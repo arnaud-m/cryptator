@@ -10,6 +10,6 @@ package cryptator.specs;
 
 public interface ICryptarithmChecker {
 
-	boolean check(String equation, ICryptaSolution solution);
+	boolean check(ICryptaTree cryptarithm, ICryptaSolution solution);
 
 }
