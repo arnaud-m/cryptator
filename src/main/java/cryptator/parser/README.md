@@ -2,7 +2,7 @@
 ```bash
 $ export CLASSPATH=".:/usr/local/lib/antlr-4.9.2-complete.jar:$CLASSPATH"
 $ java -jar /usr/local/lib/antlr-4.9.2-complete.jar Parser.g4
-$ javac Parser*.java
+$ javac *.java
 ```
 
 # <u>TO RUN:</u>
