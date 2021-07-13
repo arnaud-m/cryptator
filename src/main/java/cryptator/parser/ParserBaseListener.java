@@ -1,10 +1,6 @@
+package cryptator.parser;
+
 // Generated from Parser.g4 by ANTLR 4.9.2
-
-import structure.NodeTree;
-import structure.Feuille;
-import structure.Operation;
-import structure.Equation;
-
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;

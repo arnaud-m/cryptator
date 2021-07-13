@@ -1,9 +1,6 @@
-// Generated from Parser.g4 by ANTLR 4.9.2
+package cryptator.parser;
 
-import structure.NodeTree;
-import structure.Feuille;
-import structure.Operation;
-import structure.Equation;
+// Generated from Parser.g4 by ANTLR 4.9.2
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
