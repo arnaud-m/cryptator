@@ -1,4 +1,4 @@
-grammar Parser;
+grammar Cryptator;
 
 @header{
 package cryptator.parser;

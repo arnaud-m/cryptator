@@ -175,6 +175,5 @@ $RECYCLE.BIN/
 
 #####=== Parser ===#####
 
-src/main/java/cryptator/parser/*.java
-src/main/java/cryptator/parser/*.tokens
-src/main/java/cryptator/parser/*.interp
+src/main/antlr4-source-folder/
+
