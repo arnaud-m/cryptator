@@ -1,11 +1,8 @@
-package structure;
+package cryptator.structure;
 
 public interface NodeTree {
-    public String toString();
     public void calcul();
-
     public void visualise();
-
     public String getName();
     public NodeTree getLeftChildren();
     public NodeTree getRightChildren();
