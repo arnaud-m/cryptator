@@ -8,25 +8,12 @@
  */
 package cryptator;
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-
-import cryptator.parser.CryptatorLexer;
-import cryptator.parser.CryptatorParser;
-import cryptator.parser.CryptatorParser.ProgramContext;
-
 public class Main {
     public static void main(String[] args) throws Exception {
-        //CharStream input = CharStreams.fromString("p1+di*n2=z=z");
-        CharStream input = CharStreams.fromString("p1+di*+n2=z");
-        //CharStream input = CharStreams.fromString("p+di*n=z");
-        CryptatorLexer lexer = new CryptatorLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CryptatorParser parser = new CryptatorParser(tokens);
-        ProgramContext ctx = parser.program();
-        System.out.println(ctx.equation.node);
-       
+    	CryptaParserWrapper parser = new CryptaParserWrapper();
+    	parser.parse("p1+di*n2=z=z");
+    	parser.parse("p1+di*n2=z=u");
+    	parser.parse("p1+di*+n2=z");
+    	parser.parse("p+di*n=z");       
     }
 }
