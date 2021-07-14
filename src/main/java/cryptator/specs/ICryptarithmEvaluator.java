@@ -8,8 +8,8 @@
  */
 package cryptator.specs;
 
-public interface ICryptarithmChecker {
+public interface ICryptarithmEvaluator {
 
-	boolean check(ICryptaTree cryptarithm, ICryptaSolution solution);
+	int evaluate(ICryptaTree cryptarithm, ICryptaSolution solution, int base);
 
 }

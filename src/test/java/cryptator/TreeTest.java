@@ -8,10 +8,14 @@
  */
 package cryptator;
 
+import java.util.HashMap;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import cryptator.solver.CryptaSolution;
 import cryptator.specs.ICryptaTree;
+import cryptator.specs.ICryptarithmEvaluator;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 import cryptator.tree.TreeUtils;
@@ -59,5 +63,25 @@ public class TreeTest {
 		System.out.println();
 		TreeUtils.writePostorder(bigCatLion, System.out);
 		System.out.println();
+		
+		HashMap<Character, Integer> sendMory = new HashMap<Character, Integer>();
+		// La solution est O = 0, M = 1, Y = 2, E = 5, N = 6, D = 7, R = 8 et S = 9. 
+		sendMory.put('s', 9);
+		sendMory.put('e', 5);
+		sendMory.put('n', 6);
+		sendMory.put('d', 7);
+		sendMory.put('m', 1);
+		sendMory.put('o', 0);
+		sendMory.put('r', 8);
+		sendMory.put('y', 2);
+		
+		ICryptarithmEvaluator chk = TreeUtils.makeCryptarithmChecker();
+		int v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMory), 10);
+		System.out.println(v);
+		
+		sendMory.replace('y', 0);	
+		v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMory), 10);
+		System.out.println(v);
 	}
+	
 }
