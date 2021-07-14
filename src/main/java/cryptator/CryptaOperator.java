@@ -19,7 +19,8 @@ public enum CryptaOperator {
 	MOD("%", (a, b) -> a % b), 
 	POW("^", (a, b) -> a ^ b), 
 	ID("", (a, b) -> 0),
-	EQ("==", (a, b) -> a == b ? 1 : 0), 
+	// TODO use == instead of = for equality ?
+	EQ("=", (a, b) -> a == b ? 1 : 0), 
 	NEQ("!=", (a, b) -> a != b ? 1 : 0), 
 	LT("<", (a, b) -> a < b ? 1 : 0), 
 	GT(">", (a, b) -> a > b ? 1 : 0), 
@@ -48,7 +49,6 @@ public enum CryptaOperator {
 		if(token == null) return null;
 		for(CryptaOperator operator : CryptaOperator.values()) {
 			if(token.equals(operator.getToken())) return operator;
-			CryptaOperator.valueOf("");
 		}
 		throw new IllegalArgumentException("Unknown token: " + token);
 	}

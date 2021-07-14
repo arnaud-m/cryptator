@@ -15,14 +15,14 @@ public class CryptaLeaf implements ICryptaNode {
 
 	private final char[] word;
 	
+	public CryptaLeaf(String word) {
+		this(word.toCharArray());
+	}
+	
 	public CryptaLeaf(char[] word) {
 		this.word = word;
 	}
 	
-	public CryptaLeaf(String word) {
-		this(word.toCharArray());
-	}
-
 	@Override
 	public CryptaOperator getOperator() {
 		return CryptaOperator.ID;

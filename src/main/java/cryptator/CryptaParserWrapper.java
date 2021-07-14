@@ -29,10 +29,9 @@ public class CryptaParserWrapper implements ICryptaParser {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CryptatorParser parser = new CryptatorParser(tokens);
         ProgramContext ctx = parser.program();
-        //System.out.println(ctx.equation.node);
-		return null;
+        // TODO Handle errors
+        return ctx.equation().node;
 	}
-	
 	
 
 }

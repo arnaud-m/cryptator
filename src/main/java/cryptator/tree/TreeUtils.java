@@ -32,6 +32,11 @@ public final class TreeUtils {
 		out.flush();
 	}
 	
+	public static void printPostorder(ICryptaNode root) {
+		writePostorder(root, System.out);
+		System.out.println();
+	}
+	
 	public static void writePostorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
 		TreeTraversals.postorderTraversal(root, (node, num) -> {
@@ -42,6 +47,7 @@ public final class TreeUtils {
 		out.flush();
 	}
 
+	
 	public static void toString(ICryptaNode root, OutputStream outstream) {
 
 	}

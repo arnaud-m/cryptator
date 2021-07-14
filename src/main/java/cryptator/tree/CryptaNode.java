@@ -19,6 +19,9 @@ public class CryptaNode implements ICryptaNode {
 	
 	private final ICryptaNode rightChild;
 	
+	public CryptaNode(String operator, ICryptaNode leftChild, ICryptaNode rightChild) {
+		this(CryptaOperator.valueOfToken(operator), leftChild, rightChild);
+	}
 	public CryptaNode(CryptaOperator operator, ICryptaNode leftChild, ICryptaNode rightChild) {
 		this.operator = operator;
 		this.leftChild = leftChild;
