@@ -15,7 +15,11 @@ public class Cryptator {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Hello World");
+		CryptaParserWrapper parser = new CryptaParserWrapper();
+    	parser.parse("p1+di*n2=z=z");
+    	parser.parse("p1+di*n2=z=u");
+    	parser.parse("p1+di*+n2=z");
+    	parser.parse("p+di*n=z"); 
 	}
 
 }
