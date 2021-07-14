@@ -10,6 +10,8 @@ package cryptator.specs;
 
 public interface ICryptaSolution {
 
-	int getValue(char symbol) throws IllegalArgumentException;
+	boolean hasDigit(char symbol); 
+	
+	int getDigit(char symbol);
 
 }
