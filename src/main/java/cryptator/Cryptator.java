@@ -46,6 +46,14 @@ public class Cryptator {
 			e.printStackTrace();
 		}
 		
+    	// TODO What is the largest integer with choco ?
+    	node = parser.parse("pppppppppppppppppppp + aaaaaaaaaaaaaaaaaaaaaaa = zzzzzzzzzzzzzzzzzzzzzzza");
+		TreeUtils.printPostorder(node);
+		
+		// TODO What about negative numbers ?
+		node = parser.parse("- a - ( - c) = d");
+		TreeUtils.printPostorder(node);
+		
 		// OK
 		
 		node = parser.parse("p+di*n=z");
