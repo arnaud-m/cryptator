@@ -15,15 +15,15 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import cryptator.parser.CryptatorLexer;
 import cryptator.parser.CryptatorParser;
 import cryptator.parser.CryptatorParser.ProgramContext;
-import cryptator.specs.ICryptaTree;
-import cryptator.specs.ICryptarithmParser;
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ICryptaParser;
 
-public class CryptaParserWrapper implements ICryptarithmParser {
+public class CryptaParserWrapper implements ICryptaParser {
 
 	public CryptaParserWrapper() {}
 
 	@Override
-	public ICryptaTree parse(String cryptarithm) {
+	public ICryptaNode parse(String cryptarithm) {
 		final CharStream input = CharStreams.fromString(cryptarithm);
         CryptatorLexer lexer = new CryptatorLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);

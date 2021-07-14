@@ -14,19 +14,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cryptator.solver.CryptaSolution;
-import cryptator.specs.ICryptaTree;
-import cryptator.specs.ICryptarithmEvaluator;
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ICryptaEvaluator;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 import cryptator.tree.TreeUtils;
 
 public class TreeTest {
 
-	public ICryptaTree sendMoreMoney;
+	public ICryptaNode sendMoreMoney;
 	
-	public ICryptaTree donaldGeraldRobert;
+	public ICryptaNode donaldGeraldRobert;
 	
-	public ICryptaTree bigCatLion;
+	public ICryptaNode bigCatLion;
 	
 	@Before
 	public void initializeTrees() {
@@ -75,7 +75,7 @@ public class TreeTest {
 		sendMory.put('r', 8);
 		sendMory.put('y', 2);
 		
-		ICryptarithmEvaluator chk = TreeUtils.makeCryptarithmChecker();
+		ICryptaEvaluator chk = TreeUtils.makeCryptarithmChecker();
 		int v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMory), 10);
 		System.out.println(v);
 		

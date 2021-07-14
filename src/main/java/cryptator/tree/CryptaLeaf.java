@@ -9,9 +9,9 @@
 package cryptator.tree;
 
 import cryptator.CryptaOperator;
-import cryptator.specs.ICryptaTree;
+import cryptator.specs.ICryptaNode;
 
-public class CryptaLeaf implements ICryptaTree {
+public class CryptaLeaf implements ICryptaNode {
 
 	private final char[] word;
 	
@@ -34,12 +34,12 @@ public class CryptaLeaf implements ICryptaTree {
 	}
 
 	@Override
-	public ICryptaTree getLeftChild() {
+	public ICryptaNode getLeftChild() {
 		return null;
 	}
 
 	@Override
-	public ICryptaTree getRightChild() {
+	public ICryptaNode getRightChild() {
 		return null;
 	}
 

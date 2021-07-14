@@ -8,21 +8,12 @@
  */
 package cryptator.specs;
 
-import cryptator.CryptaOperator;
+import java.util.stream.Stream;
 
-// Rename ICryptaNode ?
-public interface ICryptaTree {
+import cryptator.CryptaConfig;
 
-	CryptaOperator getOperator();
-	
-	char[] getWord();
-	
-	ICryptaTree getLeftChild();
-	
-	ICryptaTree getRightChild();
-	
-	boolean isLeaf();
-	
-	boolean isInternalNode();
-	
+public interface ICryptaSolver {
+
+	Stream<ICryptaSolution> solve(ICryptaNode cryptarithm, CryptaConfig config);
+
 }

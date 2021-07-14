@@ -8,7 +8,8 @@
  */
 package cryptator.specs;
 
-public interface ITraversalEdgeConsumer {
-	
-	void accept(ICryptaNode node, int numNode, ICryptaNode father, int numFather);
+public interface ICryptaEvaluator {
+
+	int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base);
+
 }

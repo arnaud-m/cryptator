@@ -13,8 +13,8 @@ import java.io.PrintWriter;
 import java.util.Stack;
 
 import cryptator.specs.ICryptaSolution;
-import cryptator.specs.ICryptaTree;
-import cryptator.specs.ICryptarithmEvaluator;
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ICryptaEvaluator;
 import cryptator.specs.ITraversalEdgeConsumer;
 import cryptator.specs.ITraversalNodeConsumer;
 
@@ -35,7 +35,7 @@ public final class TreeUtils {
 			out.write("graph G {\nnode [shape=plaintext];\n");
 		}
 
-		public void writeNode(int num, ICryptaTree node) {
+		public void writeNode(int num, ICryptaNode node) {
 			out.write(Integer.toString(num));
 			out.write("[label=\"");
 			out.write(node.getWord());
@@ -51,7 +51,7 @@ public final class TreeUtils {
 
 
 		@Override
-		public void accept(ICryptaTree node, int numNode, ICryptaTree father, int numFather) {
+		public void accept(ICryptaNode node, int numNode, ICryptaNode father, int numFather) {
 			writeNode(numNode, node);
 			writeEdge(numFather, numNode);
 		}
@@ -64,7 +64,7 @@ public final class TreeUtils {
 
 	}
 
-	public static void toDotty(ICryptaTree root, OutputStream outstream) {
+	public static void toDotty(ICryptaNode root, OutputStream outstream) {
 		final TreeToDotty toDotty = new TreeToDotty(outstream);
 		toDotty.setUp();
 		toDotty.writeNode(1, root);
@@ -73,7 +73,7 @@ public final class TreeUtils {
 
 	}
 
-	public static void writePreorder(ICryptaTree root, OutputStream outstream) {
+	public static void writePreorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
 		TreeTraversals.preorderTraversal(root, (node, num) -> {
 			out.write(node.getWord());
@@ -83,7 +83,7 @@ public final class TreeUtils {
 		out.flush();
 	}
 	
-	public static void writePostorder(ICryptaTree root, OutputStream outstream) {
+	public static void writePostorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
 		TreeTraversals.postorderTraversal(root, (node, num) -> {
 			out.write(node.getWord());
@@ -93,7 +93,7 @@ public final class TreeUtils {
 		out.flush();
 	}
 
-	public static void toString(ICryptaTree root, OutputStream outstream) {
+	public static void toString(ICryptaNode root, OutputStream outstream) {
 
 	}
 	
@@ -113,7 +113,7 @@ public final class TreeUtils {
 			this.base = base;
 		}
 
-		private final Integer getWordValue(ICryptaTree node) {
+		private final Integer getWordValue(ICryptaNode node) {
 			int v = 0;
 			for (char c : node.getWord()) {
 				// TODO Handle missing value ?
@@ -123,7 +123,7 @@ public final class TreeUtils {
 		}
 		
 		@Override
-		public void accept(ICryptaTree node, int numNode) {
+		public void accept(ICryptaNode node, int numNode) {
 			if(node.isLeaf()) {
 				stack.push(getWordValue(node));
 			} else {
@@ -139,22 +139,22 @@ public final class TreeUtils {
 		}
 	}
 	
-	static class CryptaChecker implements ICryptarithmEvaluator {
+	static class CryptaChecker implements ICryptaEvaluator {
 
 		@Override
-		public int evaluate(ICryptaTree cryptarithm, ICryptaSolution solution, int base) {
+		public int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) {
 			CheckerConsumer checkerNodeConsumer = new CheckerConsumer(solution, base);
 			TreeTraversals.postorderTraversal(cryptarithm, checkerNodeConsumer);
 			return checkerNodeConsumer.peek();
 		}		
 	}
 	
-	public static ICryptarithmEvaluator makeCryptarithmChecker() {
+	public static ICryptaEvaluator makeCryptarithmChecker() {
 		return new CryptaChecker();
 	}
 
 	// TODO Return a choco model : add mvn dependency
-	public static Object model(ICryptaTree root) {
+	public static Object model(ICryptaNode root) {
 		return null;
 	}
 

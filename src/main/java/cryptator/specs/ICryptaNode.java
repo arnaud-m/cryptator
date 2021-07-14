@@ -8,8 +8,21 @@
  */
 package cryptator.specs;
 
-public interface ICryptarithmParser {
+import cryptator.CryptaOperator;
 
-	ICryptaTree parse(String cryptarithm);
+// Rename ICryptaNode ?
+public interface ICryptaNode {
 
+	CryptaOperator getOperator();
+	
+	char[] getWord();
+	
+	ICryptaNode getLeftChild();
+	
+	ICryptaNode getRightChild();
+	
+	boolean isLeaf();
+	
+	boolean isInternalNode();
+	
 }

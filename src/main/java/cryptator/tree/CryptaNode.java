@@ -9,17 +9,17 @@
 package cryptator.tree;
 
 import cryptator.CryptaOperator;
-import cryptator.specs.ICryptaTree;
+import cryptator.specs.ICryptaNode;
 
-public class CryptaNode implements ICryptaTree {
+public class CryptaNode implements ICryptaNode {
 	
 	private final CryptaOperator operator;
 	
-	private final ICryptaTree leftChild;
+	private final ICryptaNode leftChild;
 	
-	private final ICryptaTree rightChild;
+	private final ICryptaNode rightChild;
 	
-	public CryptaNode(CryptaOperator operator, ICryptaTree leftChild, ICryptaTree rightChild) {
+	public CryptaNode(CryptaOperator operator, ICryptaNode leftChild, ICryptaNode rightChild) {
 		this.operator = operator;
 		this.leftChild = leftChild;
 		this.rightChild = rightChild;
@@ -36,12 +36,12 @@ public class CryptaNode implements ICryptaTree {
 	}
 
 	@Override
-	public ICryptaTree getLeftChild() {
+	public ICryptaNode getLeftChild() {
 		return leftChild;
 	}
 
 	@Override
-	public ICryptaTree getRightChild() {
+	public ICryptaNode getRightChild() {
 		return rightChild;
 	}
 

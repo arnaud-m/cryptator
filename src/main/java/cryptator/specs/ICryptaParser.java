@@ -8,12 +8,8 @@
  */
 package cryptator.specs;
 
-import java.util.stream.Stream;
+public interface ICryptaParser {
 
-import cryptator.CryptaConfig;
-
-public interface ICryptarithmSolver {
-
-	Stream<ICryptaSolution> solve(ICryptaTree cryptarithm, CryptaConfig config);
+	ICryptaNode parse(String cryptarithm);
 
 }

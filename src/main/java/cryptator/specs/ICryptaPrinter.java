@@ -8,8 +8,10 @@
  */
 package cryptator.specs;
 
-public interface ICryptarithmEvaluator {
+import java.io.OutputStream;
 
-	int evaluate(ICryptaTree cryptarithm, ICryptaSolution solution, int base);
+public interface ICryptaPrinter {
+
+	void print(ICryptaNode node, OutputStream outstream);
 
 }
