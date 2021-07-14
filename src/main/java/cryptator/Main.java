@@ -15,14 +15,18 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import cryptator.parser.CryptatorLexer;
 import cryptator.parser.CryptatorParser;
+import cryptator.parser.CryptatorParser.ProgramContext;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        CharStream input = CharStreams.fromString("p+di*n=z");
-       CryptatorLexer lexer = new CryptatorLexer(input);
+        //CharStream input = CharStreams.fromString("p1+di*n2=z=z");
+        CharStream input = CharStreams.fromString("p1+di*+n2=z");
+        //CharStream input = CharStreams.fromString("p+di*n=z");
+        CryptatorLexer lexer = new CryptatorLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CryptatorParser parser = new CryptatorParser(tokens);
-        ParseTree tree = parser.program();
-        //System.out.println(tree.getPayload());
+        ProgramContext ctx = parser.program();
+        System.out.println(ctx.equation.node);
+       
     }
 }

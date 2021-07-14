@@ -8,21 +8,56 @@
  */
 package cryptator;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import cryptator.specs.ICryptaTree;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 import cryptator.tree.TreeUtils;
 
 public class TreeTest {
 
+	public ICryptaTree sendMoreMoney;
+	
+	public ICryptaTree donaldGeraldRobert;
+	
+	public ICryptaTree bigCatLion;
+	
+	@Before
+	public void initializeTrees() {
+		sendMoreMoney = new CryptaNode(CryptaOperator.EQ, 
+				new CryptaNode(CryptaOperator.ADD, new CryptaLeaf("send"), new CryptaLeaf("more")), 
+				new CryptaLeaf("money"));
+		
+		donaldGeraldRobert = new CryptaNode(CryptaOperator.EQ, 
+				new CryptaNode(CryptaOperator.ADD, new CryptaLeaf("donald"), new CryptaLeaf("gerald")), 
+				new CryptaLeaf("robert"));
+		
+		bigCatLion= new CryptaNode(CryptaOperator.EQ, 
+				new CryptaNode(CryptaOperator.ADD, new CryptaLeaf("big"), new CryptaLeaf("cat")), 
+				new CryptaLeaf("lion"));
+		
+	}
+	
 	public TreeTest() {}
 	
 	@Test
 	public void testTree() {
-		CryptaNode l = new CryptaNode(CryptaOperator.ADD, new CryptaLeaf("send"), new CryptaLeaf("more"));
-		CryptaNode t = new CryptaNode(CryptaOperator.EQ, l, new CryptaLeaf("money"));
-		TreeUtils.toDotty(t, System.out);
-		TreeUtils.writePreorder(t, System.out);
+		TreeUtils.toDotty(sendMoreMoney, System.out);
+		
+		TreeUtils.writePreorder(sendMoreMoney, System.out);
+		System.out.println();
+		TreeUtils.writePreorder(donaldGeraldRobert, System.out);
+		System.out.println();
+		TreeUtils.writePreorder(bigCatLion, System.out);
+		System.out.println();
+		
+		TreeUtils.writePostorder(sendMoreMoney, System.out);
+		System.out.println();
+		TreeUtils.writePostorder(donaldGeraldRobert, System.out);
+		System.out.println();
+		TreeUtils.writePostorder(bigCatLion, System.out);
+		System.out.println();
 	}
 }

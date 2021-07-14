@@ -7,7 +7,7 @@ import cryptator.structure.*;
 
 // Parser Rules
 
-program : equation {$equation.node.visualise();System.out.println($equation.node.toString());}; //additional token to simplify the passage in parameter
+program : equation {System.out.println($equation.node.toString());}; //additional token to simplify the passage in parameter
 
 equation returns [NodeTree node]: //create a node of the tree corresponding to an equation and return this node
                 left=expression COMPARATEUR right=expression {$node=new Equation($COMPARATEUR.getText(), $left.node, $right.node);};

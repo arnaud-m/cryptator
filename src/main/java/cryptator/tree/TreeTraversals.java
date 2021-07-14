@@ -8,8 +8,9 @@
  */
 package cryptator.tree;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Stack;
-import java.util.function.ObjIntConsumer;
 
 import cryptator.specs.ICryptaTree;
 import cryptator.specs.ITraversalEdgeConsumer;
@@ -19,13 +20,14 @@ import cryptator.specs.ITraversalNodeConsumer;
 public final class TreeTraversals {
 
 	private TreeTraversals() {}
-	
+
+
 	static class TraversalEdge {
-		
+
 		public final ICryptaTree node;
-		
+
 		public final ICryptaTree father;
-		
+
 		public final int numFather;
 
 		public TraversalEdge(ICryptaTree node, ICryptaTree father, int numFather) {
@@ -46,12 +48,9 @@ public final class TreeTraversals {
 		public final int getNumFather() {
 			return numFather;
 		}
-		
-		
+
+
 	}
-
-
-
 
 	public static void preorderTraversal(ICryptaTree root, ITraversalNodeConsumer traversalConsumer) {
 		final Stack<ICryptaTree> stack = new Stack<ICryptaTree>();
@@ -67,14 +66,14 @@ public final class TreeTraversals {
 			num++;
 		}	
 	}
-	
+
 	private static void pushChildren(Stack<TraversalEdge> stack, ICryptaTree n, int num) {
 		if(n.isInternalNode()) {
 			stack.push(new TraversalEdge(n.getRightChild(), n, num));
 			stack.push(new TraversalEdge(n.getLeftChild(), n, num));
 		}
 	}
-	
+
 	public static void preorderTraversal(ICryptaTree root, ITraversalEdgeConsumer traversalConsumer) {
 		final Stack<TraversalEdge> stack = new Stack<TraversalEdge>();
 		int num = 1;
@@ -88,11 +87,26 @@ public final class TreeTraversals {
 		}	
 	}
 
-
 	public static void postorderTraversal(ICryptaTree root, ITraversalNodeConsumer traversalNodeConsumer) {
-
+		final Stack<ICryptaTree> stack = new Stack<ICryptaTree>();
+		final ArrayList<ICryptaTree> order= new ArrayList<ICryptaTree>();
+		stack.push(root);
+		while(! stack.isEmpty()) {
+			final ICryptaTree n = stack.pop();
+			order.add(n);
+			if(n.isInternalNode()) {
+				stack.push(n.getLeftChild());
+				stack.push(n.getRightChild());
+			}
+		}
+		final ListIterator<ICryptaTree> iter = order.listIterator(order.size());
+		int num = 1;
+		while(iter.hasPrevious()) {
+			traversalNodeConsumer.accept(iter.previous(), num++);
+		}
 	}
-	
+
+
 	public static void inorderTraversal(ICryptaTree root, ITraversalNodeConsumer traversalNodeConsumer) {
 
 	}	

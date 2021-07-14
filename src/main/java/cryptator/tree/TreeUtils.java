@@ -34,7 +34,7 @@ public final class TreeUtils {
 
 		public void writeNode(int num, ICryptaTree node) {
 			out.write(Integer.toString(num));
-			out.write("[label =\"");
+			out.write("[label=\"");
 			out.write(node.getWord());
 			out.write("\"];\n");
 		}
@@ -79,10 +79,22 @@ public final class TreeUtils {
 				);
 		out.flush();
 	}
+	
+	public static void writePostorder(ICryptaTree root, OutputStream outstream) {
+		final PrintWriter out = new PrintWriter(outstream);
+		TreeTraversals.postorderTraversal(root, (node, num) -> {
+			out.write(node.getWord());
+			out.write(" ");
+		}
+				);
+		out.flush();
+	}
 
 	public static void toString(ICryptaTree root, OutputStream outstream) {
 
 	}
+	
+	
 
 	public static boolean evaluate(ICryptaTree root, ICryptaSolution solution) {
 		return false;
