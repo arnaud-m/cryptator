@@ -8,7 +8,7 @@
  */
 package cryptator.specs;
 
-public interface ICryptaEvaluator {
+public interface ICryptaEvaluation {
 
 	int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base);
 

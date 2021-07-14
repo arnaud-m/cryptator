@@ -15,7 +15,8 @@ import org.junit.Test;
 
 import cryptator.solver.CryptaSolution;
 import cryptator.specs.ICryptaNode;
-import cryptator.specs.ICryptaEvaluator;
+import cryptator.specs.ICryptaEvaluation;
+import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 import cryptator.tree.GraphizExporter;
@@ -76,7 +77,7 @@ public class TreeTest {
 		sendMory.put('r', 8);
 		sendMory.put('y', 2);
 		
-		ICryptaEvaluator chk = TreeUtils.makeCryptarithmChecker();
+		ICryptaEvaluation chk = new CryptaEvaluation();
 		int v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMory), 10);
 		System.out.println(v);
 		
