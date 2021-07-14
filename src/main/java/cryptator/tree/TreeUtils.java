@@ -46,14 +46,7 @@ public final class TreeUtils {
 				);
 		out.flush();
 	}
-
 	
-	public static void toString(ICryptaNode root, OutputStream outstream) {
-
-	}
-	
-	
-
 
 	// TODO Return a choco model : add mvn dependency
 	public static Object model(ICryptaNode root) {
