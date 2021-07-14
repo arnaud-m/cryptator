@@ -10,8 +10,12 @@ package cryptator;
 
 public enum CryptaOperator {
 
-	ADD("+"), SUB("-"), MUL("*"), DIV("/"), POW("^"), ID(""),
-	EQ("=="), NEQ("!="), LT("<"), GT(">"), LEQ("<="), GEQ(">=");
+	ADD("+"), SUB("-"), 
+	MUL("*"), DIV("/"), 
+	MOD("%"), POW("^"), ID(""),
+	EQ("=="), NEQ("!="), 
+	LT("<"), GT(">"), 
+	LEQ("<="), GEQ(">=");
 	
 	public final String token;
 
