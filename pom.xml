@@ -109,8 +109,7 @@
 						<template>JAVADOC_STYLE</template>
 					</mapping>
 					<includes>
-						<include>**/*.java</include>
-						<include>**/*.template</include>
+						<include>src/*/java/**/*.java</include>
 						<include>**/pom.xml</include>
 					</includes>
 				</configuration>
