@@ -11,18 +11,25 @@ package cryptator;
 public enum CryptaOperator {
 
 	ADD("+"), SUB("-"), MUL("*"), DIV("/"), POW("^"), ID(""),
-	EQ("=="), NEQ("!="), LEQ("<="), GEQ(">=");
+	EQ("=="), NEQ("!="), LT("<"), GT(">"), LEQ("<="), GEQ(">=");
 	
-	public final String operator;
+	public final String token;
 
-	private CryptaOperator(String operator) {
-		this.operator = operator;
+	private CryptaOperator(String token) {
+		this.token = token;
 	}
 
-	public final String getOperator() {
-		return operator;
+	public final String getToken() {
+		return token;
 	}
 	
-	
+	public static CryptaOperator valueOfToken(String token) {
+		if(token == null) return null;
+		for(CryptaOperator operator : CryptaOperator.values()) {
+			if(token.equals(operator.getToken())) return operator;
+			CryptaOperator.valueOf("");
+		}
+		throw new IllegalArgumentException("Unknown token: " + token);
+	}
 	
 }

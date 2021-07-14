@@ -32,7 +32,7 @@ public class CryptaNode implements ICryptaTree {
 
 	@Override
 	public char[] getWord() {
-		return operator.getOperator().toCharArray();
+		return operator.getToken().toCharArray();
 	}
 
 	@Override
