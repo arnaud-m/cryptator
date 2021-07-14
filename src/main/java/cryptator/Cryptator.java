@@ -19,6 +19,7 @@ public class Cryptator {
     	parser.parse("p1+di*n2=z=z");
     	parser.parse("p1+di*n2=z=u");
     	parser.parse("p1+di*+n2=z");
+    	parser.parse("p1+di*++n2=z");
     	parser.parse("p+di*n=z"); 
 	}
 
