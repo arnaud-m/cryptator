@@ -22,57 +22,6 @@ public final class TreeUtils {
 
 	private TreeUtils() {}
 
-	private static class TreeToDotty implements ITraversalEdgeConsumer {
-
-		private final PrintWriter out;
-
-		public TreeToDotty(OutputStream outstream) {
-			super();
-			this.out = new PrintWriter(outstream);
-		}
-
-		public void setUp() {
-			out.write("graph G {\nnode [shape=plaintext];\n");
-		}
-
-		public void writeNode(int num, ICryptaNode node) {
-			out.write(Integer.toString(num));
-			out.write("[label=\"");
-			out.write(node.getWord());
-			out.write("\"];\n");
-		}
-
-		public void writeEdge(int i, int j) {
-			out.write(Integer.toString(i));
-			out.write("--");
-			out.write(Integer.toString(j));
-			out.write(";\n");
-		}
-
-
-		@Override
-		public void accept(ICryptaNode node, int numNode, ICryptaNode father, int numFather) {
-			writeNode(numNode, node);
-			writeEdge(numFather, numNode);
-		}
-
-		public void tearDown() {
-			out.write("}\n");
-			out.flush();
-		}
-
-
-	}
-
-	public static void toDotty(ICryptaNode root, OutputStream outstream) {
-		final TreeToDotty toDotty = new TreeToDotty(outstream);
-		toDotty.setUp();
-		toDotty.writeNode(1, root);
-		TreeTraversals.preorderTraversal(root, toDotty);
-		toDotty.tearDown();
-
-	}
-
 	public static void writePreorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
 		TreeTraversals.preorderTraversal(root, (node, num) -> {

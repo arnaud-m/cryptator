@@ -18,6 +18,7 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaEvaluator;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
+import cryptator.tree.GraphizExporter;
 import cryptator.tree.TreeUtils;
 
 public class TreeTest {
@@ -48,7 +49,7 @@ public class TreeTest {
 	
 	@Test
 	public void testTree() {
-		TreeUtils.toDotty(sendMoreMoney, System.out);
+		(new GraphizExporter()).print(sendMoreMoney, System.out);
 		
 		TreeUtils.writePreorder(sendMoreMoney, System.out);
 		System.out.println();
