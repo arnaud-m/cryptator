@@ -12,6 +12,6 @@ public interface ICryptaSolution {
 
 	boolean hasDigit(char symbol); 
 	
-	int getDigit(char symbol);
+	int getDigit(char symbol) throws Exception;
 
 }

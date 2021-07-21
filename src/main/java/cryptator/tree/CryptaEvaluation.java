@@ -40,7 +40,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 			this.base = base;
 		}
 
-		private final Integer getWordValue(ICryptaNode node) {
+		private Integer getWordValue(ICryptaNode node) throws Exception {
 			int v = 0;
 			for (char c : node.getWord()) {
 				// TODO Handle missing value ?
@@ -51,18 +51,29 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 		
 		@Override
 		public void accept(ICryptaNode node, int numNode) {
-			if(node.isLeaf()) {
-				stack.push(getWordValue(node));
-			} else {
-				final int b = stack.pop();
-				final int a = stack.pop();
-				stack.push(node.getOperator().getFunction().applyAsInt(a, b));
+			try {
+				if(node.isLeaf()) {
+					stack.push(getWordValue(node));
+				} else {
+					final int b = stack.pop();
+					final int a = stack.pop();
+					stack.push(node.getOperator().getFunction().applyAsInt(a, b));
+				}
+			}
+			catch(Exception e){
+				System.out.println(e.getMessage());
 			}
 		}
 		
 		public int peek() {
 			// TODO Check that the stack contains a single value
-			return stack.peek();
+			try {
+				return stack.peek();
+			}
+			catch(Exception e){
+				System.out.println(e.getMessage());
+				return -1;
+			}
 		}
 	}
 	

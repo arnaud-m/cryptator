@@ -108,6 +108,16 @@ public final class TreeTraversals {
 
 
 	public static void inorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
+		int num =1;
+		inorder(root, traversalNodeConsumer, num);
+	}
 
-	}	
+	private static void inorder(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer, int num) {
+		if(root!=null) {
+			inorder(root.getLeftChild(), traversalNodeConsumer, num*2);
+			traversalNodeConsumer.accept(root, num);
+			inorder(root.getRightChild(), traversalNodeConsumer, num*2+1);
+		}
+
+	}
 }

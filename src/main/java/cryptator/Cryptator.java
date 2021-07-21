@@ -25,42 +25,46 @@ public class Cryptator {
 		CryptaParserWrapper parser = new CryptaParserWrapper();
     	ICryptaNode node;
 		// KO
-		
-		node = parser.parse("p1+di*n2=z=z");
+
+
+		node = parser.parse("p1+di*&n2=z=z");
 		TreeUtils.printPostorder(node);
+
 		
     	node = parser.parse("p1+di*n2=z=u");
     	TreeUtils.printPostorder(node);
+
 		
     	node = parser.parse("p1+di*+n2=z");
     	TreeUtils.printPostorder(node);
-		
+
+
     	node = parser.parse("p1 di*+n2=z");
+		TreeUtils.printPostorder(node);
+
+
+		node = parser.parse("p1+di*++n2=z");
+		TreeUtils.printPostorder(node);
+
+
+    	node = parser.parse("pppppppppppppppppppp + aaaaaaaaaaaaaaaaaaaaaaa = zzzzzzzzzzzzzzzzzzzzzzz");
     	TreeUtils.printPostorder(node);
-		
-    	try {
-			node = parser.parse("p1+di*++n2=z");
-			TreeUtils.printPostorder(node);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-    	// TODO What is the largest integer with choco ?
-    	node = parser.parse("pppppppppppppppppppp + aaaaaaaaaaaaaaaaaaaaaaa = zzzzzzzzzzzzzzzzzzzzzzza");
+
+		node = parser.parse("pppppppp + aaaaaaaaaaaaaaaaaaaaaaa = zzzzzzzzzzzzzzzzzzzzzzz");
 		TreeUtils.printPostorder(node);
 		
-		// TODO What about negative numbers ?
 		node = parser.parse("- a - ( - c) = d");
 		TreeUtils.printPostorder(node);
+
 		
 		// OK
-		
 		node = parser.parse("p+di*n=z");
-		TreeUtils.printPostorder(node);
+		TreeUtils.printInorder(node);
+
 		
 		node = parser.parse("p+  di*n =  z");
 		TreeUtils.printPostorder(node);
+
 		
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 		map.put('p', 0);
@@ -75,7 +79,6 @@ public class Cryptator {
 		System.out.println(eval.evaluate(node, sol, 10));
 		
 		map.remove('p');
-		// FIXME missing value not detected 
 		System.out.println(eval.evaluate(node, sol, 10));
 	}
 

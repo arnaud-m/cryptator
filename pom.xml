@@ -71,7 +71,12 @@
 			<artifactId>antlr4-runtime</artifactId>
 			<version>4.9.2</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>2.7.7</version>
+        </dependency>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>

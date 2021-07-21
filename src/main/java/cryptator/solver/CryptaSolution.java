@@ -31,9 +31,12 @@ public class CryptaSolution implements ICryptaSolution {
 	}
 
 	@Override
-	public int getDigit(char symbol) {
+	public int getDigit(char symbol) throws Exception {
 		final Integer v = symbolToDigit.get(Character.valueOf(symbol));
-		return v != null ? v : -1;
+		if(v == null){
+			throw new Exception("Unrecognized symbol: " + symbol);
+		}
+		return v;
 	}
 
 	

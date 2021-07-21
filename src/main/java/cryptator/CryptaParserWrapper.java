@@ -8,15 +8,17 @@
  */
 package cryptator;
 
+import cryptator.parser.CryptatorLexer;
+import cryptator.parser.CryptatorParser;
+import cryptator.parser.CryptatorParser.ProgramContext;
+
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ICryptaParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import cryptator.parser.CryptatorLexer;
-import cryptator.parser.CryptatorParser;
-import cryptator.parser.CryptatorParser.ProgramContext;
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ICryptaParser;
+import Exception.ThrowingErrorListener;
 
 public class CryptaParserWrapper implements ICryptaParser {
 
@@ -24,14 +26,24 @@ public class CryptaParserWrapper implements ICryptaParser {
 
 	@Override
 	public ICryptaNode parse(String cryptarithm) {
-		final CharStream input = CharStreams.fromString(cryptarithm);
+
+        final CharStream input = CharStreams.fromString(cryptarithm);
         CryptatorLexer lexer = new CryptatorLexer(input);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CryptatorParser parser = new CryptatorParser(tokens);
-        ProgramContext ctx = parser.program();
-        // TODO Handle errors
-        return ctx.equation().node;
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+        try {
+            ProgramContext ctx = parser.program();
+            return ctx.equation().node;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
 	}
-	
 
 }
