@@ -8,12 +8,13 @@
  */
 package cryptator;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
-import cryptator.solver.CryptaSolution;
+import cryptator.solver.Variable;
 import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.TreeUtils;
+
+import static cryptator.tree.TreeUtils.*;
 
 public class Cryptator {
 
@@ -24,62 +25,17 @@ public class Cryptator {
 	public static void main(String[] args) {
 		CryptaParserWrapper parser = new CryptaParserWrapper();
     	ICryptaNode node;
-		// KO
 
 
-		node = parser.parse("p1+di*&n2=z=z");
-		TreeUtils.printPostorder(node);
-
-		
-    	node = parser.parse("p1+di*n2=z=u");
-    	TreeUtils.printPostorder(node);
-
-		
-    	node = parser.parse("p1+di*+n2=z");
-    	TreeUtils.printPostorder(node);
+		node = parser.parse("send+more=money");
+		System.out.println(node.getWord());
+		ArrayList<Variable> map=TreeUtils.mapPostorder(node);
+		System.out.println(map);
+		ArrayList<Integer> tab =makeArray(map.size());
+		System.out.println(tab);
+		System.out.println(arrayVarToString(findSolCrypta(tab, map.size(), 10, map, node)));
 
 
-    	node = parser.parse("p1 di*+n2=z");
-		TreeUtils.printPostorder(node);
-
-
-		node = parser.parse("p1+di*++n2=z");
-		TreeUtils.printPostorder(node);
-
-
-    	node = parser.parse("pppppppppppppppppppp + aaaaaaaaaaaaaaaaaaaaaaa = zzzzzzzzzzzzzzzzzzzzzzz");
-    	TreeUtils.printPostorder(node);
-
-		node = parser.parse("pppppppp + aaaaaaaaaaaaaaaaaaaaaaa = zzzzzzzzzzzzzzzzzzzzzzz");
-		TreeUtils.printPostorder(node);
-		
-		node = parser.parse("- a - ( - c) = d");
-		TreeUtils.printPostorder(node);
-
-		
-		// OK
-		node = parser.parse("p+di*n=z");
-		TreeUtils.printInorder(node);
-
-		
-		node = parser.parse("p+  di*n =  z");
-		TreeUtils.printPostorder(node);
-
-		
-		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-		map.put('p', 0);
-		map.put('d', 1);
-		map.put('i', 2);
-		map.put('n', 3);
-		map.put('z', 4);
-		CryptaSolution sol = new CryptaSolution(map);
-		
-		CryptaEvaluation eval = new CryptaEvaluation();
-		
-		System.out.println(eval.evaluate(node, sol, 10));
-		
-		map.remove('p');
-		System.out.println(eval.evaluate(node, sol, 10));
 	}
 
 }

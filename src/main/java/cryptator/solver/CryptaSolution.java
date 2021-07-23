@@ -8,32 +8,43 @@
  */
 package cryptator.solver;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import cryptator.specs.ICryptaSolution;
 
 public class CryptaSolution implements ICryptaSolution {
 
-	public final HashMap<Character, Integer> symbolToDigit;
+	public final ArrayList<Variable> symbolToDigit;
 	
-	public CryptaSolution(HashMap<Character, Integer> digitToValue) {
+	public CryptaSolution(ArrayList<Variable> digitToValue) {
 		super();
 		this.symbolToDigit = digitToValue;
 	}
 	
-	public final HashMap<Character, Integer> getDigitToValue() {
+	public final ArrayList<Variable> getDigitToValue() {
 		return symbolToDigit;
 	}
 
 	@Override
 	public boolean hasDigit(char symbol) {
-		return symbolToDigit.containsKey(Character.valueOf(symbol));
+		for(Variable var: symbolToDigit){
+			if(var.getName()==symbol){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public int getDigit(char symbol) throws Exception {
-		final Integer v = symbolToDigit.get(Character.valueOf(symbol));
-		if(v == null){
+		int v = -1;
+		for(Variable var: symbolToDigit) {
+			if(symbol==var.getName()) {
+				v = var.getValue();
+				break;
+			}
+		}
+		if(v == -1){
 			throw new Exception("Unrecognized symbol: " + symbol);
 		}
 		return v;

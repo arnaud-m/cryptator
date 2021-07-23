@@ -21,7 +21,6 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 	public int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) {
 		EvaluationConsumer evaluationNodeConsumer = new EvaluationConsumer(solution, base);
 		TreeTraversals.postorderTraversal(cryptarithm, evaluationNodeConsumer);
-		// FIXME Handle missing values
 		return evaluationNodeConsumer.peek();
 	}	
 	
@@ -43,7 +42,6 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 		private Integer getWordValue(ICryptaNode node) throws Exception {
 			int v = 0;
 			for (char c : node.getWord()) {
-				// TODO Handle missing value ?
 				v = v * base + solution.getDigit(c);
 			}
 			return v;

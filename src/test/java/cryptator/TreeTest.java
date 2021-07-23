@@ -8,19 +8,18 @@
  */
 package cryptator;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
+import cryptator.solver.CryptaSolution;
+import cryptator.solver.Variable;
+import cryptator.specs.ICryptaEvaluation;
+import cryptator.tree.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import cryptator.solver.CryptaSolution;
 import cryptator.specs.ICryptaNode;
-import cryptator.specs.ICryptaEvaluation;
-import cryptator.tree.CryptaEvaluation;
-import cryptator.tree.CryptaLeaf;
-import cryptator.tree.CryptaNode;
-import cryptator.tree.GraphizExporter;
-import cryptator.tree.TreeUtils;
 
 import static cryptator.tree.TreeUtils.*;
 import static org.junit.Assert.*;
@@ -34,6 +33,7 @@ public class TreeTest {
 	public ICryptaNode bigCatLion;
 
 	public ICryptaNode ABC;
+
 	
 	@Before
 	public void initializeTrees() {
@@ -63,71 +63,139 @@ public class TreeTest {
 		(new GraphizExporter()).print(sendMoreMoney, System.out);
 
 		//preorder
-		assertEquals(TreeUtils.writePreorder(sendMoreMoney, System.out), "= + send more money ");
+		assertEquals(writePreorder(sendMoreMoney, System.out), "= + send more money ");
 		System.out.println();
-		assertEquals(TreeUtils.writePreorder(donaldGeraldRobert, System.out), "= + donald gerald robert ");
+		assertEquals(writePreorder(donaldGeraldRobert, System.out), "= + donald gerald robert ");
 		System.out.println();
-		assertEquals(TreeUtils.writePreorder(bigCatLion, System.out), "= + big cat lion ");
+		assertEquals(writePreorder(bigCatLion, System.out), "= + big cat lion ");
 		System.out.println();
 
 		//postorder
-		assertEquals(TreeUtils.writePostorder(sendMoreMoney, System.out), "send more + money = ");
+		assertEquals(writePostorder(sendMoreMoney, System.out), "send more + money = ");
 		System.out.println();
-		assertEquals(TreeUtils.writePostorder(donaldGeraldRobert, System.out), "donald gerald + robert = ");
+		assertEquals(writePostorder(donaldGeraldRobert, System.out), "donald gerald + robert = ");
 		System.out.println();
-		assertEquals(TreeUtils.writePostorder(bigCatLion, System.out), "big cat + lion = ");
+		assertEquals(writePostorder(bigCatLion, System.out), "big cat + lion = ");
 		System.out.println();
 
 		//inorder
-		assertEquals(TreeUtils.writeInorder(sendMoreMoney, System.out), "send + more = money ");
+		assertEquals(writeInorder(sendMoreMoney, System.out), "send + more = money ");
 		System.out.println();
-		assertEquals(TreeUtils.writeInorder(donaldGeraldRobert, System.out), "donald + gerald = robert ");
+		assertEquals(writeInorder(donaldGeraldRobert, System.out), "donald + gerald = robert ");
 		System.out.println();
-		assertEquals(TreeUtils.writeInorder(bigCatLion, System.out), "big + cat = lion ");
+		assertEquals(writeInorder(bigCatLion, System.out), "big + cat = lion ");
 		System.out.println();
 
 		//evaluate
-		HashMap<Character, Integer> abc = new HashMap<Character, Integer>();
-		abc.put('A', 0);
-		abc.put('B', 0);
-		abc.put('C', 0);
+		ArrayList<Variable> abc = new ArrayList<>();
+		abc.add(new Variable('A', 0, 1, 9));
+		abc.add(new Variable('B', 0, 1, 9));
+		abc.add(new Variable('C', 0, 1, 9));
 
 
-		HashMap<Character, Integer> abcSol = new HashMap<Character, Integer>();
+		ArrayList<Variable> abcSol = new ArrayList<>();
 		// La solution est A=9 B=2 et C=1.
-		abcSol.put('A', 9);
-		abcSol.put('B', 2);
-		abcSol.put('C', 1);
+		abcSol.add(new Variable('A', 9, 1, 9));
+		abcSol.add(new Variable('B', 2, 1, 9));
+		abcSol.add(new Variable('C', 1, 1, 9));
 
-		//algo d'exploration methode 1
-		int[] tab={0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-		assertEquals(explorationRecursive(10, tab, null, abc, ABC), abcSol);
+		long start = System.currentTimeMillis();
+		//algo incremental
+		ArrayList<Integer> tab2 = makeArray(abc.size());
+		assertEquals(arrayVarToString(Objects.requireNonNull(explorationRecursive(tab2, abc, ABC))), arrayVarToString(abcSol));
+		long end = System.currentTimeMillis();
+		System.out.println("abc par incrementation: "+ String.valueOf(end-start) + "ms");
 
-		//algo d'exploration methode 2
-		int[] tab2={0,0,0};
-		assertEquals(explorationRecursive2(tab2, abc, ABC), abcSol);
 
-		HashMap<Character, Integer> sendMory = new HashMap<Character, Integer>();
+		start = System.currentTimeMillis();
+		//algo heap
+		ArrayList<Integer> comb= new ArrayList<>();
+		for (int i=0; i<10; i++) {
+			comb.add(i);
+		}
+
+		assertEquals(arrayVarToString(findSolCrypta(comb, 3, 10, abc, ABC)), arrayVarToString(abcSol));
+		end = System.currentTimeMillis();
+		System.out.println("abc par heap: "+ String.valueOf(end-start) + "ms");
+
+
+		ArrayList<Variable> sendMory = new ArrayList<>();
 		// La solution est O = 0, M = 1, Y = 2, E = 5, N = 6, D = 7, R = 8 et S = 9.
-		sendMory.put('o', 0);
-		sendMory.put('m', 1);
-		sendMory.put('y', 2);
-		sendMory.put('e', 5);
-		sendMory.put('n', 6);
-		sendMory.put('d', 7);
-		sendMory.put('r', 8);
-		sendMory.put('s', 9);
+		sendMory.add(new Variable('o', 0, 0, 9));
+		sendMory.add(new Variable('m', 0, 1, 9));
+		sendMory.add(new Variable('y', 0, 0, 9));
+		sendMory.add(new Variable('e', 0, 0, 9));
+		sendMory.add(new Variable('n', 0, 0, 9));
+		sendMory.add(new Variable('d', 0, 0, 9));
+		sendMory.add(new Variable('r', 0, 0, 9));
+		sendMory.add(new Variable('s', 0, 1, 9));
+
+		ArrayList<Variable> sendMorySol = new ArrayList<>();
+		// La solution est O = 0, M = 1, Y = 2, E = 5, N = 6, D = 7, R = 8 et S = 9.
+		sendMorySol.add(new Variable('o', 0, 0, 9));
+		sendMorySol.add(new Variable('m', 1, 1, 9));
+		sendMorySol.add(new Variable('y', 2, 0, 9));
+		sendMorySol.add(new Variable('e', 5, 0, 9));
+		sendMorySol.add(new Variable('n', 6, 0, 9));
+		sendMorySol.add(new Variable('d', 7, 0, 9));
+		sendMorySol.add(new Variable('r', 8, 0, 9));
+		sendMorySol.add(new Variable('s', 9, 1, 9));
+
+		start = System.currentTimeMillis();
+		//algo incremental
+		ArrayList<Integer> tab3 = makeArray(sendMory.size());
+		assertEquals(arrayVarToString(Objects.requireNonNull(explorationRecursive(tab3, sendMory, sendMoreMoney))), arrayVarToString(sendMorySol));
+		end = System.currentTimeMillis();
+		System.out.println("sendmory par incrementation: "+ String.valueOf(end-start) + "ms");
+
+		start = System.currentTimeMillis();
+		//algo heap
+		comb= new ArrayList<>();
+		for (int i=0; i<10; i++) {
+			comb.add(i);
+		}
+
+		assertEquals(arrayVarToString(findSolCrypta(comb, sendMory.size(), 10, sendMory, sendMoreMoney)), arrayVarToString(sendMorySol));
+		end = System.currentTimeMillis();
+		System.out.println("sendmory par heap: "+ String.valueOf(end-start) + "ms");
 
 
 		ICryptaEvaluation chk = new CryptaEvaluation();
 		int v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMory), 10);
 		assertEquals(v,1);
 		System.out.println(v);
-		
-		sendMory.replace('y', 0);
+
+		for(Variable var: sendMory){
+			if(var.getName()=='y'){
+				var.setValue(0);
+			}
+		}
 		v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMory), 10);
 		assertEquals(v,0);
 		System.out.println(v);
 	}
-	
+
+
+	@Test
+	public void testParse() {
+		CryptaParserWrapper parser = new CryptaParserWrapper();
+		ICryptaNode node;
+
+		node = parser.parse("send+more=money");
+		assertEquals(TreeUtils.writeInorder(node, System.out), TreeUtils.writeInorder(sendMoreMoney, System.out));
+
+		node = parser.parse("pppppppp + aaaaaaaaaaaaaaaaaaaaaaa = zzzzzzzzzzzzzzzzzzzzzzz");
+		assertNull(node);
+
+		node = parser.parse("p1+di*&n2=z=z");
+		assertNull(node);
+
+		node = parser.parse("p1+di*+n2=z");
+		assertNull(node);
+
+	}
+
+
+
+
 }
