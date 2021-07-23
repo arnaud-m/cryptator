@@ -26,13 +26,9 @@ public class Cryptator {
 		CryptaParserWrapper parser = new CryptaParserWrapper();
     	ICryptaNode node;
 
-
 		node = parser.parse("send+more=money");
-		System.out.println(node.getWord());
 		ArrayList<Variable> map=TreeUtils.mapPostorder(node);
-		System.out.println(map);
 		ArrayList<Integer> tab =makeArray(map.size());
-		System.out.println(tab);
 		System.out.println(arrayVarToString(findSolCrypta(tab, map.size(), 10, map, node)));
 
 
