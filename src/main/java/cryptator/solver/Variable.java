@@ -1,23 +1,34 @@
 package cryptator.solver;
 
+
+
+
 public class Variable {
-    private char name;
+    private String name;
     private int value=-1;
     private int valMin;
     private int valMax;
 
-    public Variable(char name, int value, int valMin, int valMax) {
+    public Variable(String name, int value, int valMin, int valMax) {
         this.name = name;
-        this.value = value;
-        this.valMin = valMin;
-        this.valMax = valMax;
+        try {
+            int i = Integer.parseInt(String.valueOf(name));
+            this.value = i;
+            this.valMin = i;
+            this.valMax = i;
+        }catch (Exception e){
+            this.value = value;
+            this.valMin = valMin;
+            this.valMax = valMax;
+        }
+
     }
 
-    public char getName() {
-        return name;
+    public String getName() {
+        return String.valueOf(name);
     }
 
-    public void setName(char name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -25,10 +36,12 @@ public class Variable {
         return value;
     }
 
-    public void setValue(int value) {
+    public boolean setValue(int value) {
         if(value<=valMax && value>=valMin) {
             this.value = value;
+            return true;
         }
+        return false;
     }
 
     public int getValMin() {

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import cryptator.specs.ICryptaSolution;
 
+
 public class CryptaSolution implements ICryptaSolution {
 
 	public final ArrayList<Variable> symbolToDigit;
@@ -28,7 +29,7 @@ public class CryptaSolution implements ICryptaSolution {
 	@Override
 	public boolean hasDigit(char symbol) {
 		for(Variable var: symbolToDigit){
-			if(var.getName()==symbol){
+			if(var.getName().equals(String.valueOf(symbol))){
 				return true;
 			}
 		}
@@ -39,7 +40,7 @@ public class CryptaSolution implements ICryptaSolution {
 	public int getDigit(char symbol) throws Exception {
 		int v = -1;
 		for(Variable var: symbolToDigit) {
-			if(symbol==var.getName()) {
+			if(String.valueOf(symbol).equals(var.getName())) {
 				v = var.getValue();
 				break;
 			}
@@ -50,5 +51,5 @@ public class CryptaSolution implements ICryptaSolution {
 		return v;
 	}
 
-	
+
 }
