@@ -10,6 +10,7 @@ package cryptator.specs;
 
 public interface ICryptaEvaluation {
 
+	// TODO Throws an exception on failure ?
 	int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base);
 
 }

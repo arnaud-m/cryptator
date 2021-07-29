@@ -46,6 +46,7 @@ public class CryptaSolution implements ICryptaSolution {
 			}
 		}
 		if(v == -1){
+			// FIXME Always specialize exception. 
 			throw new Exception("Unrecognized symbol: " + symbol);
 		}
 		return v;

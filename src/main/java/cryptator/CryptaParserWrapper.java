@@ -20,13 +20,13 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import Exception.ThrowingErrorListener;
 
+// TODO Move to parser package ? 
 public class CryptaParserWrapper implements ICryptaParser {
 
 	public CryptaParserWrapper() {}
 
 	@Override
 	public ICryptaNode parse(String cryptarithm) {
-
         final CharStream input = CharStreams.fromString(cryptarithm);
         CryptatorLexer lexer = new CryptatorLexer(input);
         lexer.removeErrorListeners();
@@ -41,6 +41,8 @@ public class CryptaParserWrapper implements ICryptaParser {
             return ctx.equation().node;
         }
         catch(Exception e){
+        	// FIXME Throw CryptaParserException
+        	// Catching here -> exception not handled depending on the context
             System.out.println(e.getMessage());
         }
         return null;

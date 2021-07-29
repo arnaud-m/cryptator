@@ -30,6 +30,10 @@ public enum CryptaOperator {
 	public final String token;
 	
 	public final IntBinaryOperator function;
+	
+	// TODO public final BinaryOperator<ArExpression> expression;
+	
+	// TODO public final BiFunction<ArExpression, ArExpression, ReExpression> constraint;
 
 	private CryptaOperator(String token, IntBinaryOperator function) {
 		this.token = token;

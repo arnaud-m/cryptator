@@ -13,5 +13,7 @@ import java.io.OutputStream;
 public interface ICryptaPrinter {
 
 	void print(ICryptaNode node, OutputStream outstream);
+	
+	// TODO void print(ICryptaNode node, ICryptaSolution solution, OutputStream outstream) ?
 
 }

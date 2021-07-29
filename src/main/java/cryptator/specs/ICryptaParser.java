@@ -8,8 +8,16 @@
  */
 package cryptator.specs;
 
+import cryptator.CryptaParserException;
+
 public interface ICryptaParser {
 
-	ICryptaNode parse(String cryptarithm);
+	/**
+	 * Parse a cryptarithm 
+	 * @param cryptarithm encoded using the antlr4 grammar
+	 * @return the root of a complete binary tree that represent the cryptarithm.
+	 * @throws CryptaParserException on failure. 
+	 */
+	ICryptaNode parse(String cryptarithm) throws CryptaParserException;
 
 }
