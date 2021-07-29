@@ -10,8 +10,15 @@ package cryptator;
 
 public class CryptaConfig {
 
-	public CryptaConfig() {
-		// TODO Auto-generated constructor stub
-	}
+	public boolean allowLeadingZeros;
+	
+	public boolean isCaseSensitive;
+	
+	public long solutionLimit;
+	
+	public long timeLimit;
+	
+	
+	public CryptaConfig() {}
 
 }

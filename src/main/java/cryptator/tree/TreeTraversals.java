@@ -22,7 +22,7 @@ public final class TreeTraversals {
 	private TreeTraversals() {}
 
 
-	static class TraversalEdge {
+	private static class TraversalEdge {
 
 		public final ICryptaNode node;
 

@@ -10,7 +10,7 @@ package cryptator.specs;
 
 import cryptator.CryptaOperator;
 
-// Rename ICryptaNode ?
+
 public interface ICryptaNode {
 
 	CryptaOperator getOperator();

@@ -17,9 +17,7 @@ import cryptator.specs.ITraversalEdgeConsumer;
 
 public class GraphizExporter implements ICryptaPrinter {
 
-	public GraphizExporter() {
-		// TODO Auto-generated constructor stub
-	}
+	public GraphizExporter() {}
 
 	@Override
 	public void print(ICryptaNode node, OutputStream outstream) {
