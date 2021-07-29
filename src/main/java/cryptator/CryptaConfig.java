@@ -10,15 +10,59 @@ package cryptator;
 
 public class CryptaConfig {
 
-	public boolean allowLeadingZeros;
+	public boolean isCaseSensitive = true;
 	
-	public boolean isCaseSensitive;
+	public boolean allowLeadingZeros = false;
 	
-	public long solutionLimit;
+	/**
+	 * Base, or radix, of the positional Numeral System
+    */
+	public int arithmeticBase = 10;
 	
-	public long timeLimit;
+	public int relaxMinDigitOccurence = 0;
 	
+	public int relaxMaxDigitOccurence = 0;
 	
 	public CryptaConfig() {}
+
+	public final boolean isCaseSensitive() {
+		return isCaseSensitive;
+	}
+
+	public final void setCaseSensitive(boolean isCaseSensitive) {
+		this.isCaseSensitive = isCaseSensitive;
+	}
+
+	public final boolean allowLeadingZeros() {
+		return allowLeadingZeros;
+	}
+
+	public final void allowLeadingZeros(boolean allowLeadingZeros) {
+		this.allowLeadingZeros = allowLeadingZeros;
+	}
+
+	public final int getArithmeticBase() {
+		return arithmeticBase;
+	}
+
+	public final void setArithmeticBase(int arithmeticBase) {
+		this.arithmeticBase = arithmeticBase;
+	}
+
+	public final int getRelaxMinDigitOccurence() {
+		return relaxMinDigitOccurence;
+	}
+
+	public final void setRelaxMinDigitOccurence(int relaxMinDigitOccurence) {
+		this.relaxMinDigitOccurence = relaxMinDigitOccurence;
+	}
+
+	public final int getRelaxMaxDigitOccurence() {
+		return relaxMaxDigitOccurence;
+	}
+
+	public final void setRelaxMaxDigitOccurence(int relaxMaxDigitOccurence) {
+		this.relaxMaxDigitOccurence = relaxMaxDigitOccurence;
+	}
 
 }
