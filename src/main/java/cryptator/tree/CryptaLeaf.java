@@ -52,5 +52,9 @@ public class CryptaLeaf implements ICryptaNode {
 	public boolean isInternalNode() {
 		return false;
 	}
-
+	
+	@Override
+	public String toString() {
+		return new String(word);
+	}
 }

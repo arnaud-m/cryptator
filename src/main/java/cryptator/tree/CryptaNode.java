@@ -58,6 +58,9 @@ public class CryptaNode implements ICryptaNode {
 		return true;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return operator.getToken();
+	}
 
 }
