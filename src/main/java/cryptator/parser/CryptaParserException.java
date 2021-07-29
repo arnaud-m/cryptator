@@ -1,6 +1,5 @@
-package cryptator;
+package cryptator.parser;
 
-//TODO Move to parser package ? 
 public class CryptaParserException extends Exception {
 
 	// TODO Define useful constructors

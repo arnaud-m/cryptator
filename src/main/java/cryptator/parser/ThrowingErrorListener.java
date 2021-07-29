@@ -1,4 +1,4 @@
-package Exception;
+package cryptator.parser;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
@@ -9,7 +9,12 @@ public class ThrowingErrorListener extends BaseErrorListener {
 
     public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
 
-    @Override
+    
+    private ThrowingErrorListener() {
+		super();
+	}
+
+	@Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
             throws ParseCancellationException {
         throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg);

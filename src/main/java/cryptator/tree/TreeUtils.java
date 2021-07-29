@@ -25,47 +25,36 @@ import org.chocosolver.solver.variables.IntVar;
 public final class TreeUtils {
 
 	private TreeUtils() {}
+	
 
-	public static String writePreorder(ICryptaNode root, OutputStream outstream) {
-		final String[] s = {""};
+	public static void writePreorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
-
 		TreeTraversals.preorderTraversal(root, (node, num) -> {
 			out.write(node.getWord());
 			out.write(" ");
-			s[0] = s[0] + String.valueOf(node.getWord()) + " ";
 		}
-				);
+		);
 		out.flush();
-		return s[0];
 	}
 
 	
 	public static void printPostorder(ICryptaNode root) {
-		if(root!=null) {
-			writePostorder(root, System.out);
-		}
+		writePostorder(root, System.out);
 		System.out.println();
 	}
 	
-	public static String writePostorder(ICryptaNode root, OutputStream outstream) {
-		final String[] s = {""};
+	public static void writePostorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
 		TreeTraversals.postorderTraversal(root, (node, num) -> {
 			out.write(node.getWord());
 			out.write(" ");
-			s[0] = s[0] + String.valueOf(node.getWord()) + " ";
 		}
-				);
+		);
 		out.flush();
-		return s[0];
-
 	}
 
 	public static void printInorder(ICryptaNode root) {
-		if(root!=null) {
-			writeInorder(root, System.out);
-		}
+		writeInorder(root, System.out);
 		System.out.println();
 	}
 
@@ -75,6 +64,10 @@ public final class TreeUtils {
 		TreeTraversals.inorderTraversal(root, (node, num) -> {
 			out.write(node.getWord());
 			out.write(" ");
+			// FIXME The number is invalid
+			out.write(String.valueOf(num));
+			out.write(" ");
+			// TODO What is the purpose of s ? 
 			s[0] = s[0] + String.valueOf(node.getWord()) + " ";
 		}
 				);

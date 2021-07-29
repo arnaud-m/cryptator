@@ -8,7 +8,10 @@
  */
 package cryptator;
 
+import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
+import cryptator.tree.TreeUtils;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
@@ -29,6 +32,9 @@ public class Cryptator {
     	ICryptaNode node;
 
 		node = parser.parse("send+more=money");
+		
+		TreeUtils.printInorder(node);
+		TreeUtils.printPostorder(node);
 //		ArrayList<Variable> map=TreeUtils.mapPostorder(node);
 //		ArrayList<Integer> tab =makeArray(map.size());
 //		System.out.println(arrayVarToString(findSolCrypta(tab, map.size(), 10, map, node, 1)));

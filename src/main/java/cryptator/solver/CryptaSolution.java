@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import cryptator.specs.ICryptaSolution;
 
 
-public class CryptaSolution implements ICryptaSolution {
 
+public class CryptaSolution implements ICryptaSolution {
+	
+	// TODO Margaux: Tu devais créer une AUTRE classe, et pas supprimer celle utilisant la map.
+	// De plus, tu devrais quand même utiliser une map ! Utiliser la généricité ?
 	public final ArrayList<Variable> symbolToDigit;
 	
 	public CryptaSolution(ArrayList<Variable> digitToValue) {

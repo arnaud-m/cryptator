@@ -6,7 +6,7 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator;
+package cryptator.parser;
 
 import cryptator.parser.CryptatorLexer;
 import cryptator.parser.CryptatorParser;
@@ -18,15 +18,12 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import Exception.ThrowingErrorListener;
-
-// TODO Move to parser package ? 
 public class CryptaParserWrapper implements ICryptaParser {
 
 	public CryptaParserWrapper() {}
 
 	@Override
-	public ICryptaNode parse(String cryptarithm) {
+	public ICryptaNode parse(String cryptarithm) throws CryptaParserException {
         final CharStream input = CharStreams.fromString(cryptarithm);
         CryptatorLexer lexer = new CryptatorLexer(input);
         lexer.removeErrorListeners();
@@ -41,11 +38,10 @@ public class CryptaParserWrapper implements ICryptaParser {
             return ctx.equation().node;
         }
         catch(Exception e){
-        	// FIXME Throw CryptaParserException
         	// Catching here -> exception not handled depending on the context
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
+            throw new CryptaParserException();
         }
-        return null;
 	}
 
 }

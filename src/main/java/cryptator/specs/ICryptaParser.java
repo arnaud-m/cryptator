@@ -8,7 +8,7 @@
  */
 package cryptator.specs;
 
-import cryptator.CryptaParserException;
+import cryptator.parser.CryptaParserException;
 
 public interface ICryptaParser {
 
