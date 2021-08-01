@@ -19,7 +19,7 @@ public class CryptaConfig {
     */
 	public int arithmeticBase = 10;
 	
-	public boolean useHornerScheme = false;
+	public boolean hornerScheme = false;
 	
 	public int relaxMinDigitOccurence = 0;
 	
@@ -49,6 +49,15 @@ public class CryptaConfig {
 
 	public final void setArithmeticBase(int arithmeticBase) {
 		this.arithmeticBase = arithmeticBase;
+	}
+	
+
+	public final boolean useHornerScheme() {
+		return hornerScheme;
+	}
+
+	public final void useHornerScheme(boolean used) {
+		this.hornerScheme = used;
 	}
 
 	public final int getRelaxMinDigitOccurence() {

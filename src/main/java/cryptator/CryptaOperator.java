@@ -8,45 +8,50 @@
  */
 package cryptator;
 
+import java.util.function.BinaryOperator;
 import java.util.function.IntBinaryOperator;
+
+import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 
 public enum CryptaOperator {
 
-	ADD("+", (a, b) -> a + b),
-	SUB("-", (a, b) -> a - b), 
-	MUL("*", (a, b) -> a * b), 
-	DIV("/", (a, b) -> a / b), 
-	MOD("%", (a, b) -> a % b), 
-	POW("^", (a, b) -> a ^ b), 
-	ID("", (a, b) -> 0),
+	ADD("+", (a, b) -> a + b, (a, b) -> a.add(b)),
+	SUB("-", (a, b) -> a - b, (a, b) -> a.sub(b)), 
+	MUL("*", (a, b) -> a * b, (a, b) -> a.mul(b)), 
+	DIV("/", (a, b) -> a / b, (a, b) -> a.div(b)), 
+	MOD("%", (a, b) -> a % b, (a, b) -> a.mod(b)), 
+	POW("^", (a, b) -> a ^ b, (a, b) -> a.pow(b)), 
+	ID("", (a, b) -> 0, (a, b) -> null),
 	// TODO use == instead of = for equality ?
-	EQ("=", (a, b) -> a == b ? 1 : 0), 
-	NEQ("!=", (a, b) -> a != b ? 1 : 0), 
-	LT("<", (a, b) -> a < b ? 1 : 0), 
-	GT(">", (a, b) -> a > b ? 1 : 0), 
-	LEQ("<=", (a, b) -> a <= b ? 1 : 0), 
-	GEQ(">=", (a, b) -> a >= b ? 1 : 0);
-	
-	public final String token;
-	
-	public final IntBinaryOperator function;
-	
-	// TODO public final BinaryOperator<ArExpression> expression;
-	// TODO ReExpression extends ArExpression
-	// TODO public final BiFunction<ArExpression, ArExpression, ReExpression> constraint;
+	EQ("=", (a, b) -> a == b ? 1 : 0, (a, b) -> a.eq(b)), 
+	NEQ("!=", (a, b) -> a != b ? 1 : 0, (a, b) -> a.ne(b)), 
+	LT("<", (a, b) -> a < b ? 1 : 0, (a, b) -> a.lt(b)), 
+	GT(">", (a, b) -> a > b ? 1 : 0, (a, b) -> a.gt(b)), 
+	LEQ("<=", (a, b) -> a <= b ? 1 : 0, (a, b) -> a.le(b)), 
+	GEQ(">=", (a, b) -> a >= b ? 1 : 0, (a, b) -> a.ge(b));
 
-	private CryptaOperator(String token, IntBinaryOperator function) {
+	public final String token;
+
+	public final IntBinaryOperator function;
+
+	public final BinaryOperator<ArExpression> expression;
+
+	private CryptaOperator(String token, IntBinaryOperator function, BinaryOperator<ArExpression> expression) {
 		this.token = token;
 		this.function = function;
+		this.expression = expression;
 	}
 
 	public final String getToken() {
 		return token;
 	}
-	
-	
+
 	public final IntBinaryOperator getFunction() {
 		return function;
+	}
+
+	public final BinaryOperator<ArExpression> getExpression() {
+		return expression;
 	}
 
 	public static CryptaOperator valueOfToken(String token) {
@@ -56,5 +61,5 @@ public enum CryptaOperator {
 		}
 		throw new IllegalArgumentException("Unknown token: " + token);
 	}
-	
+
 }
