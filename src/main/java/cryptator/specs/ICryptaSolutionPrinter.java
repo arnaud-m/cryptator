@@ -10,8 +10,8 @@ package cryptator.specs;
 
 import java.io.OutputStream;
 
-public interface ICryptaPrinter {
+public interface ICryptaSolutionPrinter {
 
-	void print(ICryptaNode node, OutputStream outstream);
+	void print(ICryptaNode node, ICryptaSolution solution, OutputStream outstream);
 
 }

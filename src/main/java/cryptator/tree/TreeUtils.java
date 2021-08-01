@@ -67,7 +67,6 @@ public final class TreeUtils {
 			// FIXME The number is invalid
 			out.write(String.valueOf(num));
 			out.write(" ");
-			// TODO What is the purpose of s ? 
 			s[0] = s[0] + String.valueOf(node.getWord()) + " ";
 		}
 				);
@@ -370,10 +369,5 @@ public final class TreeUtils {
 		return sb.toString();
 	}
 
-
-	// TODO Return a choco model : add mvn dependency
-	public static Object model(ICryptaNode root) {
-		return null;
-	}
 
 }

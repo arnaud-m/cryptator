@@ -108,6 +108,9 @@ public final class TreeTraversals {
 
 
 	public static void inorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
+		// TODO @Margaux https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
+		// Beware of the numbering
+		// Out of curiosity : https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/
 		int num =1;
 		inorder(root, traversalNodeConsumer, num);
 	}

@@ -32,7 +32,7 @@ public enum CryptaOperator {
 	public final IntBinaryOperator function;
 	
 	// TODO public final BinaryOperator<ArExpression> expression;
-	
+	// TODO ReExpression extends ArExpression
 	// TODO public final BiFunction<ArExpression, ArExpression, ReExpression> constraint;
 
 	private CryptaOperator(String token, IntBinaryOperator function) {

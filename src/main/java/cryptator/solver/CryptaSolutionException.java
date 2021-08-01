@@ -6,17 +6,20 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.parser;
+package cryptator.solver;
 
-public class CryptaParserException extends Exception {
+public class CryptaSolutionException extends Exception {
 
-	// TODO Define useful constructors
-	
-	private static final long serialVersionUID = 6706871076287552877L;
+	private static final long serialVersionUID = -2484196043007677114L;
 
-	public CryptaParserException() {
-		super();
+	public CryptaSolutionException() {
 		// TODO Auto-generated constructor stub
 	}
+
+	public CryptaSolutionException(String message) {
+		super(message);
+	}
 	
+	
+
 }

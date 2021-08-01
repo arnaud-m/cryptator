@@ -8,10 +8,20 @@
  */
 package cryptator.specs;
 
+import cryptator.solver.CryptaSolutionException;
+
 public interface ICryptaSolution {
 
 	boolean hasDigit(char symbol); 
 	
-	int getDigit(char symbol) throws Exception;
-
+	int getDigit(char symbol) throws CryptaSolutionException;
+	
+	default int getDigit(char symbol, int defaultValue) {
+		try {
+			return getDigit(symbol);
+		} catch (CryptaSolutionException e) {
+			return defaultValue;
+		}
+	}
+	
 }

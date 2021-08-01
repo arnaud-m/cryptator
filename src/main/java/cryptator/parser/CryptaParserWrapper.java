@@ -8,15 +8,14 @@
  */
 package cryptator.parser;
 
-import cryptator.parser.CryptatorLexer;
-import cryptator.parser.CryptatorParser;
-import cryptator.parser.CryptatorParser.ProgramContext;
-
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ICryptaParser;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+
+import cryptator.parser.CryptatorParser.ProgramContext;
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ICryptaParser;
 
 public class CryptaParserWrapper implements ICryptaParser {
 
@@ -39,7 +38,9 @@ public class CryptaParserWrapper implements ICryptaParser {
         }
         catch(Exception e){
         	// Catching here -> exception not handled depending on the context
-            System.err.println(e.getMessage());
+        	// TODO @Margaux throw an exception with useful attributes for helping the user. 
+            System.err.println(e.getMessage()); // FOR DEBUG
+            e.printStackTrace();
             throw new CryptaParserException();
         }
 	}

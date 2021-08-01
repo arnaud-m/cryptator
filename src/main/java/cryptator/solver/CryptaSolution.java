@@ -38,9 +38,10 @@ public class CryptaSolution implements ICryptaSolution {
 		}
 		return false;
 	}
+	
 
 	@Override
-	public int getDigit(char symbol) throws Exception {
+	public int getDigit(char symbol) throws CryptaSolutionException {
 		int v = -1;
 		for(Variable var: symbolToDigit) {
 			if(String.valueOf(symbol).equals(var.getName())) {
@@ -49,8 +50,7 @@ public class CryptaSolution implements ICryptaSolution {
 			}
 		}
 		if(v == -1){
-			// FIXME Always specialize exception. 
-			throw new Exception("Unrecognized symbol: " + symbol);
+			throw new CryptaSolutionException("cant find symbol: " + symbol);
 		}
 		return v;
 	}
