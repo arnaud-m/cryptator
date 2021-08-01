@@ -57,6 +57,29 @@ public class EvaluationTest {
 	}
 	
 	@Test
+	public void testBinaryEval1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("BAB + BA = BBB");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A 0 B 1");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 2));
+	}
+	
+	@Test
+	public void testBinaryEval2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("BAB + BA = BBB");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A 1 B 1");
+		assertEquals(0, eval.evaluate(cryptarithm, solution, 2));
+	}
+	
+	@Test
+	public void testBinaryEval3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("BBB + B = BAAA");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A 0 B 1");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 2));
+	}
+	
+	
+	
+	@Test
 	public void testEvaluation2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
 		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 0");
