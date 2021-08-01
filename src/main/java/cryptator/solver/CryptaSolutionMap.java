@@ -8,7 +8,6 @@
  */
 package cryptator.solver;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 import cryptator.specs.ICryptaSolution;
@@ -20,7 +19,7 @@ public class CryptaSolutionMap implements ICryptaSolution {
 	public final static ICryptaSolution parseSolution(String solution) throws CryptaSolutionException {
 		final HashMap<Character, Integer> symbolToDigit = new HashMap<Character, Integer>();
 		final String[] split = solution.split("\\s*[\\s=]\\s*");
-		System.out.println(Arrays.toString(split));
+		//System.out.println(Arrays.toString(split));
 		if( split.length % 2 != 0) throw new CryptaSolutionException("Invalid number of splits: " + split.length);
 		for (int i = 0; i < split.length; i+=2) {
 			if( split[i].length() != 1) throw new CryptaSolutionException("Invalid symbol: " + split[i]);
@@ -42,6 +41,11 @@ public class CryptaSolutionMap implements ICryptaSolution {
 	
 	public final HashMap<Character, Integer> getSymbolToDigit() {
 		return symbolToDigit;
+	}
+	
+	@Override
+	public int size() {
+		return symbolToDigit.size();
 	}
 
 	@Override

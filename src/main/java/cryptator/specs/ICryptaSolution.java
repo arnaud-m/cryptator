@@ -11,7 +11,9 @@ package cryptator.specs;
 import cryptator.solver.CryptaSolutionException;
 
 public interface ICryptaSolution {
-
+	
+	int size();
+	
 	boolean hasDigit(char symbol); 
 	
 	int getDigit(char symbol) throws CryptaSolutionException;

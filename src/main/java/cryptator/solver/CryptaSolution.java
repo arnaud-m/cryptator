@@ -25,6 +25,12 @@ public class CryptaSolution implements ICryptaSolution {
 		super();
 		this.symbolToDigit = digitToValue;
 	}
+
+@Override
+	public int size() {
+		return symbolToDigit.size();
+	}
+
 	
 	public final HashMap<Character, Variable> getDigitToValue() {
 		return symbolToDigit;
