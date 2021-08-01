@@ -97,7 +97,13 @@ public final class TreeUtils {
 			}
 		}
 		ICryptaEvaluation chk = new CryptaEvaluation();
-		int v = chk.evaluate(cryptarithm, new CryptaSolution(map), 10);
+		int v;
+		try {
+			v = chk.evaluate(cryptarithm, new CryptaSolution(map), 10);
+		} catch (CryptaEvaluationException e) {
+			e.printStackTrace();
+			v = -1;
+		}
 		return v == 1? map: null;
 	}
 

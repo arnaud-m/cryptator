@@ -4,12 +4,22 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import cryptator.parser.CryptaParserException;
+import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaSolutionException;
 import cryptator.solver.CryptaSolutionMap;
+import cryptator.specs.ICryptaEvaluation;
+import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
+import cryptator.tree.CryptaEvaluation;
+import cryptator.tree.CryptaEvaluationException;
 
 public class EvaluationTest {
 
+	public final CryptaParserWrapper parser = new CryptaParserWrapper();
+
+	public final ICryptaEvaluation eval = new CryptaEvaluation();
+	
 	public EvaluationTest() {}
 	
 	@Test
@@ -38,5 +48,42 @@ public class EvaluationTest {
 	public void testInvalidSolutionParser3() throws CryptaSolutionException {
 		CryptaSolutionMap.parseSolution("A 1 B");		
 	}
+	
+	@Test
+	public void testEvaluation1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 9");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
+	}
+	
+	@Test
+	public void testEvaluation2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 0");
+		assertEquals(0, eval.evaluate(cryptarithm, solution, 10));
+	}
+	
+	@Test(expected=CryptaEvaluationException.class)
+	public void testEvalPartialSolution() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8");
+		eval.evaluate(cryptarithm, solution, 10);
+	}
+	
+	@Test(expected=CryptaEvaluationException.class)
+	public void testEvalWithInvalidDigit1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 10");
+		eval.evaluate(cryptarithm, solution, 10);
+	}
+	
+	@Test(expected=CryptaEvaluationException.class)
+	public void testEvalWithInvalidDigit2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = -9");
+		eval.evaluate(cryptarithm, solution, 10);
+	}
+	
+	
 
 }

@@ -8,9 +8,10 @@
  */
 package cryptator.specs;
 
+import cryptator.tree.CryptaEvaluationException;
+
 public interface ICryptaEvaluation {
 
-	// TODO Throws an exception on failure ?
-	int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base);
+	int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException;
 
 }

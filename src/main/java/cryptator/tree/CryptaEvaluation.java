@@ -19,61 +19,67 @@ import cryptator.specs.ITraversalNodeConsumer;
 public class CryptaEvaluation implements ICryptaEvaluation {
 
 	@Override
-	public int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) {
-		EvaluationConsumer evaluationNodeConsumer = new EvaluationConsumer(solution, base);
+	public int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException {
+		final EvaluationConsumer evaluationNodeConsumer = new EvaluationConsumer(solution, base);
 		TreeTraversals.postorderTraversal(cryptarithm, evaluationNodeConsumer);
-		return evaluationNodeConsumer.peek();
+		return evaluationNodeConsumer.eval();
 	}	
-	
+
 	private static class EvaluationConsumer implements ITraversalNodeConsumer {
 
 		private final ICryptaSolution solution;
-		
+
 		private final int base;
-		
+
 		private final Stack<Integer> stack = new Stack<Integer>();
-		
-		
+
+		private CryptaEvaluationException exception;
+
+
 		public EvaluationConsumer(ICryptaSolution solution, int base) {
 			super();
 			this.solution = solution;
 			this.base = base;
 		}
 
-		private Integer getWordValue(ICryptaNode node) throws CryptaSolutionException {
-			int v = 0;
-			for (char c : node.getWord()) {
-				v = v * base + solution.getDigit(c);
+		private Integer getWordValue(ICryptaNode node) throws CryptaEvaluationException {
+			try {
+				int v = 0;
+				for (char c : node.getWord()) {
+					final int digit = solution.getDigit(c);
+					if(digit < 0 || digit >= base) throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
+					v = v * base + digit;
+				}
+				return v;
+			} catch (CryptaSolutionException e) {
+				throw new CryptaEvaluationException("Cannot use a partial solution for evaluation", e);
 			}
-			return v;
 		}
-		
+
 		@Override
 		public void accept(ICryptaNode node, int numNode) {
-			try {
+			// Check for the exception because it cannot be thrown here without changing the method signature.
+			if(exception == null) {
 				if(node.isLeaf()) {
-					stack.push(getWordValue(node));
+					try {
+						stack.push(getWordValue(node));
+					} catch (CryptaEvaluationException e) {
+						exception = e;
+					}
 				} else {
 					final int b = stack.pop();
 					final int a = stack.pop();
 					stack.push(node.getOperator().getFunction().applyAsInt(a, b));
 				}
 			}
-			catch(CryptaSolutionException e){
-				System.out.println(e.getMessage());
-			}
 		}
-		
-		public int peek() {
-			// TODO Check that the stack contains a single value
-			try {
-				return stack.peek();
-			}
-			catch(Exception e){
-				System.out.println(e.getMessage());
-				return -1;
-			}
+
+
+		public int eval() throws CryptaEvaluationException {
+			if(exception != null) throw exception;
+			if(stack.size() != 1) throw new CryptaEvaluationException("Invalid stack size at the end of evaluation.");
+			return stack.peek();
 		}
 	}
-	
+
 }
