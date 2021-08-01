@@ -17,7 +17,6 @@ import cryptator.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalNodeConsumer;
-import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.TreeTraversals;
 
 public class CryptaModeler implements ICryptaModeler {
@@ -25,7 +24,7 @@ public class CryptaModeler implements ICryptaModeler {
 	public CryptaModeler() {}
 
 	@Override
-	public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaEvaluationException {
+	public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
 		final Model model = new Model("Cryptarithm");
 		final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
 		TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
@@ -61,7 +60,7 @@ public class CryptaModeler implements ICryptaModeler {
 
 
 		private IntVar createSymbolVar(char symbol) {
-			return model.intVar(String.valueOf(symbol), 0, config.getArithmeticBase()-1);
+			return model.intVar(String.valueOf(symbol), 0, config.getArithmeticBase()-1, false);
 		}
 
 		private IntVar getSymbolVar(char symbol) {
@@ -96,7 +95,7 @@ public class CryptaModeler implements ICryptaModeler {
 
 			@Override
 			public IntVar apply(char[] word) {
-				// TODO @Margaux
+				// TODO @Margaux https://en.wikipedia.org/wiki/Horner%27s_method
 				return null;
 			}			
 		}	
@@ -117,9 +116,12 @@ public class CryptaModeler implements ICryptaModeler {
 			}
 		}
 
-		public ReExpression cryptarithmEquationConstraint() {
-			if(stack.size() != 1) throw new IllegalStateException("Invalid stack size at the end of modeling.");
-			return (ReExpression) stack.peek();
+		public ReExpression cryptarithmEquationConstraint() throws CryptaModelException {
+			if(stack.size() != 1) throw new CryptaModelException("Invalid stack size at the end of modeling.");
+			if (stack.peek() instanceof ReExpression) {
+				return (ReExpression) stack.peek();
+			} else 
+			throw new CryptaModelException("Modeling error for the cryptarithm equation constraint.");
 		}
 		
 		private IntVar[] getGCCVars() {
@@ -136,12 +138,13 @@ public class CryptaModeler implements ICryptaModeler {
 		}
 		
 		private IntVar[] getGCCOccs(int lb, int ub) {
-			return model.intVarArray("O", config.getArithmeticBase(), lb, ub);
+			return model.intVarArray("O", config.getArithmeticBase(), lb, ub, false);
 		}
 				
-		public Constraint globalCardinalityConstraint() {
+		public Constraint globalCardinalityConstraint() throws CryptaModelException {
 			final IntVar[] vars = getGCCVars();
 			final int n = vars.length;
+			if(n == 0) throw new CryptaModelException("No symbol found while modeling !");
 			final int b = config.getArithmeticBase();
 			final int minOcc = Math.max(0, (n/b) - config.getRelaxMinDigitOccurence() );
 			final int maxOcc = Math.max(0, ((n+b-1)/b) + config.getRelaxMaxDigitOccurence() );

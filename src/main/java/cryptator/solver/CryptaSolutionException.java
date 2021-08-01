@@ -12,10 +12,6 @@ public class CryptaSolutionException extends Exception {
 
 	private static final long serialVersionUID = -2484196043007677114L;
 
-	public CryptaSolutionException() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public CryptaSolutionException(String message) {
 		super(message);
 	}

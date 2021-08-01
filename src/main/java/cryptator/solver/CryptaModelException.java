@@ -6,14 +6,16 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.specs;
+package cryptator.solver;
 
-import cryptator.CryptaConfig;
-import cryptator.solver.CryptaModel;
-import cryptator.solver.CryptaModelException;
+public class CryptaModelException extends Exception {
 
-public interface ICryptaModeler {
+	private static final long serialVersionUID = -2484196043007677114L;
 
-	CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException;
+	public CryptaModelException(String message) {
+		super(message);
+	}
+	
+	
 
 }
