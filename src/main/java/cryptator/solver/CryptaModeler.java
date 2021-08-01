@@ -1,13 +1,14 @@
 package cryptator.solver;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
@@ -26,14 +27,12 @@ public class CryptaModeler implements ICryptaModeler {
 	@Override
 	public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaEvaluationException {
 		final Model model = new Model("Cryptarithm");
-
 		final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
 		TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
-		modelerNodeConsumer.constraint().decompose().post();
-
+		modelerNodeConsumer.cryptarithmEquationConstraint().decompose().post();
+		modelerNodeConsumer.globalCardinalityConstraint().post();
 		return new CryptaModel(model, modelerNodeConsumer.symbolsToVariables);
 	}
-
 
 
 	private final static class ModelerConsumer implements ITraversalNodeConsumer {
@@ -118,11 +117,46 @@ public class CryptaModeler implements ICryptaModeler {
 			}
 		}
 
-		public ReExpression constraint() {
+		public ReExpression cryptarithmEquationConstraint() {
 			if(stack.size() != 1) throw new IllegalStateException("Invalid stack size at the end of modeling.");
 			return (ReExpression) stack.peek();
 		}
-
+		
+		private IntVar[] getGCCVars() {
+			final Collection<IntVar> vars = symbolsToVariables.values();
+			return vars.toArray(new IntVar[vars.size()]);
+		}
+				
+		private int[] getGCCValues() {
+			int[] values = new int[config.getArithmeticBase()];
+			for (int i = 0; i < values.length; i++) {
+				values[i] = i;
+			}
+			return values;
+		}
+		
+		private IntVar[] getGCCOccs(int lb, int ub) {
+			return model.intVarArray("O", config.getArithmeticBase(), lb, ub);
+		}
+				
+		public Constraint globalCardinalityConstraint() {
+			final IntVar[] vars = getGCCVars();
+			final int n = vars.length;
+			final int b = config.getArithmeticBase();
+			final int minOcc = Math.max(0, (n/b) - config.getRelaxMinDigitOccurence() );
+			final int maxOcc = Math.max(0, ((n+b-1)/b) + config.getRelaxMaxDigitOccurence() );
+			//System.err.println(minOcc + " " + maxOcc);
+			if(maxOcc == 1) {
+				return model.allDifferent(vars);
+			} else {
+				return model.globalCardinality(
+						vars, 
+						getGCCValues(), 
+						getGCCOccs(minOcc, maxOcc), 
+						true);
+				
+			}
+		}
 
 	}
 

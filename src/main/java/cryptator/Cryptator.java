@@ -30,7 +30,9 @@ public class Cryptator {
 		CryptaParserWrapper parser = new CryptaParserWrapper();
 		ICryptaNode node;
 
-		node = parser.parse("send+more=money");
+		//node = parser.parse("send+more=money");
+    	
+    	node = parser.parse("send+much+more=money");
 		
 		TreeUtils.printInorder(node);
 		TreeUtils.printPostorder(node);
