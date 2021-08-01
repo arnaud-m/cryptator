@@ -19,6 +19,8 @@ public class CryptaConfig {
     */
 	public int arithmeticBase = 10;
 	
+	public boolean useHornerScheme = false;
+	
 	public int relaxMinDigitOccurence = 0;
 	
 	public int relaxMaxDigitOccurence = 0;

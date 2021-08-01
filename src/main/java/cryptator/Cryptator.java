@@ -9,7 +9,8 @@
 package cryptator;
 
 import cryptator.parser.CryptaParserWrapper;
-import cryptator.solver.CryptaModel;
+==== BASE ====
+==== BASE ====
 import cryptator.specs.ICryptaNode;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
@@ -23,7 +24,6 @@ public class Cryptator {
 	}
 
 	public static void main(String[] args) throws Exception {
-		CryptaModel model= new CryptaModel("Cryptarithme");
 		//Model model=new Model("Cryptarithme");
 
 
@@ -35,16 +35,17 @@ public class Cryptator {
 //		ArrayList<Integer> tab =makeArray(map.size());
 //		System.out.println(arrayVarToString(findSolCrypta(tab, map.size(), 10, map, node, 1)));
 
+		CryptaModel model = new CryptaModeler().model(node, new CryptaConfig());
+		
+		System.out.println(model.getModel());
 
-
-		contraint(node, model);
-
-		Solver solver = model.getModel().getSolver();
-		Solution solution=new Solution(model.getModel());
-		if(solver.solve()){
-			System.out.println(arrayIntVarToString(model.getMap()));
-			System.out.println(solution.record());
-		}
+//		contraint(node, model);
+//
+//		Solver solver = model.getSolver();
+//		Solution solution=new Solution(model);
+//		if(solver.solve()){
+//			System.out.println(solution.record());
+//		}
 //		solver.showStatistics();
 //		solver.showSolutions();
 //		solver.findSolution();
