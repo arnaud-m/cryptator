@@ -8,12 +8,15 @@
  */
 package cryptator.solver;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
-public class CryptaModel {
+import cryptator.specs.ICryptaSolution;
+
+public final class CryptaModel {
 
 	public final Model model; 
 	
@@ -33,6 +36,14 @@ public class CryptaModel {
 		return symbolsToVariables;
 	}
 	
+
+	protected ICryptaSolution recordSolution() {
+		final Map<Character, Integer> symbolsToDigits = new HashMap<Character, Integer>();
+		symbolsToVariables.forEach((symbol, var) -> {
+			symbolsToDigits.put(symbol, var.getValue());
+		});
+		return new CryptaSolutionMap(symbolsToDigits);
+	}
 	
 	
 	

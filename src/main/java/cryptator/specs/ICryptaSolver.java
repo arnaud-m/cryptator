@@ -8,12 +8,13 @@
  */
 package cryptator.specs;
 
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import cryptator.CryptaConfig;
 
 public interface ICryptaSolver {
 
-	Stream<ICryptaSolution> solve(ICryptaNode cryptarithm, CryptaConfig config);
+	boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer);
 
 }

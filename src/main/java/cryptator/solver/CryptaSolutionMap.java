@@ -9,13 +9,14 @@
 package cryptator.solver;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import cryptator.specs.ICryptaSolution;
 
 public class CryptaSolutionMap implements ICryptaSolution {
 
-	public final HashMap<Character, Integer> symbolToDigit;
-	
+	public final Map<Character, Integer> symbolsToDigits;
+			
 	public final static ICryptaSolution parseSolution(String solution) throws CryptaSolutionException {
 		final HashMap<Character, Integer> symbolToDigit = new HashMap<Character, Integer>();
 		final String[] split = solution.split("\\s*[\\s=]\\s*");
@@ -34,35 +35,35 @@ public class CryptaSolutionMap implements ICryptaSolution {
 		return new CryptaSolutionMap(symbolToDigit);
 	}
 	
-	public CryptaSolutionMap(HashMap<Character, Integer> symbolToDigit) {
+	public CryptaSolutionMap(Map<Character, Integer> symbolsToDigits) {
 		super();
-		this.symbolToDigit = symbolToDigit;
+		this.symbolsToDigits = symbolsToDigits;
 	}
 	
-	public final HashMap<Character, Integer> getSymbolToDigit() {
-		return symbolToDigit;
+	public final Map<Character, Integer> getSymbolToDigit() {
+		return symbolsToDigits;
 	}
 	
 	@Override
 	public int size() {
-		return symbolToDigit.size();
+		return symbolsToDigits.size();
 	}
 
 	@Override
 	public boolean hasDigit(char symbol) {
-		return symbolToDigit.containsKey(Character.valueOf(symbol));
+		return symbolsToDigits.containsKey(Character.valueOf(symbol));
 	}
 
 	@Override
 	public int getDigit(char symbol) throws CryptaSolutionException {
-		final Integer v = symbolToDigit.get(Character.valueOf(symbol));
+		final Integer v = symbolsToDigits.get(Character.valueOf(symbol));
 		if(v == null) throw new CryptaSolutionException("cant find symbol: " + symbol);
 		else return v.intValue();
 	}
 
 	@Override
 	public String toString() {
-		return symbolToDigit.toString();
+		return symbolsToDigits.toString();
 	}
 	
 	public static void main(String[] args) throws CryptaSolutionException {
