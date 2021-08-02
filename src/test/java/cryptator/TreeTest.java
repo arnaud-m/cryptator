@@ -8,17 +8,22 @@
  */
 package cryptator;
 
-import static cryptator.solver.SolverUtils.*;
-import static cryptator.tree.TreeUtils.*;
+import static cryptator.solver.SolverUtils.arrayIntVarToString;
+import static cryptator.solver.SolverUtils.contraint;
+import static cryptator.tree.TreeUtils.arrayVarToString;
+import static cryptator.tree.TreeUtils.explorationRecursive;
+import static cryptator.tree.TreeUtils.findSolCrypta;
+import static cryptator.tree.TreeUtils.makeArray;
+import static cryptator.tree.TreeUtils.writeInorder;
 import static cryptator.tree.TreeUtils.writePostorder;
-import static org.junit.Assert.*;
+import static cryptator.tree.TreeUtils.writePreorder;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import cryptator.solver.CryptaModel;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
@@ -28,14 +33,16 @@ import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
-import cryptator.solver.*;
+import cryptator.solver.CryptaModel;
+import cryptator.solver.CryptaModel2;
+import cryptator.solver.CryptaSolution;
+import cryptator.solver.Variable;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 import cryptator.tree.GraphizExporter;
-import cryptator.tree.TreeUtils;
 
 public class TreeTest {
 
@@ -298,7 +305,7 @@ public class TreeTest {
 	public void choco() throws Exception {
 		long start = System.currentTimeMillis();
 
-		CryptaModel model= new CryptaModel("Cryptarithme");
+		CryptaModel2 model= new CryptaModel2("Cryptarithme");
 
 		contraint(ABC, model);
 		Solver solver = model.getModel().getSolver();

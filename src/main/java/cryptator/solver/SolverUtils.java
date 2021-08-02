@@ -1,3 +1,11 @@
+/**
+ * This file is part of cryptator, https://github.com/arnaud-m/cryptator
+ *
+ * Copyright (c) 2021, Université Côte d'Azur. All rights reserved.
+ *
+ * Licensed under the BSD 3-clause license.
+ * See LICENSE file in the project root for full license information.
+ */
 package cryptator.solver;
 
 import cryptator.specs.ICryptaNode;
@@ -10,7 +18,7 @@ import java.util.ArrayList;
 
 public class SolverUtils {
 
-    public static CryptaModel contraint(ICryptaNode root, CryptaModel model) {
+    public static CryptaModel2 contraint(ICryptaNode root, CryptaModel2 model) {
         mapPostorder(root, model);
 
         contraintWordPostorder(root, model);
@@ -41,7 +49,7 @@ public class SolverUtils {
         return model;
     }
 
-    public static void mapPostorder(ICryptaNode root, CryptaModel model) {
+    public static void mapPostorder(ICryptaNode root, CryptaModel2 model) {
         Model m=model.getModel();
         TreeTraversals.postorderTraversal(root, (node, num) -> {
                     if (node.isLeaf()) {
@@ -61,7 +69,7 @@ public class SolverUtils {
         );
     }
 
-    public static void contraintWordPostorder(ICryptaNode root, CryptaModel model) {
+    public static void contraintWordPostorder(ICryptaNode root, CryptaModel2 model) {
         Model m=model.getModel();
         TreeTraversals.postorderTraversal(root, (node, num) -> {
                     if (node.isLeaf()) {
@@ -85,7 +93,7 @@ public class SolverUtils {
         );
     }
 
-    public static void comparator(ICryptaNode root, CryptaModel model) {
+    public static void comparator(ICryptaNode root, CryptaModel2 model) {
         switch (root.getOperator()){
             case EQ:
                 calcul(root.getLeftChild(), model).eq(calcul(root.getRightChild(), model)).decompose().post();
@@ -110,7 +118,7 @@ public class SolverUtils {
     }
 
 
-    public static ArExpression calcul(ICryptaNode root, CryptaModel model) {
+    public static ArExpression calcul(ICryptaNode root, CryptaModel2 model) {
         switch (root.getOperator()){
             case ADD:
                 return calcul(root.getLeftChild(), model).add(calcul(root.getRightChild(), model));
