@@ -11,6 +11,7 @@ package cryptator.tree;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cryptator.solver.CryptaSolution;
 import cryptator.solver.Variable;
@@ -58,165 +59,20 @@ public final class TreeUtils {
 		System.out.println();
 	}
 
-	public static String writeInorder(ICryptaNode root, OutputStream outstream) {
-		final String[] s = {""};
+	public static void writeInorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
 		TreeTraversals.inorderTraversal(root, (node, num) -> {
 			out.write(node.getWord());
 			out.write(" ");
-			// FIXME The number is invalid
-			out.write(String.valueOf(num));
-			out.write(" ");
-			s[0] = s[0] + String.valueOf(node.getWord()) + " ";
+//			out.write(String.valueOf(num));
+//			out.write(" ");
 		}
 				);
 		out.flush();
-		return s[0];
-	}
-
-	public static ArrayList<Variable> mapPostorder(ICryptaNode root) {
-		final ArrayList<Variable>[] map = new ArrayList[]{new ArrayList<>()};
-		TreeTraversals.postorderTraversal(root, (node, num) -> {
-				if (node.isLeaf()) {
-					char[] word = node.getWord();
-					addVar(map[0], new Variable(String.valueOf(word[0]), 0, 1, 9));
-					for (int i=1; i<word.length;i++) {
-						addVar(map[0], new Variable(String.valueOf(word[i]), 0, 0, 9));
-					}
-					StringBuilder s = new StringBuilder();
-					for (char c: word){
-						s.append(c);
-					}
-
-					addVar(map[0], new Variable(s.toString(), 0, 1, (int) Math.pow(10,word.length)-1));
-				}
-			}
-		);
-		return map[0];
-	}
-
-	public static ArrayList<IntVar> contraintWordPostorder(ICryptaNode root, ArrayList<IntVar> map, Model model) {
-		TreeTraversals.postorderTraversal(root, (node, num) -> {
-					if (node.isLeaf()) {
-						char[] word = node.getWord();
-						IntVar[] vars= new IntVar[word.length];
-						int[] coeffs= new int[word.length];
-
-						for(int i=0; i<word.length; i++){
-							vars[i]=getVar(map, String.valueOf(word[i]));
-							coeffs[i]= (int) Math.pow(10, word.length-i-1);
-						}
-
-						StringBuilder s = new StringBuilder();
-						for (char c: word){
-							s.append(c);
-						}
-						IntVar v=getVar(map, s.toString());
-						model.scalar(vars, coeffs, "=", v).post();
-					}
-				}
-		);
-		return map;
 	}
 
 
-	public static Model contraint(ICryptaNode root, Model model) {
-		ArrayList<Variable> mapV = mapPostorder(root);
 
-		ArrayList<IntVar> map = new ArrayList<>();
-		for (Variable v: mapV){
-			map.add(model.intVar(v.getName(), v.getValMin(), v.getValMax(), false));
-		}
-
-
-		contraintWordPostorder(root, map, model);
-
-
-		ArrayList<IntVar> allDif = new ArrayList<>();
-		for(IntVar var: map){
-			if(var.getLB()!=var.getUB()){
-				allDif.add(var);
-			}
-		}
-
-		IntVar[] array = allDif.toArray(new IntVar[0]);
-		model.allDifferent(array).post();
-
-
-		comparator(root, map, model);
-		return model;
-	}
-
-	public static void comparator(ICryptaNode root, ArrayList<IntVar> map, Model model) {
-		switch (root.getOperator()){
-			case EQ:
-				calcul(root.getLeftChild(), map, model).eq(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case NEQ:
-				calcul(root.getLeftChild(), map, model).ne(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case LT:
-				calcul(root.getLeftChild(), map, model).lt(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case GT:
-				calcul(root.getLeftChild(), map, model).gt(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case LEQ:
-				calcul(root.getLeftChild(), map, model).le(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case GEQ:
-				calcul(root.getLeftChild(), map, model).ge(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-		}
-
-	}
-
-
-	public static ArExpression calcul(ICryptaNode root, ArrayList<IntVar> map, Model model) {
-		switch (root.getOperator()){
-			case ADD:
-				return calcul(root.getLeftChild(), map, model).add(calcul(root.getRightChild(), map, model));
-
-			case SUB:
-				return calcul(root.getLeftChild(), map, model).sub(calcul(root.getRightChild(), map, model));
-
-			case MUL:
-				return calcul(root.getLeftChild(), map, model).mul(calcul(root.getRightChild(), map, model));
-
-			case DIV:
-				return calcul(root.getLeftChild(), map, model).div(calcul(root.getRightChild(), map, model));
-
-			case MOD:
-				return calcul(root.getLeftChild(), map, model).mod(calcul(root.getRightChild(), map, model));
-
-			case POW:
-				return calcul(root.getLeftChild(), map, model).pow(calcul(root.getRightChild(), map, model));
-
-			default:
-				IntVar v=getVar(map, String.valueOf(root.getWord()));
-				return v!=null? v: model.intVar("0", 0, 0, false);
-		}
-	}
-
-	private static IntVar getVar(ArrayList<IntVar> map, String s) {
-		for (IntVar var: map){
-			if(var.getName().equals(s)){
-				return var;
-			}
-		}
-		return null;
-	}
-
-	public static void addVar(ArrayList<Variable> map, Variable var) {
-		for (Variable v: map){
-			if (v.getName().equals(var.getName())){
-				v.setValMax(Math.min(v.getValMax(), var.getValMax()));
-				v.setValMin(Math.max(v.getValMin(), var.getValMin()));
-				return;
-			}
-		}
-		map.add(var);
-	}
 
 	public static ArrayList<Integer> makeArray (int n) {
 		ArrayList<Integer> tab=new ArrayList<>();
@@ -230,9 +86,9 @@ public final class TreeUtils {
 
 	//checker
 
-	private static ArrayList<Variable> checkArray(ArrayList<Integer> input, ArrayList<Variable> map, ICryptaNode cryptarithm, int max) {
+	private static HashMap<Character, Variable> checkArray(ArrayList<Integer> input, HashMap<Character, Variable> map, ICryptaNode cryptarithm, int max) {
 		int i=0;
-		for (Variable var : map) {
+		for (Variable var : map.values()) {
 			if(var.setValue(input.get(i)%max)){
 				i++;
 			}
@@ -245,8 +101,8 @@ public final class TreeUtils {
 		return v == 1? map: null;
 	}
 
-	public static ArrayList<Variable> explorationRecursive(ArrayList<Integer> elements,
-														   ArrayList<Variable> map, ICryptaNode cryptarithm, int max, int nbRep) throws Exception {
+	public static HashMap<Character, Variable> explorationRecursive(ArrayList<Integer> elements,
+														   HashMap<Character, Variable> map, ICryptaNode cryptarithm, int max, int nbRep) throws Exception {
 		if(map.size()>max*nbRep){
 			throw new Exception("to much different letter");
 		}
@@ -271,7 +127,7 @@ public final class TreeUtils {
 			}
 
 			if(rep<=nbRep) {
-				ArrayList<Variable> res = checkArray(elements, map, cryptarithm, max);
+				HashMap<Character, Variable> res = checkArray(elements, map, cryptarithm, max);
 				if (res != null) {
 					return res;
 				}
@@ -301,10 +157,10 @@ public final class TreeUtils {
 	}
 
 	// Generating permutation using Heap Algorithm
-	public static ArrayList<Variable> heapPermutation(ArrayList<Integer> a, int size, int n, ArrayList<Variable> map, ICryptaNode cryptarithm, int max) {
+	public static HashMap<Character, Variable> heapPermutation(ArrayList<Integer> a, int size, int n, HashMap<Character, Variable> map, ICryptaNode cryptarithm, int max) {
 		// if size becomes 1 then prints the obtained
 		// permutation
-		ArrayList<Variable> m = null;
+		HashMap<Character, Variable> m = null;
 		if (size == 1) {
 			m=checkArray(a, map, cryptarithm, max);
 			return m;
@@ -334,12 +190,12 @@ public final class TreeUtils {
 		return m;
 	}
 
-	public static ArrayList<Variable> findSolCrypta(ArrayList<Integer> comb, int size, int max, ArrayList<Variable> map, ICryptaNode cryptarithm, int nbRep) throws Exception {
+	public static HashMap<Character, Variable> findSolCrypta(ArrayList<Integer> comb, int size, int max, HashMap<Character, Variable> map, ICryptaNode cryptarithm, int nbRep) throws Exception {
 		if(map.size()>max*nbRep){
 			throw new Exception("to much different letter");
 		}
 		while (comb!=null) {
-			ArrayList<Variable> m=checkArray(comb, map, cryptarithm, max);
+			HashMap<Character, Variable> m=checkArray(comb, map, cryptarithm, max);
 			if(m!=null){
 
 				return m;
@@ -356,10 +212,10 @@ public final class TreeUtils {
 
 
 
-		public static String arrayVarToString(ArrayList<Variable> map) {
+		public static String arrayVarToString(HashMap<Character, Variable> map) {
 		StringBuilder sb=new StringBuilder();
 		if(map!=null) {
-			for (Variable var : map) {
+			for (Variable var : map.values()) {
 				sb.append(var.getName());
 				sb.append("=");
 				sb.append(var.getValue());

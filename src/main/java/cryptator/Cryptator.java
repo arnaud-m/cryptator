@@ -9,14 +9,12 @@
 package cryptator;
 
 import cryptator.parser.CryptaParserWrapper;
+import cryptator.solver.CryptaModel;
 import cryptator.specs.ICryptaNode;
-import cryptator.tree.TreeUtils;
-
-import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
-import static cryptator.tree.TreeUtils.*;
+import static cryptator.solver.SolverUtils.*;
 
 public class Cryptator {
 
@@ -25,16 +23,14 @@ public class Cryptator {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Model model=new Model("Cryptarithme");
+		CryptaModel model= new CryptaModel("Cryptarithme");
+		//Model model=new Model("Cryptarithme");
 
 
 		CryptaParserWrapper parser = new CryptaParserWrapper();
-    	ICryptaNode node;
+		ICryptaNode node;
 
 		node = parser.parse("send+more=money");
-		
-		TreeUtils.printInorder(node);
-		TreeUtils.printPostorder(node);
 //		ArrayList<Variable> map=TreeUtils.mapPostorder(node);
 //		ArrayList<Integer> tab =makeArray(map.size());
 //		System.out.println(arrayVarToString(findSolCrypta(tab, map.size(), 10, map, node, 1)));
@@ -43,9 +39,10 @@ public class Cryptator {
 
 		contraint(node, model);
 
-		Solver solver = model.getSolver();
-		Solution solution=new Solution(model);
+		Solver solver = model.getModel().getSolver();
+		Solution solution=new Solution(model.getModel());
 		if(solver.solve()){
+			System.out.println(arrayIntVarToString(model.getMap()));
 			System.out.println(solution.record());
 		}
 //		solver.showStatistics();

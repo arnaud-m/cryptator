@@ -8,14 +8,15 @@
  */
 package cryptator.parser;
 
-import org.antlr.v4.runtime.BailErrorStrategy;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import cryptator.parser.CryptatorParser.ProgramContext;
+
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaParser;
+import org.antlr.v4.runtime.RecognitionException;
 
 public class CryptaParserWrapper implements ICryptaParser {
 
@@ -24,25 +25,26 @@ public class CryptaParserWrapper implements ICryptaParser {
 	@Override
 	public ICryptaNode parse(String cryptarithm) throws CryptaParserException {
         final CharStream input = CharStreams.fromString(cryptarithm);
-        CryptatorLexer lexer = new CryptatorLexer(input);
+        cryptator.parser.CryptatorLexer lexer = new cryptator.parser.CryptatorLexer(input);
         lexer.removeErrorListeners();
         lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CryptatorParser parser = new CryptatorParser(tokens);
+        cryptator.parser.CryptatorParser parser = new cryptator.parser.CryptatorParser(tokens);
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         try {
-            ProgramContext ctx = parser.program();
+            cryptator.parser.CryptatorParser.ProgramContext ctx = parser.program();
             return ctx.equation().node;
-        }
-        catch(Exception e){
-        	// Catching here -> exception not handled depending on the context
-        	// TODO @Margaux throw an exception with useful attributes for helping the user. 
+        } catch (RecognitionException e) {
+            // Catching here -> exception not handled depending on the context
+            // TODO @Margaux throw an exception with useful attributes for helping the user.
             System.err.println(e.getMessage()); // FOR DEBUG
             e.printStackTrace();
+            //TODO catch this exception
             throw new CryptaParserException();
         }
-	}
+
+    }
 
 }

@@ -24,7 +24,7 @@ public class Variable {
             this.value = i;
             this.valMin = i;
             this.valMax = i;
-        }catch (Exception e){
+        } catch (NumberFormatException e) {
             this.value = value;
             this.valMin = valMin;
             this.valMax = valMax;

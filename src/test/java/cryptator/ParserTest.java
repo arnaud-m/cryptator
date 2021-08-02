@@ -8,8 +8,7 @@
  */
 package cryptator;
 
-import static cryptator.tree.TreeUtils.writePostorder;
-import static cryptator.tree.TreeUtils.writePreorder;
+import static cryptator.tree.TreeUtils.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -38,20 +37,30 @@ public class ParserTest {
 		writePostorder(node, os);
 		assertEquals(expected, new String(os.toByteArray()));
 	}
+
+	public static void testInorder(String expected, ICryptaNode node) {
+		final ByteArrayOutputStream os = new ByteArrayOutputStream();
+		writeInorder(node, os);
+		assertEquals(expected, new String(os.toByteArray()));
+	}
 	
 	
 	@Test
 	public void testParser1() throws CryptaParserException {
 		final ICryptaNode node = parser.parse("send+more=money");
-		testPreorder("= + send more money ", node);;
-		testPostorder("send more + money = ", node);;
+		testPreorder("= + send more money ", node);
+		testPostorder("send more + money = ", node);
+		testInorder("send + more = money ", node);
+
 	}
 	
 	@Test
 	public void testParser2() throws CryptaParserException {
 		final ICryptaNode node = parser.parse("(send + more1 * more2) >=  money");
-		testPreorder(">= + send * more1 more2 money ", node);;
-		testPostorder("send more1 more2 * + money >= ", node);;
+		testPreorder(">= + send * more1 more2 money ", node);
+		testPostorder("send more1 more2 * + money >= ", node);
+		testInorder("send + more1 * more2 >= money ", node);
+
 	}
 
 	@Test(expected = CryptaParserException.class)
@@ -71,7 +80,6 @@ public class ParserTest {
 	
 	@Test(expected = CryptaParserException.class)
 	public void testParserError4() throws CryptaParserException {
-		// FIXME Limit at 9 characters and not 8 as indicated in the grammar 
 		parser.parse("aaaaaaaaa <= bbbbbbbbbb");
 	}
 	

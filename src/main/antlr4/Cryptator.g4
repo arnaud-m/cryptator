@@ -27,7 +27,7 @@ expression returns [ICryptaNode node]: //create recursively the tree of expressi
             | sub expression {$node=new CryptaNode($sub.text, new CryptaLeaf("0"), $expression.node);};
 
 symbol locals [int n = 0]:  //additional token to simplify the passage in parameter
-    ({$n <= 8}? LETTER {$n++;})+; //limit at 8 symbol else an error is raise
+    ({$n <= 8}? LETTER {$n++;})+; //limit at 9 symbol else an error is raise
 
 modORpow : '%' | '^';
 

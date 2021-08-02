@@ -9,50 +9,56 @@
 package cryptator.solver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cryptator.specs.ICryptaSolution;
 
 
 
 public class CryptaSolution implements ICryptaSolution {
-	
-	// TODO Margaux: Tu devais créer une AUTRE classe, et pas supprimer celle utilisant la map.
-	// De plus, tu devrais quand même utiliser une map ! Utiliser la généricité ?
-	public final ArrayList<Variable> symbolToDigit;
-	
-	public CryptaSolution(ArrayList<Variable> digitToValue) {
+
+
+	public final HashMap<Character, Variable> symbolToDigit;
+
+
+	public CryptaSolution(HashMap<Character, Variable> digitToValue) {
 		super();
 		this.symbolToDigit = digitToValue;
 	}
 	
-	public final ArrayList<Variable> getDigitToValue() {
+	public final HashMap<Character, Variable> getDigitToValue() {
 		return symbolToDigit;
 	}
 
 	@Override
 	public boolean hasDigit(char symbol) {
-		for(Variable var: symbolToDigit){
-			if(var.getName().equals(String.valueOf(symbol))){
-				return true;
-			}
-		}
-		return false;
+		return symbolToDigit.get(symbol) != null;
+//		for(Variable var: symbolToDigit){
+//			if(var.getName().equals(String.valueOf(symbol))){
+//				return true;
+//			}
+//		}
+//		return false;
 	}
 	
 
 	@Override
 	public int getDigit(char symbol) throws CryptaSolutionException {
-		int v = -1;
-		for(Variable var: symbolToDigit) {
-			if(String.valueOf(symbol).equals(var.getName())) {
-				v = var.getValue();
-				break;
-			}
+		int v=symbolToDigit.get(symbol).getValue();
+////		for(Variable var: symbolToDigit) {
+////			if(String.valueOf(symbol).equals(var.getName())) {
+////				v = var.getValue();
+////				break;
+////			}
+////		}
+//		if(v == -1){
+//			throw new CryptaSolutionException("cant find symbol: " + symbol);
+//		}
+		if(v!=-1){
+			return v;
 		}
-		if(v == -1){
-			throw new CryptaSolutionException("cant find symbol: " + symbol);
-		}
-		return v;
+		throw new CryptaSolutionException("cant find symbol: " + symbol);
+
 	}
 
 

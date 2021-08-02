@@ -9,6 +9,7 @@
 package cryptator.tree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ListIterator;
 import java.util.Stack;
 
@@ -108,11 +109,25 @@ public final class TreeTraversals {
 
 
 	public static void inorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
-		// TODO @Margaux https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
+		// https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
 		// Beware of the numbering
 		// Out of curiosity : https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/
-		int num =1;
-		inorder(root, traversalNodeConsumer, num);
+
+		int num=1;
+
+		Stack<ICryptaNode> s = new Stack<ICryptaNode>();
+		ICryptaNode curr = root;
+		while (curr != null || s.size() > 0) {
+			while (curr != null) {
+				s.push(curr);
+				curr = curr.getLeftChild();
+			}
+			curr = s.pop();
+			traversalNodeConsumer.accept(curr, num++);
+			curr = curr.getRightChild();
+		}
+
+//		inorder(root, traversalNodeConsumer, num);
 	}
 
 	private static void inorder(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer, int num) {

@@ -10,6 +10,7 @@ package cryptator.tree;
 
 import java.util.Stack;
 
+import cryptator.solver.CryptaSolutionException;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
@@ -39,7 +40,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 			this.base = base;
 		}
 
-		private Integer getWordValue(ICryptaNode node) throws Exception {
+		private Integer getWordValue(ICryptaNode node) throws CryptaSolutionException {
 			int v = 0;
 			for (char c : node.getWord()) {
 				v = v * base + solution.getDigit(c);
@@ -58,7 +59,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 					stack.push(node.getOperator().getFunction().applyAsInt(a, b));
 				}
 			}
-			catch(Exception e){
+			catch(CryptaSolutionException e){
 				System.out.println(e.getMessage());
 			}
 		}
