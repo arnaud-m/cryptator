@@ -11,26 +11,39 @@ package cryptator.tree;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import cryptator.solver.CryptaSolutionException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaPrinter;
+import cryptator.specs.ICryptaSolution;
+import cryptator.specs.ICryptaSolutionPrinter;
 import cryptator.specs.ITraversalEdgeConsumer;
 
-public class GraphizExporter implements ICryptaPrinter {
+public class GraphizExporter implements ICryptaPrinter, ICryptaSolutionPrinter {
 
 	public GraphizExporter() {}
 
-	@Override
-	public void print(ICryptaNode node, OutputStream outstream) {
-		final GraphvizConsumer toDotty = new GraphvizConsumer(outstream);
+	private void print(ICryptaNode node, GraphvizConsumer toDotty) {
 		toDotty.setUp();
 		toDotty.writeNode(1, node);
 		TreeTraversals.preorderTraversal(node, toDotty);
 		toDotty.tearDown();
 	}
 
+	@Override
+	public void print(ICryptaNode node, OutputStream outstream) {
+		print(node, new GraphvizConsumer(outstream));
+	}
+
+
+	@Override
+	public void print(ICryptaNode node, ICryptaSolution solution, OutputStream outstream) {
+		print(node, new GraphvizSolutionConsumer(outstream, solution));	
+	}
+
+
 	private static class GraphvizConsumer implements ITraversalEdgeConsumer {
 
-		private final PrintWriter out;
+		protected final PrintWriter out;
 
 		public GraphvizConsumer(OutputStream outstream) {
 			super();
@@ -67,5 +80,54 @@ public class GraphizExporter implements ICryptaPrinter {
 			out.flush();
 		}
 	}
+
+	private static class GraphvizSolutionConsumer extends GraphvizConsumer {
+
+		private final ICryptaSolution solution;
+
+		public GraphvizSolutionConsumer(OutputStream outstream, ICryptaSolution solution) {
+			super(outstream);
+			this.solution = solution;
+		}
+
+		private void writeRecordLabel(char[] a) {
+			if (a == null)
+				return ;
+			int iMax = a.length - 1;
+			if (iMax == -1)
+				return ;
+
+			for (int i = 0; ; i++) {
+				out.write('{');
+				out.write(a[i]);
+				out.write('|');
+				try {
+					final int digit = solution.getDigit(a[i]);
+					out.write(String.valueOf(digit));
+				} catch (CryptaSolutionException e) {
+					// Nothing to write
+				}	
+				out.write('}');
+
+				if (i == iMax)
+					return ;
+				out.write("|");
+			}		
+		}
+
+
+		@Override
+		public void writeNode(int num, ICryptaNode node) {
+			if(node.isInternalNode()) super.writeNode(num, node);
+			else {
+				out.write(Integer.toString(num));
+				out.write("[shape=record, label=\"");
+				writeRecordLabel(node.getWord());
+				out.write("\"];\n");
+			}
+		}
+
+	}
+
 
 }
