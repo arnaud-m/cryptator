@@ -16,9 +16,7 @@ import cryptator.solver.CryptaSolution;
 import cryptator.solver.Variable;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
-import org.chocosolver.solver.Model;
-import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
-import org.chocosolver.solver.variables.IntVar;
+
 
 
 
@@ -103,117 +101,10 @@ public final class TreeUtils {
 		return map[0];
 	}
 
-	public static ArrayList<IntVar> contraintWordPostorder(ICryptaNode root, ArrayList<IntVar> map, Model model) {
-		TreeTraversals.postorderTraversal(root, (node, num) -> {
-					if (node.isLeaf()) {
-						char[] word = node.getWord();
-						IntVar[] vars= new IntVar[word.length];
-						int[] coeffs= new int[word.length];
-
-						for(int i=0; i<word.length; i++){
-							vars[i]=getVar(map, String.valueOf(word[i]));
-							coeffs[i]= (int) Math.pow(10, word.length-i-1);
-						}
-
-						StringBuilder s = new StringBuilder();
-						for (char c: word){
-							s.append(c);
-						}
-						IntVar v=getVar(map, s.toString());
-						model.scalar(vars, coeffs, "=", v).post();
-					}
-				}
-		);
-		return map;
-	}
 
 
-	public static Model contraint(ICryptaNode root, Model model) {
-		ArrayList<Variable> mapV = mapPostorder(root);
-
-		ArrayList<IntVar> map = new ArrayList<>();
-		for (Variable v: mapV){
-			map.add(model.intVar(v.getName(), v.getValMin(), v.getValMax(), false));
-		}
 
 
-		contraintWordPostorder(root, map, model);
-
-
-		ArrayList<IntVar> allDif = new ArrayList<>();
-		for(IntVar var: map){
-			if(var.getLB()!=var.getUB()){
-				allDif.add(var);
-			}
-		}
-
-		IntVar[] array = allDif.toArray(new IntVar[0]);
-		model.allDifferent(array).post();
-
-
-		comparator(root, map, model);
-		return model;
-	}
-
-	public static void comparator(ICryptaNode root, ArrayList<IntVar> map, Model model) {
-		switch (root.getOperator()){
-			case EQ:
-				calcul(root.getLeftChild(), map, model).eq(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case NEQ:
-				calcul(root.getLeftChild(), map, model).ne(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case LT:
-				calcul(root.getLeftChild(), map, model).lt(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case GT:
-				calcul(root.getLeftChild(), map, model).gt(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case LEQ:
-				calcul(root.getLeftChild(), map, model).le(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-			case GEQ:
-				calcul(root.getLeftChild(), map, model).ge(calcul(root.getRightChild(), map, model)).decompose().post();
-				break;
-		}
-
-	}
-
-
-	public static ArExpression calcul(ICryptaNode root, ArrayList<IntVar> map, Model model) {
-		switch (root.getOperator()){
-			case ADD:
-				return calcul(root.getLeftChild(), map, model).add(calcul(root.getRightChild(), map, model));
-
-			case SUB:
-				return calcul(root.getLeftChild(), map, model).sub(calcul(root.getRightChild(), map, model));
-
-			case MUL:
-				return calcul(root.getLeftChild(), map, model).mul(calcul(root.getRightChild(), map, model));
-
-			case DIV:
-				return calcul(root.getLeftChild(), map, model).div(calcul(root.getRightChild(), map, model));
-
-			case MOD:
-				return calcul(root.getLeftChild(), map, model).mod(calcul(root.getRightChild(), map, model));
-
-			case POW:
-				return calcul(root.getLeftChild(), map, model).pow(calcul(root.getRightChild(), map, model));
-
-			default:
-				IntVar v=getVar(map, String.valueOf(root.getWord()));
-				return v!=null? v: model.intVar("0", 0, 0, false);
-		}
-	}
-
-	private static IntVar getVar(ArrayList<IntVar> map, String s) {
-		for (IntVar var: map){
-			if(var.getName().equals(s)){
-				return var;
-			}
-		}
-		return null;
-	}
 
 	public static void addVar(ArrayList<Variable> map, Variable var) {
 		for (Variable v: map){
@@ -364,7 +255,7 @@ public final class TreeUtils {
 
 
 
-		public static String arrayVarToString(ArrayList<Variable> map) {
+	public static String arrayVarToString(ArrayList<Variable> map) {
 		StringBuilder sb=new StringBuilder();
 		if(map!=null) {
 			for (Variable var : map) {

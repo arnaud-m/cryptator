@@ -22,9 +22,9 @@ expression returns [ICryptaNode node]: //create recursively the tree of expressi
             symbol {$node=new CryptaLeaf($symbol.text);} //create a node of the tree corresponding to a leaf and return this node
             | '(' expression ')' {$node=$expression.node;}
             | e1=expression modORpow e2=expression {$node=new CryptaNode($modORpow.text, $e1.node, $e2.node);} //create a node of the tree corresponding to an operation and return this node
+            | sub expression {$node=new CryptaNode($sub.text, new CryptaLeaf("0"), $expression.node);}
             | e1=expression divORmul e2=expression {$node=new CryptaNode($divORmul.text, $e1.node, $e2.node);}
-            | e1=expression addORsub e2=expression {$node=new CryptaNode($addORsub.text, $e1.node, $e2.node);}
-            | sub expression {$node=new CryptaNode($sub.text, new CryptaLeaf("0"), $expression.node);};
+            | e1=expression addORsub e2=expression {$node=new CryptaNode($addORsub.text, $e1.node, $e2.node);};
 
 symbol locals [int n = 0]:  //additional token to simplify the passage in parameter
     ({$n <= 8}? LETTER {$n++;})+; //limite at 8 symbol else an error is raise
