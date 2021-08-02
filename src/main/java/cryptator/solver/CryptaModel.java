@@ -37,7 +37,7 @@ public final class CryptaModel {
 	}
 	
 
-	protected ICryptaSolution recordSolution() {
+	public ICryptaSolution recordSolution() {
 		final Map<Character, Integer> symbolsToDigits = new HashMap<Character, Integer>();
 		symbolsToVariables.forEach((symbol, var) -> {
 			symbolsToDigits.put(symbol, var.getValue());
