@@ -11,6 +11,8 @@ package cryptator.specs;
 import java.util.function.Consumer;
 
 import cryptator.CryptaConfig;
+import cryptator.solver.CryptaModelException;
+import cryptator.solver.CryptaSolverException;
 
 public interface ICryptaSolver {
 
@@ -18,7 +20,7 @@ public interface ICryptaSolver {
 	
 	void limitSolution(long limit);
 	
-	boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer);
+	boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException, CryptaSolverException;
 	
 
 }

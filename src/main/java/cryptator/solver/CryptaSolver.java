@@ -49,29 +49,24 @@ public class CryptaSolver implements ICryptaSolver {
 
 
 	@Override
-	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) {
-		try {
-			final CryptaModel m = modeler.model(cryptarithm, config);
-			final Solver solver = m.getModel().getSolver();
-			if(timeLimit > 0) solver.limitTime(timeLimit);
-			System.out.println(m.getModel());
-			if(solutionLimit > 0) {
-				long n = solutionLimit; 
-				while(n > 0 && solver.solve()) {
-					solutionConsumer.accept(m.recordSolution());
-					n--;
-				}
-			} else {
-				while(solver.solve()) {
-					solutionConsumer.accept(m.recordSolution());
-				}
+	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
+		final CryptaModel m = modeler.model(cryptarithm, config);
+		final Solver solver = m.getModel().getSolver();
+		if(timeLimit > 0) solver.limitTime(timeLimit);
+		System.out.println(m.getModel());
+		if(solutionLimit > 0) {
+			long n = solutionLimit; 
+			while(n > 0 && solver.solve()) {
+				solutionConsumer.accept(m.recordSolution());
+				n--;
 			}
-			solver.printStatistics();
-			solver.showStatistics();
-		} catch (CryptaModelException e) {
-			// TODO Handle properly
-			e.printStackTrace();
+		} else {
+			while(solver.solve()) {
+				solutionConsumer.accept(m.recordSolution());
+			}
 		}
+		solver.printStatistics();
+		solver.showStatistics();
 		return false;
 	}
 

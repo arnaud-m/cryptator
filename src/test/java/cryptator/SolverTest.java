@@ -16,7 +16,9 @@ import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
+import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
+import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
@@ -43,7 +45,7 @@ public class SolverTest {
 		solver.limitTime(2000);
 	}
 	
-	private void testCryptarithm(String cryptarithm) throws CryptaParserException {
+	private void testCryptarithm(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		ICryptaNode node = parser.parse(cryptarithm);
 		solver.solve(node, config, (s) -> {
 			// System.out.println(s);
@@ -57,41 +59,41 @@ public class SolverTest {
 	}
 
 	@Test
-	public void testSendMoreMoney1() throws CryptaParserException {
+	public void testSendMoreMoney1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		testCryptarithm("send+more=money");
 	}
 	
 	@Test
-	public void testSendMoreMoney2() throws CryptaParserException {
+	public void testSendMoreMoney2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(16);
 		testCryptarithm("send+more=money");
 	}
 	
 	@Test
-	public void testSendMoreMoney3() throws CryptaParserException {
+	public void testSendMoreMoney3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.allowLeadingZeros(true);
 		testCryptarithm("send+more=money");
 	}
 
 	@Test
-	public void testBigCatLion1() throws CryptaParserException {
+	public void testBigCatLion1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		testCryptarithm("big+cat=lion");
 	}
 
 	@Test
-	public void testBigCatLion2() throws CryptaParserException {
+	public void testBigCatLion2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(16);
 		testCryptarithm("big+cat=lion");
 	}
 
 	@Test
-	public void testBigCatLion3() throws CryptaParserException {
+	public void testBigCatLion3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.allowLeadingZeros(true);
 		testCryptarithm("big+cat=lion");
 	}
 
 	@Test
-	public void testBigCatLion4() throws CryptaParserException {
+	public void testBigCatLion4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		testCryptarithm("big+cat=big");
 	}
 
