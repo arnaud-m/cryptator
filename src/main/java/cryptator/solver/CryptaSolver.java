@@ -9,6 +9,7 @@
 package cryptator.solver;
 
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 import org.chocosolver.solver.Solver;
 
@@ -19,6 +20,8 @@ import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 
 public class CryptaSolver implements ICryptaSolver {
+	
+	private static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
 
 	private final ICryptaModeler modeler = new CryptaModeler();
 
@@ -51,22 +54,22 @@ public class CryptaSolver implements ICryptaSolver {
 	@Override
 	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
 		final CryptaModel m = modeler.model(cryptarithm, config);
-		final Solver solver = m.getModel().getSolver();
-		if(timeLimit > 0) solver.limitTime(timeLimit);
-		System.out.println(m.getModel());
+		LOGGER.info(m.getModel().toString());
+		final Solver s = m.getModel().getSolver();
+		if(timeLimit > 0) s.limitTime(timeLimit);
 		if(solutionLimit > 0) {
 			long n = solutionLimit; 
-			while(n > 0 && solver.solve()) {
+			while(n > 0 && s.solve()) {
 				solutionConsumer.accept(m.recordSolution());
 				n--;
 			}
 		} else {
-			while(solver.solve()) {
+			while(s.solve()) {
 				solutionConsumer.accept(m.recordSolution());
 			}
 		}
-		solver.printStatistics();
-		solver.showStatistics();
+		LOGGER.info(s.getMeasures().toString());
+	//	s.showStatistics();
 		return false;
 	}
 
