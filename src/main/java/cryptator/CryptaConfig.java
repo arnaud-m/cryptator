@@ -23,12 +23,6 @@ public class CryptaConfig {
 	
 	public int relaxMaxDigitOccurence = 0;
 	
-	// TODO Remove ? Keep only model config ?
-	public int timeLimit = 0;
-	
-	// TODO Remove ? Keep only model config ?
-	public int solutionLimit = 0;
-	
 	public CryptaConfig() {}
 
 	public final boolean allowLeadingZeros() {
@@ -70,24 +64,6 @@ public class CryptaConfig {
 
 	public final void setRelaxMaxDigitOccurence(int relaxMaxDigitOccurence) {
 		this.relaxMaxDigitOccurence = relaxMaxDigitOccurence;
-	}
-
-	public final int getTimeLimit() {
-		return timeLimit;
-	}
-
-	public final void setTimeLimit(int timeLimit) {
-		this.timeLimit = timeLimit;
-	}
-
-	public final int getSolutionLimit() {
-		return solutionLimit;
-	}
-
-	public final void setSolutionLimit(int solutionLimit) {
-		this.solutionLimit = solutionLimit;
-	}
-	
-	
+	}	
 
 }

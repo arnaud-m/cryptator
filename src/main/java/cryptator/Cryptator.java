@@ -8,6 +8,9 @@
  */
 package cryptator;
 
+import java.util.Arrays;
+import java.util.logging.Logger;
+
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaModel2;
 import cryptator.solver.CryptaSolver;
@@ -18,27 +21,24 @@ import org.chocosolver.solver.Solver;
 import static cryptator.solver.SolverUtils.contraint;
 
 public class Cryptator {
+	
+	private static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
+
 
 	public Cryptator() {}
 
 	public static void main(String[] args) throws Exception {
+		System.out.println(Arrays.toString(args));
 		final CryptaParserWrapper parser = new CryptaParserWrapper();
-    	final ICryptaNode node = parser.parse("AB+BA=CBC");
-//		final CryptaConfig config = new CryptaConfig();
-//		final GraphizExporter export = new GraphizExporter();
-//		config.setSolutionLimit(2);
-//		final CryptaSolver solver = new CryptaSolver();
-//		solver.solve(node, config, (s) -> {
-//			System.out.println(s);
-//			export.print(node, s, System.out);
-//		} );
-
-		CryptaModel2 model=new CryptaModel2("AB+BA=CBC");
-		contraint(node, model);
-		Solver solver= model.getModel().getSolver();
-		if(solver.solve()){
-			System.out.println(model.getMap());
-		}
+    	final ICryptaNode node = parser.parse("donald+gerald=robert");
+		final CryptaConfig config = new CryptaConfig();
+		final GraphizExporter export = new GraphizExporter();
+		final CryptaSolver solver = new CryptaSolver();
+		solver.limitSolution(2);
+		solver.solve(node, config, (s) -> {
+			System.out.println(s);
+			export.print(node, s, System.out);
+		} );		
 	}
 
 }

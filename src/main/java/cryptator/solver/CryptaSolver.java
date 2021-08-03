@@ -20,18 +20,47 @@ import cryptator.specs.ICryptaSolver;
 
 public class CryptaSolver implements ICryptaSolver {
 
-	public final ICryptaModeler modeler = new CryptaModeler();
-	
+	private final ICryptaModeler modeler = new CryptaModeler();
+
+	private long timeLimit = 0;
+
+	private long solutionLimit = 0;
+
 	public CryptaSolver() {}
+
+
+	public final long getTimeLimit() {
+		return timeLimit;
+	}
+
+
+	@Override
+	public final void limitTime(long limit) {
+		this.timeLimit = limit;
+	}
+
+
+
+	public final long getSolutionLimit() {
+		return solutionLimit;
+	}
+
+
+
+	public final void limitSolution(long limit) {
+		this.solutionLimit = limit;
+	}
+
+
 
 	@Override
 	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) {
 		try {
 			final CryptaModel m = modeler.model(cryptarithm, config);
 			final Solver solver = m.getModel().getSolver();
-			if(config.getTimeLimit() > 0) solver.limitTime(config.getTimeLimit());
-			if(config.getSolutionLimit() > 0) {
-				int n = config.getSolutionLimit(); 
+			if(timeLimit > 0) solver.limitTime(timeLimit);
+			if(solutionLimit > 0) {
+				long n = solutionLimit; 
 				while(n > 0 && solver.solve()) {
 					solutionConsumer.accept(m.recordSolution());
 					n--;

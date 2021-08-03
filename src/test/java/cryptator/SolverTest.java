@@ -39,13 +39,14 @@ public class SolverTest {
 	public void setDefaultConfig() {
 		config.setArithmeticBase(10);
 		config.allowLeadingZeros(false);
-		config.setSolutionLimit(100);
+		solver.limitSolution(100);
+		solver.limitTime(2000);
 	}
 	
 	private void testCryptarithm(String cryptarithm) throws CryptaParserException {
 		ICryptaNode node = parser.parse(cryptarithm);
 		solver.solve(node, config, (s) -> {
-			System.out.println(s);
+			// System.out.println(s);
 			try {
 				assertEquals(1, eval.evaluate(node, s, config.getArithmeticBase()));
 			} catch (CryptaEvaluationException e) {
