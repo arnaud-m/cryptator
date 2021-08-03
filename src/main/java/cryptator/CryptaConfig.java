@@ -9,15 +9,13 @@
 package cryptator;
 
 public class CryptaConfig {
-
-	public boolean isCaseSensitive = true;
-	
-	public boolean allowLeadingZeros = false;
 	
 	/**
 	 * Base, or radix, of the positional Numeral System
     */
 	public int arithmeticBase = 10;
+	
+	public boolean allowLeadingZeros = false;
 	
 	public boolean hornerScheme = false;
 	
@@ -25,19 +23,13 @@ public class CryptaConfig {
 	
 	public int relaxMaxDigitOccurence = 0;
 	
+	// TODO Remove ? Keep only model config ?
 	public int timeLimit = 0;
 	
+	// TODO Remove ? Keep only model config ?
 	public int solutionLimit = 0;
 	
 	public CryptaConfig() {}
-
-	public final boolean isCaseSensitive() {
-		return isCaseSensitive;
-	}
-
-	public final void setCaseSensitive(boolean isCaseSensitive) {
-		this.isCaseSensitive = isCaseSensitive;
-	}
 
 	public final boolean allowLeadingZeros() {
 		return allowLeadingZeros;

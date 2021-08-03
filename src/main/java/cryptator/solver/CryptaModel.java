@@ -44,6 +44,11 @@ public final class CryptaModel {
 		});
 		return new CryptaSolutionMap(symbolsToDigits);
 	}
+
+	@Override
+	public String toString() {
+		return symbolsToVariables.values().toString();
+	}
 	
 	
 	
