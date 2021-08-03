@@ -154,9 +154,15 @@ public class CryptaModeler implements ICryptaModeler {
 			final int n = vars.length;
 			if(n == 0) throw new CryptaModelException("No symbol found while modeling !");
 			final int b = config.getArithmeticBase();
-			// FIXME Check that config int are positive ?
-			final int minOcc = Math.max(0, (n/b) - config.getRelaxMinDigitOccurence() );
-			final int maxOcc = Math.max(0, ((n+b-1)/b) + config.getRelaxMaxDigitOccurence() );
+			
+			int minOcc = n/b;
+			final int deltaMin = config.getRelaxMinDigitOccurence();
+			if(deltaMin > 0) minOcc = Math.max(0, minOcc - deltaMin);
+			
+			int maxOcc = (n+b-1)/b;
+			final int deltaMax = config.getRelaxMaxDigitOccurence();
+			if(deltaMax > 0) maxOcc = Math.min(n, maxOcc + deltaMax);
+			
 			if(maxOcc == 1) {
 				return model.allDifferent(vars);
 			} else {

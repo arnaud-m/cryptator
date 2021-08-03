@@ -43,7 +43,6 @@ public class ParserTest {
 		assertEquals(expected, new String(os.toByteArray()));
 	}
 	
-	//TODO plein de testes
 	@Test
 	public void testParser1() throws CryptaParserException {
 		final ICryptaNode node = parser.parse("send+more=money");

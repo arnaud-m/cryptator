@@ -22,7 +22,6 @@ public enum CryptaOperator {
 	MOD("%", (a, b) -> a % b, (a, b) -> a.mod(b)), 
 	POW("^", (a, b) -> a ^ b, (a, b) -> a.pow(b)), 
 	ID("", (a, b) -> 0, (a, b) -> null),
-	// TODO use == instead of = for equality ?
 	EQ("=", (a, b) -> a == b ? 1 : 0, (a, b) -> a.eq(b)), 
 	NEQ("!=", (a, b) -> a != b ? 1 : 0, (a, b) -> a.ne(b)), 
 	LT("<", (a, b) -> a < b ? 1 : 0, (a, b) -> a.lt(b)), 

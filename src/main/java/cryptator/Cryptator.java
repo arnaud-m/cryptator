@@ -80,7 +80,9 @@ public class Cryptator {
 			// parse the arguments.
 			parser.parseArgument(args);
 			LOGGER.config("Parse options [OK]");
-
+			
+			// FIXME Check for validity of integer options ?
+			
 			// you can parse additional arguments if you want.
 			// parser.parseArgument("more","args");
 
@@ -93,6 +95,7 @@ public class Cryptator {
 		} catch( CmdLineException e ) {
 			System.err.println(e.getMessage());
 		}
+		
 		// if there's a problem in the command line,
 		// you'll get this exception. this will report
 		// an error message.
