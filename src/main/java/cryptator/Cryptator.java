@@ -8,8 +8,11 @@
  */
 package cryptator;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.kohsuke.args4j.CmdLineException;
@@ -31,15 +34,29 @@ import cryptator.tree.GraphizExporter;
 
 public class Cryptator {
 
-	private static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
 	
+	 static {
+	      InputStream stream = Cryptator.class.getClassLoader().
+	              getResourceAsStream("logging.properties");
+	      try {
+	          LogManager.getLogManager().readConfiguration(stream);
+
+	      } catch (IOException e) {
+	          e.printStackTrace();
+	      }
+	  }
+	 
+	private static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
+		
 	public Cryptator() {}
 
 	public static void main(String[] args) {
 
 		final CryptatorConfig config = parseOptions(args);
 		if(config == null) return;
-
+		
+		configureLogging(config);
+		
 		if( config.getArguments().isEmpty()) {
 			LOGGER.severe("Parse cryptarithm arguments [FAIL]");
 			return;
@@ -62,7 +79,7 @@ public class Cryptator {
 		try {
 			// parse the arguments.
 			parser.parseArgument(args);
-			LOGGER.info("Parse options [OK]");
+			LOGGER.config("Parse options [OK]");
 
 			// you can parse additional arguments if you want.
 			// parser.parseArgument("more","args");
@@ -86,12 +103,18 @@ public class Cryptator {
 
 		// print option sample. This is useful some time
 		System.err.println("  Example: java Cryptator"+parser.printExample(OptionHandlerFilter.ALL));
-		LOGGER.info("Parse options [FAIL]");
+		LOGGER.severe("Parse options [FAIL]");
 		return null;
 
 	}
 
-
+	private final static void configureLogging(CryptatorConfig config) {
+		if(config.isVerbose()) {
+			LOGGER.setLevel(Level.FINE);
+			CryptaSolver.LOGGER.setLevel(Level.FINE);
+		}
+	}
+		
 	private final static ICryptaSolver buildSolver(CryptatorConfig config) {
 		final ICryptaSolver solver = new CryptaSolver();
 		solver.limitSolution(config.getSolutionLimit());
@@ -116,10 +139,10 @@ public class Cryptator {
 
 	private static class DefaultConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-
+		
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
-			LOGGER.info(s.toString());
+			LOGGER.log(Level.INFO, "Solution found.\n{0}", s);
 		}
 
 	}
@@ -143,7 +166,7 @@ public class Cryptator {
 			} catch (CryptaEvaluationException e) {
 				LOGGER.log(Level.WARNING, "Eval cryptarithm exception thrown", e);
 			}
-			LOGGER.log(Level.INFO, "Eval cryptarithm solution [{0}]", check);		
+			LOGGER.log(Level.CONFIG, "Eval cryptarithm solution [{0}]", check);		
 		}
 
 	}
@@ -155,10 +178,10 @@ public class Cryptator {
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
 			graphviz.print(n, s, System.out);
+			LOGGER.config("Export cryptarithm solution [OK]");
 		}
 
 	}
-
 
 
 	public static BiConsumer<ICryptaNode, ICryptaSolution> buildBiConsumer(final CryptatorConfig config) {
@@ -172,8 +195,6 @@ public class Cryptator {
 		}
 		return consumer;
 	}
-
-	
 
 
 }
