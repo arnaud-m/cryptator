@@ -9,7 +9,6 @@
 package cryptator.specs;
 
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import cryptator.CryptaConfig;
 

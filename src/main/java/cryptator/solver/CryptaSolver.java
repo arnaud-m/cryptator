@@ -33,24 +33,19 @@ public class CryptaSolver implements ICryptaSolver {
 		return timeLimit;
 	}
 
-
 	@Override
 	public final void limitTime(long limit) {
 		this.timeLimit = limit;
 	}
-
-
 
 	public final long getSolutionLimit() {
 		return solutionLimit;
 	}
 
 
-
 	public final void limitSolution(long limit) {
 		this.solutionLimit = limit;
 	}
-
 
 
 	@Override
@@ -59,6 +54,7 @@ public class CryptaSolver implements ICryptaSolver {
 			final CryptaModel m = modeler.model(cryptarithm, config);
 			final Solver solver = m.getModel().getSolver();
 			if(timeLimit > 0) solver.limitTime(timeLimit);
+			System.out.println(m.getModel());
 			if(solutionLimit > 0) {
 				long n = solutionLimit; 
 				while(n > 0 && solver.solve()) {
@@ -73,6 +69,7 @@ public class CryptaSolver implements ICryptaSolver {
 			solver.printStatistics();
 			solver.showStatistics();
 		} catch (CryptaModelException e) {
+			// TODO Handle properly
 			e.printStackTrace();
 		}
 		return false;

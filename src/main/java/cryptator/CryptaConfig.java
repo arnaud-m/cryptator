@@ -8,23 +8,40 @@
  */
 package cryptator;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
+
 public class CryptaConfig {
-	
+
 	/**
 	 * Base, or radix, of the positional Numeral System
-    */
-	public int arithmeticBase = 10;
-	
-	public boolean allowLeadingZeros = false;
-	
-	public boolean hornerScheme = false;
-	
-	public int relaxMinDigitOccurence = 0;
-	
-	public int relaxMaxDigitOccurence = 0;
-	
-	public CryptaConfig() {}
+	 */
+	@Option(name="--b", usage="boolean value for checking the custom handler")
+	private int arithmeticBase = 10;
 
+	@Option(name="-z",handler=ExplicitBooleanOptionHandler.class,usage="boolean value for checking the custom handler")
+	private boolean allowLeadingZeros;
+
+	@Option(name="-h",handler=ExplicitBooleanOptionHandler.class,usage="boolean value for checking the custom handler")
+	private boolean hornerScheme;
+
+	@Option(name="-min", usage="boolean value for checking the custom handler")
+	private int relaxMinDigitOccurence = 0;
+
+	@Option(name="-max", usage="boolean value for checking the custom handler")
+	private int relaxMaxDigitOccurence = 0;
+
+	// receives other command line parameters than options
+	@Argument
+	private List<String> arguments = new ArrayList<String>();
+
+	public CryptaConfig() {}
+	
 	public final boolean allowLeadingZeros() {
 		return allowLeadingZeros;
 	}
@@ -40,7 +57,6 @@ public class CryptaConfig {
 	public final void setArithmeticBase(int arithmeticBase) {
 		this.arithmeticBase = arithmeticBase;
 	}
-	
 
 	public final boolean useHornerScheme() {
 		return hornerScheme;
@@ -64,6 +80,9 @@ public class CryptaConfig {
 
 	public final void setRelaxMaxDigitOccurence(int relaxMaxDigitOccurence) {
 		this.relaxMaxDigitOccurence = relaxMaxDigitOccurence;
-	}	
+	}
 
+	public final List<String> getArguments() {
+		return Collections.unmodifiableList(arguments);
+	}
 }
