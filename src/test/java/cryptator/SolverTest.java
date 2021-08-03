@@ -72,5 +72,27 @@ public class SolverTest {
 		testCryptarithm("send+more=money");
 	}
 
+	@Test
+	public void testBigCatLion1() throws CryptaParserException {
+		testCryptarithm("big+cat=lion");
+	}
+
+	@Test
+	public void testBigCatLion2() throws CryptaParserException {
+		config.setArithmeticBase(16);
+		testCryptarithm("big+cat=lion");
+	}
+
+	@Test
+	public void testBigCatLion3() throws CryptaParserException {
+		config.allowLeadingZeros(true);
+		testCryptarithm("big+cat=lion");
+	}
+
+	@Test
+	public void testBigCatLion4() throws CryptaParserException {
+		testCryptarithm("big+cat=big");
+	}
+
 
 }

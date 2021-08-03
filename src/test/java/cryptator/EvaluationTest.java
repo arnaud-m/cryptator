@@ -93,11 +93,65 @@ public class EvaluationTest {
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 0");
 		assertEquals(0, eval.evaluate(cryptarithm, solution, 10));
 	}
+
+	@Test
+	public void testEvaluation3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("BIG+CAT=LION");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("B=4 I=2 G=3 C=8 A=5 T=6 L=1 O=7 N=9");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
+	}
+
+	@Test
+	public void testEvaluation4() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("3 * MOT = TOM - 1");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("M=2 O=4 T=7 3=3 1=1");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
+	}
+
+	@Test
+	public void testEvaluation5() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("TO+GO=OUT");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("T=2 O=1 G=8 U=0");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
+	}
+
+	@Test
+	public void testEvaluation6() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("SO+MANY+MORE+MEN+SEEM+TO+SAY+THAT+\n" +
+				"THEY+MAY+SOON+TRY+TO+STAY+AT+HOME+\n" +
+				"SO+AS+TO+SEE+OR+HEAR+THE+SAME+ONE+\n" +
+				"MAN+TRY+TO+MEET+THE+TEAM+ON+THE+\n" +
+				"MOON+AS+HE+HAS+AT+THE+OTHER+TEN\n" +
+				"=TESTS");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("S=3 O=1 M=2 A=7 N=6 Y=4 R=8 E=0 T=9 H=5");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
+	}
+
+	@Test
+	public void testEvaluation7() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("A%B=C");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=9 B=3 C=0");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
+	}
+
+	@Test
+	public void testEvaluation8() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("AB+BA=CBC");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=9 B=2 C=1");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
+	}
 	
 	@Test(expected=CryptaEvaluationException.class)
 	public void testEvalPartialSolution() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
 		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8");
+		eval.evaluate(cryptarithm, solution, 10);
+	}
+
+	@Test(expected=CryptaEvaluationException.class)
+	public void testEvalPartialSolution2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("AB+BA=CBC");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=9 B=2");
 		eval.evaluate(cryptarithm, solution, 10);
 	}
 	
@@ -107,14 +161,19 @@ public class EvaluationTest {
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 10");
 		eval.evaluate(cryptarithm, solution, 10);
 	}
-	
+
 	@Test(expected=CryptaEvaluationException.class)
 	public void testEvalWithInvalidDigit2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
 		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = -9");
 		eval.evaluate(cryptarithm, solution, 10);
 	}
-	
-	
+
+	@Test(expected=CryptaSolutionException.class)
+	public void testEvalWithInvalidDigit3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("AB+BA=CBC");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=9 B=2 C=a");
+		eval.evaluate(cryptarithm, solution, 10);
+	}
 
 }

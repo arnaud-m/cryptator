@@ -8,7 +8,9 @@
  */
 package cryptator.parser;
 
-public class CryptaParserException extends Exception {
+import java.util.concurrent.CancellationException;
+
+public class CryptaParserException extends CancellationException {
 
 	// TODO Define useful constructors
 	
@@ -16,6 +18,11 @@ public class CryptaParserException extends Exception {
 
 	public CryptaParserException() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public CryptaParserException(String message) {
+		super(message);
 		// TODO Auto-generated constructor stub
 	}
 	
