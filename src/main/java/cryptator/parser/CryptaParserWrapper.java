@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaParser;
 import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 public class CryptaParserWrapper implements ICryptaParser {
 
@@ -36,7 +37,7 @@ public class CryptaParserWrapper implements ICryptaParser {
         try {
             cryptator.parser.CryptatorParser.ProgramContext ctx = parser.program();
             return ctx.equation().node;
-        } catch (RecognitionException e) {
+        } catch (RecognitionException|ParseCancellationException e) {
             // Catching here -> exception not handled depending on the context
             // TODO @Margaux throw an exception with useful attributes for helping the user.
             System.err.println(e.getMessage()); // FOR DEBUG
