@@ -18,23 +18,22 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 
 public class CryptaConfig {
-	// TODO Cmd Line Documentation
 	/**
 	 * Base, or radix, of the positional Numeral System
 	 */
-	@Option(name="--b", usage="boolean value for checking the custom handler")
+	@Option(name="--b", usage="Base (or radix) of the positional numeral system used for the cryptarithm (> 1)")
 	private int arithmeticBase = 10;
 
-	@Option(name="-z",handler=ExplicitBooleanOptionHandler.class,usage="boolean value for checking the custom handler")
+	@Option(name="-z",handler=ExplicitBooleanOptionHandler.class,usage="allow leading zeros in the cryptarithm solution")
 	private boolean allowLeadingZeros;
 
-	@Option(name="-h",handler=ExplicitBooleanOptionHandler.class,usage="boolean value for checking the custom handler")
+	@Option(name="-h",handler=ExplicitBooleanOptionHandler.class,usage="use the horner scheme to model the numbers repsented by the cryptarithm words")
 	private boolean hornerScheme;
 
-	@Option(name="-min", usage="boolean value for checking the custom handler")
+	@Option(name="-min", usage="relaxation of the minimum number of occurences of a digit (>=0)")
 	private int relaxMinDigitOccurence = 0;
 
-	@Option(name="-max", usage="boolean value for checking the custom handler")
+	@Option(name="-max", usage="relaxation of the maximum number of occurences of a digit (>=0)")
 	private int relaxMaxDigitOccurence = 0;
 
 	// receives other command line parameters than options

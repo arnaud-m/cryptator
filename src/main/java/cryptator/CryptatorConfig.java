@@ -5,21 +5,19 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptatorConfig extends CryptaConfig {
 	
-	// TODO Cmd Line Documentation
-	
-	@Option(name="-s", usage="boolean value for checking the custom handler")
+	@Option(name="-s", usage="limit the number of solutions returned by the solver")
 	private int solutionLimit;
 
-	@Option(name="-t", usage="boolean value for checking the custom handler")
+	@Option(name="-t", usage="limit the time taken by a solver")
 	private int timeLimit;
 
-	@Option(name="-g",handler=ExplicitBooleanOptionHandler.class,usage="boolean value for checking the custom handler")
-	private boolean exportGraphiz;
-
-	@Option(name="-c",handler=ExplicitBooleanOptionHandler.class,usage="boolean value for checking the custom handler")
+	@Option(name="-c",handler=ExplicitBooleanOptionHandler.class,usage="check solutions by evaluation")
 	private boolean checkSolution;
 
-	@Option(name="-v",handler=ExplicitBooleanOptionHandler.class,usage="boolean value for checking the custom handler")
+	@Option(name="-g",handler=ExplicitBooleanOptionHandler.class,usage="export solutions to graphviz format")
+	private boolean exportGraphiz;
+
+	@Option(name="-v",handler=ExplicitBooleanOptionHandler.class,usage="increase the verbosity of the program")
 	private boolean verbose;
 
 	public CryptatorConfig() {}
