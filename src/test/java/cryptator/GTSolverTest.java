@@ -8,12 +8,12 @@
  */
 package cryptator;
 
-import static cryptator.solver.SolverUtils.arrayIntVarToString;
-import static cryptator.solver.SolverUtils.contraint;
-import static cryptator.tree.TreeUtils.arrayVarToString;
-import static cryptator.tree.TreeUtils.explorationRecursive;
-import static cryptator.tree.TreeUtils.findSolCrypta;
-import static cryptator.tree.TreeUtils.makeArray;
+import static cryptator.solver.gentest.SolverUtils.arrayIntVarToString;
+import static cryptator.solver.gentest.SolverUtils.contraint;
+import static cryptator.solver.gentest.TreeUtils.arrayVarToString;
+import static cryptator.solver.gentest.TreeUtils.explorationRecursive;
+import static cryptator.solver.gentest.TreeUtils.findSolCrypta;
+import static cryptator.solver.gentest.TreeUtils.makeArray;
 import static cryptator.tree.TreeUtils.writeInorder;
 import static cryptator.tree.TreeUtils.writePostorder;
 import static cryptator.tree.TreeUtils.writePreorder;
@@ -33,10 +33,9 @@ import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
-import cryptator.solver.CryptaModel;
-import cryptator.solver.CryptaModel2;
 import cryptator.solver.CryptaSolution;
-import cryptator.solver.Variable;
+import cryptator.solver.gentest.CryptaGTModel;
+import cryptator.solver.gentest.Variable;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaEvaluation;
@@ -305,7 +304,7 @@ public class GTSolverTest {
 	public void choco() throws Exception {
 		long start = System.currentTimeMillis();
 
-		CryptaModel2 model= new CryptaModel2("Cryptarithme");
+		CryptaGTModel model= new CryptaGTModel("Cryptarithme");
 
 		contraint(ABC, model);
 		Solver solver = model.getModel().getSolver();

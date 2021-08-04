@@ -9,7 +9,6 @@
 package cryptator.tree;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ListIterator;
 import java.util.Stack;
 
@@ -83,7 +82,7 @@ public final class TreeTraversals {
 			num++;
 			final TraversalEdge e = stack.pop();
 			final ICryptaNode n = e.getNode();
-			traversalConsumer.accept(n, num, e.father, e.numFather);
+			traversalConsumer.accept(n, num, e.getFather(), e.getNumFather());
 			pushChildren(stack, n, num);
 		}	
 	}

@@ -8,9 +8,9 @@
  */
 package cryptator.solver;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
+import cryptator.solver.gentest.Variable;
 import cryptator.specs.ICryptaSolution;
 
 
@@ -39,27 +39,12 @@ public class CryptaSolution implements ICryptaSolution {
 	@Override
 	public boolean hasDigit(char symbol) {
 		return symbolToDigit.get(symbol) != null;
-		//		for(Variable var: symbolToDigit){
-		//			if(var.getName().equals(String.valueOf(symbol))){
-		//				return true;
-		//			}
-		//		}
-		//		return false;
 	}
 
 
 	@Override
 	public int getDigit(char symbol) throws CryptaSolutionException {
 		int v=symbolToDigit.get(symbol).getValue();
-		////		for(Variable var: symbolToDigit) {
-		////			if(String.valueOf(symbol).equals(var.getName())) {
-		////				v = var.getValue();
-		////				break;
-		////			}
-		////		}
-		//		if(v == -1){
-		//			throw new CryptaSolutionException("cant find symbol: " + symbol);
-		//		}
 		if(v!=-1){
 			return v;
 		}

@@ -6,7 +6,7 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.solver;
+package cryptator.solver.gentest;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.exception.ContradictionException;
@@ -14,11 +14,11 @@ import org.chocosolver.solver.variables.IntVar;
 
 import java.util.ArrayList;
 
-public class CryptaModel2 {
+public class CryptaGTModel {
     private Model model;
     private ArrayList<IntVar> map=new ArrayList<>();
 
-    public CryptaModel2(String s) {
+    public CryptaGTModel(String s) {
         this.model = new Model(s);
     }
 
