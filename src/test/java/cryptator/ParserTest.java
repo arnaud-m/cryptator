@@ -8,40 +8,18 @@
  */
 package cryptator;
 
-import static cryptator.tree.TreeUtils.*;
-import static org.junit.Assert.assertEquals;
-
-import java.io.ByteArrayOutputStream;
-
 import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
+import static cryptator.TreeTest.*;
 
 public class ParserTest {
 
 	public final CryptaParserWrapper parser = new CryptaParserWrapper();
 	
 	public ParserTest() {}
-	
-	public static void testPreorder(String expected, ICryptaNode node) {
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		writePreorder(node, os);
-		assertEquals(expected, new String(os.toByteArray()));
-	}
-	
-	public static void testPostorder(String expected, ICryptaNode node) {
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		writePostorder(node, os);
-		assertEquals(expected, new String(os.toByteArray()));
-	}
-
-	public static void testInorder(String expected, ICryptaNode node) {
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		writeInorder(node, os);
-		assertEquals(expected, new String(os.toByteArray()));
-	}
 	
 	@Test
 	public void testParser1() throws CryptaParserException {

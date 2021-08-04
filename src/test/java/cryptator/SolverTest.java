@@ -16,6 +16,7 @@ import static org.junit.Assert.fail;
 import java.util.logging.Level;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
@@ -53,7 +54,7 @@ public class SolverTest {
 		ICryptaNode node = parser.parse(cryptarithm);
 		assertTrue(
 				solver.solve(node, config, (s) -> {
-					System.out.println(s);
+					//System.out.println(s);
 					try {
 						assertEquals(1, eval.evaluate(node, s, config.getArithmeticBase()));
 					} catch (CryptaEvaluationException e) {
@@ -75,6 +76,8 @@ public class SolverTest {
 
 	@Test
 	public void testSendMoreMoney1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		solver.limitSolution(0);
+		solver.limitTime(0);
 		testCryptarithmWithSolutions("send+more=money");
 	}
 
@@ -125,6 +128,8 @@ public class SolverTest {
 
 	@Test
 	public void testDonaldGeraldRobert1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		solver.limitSolution(0);
+		solver.limitTime(0);
 		testCryptarithmWithSolutions("donald + gerald = robert");
 	}
 
@@ -152,6 +157,7 @@ public class SolverTest {
 	}
 
 	@Test
+	//@Ignore
 	public void testEMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		testCryptarithmWithSolutions("nrgy = MC ^ 2");
 	}
@@ -191,6 +197,16 @@ public class SolverTest {
 	@Test
 	public void testLQ() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		testCryptarithmWithSolutions("B + A * C <= B * A / C");
+	}
+
+	@Test
+	public void testNE1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithoutSolutions("A != A");
+	}
+
+	@Test
+	public void testNE2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("A != B");
 	}
 
 	@Test

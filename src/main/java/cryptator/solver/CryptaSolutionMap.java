@@ -66,9 +66,4 @@ public class CryptaSolutionMap implements ICryptaSolution {
 		return symbolsToDigits.toString();
 	}
 	
-	public static void main(String[] args) throws CryptaSolutionException {
-		String solution = "A=  2 B    3 C   =4 D=5 E  =  6";
-		ICryptaSolution s = CryptaSolutionMap.parseSolution(solution);
-		System.out.println(s);
-	}
 }
