@@ -198,4 +198,10 @@ public class SolverTest {
 		testCryptarithmWithSolutions("s = m/s + km / h");
 	}
 
+	@Test
+	public void testBinSpeed() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.setArithmeticBase(2);
+		testCryptarithmWithoutSolutions("s = m/s + km / h");
+	}
+
 }

@@ -143,7 +143,7 @@ public class EvaluationTest {
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("S=3 O=1 M=2 A=7 N=6 Y=4 R=8 E=0 T=9 H=5");
 		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
 	}
-
+	
 	@Test
 	public void testEvaluation7() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
 		final ICryptaNode cryptarithm = parser.parse("A%B=C");
@@ -157,6 +157,16 @@ public class EvaluationTest {
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=9 B=2 C=1");
 		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
 	}
+	
+
+	@Test
+	public void testEvaluation9() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("nrgy = MC ^ 2");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("r=0 2=2 C=2 g=1 y=0 M=3 n=3");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 4));
+	}
+
+
 	
 	@Test(expected=CryptaEvaluationException.class)
 	public void testEvalPartialSolution() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {

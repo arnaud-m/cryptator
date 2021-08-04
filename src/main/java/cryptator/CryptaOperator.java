@@ -20,7 +20,7 @@ public enum CryptaOperator {
 	MUL("*", (a, b) -> a * b, (a, b) -> a.mul(b)), 
 	DIV("/", (a, b) -> a / b, (a, b) -> a.div(b)), 
 	MOD("%", (a, b) -> a % b, (a, b) -> a.mod(b)), 
-	POW("^", (a, b) -> a ^ b, (a, b) -> a.pow(b)), 
+	POW("^", (a, b) -> (int) Math.pow(a,b), (a, b) -> a.pow(b)), 
 	ID("", (a, b) -> 0, (a, b) -> null),
 	EQ("=", (a, b) -> a == b ? 1 : 0, (a, b) -> a.eq(b)), 
 	NEQ("!=", (a, b) -> a != b ? 1 : 0, (a, b) -> a.ne(b)), 
