@@ -6,11 +6,11 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.solver;
+package cryptator.solver.gentest;
 
 import java.util.HashMap;
 
-import cryptator.solver.gentest.Variable;
+import cryptator.solver.CryptaSolutionException;
 import cryptator.specs.ICryptaSolution;
 
 

@@ -33,8 +33,8 @@ import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
-import cryptator.solver.CryptaSolution;
 import cryptator.solver.gentest.CryptaGTModel;
+import cryptator.solver.gentest.CryptaSolution;
 import cryptator.solver.gentest.Variable;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;

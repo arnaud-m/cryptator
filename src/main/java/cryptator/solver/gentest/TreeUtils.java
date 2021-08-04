@@ -11,7 +11,6 @@ package cryptator.solver.gentest;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cryptator.solver.CryptaSolution;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaEvaluation;

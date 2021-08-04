@@ -157,7 +157,7 @@ public class SolverTest {
 	}
 
 	@Test
-	//@Ignore
+	@Ignore
 	public void testEMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		testCryptarithmWithSolutions("nrgy = MC ^ 2");
 	}
