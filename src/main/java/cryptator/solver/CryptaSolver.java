@@ -58,20 +58,20 @@ public class CryptaSolver implements ICryptaSolver {
 		LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel().toString());
 		final Solver s = m.getModel().getSolver();
 		if(timeLimit > 0) s.limitTime(timeLimit);
+		int solutionCount = 0;;
 		if(solutionLimit > 0) {
-			long n = solutionLimit; 
-			while(n > 0 && s.solve()) {
+			while(solutionCount < solutionLimit && s.solve()) {
 				solutionConsumer.accept(m.recordSolution());
-				n--;
+				solutionCount++;
 			}
 		} else {
 			while(s.solve()) {
 				solutionConsumer.accept(m.recordSolution());
+				solutionCount++;
 			}
 		}
 		LOGGER.log(Level.INFO, "{0}", s.getMeasures());
-	//	s.showStatistics();
-		return false;
+		return solutionCount > 0;
 	}
 
 }
