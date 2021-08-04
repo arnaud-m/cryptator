@@ -11,6 +11,8 @@ package cryptator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.logging.Level;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,13 +41,14 @@ public class SolverTest {
 
 	@Before
 	public void setDefaultConfig() {
+		CryptaSolver.LOGGER.setLevel(Level.WARNING);
 		config.setArithmeticBase(10);
 		config.allowLeadingZeros(false);
 		solver.limitSolution(100);
 		solver.limitTime(2000);
 	}
 	
-	private void testCryptarithm(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
+	private void testCryptarithmWithSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		ICryptaNode node = parser.parse(cryptarithm);
 		solver.solve(node, config, (s) -> {
 			// System.out.println(s);
@@ -57,46 +60,73 @@ public class SolverTest {
 			}
 		} );
 	}
+	
+	private void testCryptarithmWithoutSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		ICryptaNode node = parser.parse(cryptarithm);
+		solver.solve(node, config, (s) -> {
+			fail("solution should not exist.");
+		} );
+	}
 
 	@Test
 	public void testSendMoreMoney1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		testCryptarithm("send+more=money");
+		testCryptarithmWithSolutions("send+more=money");
 	}
 	
 	@Test
 	public void testSendMoreMoney2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(16);
-		testCryptarithm("send+more=money");
+		testCryptarithmWithSolutions("send+more=money");
 	}
 	
 	@Test
 	public void testSendMoreMoney3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.allowLeadingZeros(true);
-		testCryptarithm("send+more=money");
+		testCryptarithmWithSolutions("send+more=money");
 	}
 
 	@Test
 	public void testBigCatLion1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		testCryptarithm("big+cat=lion");
+		testCryptarithmWithSolutions("big+cat=lion");
 	}
 
 	@Test
 	public void testBigCatLion2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(16);
-		testCryptarithm("big+cat=lion");
+		testCryptarithmWithSolutions("big+cat=lion");
 	}
 
 	@Test
 	public void testBigCatLion3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.allowLeadingZeros(true);
-		testCryptarithm("big+cat=lion");
+		testCryptarithmWithSolutions("big+cat=lion");
 	}
 
 	@Test
-	public void testBigCatLion4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		// FIXME Do not test anything if there is no solution !
-		testCryptarithm("big+cat=big");
+	public void testBigCatBig1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithoutSolutions("big+cat=big");
 	}
-
-
+	
+	@Test
+	public void testBigCatBig2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithoutSolutions("big*cat=big");
+	}
+	
+	@Test
+	public void testBigCatBig3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.allowLeadingZeros(true);
+		testCryptarithmWithoutSolutions("big*cat=big");
+	}
+	
+	@Test
+	public void testDonaldGeraldRobert1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("donald + gerald = robert");
+	}
+	
+	@Test
+	public void testDonaldGeraldRobert2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.setArithmeticBase(2);
+		testCryptarithmWithSolutions("donald + gerald = robert");
+	}
+	
 }
