@@ -21,7 +21,7 @@ public class CryptaConfig {
 	/**
 	 * Base, or radix, of the positional Numeral System
 	 */
-	@Option(name="--b", usage="Base (or radix) of the positional numeral system used for the cryptarithm (> 1)")
+	@Option(name="-b", usage="Base (or radix) of the positional numeral system used for the cryptarithm (> 1)")
 	private int arithmeticBase = 10;
 
 	@Option(name="-z",handler=ExplicitBooleanOptionHandler.class,usage="allow leading zeros in the cryptarithm solution")
@@ -62,8 +62,8 @@ public class CryptaConfig {
 		return hornerScheme;
 	}
 
-	public final void useHornerScheme(boolean used) {
-		this.hornerScheme = used;
+	public final void useHornerScheme(boolean useHornerScheme) {
+		this.hornerScheme = useHornerScheme;
 	}
 
 	public final int getRelaxMinDigitOccurence() {
