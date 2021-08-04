@@ -9,6 +9,8 @@
 package cryptator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -35,11 +37,26 @@ public class EvaluationTest {
 		final String solution = "A=  1 B    2 C   =3 D=4 E  =  5";
 		final ICryptaSolution s = CryptaSolutionMap.parseSolution(solution);
 		assertEquals(5, s.size());
+		assertTrue(s.hasDigit('A'));
 		assertEquals(1, s.getDigit('A'));
+		assertTrue(s.hasDigit('B'));
 		assertEquals(2, s.getDigit('B'));
+		assertTrue(s.hasDigit('C'));
 		assertEquals(3, s.getDigit('C'));
+		assertTrue(s.hasDigit('D'));
 		assertEquals(4, s.getDigit('D'));
-		assertEquals(5, s.getDigit('E'));		
+		assertTrue(s.hasDigit('E'));
+		assertEquals(5, s.getDigit('E'));	
+		
+		assertFalse(s.hasDigit('F'));
+		assertFalse(s.hasDigit('G'));
+	}
+
+	@Test(expected=CryptaSolutionException.class)
+	public void testSolutionException() throws CryptaSolutionException {
+		final String solution = "A  1 B =   2 C  3  D=4 E   =  5";
+		final ICryptaSolution s = CryptaSolutionMap.parseSolution(solution);
+		assertEquals(1, s.getDigit('F'));
 	}
 	
 	@Test(expected = CryptaSolutionException.class)
