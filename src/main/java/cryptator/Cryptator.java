@@ -34,36 +34,36 @@ import cryptator.tree.GraphizExporter;
 
 public class Cryptator {
 
-	
-	 static {
-	      InputStream stream = Cryptator.class.getClassLoader().
-	              getResourceAsStream("logging.properties");
-	      try {
-	          LogManager.getLogManager().readConfiguration(stream);
 
-	      } catch (IOException e) {
-	          e.printStackTrace();
-	      }
-	  }
-	 
+	static {
+		InputStream stream = Cryptator.class.getClassLoader().
+				getResourceAsStream("logging.properties");
+		try {
+			LogManager.getLogManager().readConfiguration(stream);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
-		
+
 	public Cryptator() {}
 
 	public static void main(String[] args) {
 
 		final CryptatorConfig config = parseOptions(args);
 		if(config == null) return;
-		
+
 		configureLogging(config);
-		
+
 		if( config.getArguments().isEmpty()) {
 			LOGGER.severe("Parse cryptarithm arguments [FAIL]");
 			return;
 		}
 
 		final ICryptaSolver solver = buildSolver(config);
-		
+
 		final CryptaParserWrapper parser = new CryptaParserWrapper();
 
 		final BiConsumer<ICryptaNode, ICryptaSolution> consumer = buildBiConsumer(config);
@@ -72,30 +72,22 @@ public class Cryptator {
 			solve(cryptarithm, parser, solver, config, consumer);
 		}
 	}
-	
+
 	public static CryptatorConfig parseOptions(String[] args) {
 		final CryptatorConfig config = new CryptatorConfig();
 		final CmdLineParser parser = new CmdLineParser(config);
 		try {
 			// parse the arguments.
 			parser.parseArgument(args);
-			LOGGER.config("Parse options [OK]");
 			
-			// FIXME Check for validity of integer options ?
-			
-			// you can parse additional arguments if you want.
-			// parser.parseArgument("more","args");
-
-			//			// after parsing arguments, you should check
-			//			// if enough arguments are given.
-			//			if( ! config.getArguments().isEmpty()) {
-			//				return config;
-			//			} else LOGGER.log(Level.WARNINGSEVERE, "Parse options [OK]");
-			return config;
+			if(checkConfiguration(config)) {
+				LOGGER.config("Parse options [OK]");
+				return config;
+			}
 		} catch( CmdLineException e ) {
 			System.err.println(e.getMessage());
 		}
-		
+
 		// if there's a problem in the command line,
 		// you'll get this exception. this will report
 		// an error message.
@@ -108,7 +100,6 @@ public class Cryptator {
 		System.err.println("  Example: java Cryptator"+parser.printExample(OptionHandlerFilter.ALL));
 		LOGGER.severe("Parse options [FAIL]");
 		return null;
-
 	}
 
 	private final static void configureLogging(CryptatorConfig config) {
@@ -117,7 +108,15 @@ public class Cryptator {
 			CryptaSolver.LOGGER.setLevel(Level.FINE);
 		}
 	}
-		
+
+	private static boolean checkConfiguration(CryptatorConfig config) {
+		if( config.getArguments().isEmpty()) LOGGER.severe("Parse cryptarithm arguments [FAIL]");
+		else if(config.getArithmeticBase() < 2) LOGGER.severe("Invalid Arithmetic base option: less than 2");
+		else if(config.getRelaxMinDigitOccurence() < 0 || config.getRelaxMaxDigitOccurence() < 0) LOGGER.severe("Digit occurences cannot be negative.");
+		else return true;
+		return false;
+	}
+
 	private final static ICryptaSolver buildSolver(CryptatorConfig config) {
 		final ICryptaSolver solver = new CryptaSolver();
 		solver.limitSolution(config.getSolutionLimit());
@@ -142,7 +141,7 @@ public class Cryptator {
 
 	private static class DefaultConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-		
+
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
 			LOGGER.log(Level.INFO, "Solution found.\n{0}", s);
@@ -163,13 +162,12 @@ public class Cryptator {
 
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
-			String check = "ERROR";
 			try {
-				check = eval.evaluate(n, s, base) != 0 ? "OK" : "FAIL";
+				if(eval.evaluate(n, s, base) != 0) LOGGER.config("Eval cryptarithm solution [OK]"); 
+				else  LOGGER.warning("Eval cryptarithm solution [KO]"); 
 			} catch (CryptaEvaluationException e) {
-				LOGGER.log(Level.WARNING, "Eval cryptarithm exception thrown", e);
-			}
-			LOGGER.log(Level.CONFIG, "Eval cryptarithm solution [{0}]", check);		
+				LOGGER.log(Level.WARNING, "Eval cryptarithm solution [FAIL]", e);
+			}		
 		}
 
 	}
@@ -185,7 +183,6 @@ public class Cryptator {
 		}
 
 	}
-
 
 	public static BiConsumer<ICryptaNode, ICryptaSolution> buildBiConsumer(final CryptatorConfig config) {
 		BiConsumer<ICryptaNode, ICryptaSolution> consumer = new DefaultConsumer();
