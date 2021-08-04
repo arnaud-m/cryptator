@@ -26,12 +26,12 @@ public class CryptaSolution implements ICryptaSolution {
 		this.symbolToDigit = digitToValue;
 	}
 
-@Override
+	@Override
 	public int size() {
 		return symbolToDigit.size();
 	}
 
-	
+
 	public final HashMap<Character, Variable> getDigitToValue() {
 		return symbolToDigit;
 	}
@@ -39,27 +39,27 @@ public class CryptaSolution implements ICryptaSolution {
 	@Override
 	public boolean hasDigit(char symbol) {
 		return symbolToDigit.get(symbol) != null;
-//		for(Variable var: symbolToDigit){
-//			if(var.getName().equals(String.valueOf(symbol))){
-//				return true;
-//			}
-//		}
-//		return false;
+		//		for(Variable var: symbolToDigit){
+		//			if(var.getName().equals(String.valueOf(symbol))){
+		//				return true;
+		//			}
+		//		}
+		//		return false;
 	}
-	
+
 
 	@Override
 	public int getDigit(char symbol) throws CryptaSolutionException {
 		int v=symbolToDigit.get(symbol).getValue();
-////		for(Variable var: symbolToDigit) {
-////			if(String.valueOf(symbol).equals(var.getName())) {
-////				v = var.getValue();
-////				break;
-////			}
-////		}
-//		if(v == -1){
-//			throw new CryptaSolutionException("cant find symbol: " + symbol);
-//		}
+		////		for(Variable var: symbolToDigit) {
+		////			if(String.valueOf(symbol).equals(var.getName())) {
+		////				v = var.getValue();
+		////				break;
+		////			}
+		////		}
+		//		if(v == -1){
+		//			throw new CryptaSolutionException("cant find symbol: " + symbol);
+		//		}
 		if(v!=-1){
 			return v;
 		}

@@ -134,4 +134,9 @@ public class ParserTest {
 		parser.parse("[send + more] >= money");
 	}
 
+	@Test(expected = CryptaParserException.class)
+	public void testParserError8() throws CryptaParserException {
+		parser.parse("send + more > = money");
+	}
+
 }

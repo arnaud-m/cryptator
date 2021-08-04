@@ -51,7 +51,7 @@ public class SolverTest {
 	private void testCryptarithmWithSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		ICryptaNode node = parser.parse(cryptarithm);
 		solver.solve(node, config, (s) -> {
-			// System.out.println(s);
+			//System.out.println(s);
 			try {
 				assertEquals(1, eval.evaluate(node, s, config.getArithmeticBase()));
 			} catch (CryptaEvaluationException e) {
@@ -129,4 +129,52 @@ public class SolverTest {
 		testCryptarithmWithSolutions("donald + gerald = robert");
 	}
 	
+	@Test
+	public void testEMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("nrgy = MC ^ 2");
+	}
+	
+	@Test
+	public void testBinEMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.setArithmeticBase(2);
+		testCryptarithmWithoutSolutions("nrgy = MC ^ 2");
+	}
+	
+	@Test
+	public void testQuaEMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.setArithmeticBase(4);
+		testCryptarithmWithSolutions("nrgy = MC ^ 2");
+	}
+	
+	@Test
+	public void testModulo() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("B = BAC % AC");
+	}
+	
+	@Test
+	public void testGE() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("BAC > B * A * C");
+	}
+	
+	@Test
+	public void testGQ() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("BAC >= B * A * C");
+	}
+	
+	@Test
+	public void testLE() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("B * A / C < B + A * C");
+	}
+	
+	@Test
+	public void testLQ() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("B + A * C <= B * A / C");
+	}
+	
+	@Test
+	public void testSpeed() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.setArithmeticBase(2);
+		testCryptarithmWithSolutions("s = m/s + km / h");
+	}
+
 }

@@ -34,7 +34,7 @@ public class ExportTest {
 		}
 	}
 	
-	private final OutputStream outstream = System.out; //NUllOutputStream.INSTANCE;
+	private final OutputStream outstream = NullOutputStream.INSTANCE;
 	
 	public ExportTest() {}
 	
