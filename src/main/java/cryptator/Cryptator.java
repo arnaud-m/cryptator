@@ -129,8 +129,8 @@ public class Cryptator {
 		try {
 			final ICryptaNode node = parser.parse(cryptarithm);
 			LOGGER.log(Level.INFO, "Parse cryptarithm {0} [OK]", cryptarithm);
-			solver.solve(node, config, (s) -> {consumer.accept(node, s);});
-			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [OK]", cryptarithm);
+			final String status = solver.solve(node, config, (s) -> {consumer.accept(node, s);}) ? "OK" : "KO";
+			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
 		} catch (CryptaParserException e) {
 			LOGGER.log(Level.SEVERE, "Parse cryptarithm " + cryptarithm + " [FAIL]", e);
 		} catch (CryptaModelException e) {

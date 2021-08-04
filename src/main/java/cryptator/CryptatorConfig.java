@@ -5,6 +5,8 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptatorConfig extends CryptaConfig {
 	
+	// TODO Cmd Line Documentation
+	
 	@Option(name="-s", usage="boolean value for checking the custom handler")
 	private int solutionLimit;
 

@@ -16,8 +16,9 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
-public class CryptaConfig {
 
+public class CryptaConfig {
+	// TODO Cmd Line Documentation
 	/**
 	 * Base, or radix, of the positional Numeral System
 	 */

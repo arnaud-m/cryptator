@@ -155,6 +155,7 @@ public class CryptaModeler implements ICryptaModeler {
 			if(n == 0) throw new CryptaModelException("No symbol found while modeling !");
 			final int b = config.getArithmeticBase();
 			
+			// TODO Log/Store computed values ? 
 			int minOcc = n/b;
 			final int deltaMin = config.getRelaxMinDigitOccurence();
 			if(deltaMin > 0) minOcc = Math.max(0, minOcc - deltaMin);

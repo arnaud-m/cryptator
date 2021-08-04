@@ -94,6 +94,7 @@ public class SolverTest {
 
 	@Test
 	public void testBigCatLion4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		// FIXME Do not test anything if there is no solution !
 		testCryptarithm("big+cat=big");
 	}
 
