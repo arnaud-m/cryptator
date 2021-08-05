@@ -100,17 +100,16 @@ public class CryptaModeler implements ICryptaModeler {
 		}
 
 		private final class HornerVarBuilder implements Function<char[], IntVar> {
-
+			
 			@Override
 			public IntVar apply(char[] word) {
-				final int n = word.length;
-				IntVar tmp = getSymbolVar(word[0]);
-				for (int i = 1; i < n; i++) {
-					tmp=tmp.mul(config.getArithmeticBase()).add(getSymbolVar(word[i])).intVar();
+				if(word.length == 0) return model.intVar(0);
+				ArExpression tmp = getSymbolVar(word[0]);
+				for (int i = 1; i < word.length; i++) {
+					tmp= tmp.mul(config.getArithmeticBase())
+							.add(getSymbolVar(word[i]));
 				}
-				final IntVar wvar = createWordVar(word);
-				tmp.eq(wvar).post();
-				return wvar;
+				return tmp.intVar();
 			}			
 		}	
 
