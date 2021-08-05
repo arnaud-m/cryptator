@@ -103,8 +103,14 @@ public class CryptaModeler implements ICryptaModeler {
 
 			@Override
 			public IntVar apply(char[] word) {
-				// TODO @Margaux https://en.wikipedia.org/wiki/Horner%27s_method
-				return null;
+				final int n = word.length;
+				IntVar tmp = getSymbolVar(word[0]);
+				for (int i = 1; i < n; i++) {
+					tmp=tmp.mul(config.getArithmeticBase()).add(getSymbolVar(word[i])).intVar();
+				}
+				final IntVar wvar = createWordVar(word);
+				tmp.eq(wvar).post();
+				return wvar;
 			}			
 		}	
 
