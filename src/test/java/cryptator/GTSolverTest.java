@@ -8,12 +8,7 @@
  */
 package cryptator;
 
-import static cryptator.solver.gentest.SolverUtils.arrayIntVarToString;
-import static cryptator.solver.gentest.SolverUtils.contraint;
-import static cryptator.solver.gentest.TreeUtils.arrayVarToString;
-import static cryptator.solver.gentest.TreeUtils.explorationRecursive;
-import static cryptator.solver.gentest.TreeUtils.findSolCrypta;
-import static cryptator.solver.gentest.TreeUtils.makeArray;
+import static cryptator.solver.gentest.GTUtils.*;
 import static cryptator.tree.TreeUtils.writeInorder;
 import static cryptator.tree.TreeUtils.writePostorder;
 import static cryptator.tree.TreeUtils.writePreorder;
@@ -24,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import cryptator.solver.gentest.CryptaGTSolver;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
@@ -179,17 +175,10 @@ public class GTSolverTest {
 		writeInorder(bigCatLion, os);
 		assertEquals(os.toString(), "big + cat = lion ");
 
-
-
 		ICryptaEvaluation chk = new CryptaEvaluation();
 		int v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMorySol), 10);
 		assertEquals(v,1);
 
-//		for(Variable var: sendMorySol){
-//			if(var.getName().equals(String.valueOf('y'))){
-//				var.setValue(0);
-//			}
-//		}
 		sendMorySol.get('y').setValue(0);
 		v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMorySol), 10);
 		assertEquals(v,0);
@@ -240,24 +229,27 @@ public class GTSolverTest {
 	public void incremental() throws Exception {
 		long start = System.currentTimeMillis();
 		//algo incremental
+		CryptaGTSolver GTSolver= new CryptaGTSolver(ABC);
 		ArrayList<Integer> tab2 = makeArray(abc.size());
 
-		assertEquals(arrayVarToString(Objects.requireNonNull(explorationRecursive(tab2, abc, ABC, 10, 1))), arrayVarToString(abcSol));
+		assertEquals(arrayVarToString(Objects.requireNonNull(GTSolver.explorationRecursive(tab2, abc, 10, 1))), arrayVarToString(abcSol));
 		long end = System.currentTimeMillis();
 		System.out.println("abc par incrementation: "+ String.valueOf(end-start) + "ms");
 
 		start = System.currentTimeMillis();
 		//algo incremental avec repetition
+		GTSolver.setRoot(ABC2);
 		tab2 = makeArray(abc.size());
 
-		assertEquals(arrayVarToString(Objects.requireNonNull(explorationRecursive(tab2, abc, ABC2, 10, 2))), "A=0 B=2 C=0 ");
+		assertEquals(arrayVarToString(Objects.requireNonNull(GTSolver.explorationRecursive(tab2, abc, 10, 2))), "A=0 B=2 C=0 ");
 		end = System.currentTimeMillis();
 		System.out.println("abc par incrementation avec repetition: "+ String.valueOf(end-start) + "ms");
 
 		start = System.currentTimeMillis();
 		//algo incremental
+		GTSolver.setRoot(sendMoreMoney);
 		ArrayList<Integer> tab3 = makeArray(sendMory.size());
-		assertEquals(arrayVarToString(Objects.requireNonNull(explorationRecursive(tab3, sendMory, sendMoreMoney, 10, 1))), arrayVarToString(sendMorySol));
+		assertEquals(arrayVarToString(Objects.requireNonNull(GTSolver.explorationRecursive(tab3, sendMory, 10, 1))), arrayVarToString(sendMorySol));
 		end = System.currentTimeMillis();
 		System.out.println("sendmory par incrementation: "+ String.valueOf(end-start) + "ms");
 	}
@@ -270,8 +262,8 @@ public class GTSolverTest {
 		for (int i=0; i<10; i++) {
 			comb.add(i);
 		}
-
-		assertEquals(arrayVarToString(findSolCrypta(comb, 3, 10, abc, ABC, 1)), arrayVarToString(abcSol));
+		CryptaGTSolver GTSolver= new CryptaGTSolver(ABC);
+		assertEquals(arrayVarToString(GTSolver.findSolCrypta(comb, 3, 10, abc, 1)), arrayVarToString(abcSol));
 		long end = System.currentTimeMillis();
 		System.out.println("abc par heap: "+ String.valueOf(end-start) + "ms");
 
@@ -282,8 +274,8 @@ public class GTSolverTest {
 		for (int i=0; i<10; i++) {
 			comb.add(i);
 		}
-
-		assertEquals(arrayVarToString(findSolCrypta(comb, 3, 10, abc, ABC2, 2)), "A=0 B=1 C=0 ");
+		GTSolver.setRoot(ABC2);
+		assertEquals(arrayVarToString(GTSolver.findSolCrypta(comb, 3, 10, abc, 2)), "A=0 B=1 C=0 ");
 		end = System.currentTimeMillis();
 		System.out.println("abc par heap avec repetition: "+ String.valueOf(end-start) + "ms");
 
@@ -293,8 +285,8 @@ public class GTSolverTest {
 		for (int i=0; i<10; i++) {
 			comb.add(i);
 		}
-
-		assertEquals(arrayVarToString(findSolCrypta(comb, sendMory.size(), 10, sendMory, sendMoreMoney, 1)), arrayVarToString(sendMorySol));
+		GTSolver.setRoot(sendMoreMoney);
+		assertEquals(arrayVarToString(GTSolver.findSolCrypta(comb, sendMory.size(), 10, sendMory, 1)), arrayVarToString(sendMorySol));
 		end = System.currentTimeMillis();
 		System.out.println("sendmory par heap: "+ String.valueOf(end-start) + "ms");
 
@@ -305,8 +297,8 @@ public class GTSolverTest {
 		long start = System.currentTimeMillis();
 
 		CryptaGTModel model= new CryptaGTModel("Cryptarithme");
-
-		contraint(ABC, model);
+		CryptaGTSolver GTsolver = new CryptaGTSolver(ABC);
+		GTsolver.contraint(model);
 		Solver solver = model.getModel().getSolver();
 		Solution solution=new Solution(model.getModel());
 		solver.solve();
