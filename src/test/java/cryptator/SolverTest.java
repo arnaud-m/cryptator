@@ -78,6 +78,7 @@ public class SolverTest {
 	public void testSendMoreMoney1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		solver.limitSolution(0);
 		solver.limitTime(0);
+		config.useHornerScheme(true);
 		testCryptarithmWithSolutions("send+more=money");
 	}
 
@@ -101,6 +102,7 @@ public class SolverTest {
 	@Test
 	public void testBigCatLion2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(16);
+		config.useHornerScheme(true);
 		testCryptarithmWithSolutions("big+cat=lion");
 	}
 
@@ -142,13 +144,20 @@ public class SolverTest {
 	@Test
 	public void testDonaldGeraldRobert3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(2);
+		config.useHornerScheme(true);
+		testCryptarithmWithoutSolutions("donald + gerald = robert");
+	}
+	
+	@Test
+	public void testDonaldGeraldRobert4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.setArithmeticBase(2);
 		config.allowLeadingZeros();
 		config.setRelaxMinDigitOccurence(1);
 		testCryptarithmWithoutSolutions("donald + gerald = robert");
 	}
 	
 	@Test
-	public void testDonaldGeraldRobert4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+	public void testDonaldGeraldRobert5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(2);
 		config.allowLeadingZeros();
 		config.setRelaxMinDigitOccurence(1);
@@ -181,6 +190,7 @@ public class SolverTest {
 
 	@Test
 	public void testGE() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.useHornerScheme(true);
 		testCryptarithmWithSolutions("BAC > B * A * C");
 	}
 
@@ -191,6 +201,7 @@ public class SolverTest {
 
 	@Test
 	public void testLE() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.useHornerScheme(true);
 		testCryptarithmWithSolutions("B * A / C < B + A * C");
 	}
 
@@ -213,7 +224,7 @@ public class SolverTest {
 	public void testSpeed() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		testCryptarithmWithSolutions("s = m/s + km / h");
 	}
-
+	
 	@Test
 	public void testBinSpeed() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(2);
