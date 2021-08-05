@@ -15,13 +15,13 @@ import cryptator.specs.ICryptaSolution;
 
 
 
-public class CryptaSolution implements ICryptaSolution {
+public class CryptaGTSolution implements ICryptaSolution {
 
 
-	public final HashMap<Character, Variable> symbolToDigit;
+	public final HashMap<Character, GTVariable> symbolToDigit;
 
 
-	public CryptaSolution(HashMap<Character, Variable> digitToValue) {
+	public CryptaGTSolution(HashMap<Character, GTVariable> digitToValue) {
 		super();
 		this.symbolToDigit = digitToValue;
 	}
@@ -32,7 +32,7 @@ public class CryptaSolution implements ICryptaSolution {
 	}
 
 
-	public final HashMap<Character, Variable> getDigitToValue() {
+	public final HashMap<Character, GTVariable> getDigitToValue() {
 		return symbolToDigit;
 	}
 

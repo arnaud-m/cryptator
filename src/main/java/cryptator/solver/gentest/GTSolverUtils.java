@@ -18,9 +18,9 @@ import cryptator.tree.CryptaEvaluationException;
 
 
 
-public final class TreeUtils {
+public final class GTSolverUtils {
 
-	private TreeUtils() {}
+	private GTSolverUtils() {}
 	
 
 
@@ -36,9 +36,9 @@ public final class TreeUtils {
 
 	//checker
 
-	private static HashMap<Character, Variable> checkArray(ArrayList<Integer> input, HashMap<Character, Variable> map, ICryptaNode cryptarithm, int max) {
+	private static HashMap<Character, GTVariable> checkArray(ArrayList<Integer> input, HashMap<Character, GTVariable> map, ICryptaNode cryptarithm, int max) {
 		int i=0;
-		for (Variable var : map.values()) {
+		for (GTVariable var : map.values()) {
 			if(var.setValue(input.get(i)%max)){
 				i++;
 			}
@@ -49,7 +49,7 @@ public final class TreeUtils {
 		ICryptaEvaluation chk = new CryptaEvaluation();
 		int v;
 		try {
-			v = chk.evaluate(cryptarithm, new CryptaSolution(map), 10);
+			v = chk.evaluate(cryptarithm, new CryptaGTSolution(map), 10);
 		} catch (CryptaEvaluationException e) {
 			e.printStackTrace();
 			v = -1;
@@ -57,8 +57,8 @@ public final class TreeUtils {
 		return v == 1? map: null;
 	}
 
-	public static HashMap<Character, Variable> explorationRecursive(ArrayList<Integer> elements,
-														   HashMap<Character, Variable> map, ICryptaNode cryptarithm, int max, int nbRep) throws Exception {
+	public static HashMap<Character, GTVariable> explorationRecursive(ArrayList<Integer> elements,
+														   HashMap<Character, GTVariable> map, ICryptaNode cryptarithm, int max, int nbRep) throws Exception {
 		if(map.size()>max*nbRep){
 			throw new Exception("to much different letter");
 		}
@@ -83,7 +83,7 @@ public final class TreeUtils {
 			}
 
 			if(rep<=nbRep) {
-				HashMap<Character, Variable> res = checkArray(elements, map, cryptarithm, max);
+				HashMap<Character, GTVariable> res = checkArray(elements, map, cryptarithm, max);
 				if (res != null) {
 					return res;
 				}
@@ -113,10 +113,10 @@ public final class TreeUtils {
 	}
 
 	// Generating permutation using Heap Algorithm
-	public static HashMap<Character, Variable> heapPermutation(ArrayList<Integer> a, int size, int n, HashMap<Character, Variable> map, ICryptaNode cryptarithm, int max) {
+	public static HashMap<Character, GTVariable> heapPermutation(ArrayList<Integer> a, int size, int n, HashMap<Character, GTVariable> map, ICryptaNode cryptarithm, int max) {
 		// if size becomes 1 then prints the obtained
 		// permutation
-		HashMap<Character, Variable> m = null;
+		HashMap<Character, GTVariable> m = null;
 		if (size == 1) {
 			m=checkArray(a, map, cryptarithm, max);
 			return m;
@@ -146,12 +146,12 @@ public final class TreeUtils {
 		return m;
 	}
 
-	public static HashMap<Character, Variable> findSolCrypta(ArrayList<Integer> comb, int size, int max, HashMap<Character, Variable> map, ICryptaNode cryptarithm, int nbRep) throws Exception {
+	public static HashMap<Character, GTVariable> findSolCrypta(ArrayList<Integer> comb, int size, int max, HashMap<Character, GTVariable> map, ICryptaNode cryptarithm, int nbRep) throws Exception {
 		if(map.size()>max*nbRep){
 			throw new Exception("to much different letter");
 		}
 		while (comb!=null) {
-			HashMap<Character, Variable> m=checkArray(comb, map, cryptarithm, max);
+			HashMap<Character, GTVariable> m=checkArray(comb, map, cryptarithm, max);
 			if(m!=null){
 
 				return m;
@@ -168,10 +168,10 @@ public final class TreeUtils {
 
 
 
-		public static String arrayVarToString(HashMap<Character, Variable> map) {
+		public static String arrayVarToString(HashMap<Character, GTVariable> map) {
 		StringBuilder sb=new StringBuilder();
 		if(map!=null) {
-			for (Variable var : map.values()) {
+			for (GTVariable var : map.values()) {
 				sb.append(var.getName());
 				sb.append("=");
 				sb.append(var.getValue());

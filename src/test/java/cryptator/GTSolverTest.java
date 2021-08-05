@@ -8,8 +8,8 @@
  */
 package cryptator;
 
-import static cryptator.solver.gentest.TreeUtils.arrayVarToString;
-import static cryptator.solver.gentest.TreeUtils.makeArray;
+import static cryptator.solver.gentest.GTSolverUtils.arrayVarToString;
+import static cryptator.solver.gentest.GTSolverUtils.makeArray;
 import static cryptator.tree.TreeUtils.writeInorder;
 import static cryptator.tree.TreeUtils.writePostorder;
 import static cryptator.tree.TreeUtils.writePreorder;
@@ -32,8 +32,8 @@ import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.gentest.CryptaGTModel;
 import cryptator.solver.gentest.CryptaGTSolver;
-import cryptator.solver.gentest.CryptaSolution;
-import cryptator.solver.gentest.Variable;
+import cryptator.solver.gentest.CryptaGTSolution;
+import cryptator.solver.gentest.GTVariable;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaEvaluation;
@@ -53,11 +53,11 @@ public class GTSolverTest {
 
 	public ICryptaNode ABC2;
 
-	HashMap<Character, Variable> abc = new HashMap<>();
-	HashMap<Character, Variable> abcSol = new HashMap<>();
+	HashMap<Character, GTVariable> abc = new HashMap<>();
+	HashMap<Character, GTVariable> abcSol = new HashMap<>();
 	ArrayList<IntVar> abcIntVarSol = new ArrayList<>();
-	HashMap<Character, Variable>  sendMory = new HashMap<>();
-	HashMap<Character, Variable>  sendMorySol = new HashMap<>();
+	HashMap<Character, GTVariable>  sendMory = new HashMap<>();
+	HashMap<Character, GTVariable>  sendMorySol = new HashMap<>();
 
 	Model modelABC=new Model();
 
@@ -85,15 +85,15 @@ public class GTSolverTest {
 				new CryptaNode(CryptaOperator.MUL, new CryptaLeaf("A"), new CryptaLeaf("B")),
 				new CryptaLeaf("C"));
 
-		abc.put('A', new Variable("A", 0, 0, 9));
-		abc.put('B', new Variable("B", 0, 0, 9));
-		abc.put('C', new Variable("C", 0, 0, 9));
+		abc.put('A', new GTVariable("A", 0, 0, 9));
+		abc.put('B', new GTVariable("B", 0, 0, 9));
+		abc.put('C', new GTVariable("C", 0, 0, 9));
 
 
 		// La solution est A=9 B=2 et C=1.
-		abcSol.put('A', new Variable("A", 9, 1, 9));
-		abcSol.put('B', new Variable("B", 2, 1, 9));
-		abcSol.put('C', new Variable("C", 1, 1, 9));
+		abcSol.put('A', new GTVariable("A", 9, 1, 9));
+		abcSol.put('B', new GTVariable("B", 2, 1, 9));
+		abcSol.put('C', new GTVariable("C", 1, 1, 9));
 
 		//A=9, B=2, AB=92, B=1, A=0, BA=29, C=1, B=0, C=0, CBC=121
 		abcIntVarSol.add(modelABC.intVar("A", 9));
@@ -105,25 +105,25 @@ public class GTSolverTest {
 
 
 		// La solution est O = 0, M = 1, Y = 2, E = 5, N = 6, D = 7, R = 8 et S = 9.
-		sendMory.put('o', new Variable("o", 0, 0, 9));
-		sendMory.put('m', new Variable("m", 0, 1, 9));
-		sendMory.put('y', new Variable("y", 0, 0, 9));
-		sendMory.put('e', new Variable("e", 0, 0, 9));
-		sendMory.put('n', new Variable("n", 0, 0, 9));
-		sendMory.put('d', new Variable("d", 0, 0, 9));
-		sendMory.put('r', new Variable("r", 0, 0, 9));
-		sendMory.put('s', new Variable("s", 0, 1, 9));
+		sendMory.put('o', new GTVariable("o", 0, 0, 9));
+		sendMory.put('m', new GTVariable("m", 0, 1, 9));
+		sendMory.put('y', new GTVariable("y", 0, 0, 9));
+		sendMory.put('e', new GTVariable("e", 0, 0, 9));
+		sendMory.put('n', new GTVariable("n", 0, 0, 9));
+		sendMory.put('d', new GTVariable("d", 0, 0, 9));
+		sendMory.put('r', new GTVariable("r", 0, 0, 9));
+		sendMory.put('s', new GTVariable("s", 0, 1, 9));
 
 
 		// La solution est O = 0, M = 1, Y = 2, E = 5, N = 6, D = 7, R = 8 et S = 9.
-		sendMorySol.put('o', new Variable("o", 0, 0, 9));
-		sendMorySol.put('m', new Variable("m", 1, 1, 9));
-		sendMorySol.put('y', new Variable("y", 2, 0, 9));
-		sendMorySol.put('e', new Variable("e", 5, 0, 9));
-		sendMorySol.put('n', new Variable("n", 6, 0, 9));
-		sendMorySol.put('d', new Variable("d", 7, 0, 9));
-		sendMorySol.put('r', new Variable("r", 8, 0, 9));
-		sendMorySol.put('s', new Variable("s", 9, 1, 9));
+		sendMorySol.put('o', new GTVariable("o", 0, 0, 9));
+		sendMorySol.put('m', new GTVariable("m", 1, 1, 9));
+		sendMorySol.put('y', new GTVariable("y", 2, 0, 9));
+		sendMorySol.put('e', new GTVariable("e", 5, 0, 9));
+		sendMorySol.put('n', new GTVariable("n", 6, 0, 9));
+		sendMorySol.put('d', new GTVariable("d", 7, 0, 9));
+		sendMorySol.put('r', new GTVariable("r", 8, 0, 9));
+		sendMorySol.put('s', new GTVariable("s", 9, 1, 9));
 
 
 	}
@@ -178,11 +178,11 @@ public class GTSolverTest {
 		assertEquals(os.toString(), "big + cat = lion ");
 
 		ICryptaEvaluation chk = new CryptaEvaluation();
-		int v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMorySol), 10);
+		int v = chk.evaluate(sendMoreMoney, new CryptaGTSolution(sendMorySol), 10);
 		assertEquals(v,1);
 
 		sendMorySol.get('y').setValue(0);
-		v = chk.evaluate(sendMoreMoney, new CryptaSolution(sendMorySol), 10);
+		v = chk.evaluate(sendMoreMoney, new CryptaGTSolution(sendMorySol), 10);
 		assertEquals(v,0);
 	}
 

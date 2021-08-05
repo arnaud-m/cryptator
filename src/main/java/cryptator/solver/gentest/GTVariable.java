@@ -11,13 +11,13 @@ package cryptator.solver.gentest;
 
 
 
-public class Variable {
+public class GTVariable {
     private String name;
     private int value=-1;
     private int valMin;
     private int valMax;
 
-    public Variable(String name, int value, int valMin, int valMax) {
+    public GTVariable(String name, int value, int valMin, int valMax) {
         this.name = name;
         try {
             int i = Integer.parseInt(String.valueOf(name));
