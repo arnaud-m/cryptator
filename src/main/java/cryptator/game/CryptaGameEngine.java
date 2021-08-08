@@ -27,16 +27,13 @@ import cryptator.specs.ICryptaGameEngine;
 
 public class CryptaGameEngine implements ICryptaGameEngine {
 
-	private static final Logger LOGGER = Logger.getLogger(CryptaGameEngine.class.getName());
+	public static final Logger LOGGER = Logger.getLogger(CryptaGameEngine.class.getName());
 
 	public CryptaModel gameModel;
 
 	public CryptaModel decisionModel;
 
-	public CryptaGameEngine(CryptaModel model) {
-		this.gameModel = model;
-		this.decisionModel = makeDecisionModel(model);
-	}
+	public CryptaGameEngine() {}
 
 
 	@Override

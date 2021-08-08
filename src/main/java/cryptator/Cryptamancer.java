@@ -13,10 +13,15 @@ import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.OptionHandlerFilter;
+
 import cryptator.game.CryptaGameEngine;
 import cryptator.game.CryptaGameException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaModeler;
+import cryptator.solver.CryptaSolver;
 import cryptator.specs.ICryptaGameEngine;
 import cryptator.specs.ICryptaNode;
 
@@ -29,6 +34,49 @@ public class Cryptamancer {
 
 	private static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
 
+	public static CryptamancerConfig parseOptions(String[] args) {
+		final CryptamancerConfig config = new CryptamancerConfig();
+		final CmdLineParser parser = new CmdLineParser(config);
+		try {
+			// parse the arguments.
+			parser.parseArgument(args);
+
+			if(Cryptator.checkConfiguration(config)) {
+				LOGGER.config("Parse options [OK]");
+				return config;
+			}
+		} catch( CmdLineException e ) {
+			System.err.println(e.getMessage());
+		}
+
+		// if there's a problem in the command line,
+		// you'll get this exception. this will report
+		// an error message.
+		System.err.println("java Cryptamancer [options...] CRYPTARITHM");
+		// print the list of available options
+		parser.printUsage(System.err);
+		System.err.println();
+
+		// print option sample. This is useful some time
+		System.err.println("  Example: java Cryptator"+parser.printExample(OptionHandlerFilter.ALL));
+		LOGGER.severe("Parse options [FAIL]");
+		return null;
+	}
+
+	private final static void configureLogging(CryptamancerConfig config) {
+		if(config.isVerbose()) {
+			LOGGER.setLevel(Level.FINE);
+			CryptaGameEngine.LOGGER.setLevel(Level.FINE);
+		}
+	}
+	
+	public static ICryptaNode parseCryptarithm(CryptamancerConfig config) {
+		final CryptaParserWrapper parser = new CryptaParserWrapper();	
+		final String cryptarithm = config.getArguments().get(0);
+		LOGGER.log(Level.INFO, "play with the cryptarithm: {0}", cryptarithm);
+		return parser.parse(cryptarithm);
+	}
+		
 	private static Boolean parseDecision(Scanner s, ICryptaGameEngine engine) throws CryptaGameException {
 		//s.nextLine();
 		if(s.hasNext()) {
@@ -42,6 +90,29 @@ public class Cryptamancer {
 			}
 		}
 		return null;
+	}
+	
+	private static void play(ICryptaGameEngine engine) {
+		final Scanner scanner = new Scanner(System.in);
+		int n = 1;
+		while( (!engine.isSolved())) {
+			LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision:", n);
+			try {
+				Boolean answer = parseDecision(scanner, engine);
+				if(answer == null) 	LOGGER.warning("Cannot parse the decision.");
+				else {
+					if (answer.booleanValue()) LOGGER.info("decision accepted.");
+					else LOGGER.info("decision rejected.");
+					final DisplayPartialSolution display = new DisplayPartialSolution();
+					engine.forEachSymbolDomain(display);
+					LOGGER.log(Level.INFO, "display the current partial solution.\n{0}", display);
+				
+				}
+			} catch (CryptaGameException e) {
+				LOGGER.log(Level.WARNING, "failure while taking the decision.", e);
+			}
+			n++;
+		}
 	}
 	
 	static private class DisplayPartialSolution implements BiConsumer<Character, String> {
@@ -64,38 +135,28 @@ public class Cryptamancer {
 		@Override
 		public String toString() {
 			return b1.toString() + "\n" + b2.toString();
+		}	
+	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		final CryptamancerConfig config = parseOptions(args);
+		if(config == null) return;
+		
+		configureLogging(config);
+
+		if( config.getArguments().size() != 1) {
+			LOGGER.severe("Parse single cryptarithm argument [FAIL]");
+			return;
 		}
 		
-	}
+		final ICryptaNode node = parseCryptarithm(config);
 
-	public static void main(String[] args) throws Exception {
-		final Scanner scanner = new Scanner(System.in);
-		final CryptaParserWrapper parser = new CryptaParserWrapper();
-		final ICryptaNode node = parser.parse("send+more=money");
-		final CryptaConfig config = new CryptaConfig();
+		LOGGER.log(Level.CONFIG, "display model configuration\n{0}", config);
 		final CryptaModeler modeler= new CryptaModeler();
-		CryptaGameEngine engine = new CryptaGameEngine(modeler.model(node, config));
-		LOGGER.log(Level.INFO, "Model configuration\n{0}", config);
-		engine.setUp();
-		int n = 1;
-		while( (!engine.isSolved())) {
-			LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision:", n);
-			try {
-				Boolean answer = parseDecision(scanner, engine);
-				if(answer == null) 	LOGGER.warning("Cannot parse the decision.");
-				else {
-					if (answer.booleanValue()) LOGGER.info("decision accepted.");
-					else LOGGER.info("decision rejected.");
-					final DisplayPartialSolution display = new DisplayPartialSolution();
-					engine.forEachSymbolDomain(display);
-					LOGGER.log(Level.INFO, "display the current partial solution.\n{0}", display);
-				
-				}
-			} catch (CryptaGameException e) {
-				LOGGER.log(Level.WARNING, "failure while taking the decision.", e);
-			}
-			n++;
-		}
+		final CryptaGameEngine engine = new CryptaGameEngine();
+		engine.setUp(modeler.model(node, config));
+		play(engine);
 		engine.tearDown();
 	}
 
