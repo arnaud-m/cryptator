@@ -19,9 +19,10 @@ import org.kohsuke.args4j.OptionHandlerFilter;
 
 import cryptator.game.CryptaGameEngine;
 import cryptator.game.CryptaGameException;
+import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
+import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaModeler;
-import cryptator.solver.CryptaSolver;
 import cryptator.specs.ICryptaGameEngine;
 import cryptator.specs.ICryptaNode;
 
@@ -74,7 +75,25 @@ public class Cryptamancer {
 		final CryptaParserWrapper parser = new CryptaParserWrapper();	
 		final String cryptarithm = config.getArguments().get(0);
 		LOGGER.log(Level.INFO, "play with the cryptarithm: {0}", cryptarithm);
-		return parser.parse(cryptarithm);
+		try {
+			return parser.parse(cryptarithm);
+		} catch (CryptaParserException e) {
+			LOGGER.log(Level.SEVERE, "failed to parse the cryptarithm.");
+			return null;
+		}
+	}
+	
+	public static ICryptaGameEngine buildEngine(ICryptaNode node, CryptaConfig config) {
+		LOGGER.log(Level.CONFIG, "display model configuration\n{0}", config);
+		final CryptaModeler modeler= new CryptaModeler();
+		try {
+			final CryptaGameEngine engine = new CryptaGameEngine();
+			engine.setUp(modeler.model(node, config));
+			return engine;
+		} catch (CryptaGameException|CryptaModelException e) {
+			LOGGER.log(Level.SEVERE, "failed to build the game engine", e);
+			return null;
+		}
 	}
 		
 	private static Boolean parseDecision(Scanner s, ICryptaGameEngine engine) throws CryptaGameException {
@@ -151,12 +170,14 @@ public class Cryptamancer {
 		}
 		
 		final ICryptaNode node = parseCryptarithm(config);
-
-		LOGGER.log(Level.CONFIG, "display model configuration\n{0}", config);
-		final CryptaModeler modeler= new CryptaModeler();
-		final CryptaGameEngine engine = new CryptaGameEngine();
-		engine.setUp(modeler.model(node, config));
+		if(node == null) return;
+		
+		
+		final ICryptaGameEngine engine = buildEngine(node, config);
+		if(engine == null) return;
+		
 		play(engine);
+
 		engine.tearDown();
 	}
 
