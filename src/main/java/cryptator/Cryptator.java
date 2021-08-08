@@ -109,9 +109,8 @@ public class Cryptator {
 		}
 	}
 
-	private static boolean checkConfiguration(CryptatorConfig config) {
-		if( config.getArguments().isEmpty()) LOGGER.severe("Parse cryptarithm arguments [FAIL]");
-		else if(config.getArithmeticBase() < 2) LOGGER.severe("Invalid Arithmetic base option: less than 2");
+	protected static boolean checkConfiguration(CryptaConfig config) {
+		if(config.getArithmeticBase() < 2) LOGGER.severe("Invalid Arithmetic base option: less than 2");
 		else if(config.getRelaxMinDigitOccurence() < 0 || config.getRelaxMaxDigitOccurence() < 0) LOGGER.severe("Digit occurences cannot be negative.");
 		else return true;
 		return false;
