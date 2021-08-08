@@ -74,11 +74,11 @@ public class Cryptamancer {
 		final ICryptaNode node = parser.parse("send+more=money");
 		final CryptaConfig config = new CryptaConfig();
 		final CryptaModeler modeler= new CryptaModeler();
-		// TODO Log Config ?
 		CryptaGameEngine engine = new CryptaGameEngine(modeler.model(node, config));
+		LOGGER.log(Level.INFO, "Model configuration\n{0}", config);
 		engine.setUp();
 		int n = 1;
-		while(n < 5) {
+		while( (!engine.isSolved())) {
 			LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision:", n);
 			try {
 				Boolean answer = parseDecision(scanner, engine);
@@ -97,7 +97,6 @@ public class Cryptamancer {
 			n++;
 		}
 		engine.tearDown();
-
 	}
 
 }

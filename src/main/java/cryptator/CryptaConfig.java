@@ -85,4 +85,13 @@ public class CryptaConfig {
 	public final List<String> getArguments() {
 		return Collections.unmodifiableList(arguments);
 	}
+
+	@Override
+	public String toString() {
+		return "c BASE " + arithmeticBase + "\nc ALLOW_LEADING_0 " + allowLeadingZeros
+				+ "\nc HORNER_SCHEME " + hornerScheme + "\nc RELAX_MIN_DIGIT_OCC " + relaxMinDigitOccurence 
+				+  "\nc RELAX_MAX_DIGIT_OCC "+ relaxMaxDigitOccurence;
+	}
+	
+	
 }

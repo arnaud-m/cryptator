@@ -75,7 +75,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 	public void setUp() throws CryptaGameException {
 		Solver solver = gameModel.getModel().getSolver();
 		if( ! solver.solve() ) throw new CryptaGameException("Cryptarithm has no solution.");
-		LOGGER.log(Level.CONFIG, "display the initial cryptarithm solution:\n{0}", gameModel.recordSolution());
+		LOGGER.log(Level.CONFIG, "display the initial cryptarithm solution.\n{0}", gameModel.recordSolution());
 	}
 
 	private final static Constraint makeDecision(CryptaModel model, char symbol, CryptaOperator reOperator, int value) throws CryptaGameException {
