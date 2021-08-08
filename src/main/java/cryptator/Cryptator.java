@@ -36,7 +36,14 @@ public class Cryptator {
 
 
 	static {
-		InputStream stream = Cryptator.class.getClassLoader().
+		configureLoggers();
+	}
+
+	private static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
+
+	
+	public final static void configureLoggers() {
+		final InputStream stream = Cryptator.class.getClassLoader().
 				getResourceAsStream("logging.properties");
 		try {
 			LogManager.getLogManager().readConfiguration(stream);
@@ -46,7 +53,6 @@ public class Cryptator {
 		}
 	}
 
-	private static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
 
 	public Cryptator() {}
 
@@ -79,7 +85,7 @@ public class Cryptator {
 		try {
 			// parse the arguments.
 			parser.parseArgument(args);
-			
+
 			if(checkConfiguration(config)) {
 				LOGGER.config("Parse options [OK]");
 				return config;
