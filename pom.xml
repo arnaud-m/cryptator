@@ -16,7 +16,7 @@
 	<groupId>fr.univ-cotedazur</groupId>
 	<artifactId>cryptator</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>cryptator</name>
 	<description>Constraint-based cryptarithm solver</description>
 	<url>https://github.com/arnaud-m/cryptator</url>
