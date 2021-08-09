@@ -3,6 +3,7 @@
 #+OPTIONS: tags:t timestamp:t todo:t TeX:t LaTeX:t
 #+OPTIONS: skip:t @:t ::t |:t ^:t f:t
 #+LANGUAGE: en
+[[https://opensource.org/licenses/BSD-3-Clause][https://img.shields.io/badge/License-BSD%203--Clause-blue.svg]]
 * Cryptator
 
 Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Université Côte d'Azur).
@@ -13,7 +14,7 @@ Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Univers
 
 * Download and Installation
 
-  In the following, we distinguish two usages of pareto-store:
+  In the following, we distinguish two usages:
     - as a standalone application: the jar file includes all required dependencies,
     - as a library: the jar file excludes all dependencies.
 
@@ -34,8 +35,8 @@ Then, you only have to edit your pom.xml to declare the following library depend
 
 #+BEGIN_EXAMPLE
 <dependency>
-   <groupId>?</groupId>
-   <artifactId>?</artifactId>
+   <groupId>fr.univ-cotedazur</groupId>
+   <artifactId>cryptator</artifactId>
    <version>0.0.1-SNAPSHOT</version>
 </dependency>
 #+END_EXAMPLE
