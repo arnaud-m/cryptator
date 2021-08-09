@@ -16,7 +16,7 @@
 	<groupId>fr.univ-cotedazur</groupId>
 	<artifactId>cryptator</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1.0</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<name>cryptator</name>
 	<description>Constraint-based cryptarithm solver</description>
 	<url>https://github.com/arnaud-m/cryptator</url>
@@ -95,7 +95,7 @@
 					<encoding>UTF-8</encoding>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
-					<!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't 
+					<!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't
 						configured the maven-toolchains-plugin -->
 					<jdkToolchain>
 						<version>9</version>
