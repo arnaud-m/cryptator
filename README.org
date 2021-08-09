@@ -1,10 +1,9 @@
 #+STARTUP: overview hidestars logdone
 #+COLUMNS: %38ITEM(Details) %7TODO(To Do) %TAGS(Context)
 #+OPTIONS: tags:t timestamp:t todo:t TeX:t LaTeX:t
-#+OPTIONS: skip:t @:t ::t |:t ^:t f:t
+#+OPTIONS: @:t ::t |:t ^:t f:t
 #+LANGUAGE: en
 #+TITLE: Cryptator
-
 [[https://opensource.org/licenses/BSD-3-Clause][https://img.shields.io/badge/License-BSD%203--Clause-blue.svg]]
 
 Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Université Côte d'Azur).
