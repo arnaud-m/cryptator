@@ -35,11 +35,13 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
 	public CryptaGameEngine() {}
 
-
 	@Override
 	public void setUp(CryptaModel model) throws CryptaGameException {
 		this.gameModel = model;
 		this.decisionModel = makeDecisionModel(model);	
+		final Solver solver = gameModel.getModel().getSolver();
+		if( ! solver.solve() ) throw new CryptaGameException("Cryptarithm has no solution.");
+		LOGGER.log(Level.CONFIG, "display the initial cryptarithm solution.\n{0}", gameModel.recordSolution());
 	}
 
 	@Override
@@ -67,12 +69,6 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 			symbolsToVariables.put(symbol, m.intVar(var.getName(), var.getLB(), var.getUB(), false));
 		});
 		return new CryptaModel(m, symbolsToVariables);
-	}
-
-	public void setUp() throws CryptaGameException {
-		Solver solver = gameModel.getModel().getSolver();
-		if( ! solver.solve() ) throw new CryptaGameException("Cryptarithm has no solution.");
-		LOGGER.log(Level.CONFIG, "display the initial cryptarithm solution.\n{0}", gameModel.recordSolution());
 	}
 
 	private final static Constraint makeDecision(CryptaModel model, char symbol, CryptaOperator reOperator, int value) throws CryptaGameException {
