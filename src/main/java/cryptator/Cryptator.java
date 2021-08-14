@@ -67,6 +67,8 @@ public class Cryptator {
 			LOGGER.severe("Parse cryptarithm arguments [FAIL]");
 			return;
 		}
+		
+		//TODO Display configuration
 
 		final ICryptaSolver solver = buildSolver(config);
 

@@ -14,7 +14,6 @@ import java.util.function.IntBinaryOperator;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 
 public enum CryptaOperator {
-
 	ADD("+", (a, b) -> a + b, (a, b) -> a.add(b)),
 	SUB("-", (a, b) -> a - b, (a, b) -> a.sub(b)), 
 	MUL("*", (a, b) -> a * b, (a, b) -> a.mul(b)), 
@@ -22,6 +21,7 @@ public enum CryptaOperator {
 	MOD("%", (a, b) -> a % b, (a, b) -> a.mod(b)), 
 	POW("^", (a, b) -> (int) Math.pow(a,b), (a, b) -> a.pow(b)), 
 	ID("", (a, b) -> 0, (a, b) -> null),
+	//TODO Use relational operators with two letters
 	EQ("=", (a, b) -> a == b ? 1 : 0, (a, b) -> a.eq(b)), 
 	NEQ("!=", (a, b) -> a != b ? 1 : 0, (a, b) -> a.ne(b)), 
 	LT("<", (a, b) -> a < b ? 1 : 0, (a, b) -> a.lt(b)), 
