@@ -60,16 +60,12 @@ public class Cryptator {
 
 		final CryptatorConfig config = parseOptions(args);
 		if(config == null) return;
-
-		configureLogging(config);
-
+		
 		if( config.getArguments().isEmpty()) {
 			LOGGER.severe("Parse cryptarithm arguments [FAIL]");
 			return;
 		}
 		
-		//TODO Display configuration
-
 		final ICryptaSolver solver = buildSolver(config);
 
 		final CryptaParserWrapper parser = new CryptaParserWrapper();
@@ -81,15 +77,15 @@ public class Cryptator {
 		}
 	}
 
-	public static CryptatorConfig parseOptions(String[] args) {
+	private static CryptatorConfig parseOptions(String[] args) {
 		final CryptatorConfig config = new CryptatorConfig();
 		final CmdLineParser parser = new CmdLineParser(config);
 		try {
 			// parse the arguments.
 			parser.parseArgument(args);
-
+			configureLogging(config);
 			if(checkConfiguration(config)) {
-				LOGGER.config("Parse options [OK]");
+				LOGGER.log(Level.CONFIG, "Parse options [OK]\n{0}", config);
 				return config;
 			}
 		} catch( CmdLineException e ) {
@@ -118,7 +114,7 @@ public class Cryptator {
 	}
 
 	protected static boolean checkConfiguration(CryptaConfig config) {
-		if(config.getArithmeticBase() < 2) LOGGER.severe("Invalid Arithmetic base option: less than 2");
+		if(config.getArithmeticBase() < 2) LOGGER.severe("The Arithmetic base must be greater than 1.");
 		else if(config.getRelaxMinDigitOccurence() < 0 || config.getRelaxMaxDigitOccurence() < 0) LOGGER.severe("Digit occurences cannot be negative.");
 		else return true;
 		return false;

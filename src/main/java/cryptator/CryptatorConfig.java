@@ -50,5 +50,10 @@ public class CryptatorConfig extends CryptaConfig {
 		return verbose;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return super.toString() + 
+				"\nc TIME_LIMIT "+getTimeLimit() + 
+				"\nc SOLUTION_LIMIT "+getSolutionLimit();
+	}
 }
