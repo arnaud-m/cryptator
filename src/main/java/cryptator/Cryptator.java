@@ -11,6 +11,8 @@ package cryptator;
 import static cryptator.tree.TreeUtils.writePostorder;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,13 +28,14 @@ import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
-import cryptator.tree.GraphizExporter;
+import cryptator.tree.GraphizExport;
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.Graph;
 
 public class Cryptator {
 
-
 	public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
-
 
 	private Cryptator() {}
 
@@ -88,9 +91,12 @@ public class Cryptator {
 		return node;
 		
 	}
+	
 	private static void solve(String cryptarithm, CryptaParserWrapper parser, ICryptaSolver solver , CryptatorConfig config, BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
 		try {
 			final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
+			// TODO			if(config.isExportGraphiz()) 
+			
 			final String status = solver.solve(node, config, (s) -> {consumer.accept(node, s);}) ? "OK" : "KO";
 			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
 		} catch (CryptaParserException e) {
@@ -136,14 +142,18 @@ public class Cryptator {
 
 	private static class GraphvizConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-		public final GraphizExporter graphviz= new GraphizExporter();
-
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
-			graphviz.print(n, s, System.out);
-			LOGGER.config("Export cryptarithm solution [OK]");
+			try {
+				Graph graph = GraphizExport.exportToGraphviz(n, s);
+				File file = File.createTempFile("cryptarithm-", ".svg");
+				Graphviz.fromGraph(graph).width(800).render(Format.SVG).toFile(file);
+				LOGGER.log(Level.INFO, "Export cryptarithm solution to {0} [OK]", file);
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, "Export cryptarithm solution [FAIL]", e);
+				
+			}
 		}
-
 	}
 
 	public static BiConsumer<ICryptaNode, ICryptaSolution> buildBiConsumer(final CryptatorConfig config) {
@@ -155,6 +165,7 @@ public class Cryptator {
 		if(config.isExportGraphiz()) {
 			consumer = consumer.andThen(new GraphvizConsumer());
 		}
+		
 		return consumer;
 	}
 

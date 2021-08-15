@@ -18,6 +18,7 @@ import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolutionPrinter;
 import cryptator.specs.ITraversalEdgeConsumer;
 
+@Deprecated
 public class GraphizExporter implements ICryptaPrinter, ICryptaSolutionPrinter {
 
 	public GraphizExporter() {}

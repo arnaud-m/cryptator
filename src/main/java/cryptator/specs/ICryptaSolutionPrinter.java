@@ -10,6 +10,7 @@ package cryptator.specs;
 
 import java.io.OutputStream;
 
+@Deprecated
 public interface ICryptaSolutionPrinter {
 
 	void print(ICryptaNode node, ICryptaSolution solution, OutputStream outstream);
