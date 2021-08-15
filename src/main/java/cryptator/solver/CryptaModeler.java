@@ -154,24 +154,16 @@ public class CryptaModeler implements ICryptaModeler {
 			return model.intVarArray("O", config.getArithmeticBase(), lb, ub, false);
 		}
 				
-		public Constraint globalCardinalityConstraint() throws CryptaModelException {
+		public Constraint globalCardinalityConstraint() {
 			final IntVar[] vars = getGCCVars();
 			final int n = vars.length;
-			if(n == 0) throw new CryptaModelException("No symbol found while modeling !");
-			final int b = config.getArithmeticBase();
+			if(n == 0) return model.trueConstraint();
 			
-			// TODO Log/Store computed values ? 
-			int minOcc = n/b;
-			final int deltaMin = config.getRelaxMinDigitOccurence();
-			if(deltaMin > 0) minOcc = Math.max(0, minOcc - deltaMin);
-			
-			int maxOcc = (n+b-1)/b;
-			final int deltaMax = config.getRelaxMaxDigitOccurence();
-			if(deltaMax > 0) maxOcc = Math.min(n, maxOcc + deltaMax);
-			
+			final int maxOcc = config.getMaxDigitOccurence(n);		
 			if(maxOcc == 1) {
 				return model.allDifferent(vars);
 			} else {
+				final int minOcc = config.getMinDigitOccurence(n);
 				return model.globalCardinality(
 						vars, 
 						getGCCValues(), 

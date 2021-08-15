@@ -82,6 +82,20 @@ public class CryptaConfig {
 		this.relaxMaxDigitOccurence = relaxMaxDigitOccurence;
 	}
 
+	public final int getMinDigitOccurence(int n) {
+		int minOcc = n / getArithmeticBase();
+		final int deltaMin = getRelaxMinDigitOccurence();
+		if(deltaMin > 0) minOcc = Math.max(0, minOcc - deltaMin);
+		return minOcc;
+	}
+	
+	public final int getMaxDigitOccurence(int n) {
+		int maxOcc = (n+ getArithmeticBase() -1)/ getArithmeticBase();
+		final int deltaMax = getRelaxMaxDigitOccurence();
+		if(deltaMax > 0) maxOcc = Math.min(n, maxOcc + deltaMax);
+		return maxOcc;
+	}
+	
 	public final List<String> getArguments() {
 		return Collections.unmodifiableList(arguments);
 	}
