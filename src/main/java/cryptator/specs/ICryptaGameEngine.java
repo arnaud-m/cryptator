@@ -10,7 +10,7 @@ package cryptator.specs;
 
 import java.util.function.BiConsumer;
 
-import cryptator.CryptaOperator;
+import cryptator.game.CryptaGameDecision;
 import cryptator.game.CryptaGameException;
 import cryptator.solver.CryptaModel;
 
@@ -18,7 +18,7 @@ public interface ICryptaGameEngine {
 
 	void setUp(CryptaModel model) throws CryptaGameException;
 	
-	boolean takeDecision(char symbol, CryptaOperator reOperator, int value) throws CryptaGameException;
+	boolean takeDecision(CryptaGameDecision decision) throws CryptaGameException;
 
 	void forEachSymbolDomain(BiConsumer<Character, String> consumer);
 	

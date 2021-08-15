@@ -21,7 +21,6 @@ import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
 
-import cryptator.CryptaOperator;
 import cryptator.solver.CryptaModel;
 import cryptator.specs.ICryptaGameEngine;
 
@@ -29,16 +28,16 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
 	public static final Logger LOGGER = Logger.getLogger(CryptaGameEngine.class.getName());
 
-	public CryptaModel gameModel;
+	private CryptaModel gameModel;
 
-	public CryptaModel decisionModel;
+	private CryptaModel userModel;
 
 	public CryptaGameEngine() {}
 
 	@Override
 	public void setUp(CryptaModel model) throws CryptaGameException {
 		this.gameModel = model;
-		this.decisionModel = makeDecisionModel(model);	
+		this.userModel = makeUserDecisionModel(model);	
 		final Solver solver = gameModel.getModel().getSolver();
 		if( ! solver.solve() ) throw new CryptaGameException("Cryptarithm has no solution.");
 		LOGGER.log(Level.CONFIG, "display the initial cryptarithm solution.\n{0}", gameModel.recordSolution());
@@ -46,7 +45,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
 	@Override
 	public void forEachSymbolDomain(BiConsumer<Character, String> consumer) {
-		decisionModel.getMap().forEach((s, v) -> {
+		userModel.getMap().forEach((s, v) -> {
 			String str = v.toString();
 			consumer.accept(s, str.replaceFirst(".*=\\s*", ""));	
 		}
@@ -55,14 +54,14 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
 	@Override
 	public boolean isSolved() {
-		for(IntVar v : decisionModel.getMap().values()) {
+		for(IntVar v : userModel.getMap().values()) {
 			if(! v.isInstantiated()) return false;
 		}
 		return true;
 	}
 
 
-	private final static CryptaModel makeDecisionModel(CryptaModel model) {
+	private final static CryptaModel makeUserDecisionModel(CryptaModel model) {
 		Map<Character, IntVar> symbolsToVariables = new HashMap<Character, IntVar>();
 		final Model m = new Model("Cryptarithm-Decisions");
 		model.getMap().forEach( (symbol, var) -> {
@@ -71,11 +70,11 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 		return new CryptaModel(m, symbolsToVariables);
 	}
 
-	private final static Constraint makeDecision(CryptaModel model, char symbol, CryptaOperator reOperator, int value) throws CryptaGameException {
-		final IntVar var = model.getMap().get(symbol);
-		if(var == null) throw new CryptaGameException("Cannot find variable for symbol: " + symbol);
-		final IntVar val = model.getModel().intVar(value);
-		return ( (ReExpression) reOperator.getExpression().apply(var, val)).decompose();
+	private final static Constraint makeDecision(CryptaModel model, CryptaGameDecision decision) throws CryptaGameException {
+		final IntVar var = model.getMap().get(decision.getSymbol());
+		if(var == null) throw new CryptaGameException("Cannot find variable for symbol: " + decision.getSymbol());
+		final IntVar val = model.getModel().intVar(decision.getValue());
+		return ( (ReExpression) decision.getOperator().getExpression().apply(var, val)).decompose();
 	}
 
 	private final void propagate(CryptaModel model, Constraint decision) throws ContradictionException {
@@ -104,7 +103,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 	
 	private final void propagateUserDecision(Constraint decision) throws CryptaGameException {
 		try {
-			propagate(decisionModel, decision);
+			propagate(userModel, decision);
 		} catch (ContradictionException e) {
 			throw new CryptaGameException("decision solver should not fail !");
 		}
@@ -124,12 +123,10 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 	}
 
 	@Override
-	public boolean takeDecision(char symbol, CryptaOperator reOperator, int value) throws CryptaGameException {
-		LOGGER.log(Level.INFO, "take decision ({0} {1} {2}).", new Object[] {symbol, reOperator, value});
-		final IntVar var = gameModel.getMap().get(symbol);
-		if(var == null) throw new CryptaGameException("Cannot find variable for symbol: " + symbol);
-		final Constraint gdec = makeDecision(gameModel, symbol, reOperator, value);
-		final Constraint ddec = makeDecision(decisionModel, symbol, reOperator, value);
+	public boolean takeDecision(CryptaGameDecision decision) throws CryptaGameException {
+		LOGGER.log(Level.INFO, "take decision ({0})).", decision);
+		final Constraint gdec = makeDecision(gameModel, decision);
+		final Constraint ddec = makeDecision(userModel, decision);
 		if(probeGameDecision(gdec)) {
 			propagateUserDecision(ddec);
 			return true;
@@ -141,14 +138,12 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 	}
 
 	@Override
-	public void tearDown() {
-
-	}
+	public void tearDown() {}
 
 
 	@Override
 	public String toString() {
-		return "CryptaGameEngine [gameModel=" + gameModel + "\n, decisionModel=" + decisionModel + "]";
+		return "CryptaGameEngine [gameModel=" + gameModel + "\n, decisionModel=" + userModel + "]";
 	}
 
 

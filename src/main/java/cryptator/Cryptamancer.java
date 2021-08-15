@@ -17,6 +17,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.OptionHandlerFilter;
 
+import cryptator.game.CryptaGameDecision;
 import cryptator.game.CryptaGameEngine;
 import cryptator.game.CryptaGameException;
 import cryptator.parser.CryptaParserException;
@@ -96,20 +97,6 @@ public class Cryptamancer {
 		}
 	}
 		
-	private static Boolean parseDecision(Scanner s, ICryptaGameEngine engine) throws CryptaGameException {
-		//s.nextLine();
-		if(s.hasNext()) {
-			final String symbol = s.next();
-			if(symbol.length() == 1 && s.hasNext()) {
-				final CryptaOperator operator =  CryptaOperator.valueOfToken(s.next());
-				if(s.hasNextInt()) {
-					final int value = s.nextInt();
-					return engine.takeDecision(symbol.charAt(0), operator, value);
-				}
-			}
-		}
-		return null;
-	}
 	
 	private static void play(ICryptaGameEngine engine) {
 		final Scanner scanner = new Scanner(System.in);
@@ -117,15 +104,15 @@ public class Cryptamancer {
 		while( (!engine.isSolved())) {
 			LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision:", n);
 			try {
-				Boolean answer = parseDecision(scanner, engine);
-				if(answer == null) 	LOGGER.warning("Cannot parse the decision.");
+				final CryptaGameDecision decision = CryptaGameDecision.parseDecision(scanner);
+				if(decision == null) LOGGER.warning("Cannot parse the decision.");
 				else {
-					if (answer.booleanValue()) LOGGER.info("decision accepted.");
-					else LOGGER.info("decision rejected.");
-					final DisplayPartialSolution display = new DisplayPartialSolution();
-					engine.forEachSymbolDomain(display);
+				final boolean answer = engine.takeDecision(decision);
+				if (answer) LOGGER.info("decision accepted.");
+				else LOGGER.info("decision rejected.");
+				final DisplayPartialSolution display = new DisplayPartialSolution();
+				engine.forEachSymbolDomain(display);
 					LOGGER.log(Level.INFO, "display the current partial solution.\n{0}", display);
-				
 				}
 			} catch (CryptaGameException e) {
 				LOGGER.log(Level.WARNING, "failure while taking the decision.", e);
