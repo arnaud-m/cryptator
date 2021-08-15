@@ -13,10 +13,6 @@ import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.OptionHandlerFilter;
-
 import cryptator.game.CryptaGameDecision;
 import cryptator.game.CryptaGameEngine;
 import cryptator.game.CryptaGameException;
@@ -31,42 +27,32 @@ public class Cryptamancer {
 
 	public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
 
-	public static CryptamancerConfig parseOptions(String[] args) {
-		final CryptamancerConfig config = new CryptamancerConfig();
-		final CmdLineParser parser = new CmdLineParser(config);
-		try {
-			// parse the arguments.
-			parser.parseArgument(args);
-
-			if(Cryptator.checkConfiguration(config)) {
-				LOGGER.config("Parse options [OK]");
-				return config;
-			}
-		} catch( CmdLineException e ) {
-			System.err.println(e.getMessage());
-		}
-
-		// if there's a problem in the command line,
-		// you'll get this exception. this will report
-		// an error message.
-		System.err.println("java Cryptamancer [options...] CRYPTARITHM");
-		// print the list of available options
-		parser.printUsage(System.err);
-		System.err.println();
-
-		// print option sample. This is useful some time
-		System.err.println("  Example: java Cryptator"+parser.printExample(OptionHandlerFilter.ALL));
-		LOGGER.severe("Parse options [FAIL]");
-		return null;
-	}
-
-	private final static void configureLogging(CryptamancerConfig config) {
-		if(config.isVerbose()) {
-			LOGGER.setLevel(Level.FINE);
-			CryptaGameEngine.LOGGER.setLevel(Level.FINE);
-		}
-	}
 	
+	static class CryptamancerOptionsParser extends OptionsParser<CryptamancerConfig> {
+
+		public CryptamancerOptionsParser() {
+			super(Cryptamancer.class, new CryptamancerConfig());
+		}
+
+		@Override
+		protected void configureLoggers() {
+			super.configureLoggers();
+			if(config.isVerbose()) {
+				JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaGameEngine.LOGGER);
+			}
+		}
+		
+		public String getArgumentName() {
+			return "CRYPTARITHM";
+		}
+		
+		@Override
+		protected boolean checkArguments() {
+			return config.getArguments().size() == 1;
+		}
+
+	}
+
 	public static ICryptaNode parseCryptarithm(CryptamancerConfig config) {
 		final CryptaParserWrapper parser = new CryptaParserWrapper();	
 		final String cryptarithm = config.getArguments().get(0);
@@ -141,16 +127,11 @@ public class Cryptamancer {
 	
 	public static void main(String[] args) throws Exception {
 		JULogUtil.configureLoggers();
-		final CryptamancerConfig config = parseOptions(args);
-		if(config == null) return;
 		
-		configureLogging(config);
-
-		if( config.getArguments().size() != 1) {
-			LOGGER.severe("Parse single cryptarithm argument [FAIL]");
-			return;
-		}
-		
+		CryptamancerOptionsParser optparser = new CryptamancerOptionsParser();
+		if( ! optparser.parseOptions(args)) return;
+		final CryptamancerConfig config = optparser.getConfig();
+			
 		final ICryptaNode node = parseCryptarithm(config);
 		if(node == null) return;
 		

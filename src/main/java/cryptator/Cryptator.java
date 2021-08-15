@@ -12,10 +12,6 @@ import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.OptionHandlerFilter;
-
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaModelException;
@@ -34,18 +30,16 @@ public class Cryptator {
 
 	public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
 
-	
+
 	private Cryptator() {}
+
 
 	public static void main(String[] args) {
 		JULogUtil.configureLoggers();
-		final CryptatorConfig config = parseOptions(args);
-		if(config == null) return;
-		
-		if( config.getArguments().isEmpty()) {
-			LOGGER.severe("Parse cryptarithm arguments [FAIL]");
-			return;
-		}
+
+		CryptatorOptionsParser optparser = new CryptatorOptionsParser();
+		if ( !optparser.parseOptions(args)) return;
+		final CryptatorConfig config = optparser.getConfig();
 		
 		final ICryptaSolver solver = buildSolver(config);
 
@@ -58,69 +52,24 @@ public class Cryptator {
 		}
 	}
 
-//	private static boolean parseOptions(CryptaConfig config, String[] args, String cmdParamName, String argumentParamName) {
-//		final CmdLineParser parser = new CmdLineParser(config);
-//		try {
-//			// parse the arguments.
-//			parser.parseArgument(args);
-//			if(checkConfiguration(config)) {
-//				LOGGER.log(Level.CONFIG, "Parse options [OK]\n{0}", config);
-//				return true;
-//			}
-//		} catch( CmdLineException e ) {
-//			System.err.println(e.getMessage());
-//		}
-//
-//		// if there's a problem in the command line,
-//		// you'll get this exception. this will report
-//		// an error message.
-//		System.err.println("java " + cmdParamName + "[options...] "+ argumentParamName);
-//		// print the list of available options
-//		parser.printUsage(System.err);
-//		System.err.println();
-//
-//		// print option sample. This is useful some time
-//		System.err.println("  Example: java "+ cmdParamName  +  " " + parser.printExample(OptionHandlerFilter.ALL) + " " + argumentParamName);
-//		LOGGER.severe("Parse options [FAIL]");
-//		return false;
-//	}
-	
-	private static CryptatorConfig parseOptions(String[] args) {
-		final CryptatorConfig config = new CryptatorConfig();
-		final CmdLineParser parser = new CmdLineParser(config);
-		try {
-			// parse the arguments.
-			parser.parseArgument(args);
-			configureLogging(config);
-			if(checkConfiguration(config)) {
-				LOGGER.log(Level.CONFIG, "Parse options [OK]\n{0}", config);
-				return config;
+	static class CryptatorOptionsParser extends OptionsParser<CryptatorConfig> {
+
+		public CryptatorOptionsParser() {
+			super(Cryptator.class, new CryptatorConfig());
+		}
+
+		@Override
+		protected void configureLoggers() {
+			super.configureLoggers();
+			if(config.isVerbose()) {
+				JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaSolver.LOGGER);
 			}
-		} catch( CmdLineException e ) {
-			System.err.println(e.getMessage());
-		}
-
-		// if there's a problem in the command line,
-		// you'll get this exception. this will report
-		// an error message.
-		System.err.println("java Cryptator [options...] CRYPTARITHMS");
-		// print the list of available options
-		parser.printUsage(System.err);
-		System.err.println();
-
-		// print option sample. This is useful some time
-		System.err.println("  Example: java Cryptator"+parser.printExample(OptionHandlerFilter.ALL));
-		LOGGER.severe("Parse options [FAIL]");
-		return null;
+		}	
 	}
 
-	private final static void configureLogging(CryptatorConfig config) {
-		if(config.isVerbose()) {
-			LOGGER.setLevel(Level.FINE);
-			CryptaSolver.LOGGER.setLevel(Level.FINE);
-		}
-	}
+	
 
+	@Deprecated
 	protected static boolean checkConfiguration(CryptaConfig config) {
 		if(config.getArithmeticBase() < 2) LOGGER.severe("The Arithmetic base must be greater than 1.");
 		else if(config.getRelaxMinDigitOccurence() < 0 || config.getRelaxMaxDigitOccurence() < 0) LOGGER.severe("Digit occurences cannot be negative.");
