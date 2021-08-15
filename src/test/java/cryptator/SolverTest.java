@@ -54,11 +54,13 @@ public class SolverTest {
 		solver.limitTime(2000);
 	}
 
-	private void testCryptarithmWithSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
+	private int testCryptarithmWithSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		final int[] sols = new int[1];
 		final ICryptaNode node = parser.parse(cryptarithm);
 		assertTrue(
 				solver.solve(node, config, (s) -> {
 					//System.out.println(s);
+					sols[0]++;
 					try {
 						assertEquals(1, eval.evaluate(node, s, config.getArithmeticBase()));
 					} catch (CryptaEvaluationException e) {
@@ -67,6 +69,7 @@ public class SolverTest {
 					}
 				} )
 				);
+		return sols[0];
 	}
 	
 
@@ -84,7 +87,7 @@ public class SolverTest {
 		solver.limitSolution(0);
 		solver.limitTime(0);
 		config.useHornerScheme(true);
-		testCryptarithmWithSolutions("send+more=money");
+		assertEquals(1, testCryptarithmWithSolutions("send+more=money"));
 	}
 
 	@Test
@@ -100,12 +103,34 @@ public class SolverTest {
 	}
 
 	@Test
+	public void testSendMoreMoney4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions(" -send -more= -money"));
+	}
+	
+	@Test
+	public void testSendMoreMoney5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions(" (-send) + (-more) = (-money)"));
+	}
+
+	@Test
+	public void testSendMoreMoney6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("(-(-send)) + (-(-more)) = (-(-money))"));
+	}
+	
+	@Test
+	public void testSendMoreMoney7() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("(-send) - more = -money"));
+	}
+
+	@Test
+	public void testSendMoreMoney8() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("(-(-send)) - (-more) = money"));
+	}
+	
+	@Test
 	public void testBigCatLionSolutionLimit() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		solver.limitSolution(5);
-		final int[] tab = new int[1];
-		final ICryptaNode node = parser.parse("big+cat=lion");
-		assertTrue(solver.solve(node, config, (s) -> tab[0]++));
-		assertEquals(5, tab[0]);
+		assertEquals(5, testCryptarithmWithSolutions("big + cat = lion"));
 	}
 	
 	@Test
