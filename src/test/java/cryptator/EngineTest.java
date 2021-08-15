@@ -81,8 +81,6 @@ public class EngineTest {
 		engine.setUp(model);	
 	}
 
-	// TODO Test Decision parser ? Create Decision Class ?
-	
 	private final void testGoodDecision(char symbol, CryptaOperator reOperator, int value) throws CryptaGameException {
 		assertTrue(engine.takeDecision(new CryptaGameDecision(symbol, reOperator, value)));
 		assertFalse(engine.isSolved());

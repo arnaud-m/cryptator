@@ -52,11 +52,10 @@ public class SolverTest {
 		config = new CryptaConfig();
 		solver.limitSolution(100);
 		solver.limitTime(2000);
-		// TODO Test Limits !
 	}
 
 	private void testCryptarithmWithSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		ICryptaNode node = parser.parse(cryptarithm);
+		final ICryptaNode node = parser.parse(cryptarithm);
 		assertTrue(
 				solver.solve(node, config, (s) -> {
 					//System.out.println(s);
@@ -69,9 +68,10 @@ public class SolverTest {
 				} )
 				);
 	}
+	
 
 	private void testCryptarithmWithoutSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		ICryptaNode node = parser.parse(cryptarithm);
+		final ICryptaNode node = parser.parse(cryptarithm);
 		assertFalse(
 				solver.solve(node, config, (s) -> {
 					fail("solution should not exist.");
@@ -99,6 +99,15 @@ public class SolverTest {
 		testCryptarithmWithSolutions("send+more=money");
 	}
 
+	@Test
+	public void testBigCatLionSolutionLimit() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		solver.limitSolution(5);
+		final int[] tab = new int[1];
+		final ICryptaNode node = parser.parse("big+cat=lion");
+		assertTrue(solver.solve(node, config, (s) -> tab[0]++));
+		assertEquals(5, tab[0]);
+	}
+	
 	@Test
 	public void testBigCatLion1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		testCryptarithmWithSolutions("big+cat=lion");
