@@ -62,7 +62,9 @@ public class CryptaModeler implements ICryptaModeler {
 			this.config = config;
 			symbolsToVariables = new HashMap<Character, IntVar>();
 			firstSymbolConstraint = config.allowLeadingZeros() ? 
-					w -> {} : w -> {getSymbolVar(w[0]).gt(0).post();};	
+					w -> {} : w -> {
+						if(w.length > 0) getSymbolVar(w[0]).gt(0).post();
+					};	
 					wordVarBuilder = config.useHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
 		}
 
@@ -86,6 +88,7 @@ public class CryptaModeler implements ICryptaModeler {
 
 			@Override
 			public IntVar apply(char[] word) {
+				if(word.length == 0) return model.intVar(0);
 				final int n = word.length;
 				final IntVar[] vars = new IntVar[n];
 				final int[] coeffs = new int[n];
@@ -100,7 +103,7 @@ public class CryptaModeler implements ICryptaModeler {
 		}
 
 		private final class HornerVarBuilder implements Function<char[], IntVar> {
-			
+
 			@Override
 			public IntVar apply(char[] word) {
 				if(word.length == 0) return model.intVar(0);
@@ -134,14 +137,14 @@ public class CryptaModeler implements ICryptaModeler {
 			if (stack.peek() instanceof ReExpression) {
 				return (ReExpression) stack.peek();
 			} else 
-			throw new CryptaModelException("Modeling error for the cryptarithm equation constraint.");
+				throw new CryptaModelException("Modeling error for the cryptarithm equation constraint.");
 		}
-		
+
 		private IntVar[] getGCCVars() {
 			final Collection<IntVar> vars = symbolsToVariables.values();
 			return vars.toArray(new IntVar[vars.size()]);
 		}
-				
+
 		private int[] getGCCValues() {
 			int[] values = new int[config.getArithmeticBase()];
 			for (int i = 0; i < values.length; i++) {
@@ -149,16 +152,16 @@ public class CryptaModeler implements ICryptaModeler {
 			}
 			return values;
 		}
-		
+
 		private IntVar[] getGCCOccs(int lb, int ub) {
 			return model.intVarArray("O", config.getArithmeticBase(), lb, ub, false);
 		}
-				
+
 		public Constraint globalCardinalityConstraint() {
 			final IntVar[] vars = getGCCVars();
 			final int n = vars.length;
 			if(n == 0) return model.trueConstraint();
-			
+
 			final int maxOcc = config.getMaxDigitOccurence(n);		
 			if(maxOcc == 1) {
 				return model.allDifferent(vars);
@@ -169,7 +172,7 @@ public class CryptaModeler implements ICryptaModeler {
 						getGCCValues(), 
 						getGCCOccs(minOcc, maxOcc), 
 						true);
-				
+
 			}
 		}
 

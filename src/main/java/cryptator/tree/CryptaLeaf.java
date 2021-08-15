@@ -15,6 +15,10 @@ public class CryptaLeaf implements ICryptaNode {
 
 	private final char[] word;
 	
+	public CryptaLeaf() {
+		this(new char[0]);
+	}
+	
 	public CryptaLeaf(String word) {
 		this(word.toCharArray());
 	}
