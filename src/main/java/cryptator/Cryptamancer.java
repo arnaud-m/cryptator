@@ -29,12 +29,7 @@ import cryptator.specs.ICryptaNode;
 
 public class Cryptamancer {
 
-	static {
-		// TODO how to configure logging for the tests ? 
-		Cryptator.configureLoggers();
-	}
-
-	private static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
+	public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
 
 	public static CryptamancerConfig parseOptions(String[] args) {
 		final CryptamancerConfig config = new CryptamancerConfig();
@@ -145,7 +140,7 @@ public class Cryptamancer {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		
+		JULogUtil.configureLoggers();
 		final CryptamancerConfig config = parseOptions(args);
 		if(config == null) return;
 		

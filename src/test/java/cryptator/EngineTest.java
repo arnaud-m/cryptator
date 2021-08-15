@@ -8,12 +8,14 @@
  */
 package cryptator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.logging.Level;
-
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import cryptator.game.CryptaGameDecision;
@@ -23,7 +25,6 @@ import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaModel;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaModeler;
-import cryptator.solver.CryptaSolver;
 import cryptator.specs.ICryptaNode;
 
 public class EngineTest {
@@ -38,10 +39,13 @@ public class EngineTest {
 
 	public EngineTest() {}
 	
+	@BeforeClass
+	public static void configureTestLoggers() {
+		JULogUtil.configureTestLoggers();
+	}
+	
 	@Before
 	public void setDefaultConfig() {
-		CryptaGameEngine.LOGGER.setLevel(Level.WARNING);
-		CryptaSolver.LOGGER.setLevel(Level.WARNING);
 		config = new CryptaConfig();
 	}
 	

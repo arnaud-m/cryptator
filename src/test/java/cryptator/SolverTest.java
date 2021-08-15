@@ -13,9 +13,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.logging.Level;
-
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -42,9 +41,14 @@ public class SolverTest {
 
 	public SolverTest() {}
 
+	@BeforeClass
+	public static void configureTestLoggers() {
+		JULogUtil.configureTestLoggers();
+	}
+
+	
 	@Before
 	public void setDefaultConfig() {
-		CryptaSolver.LOGGER.setLevel(Level.WARNING);
 		config = new CryptaConfig();
 		solver.limitSolution(100);
 		solver.limitTime(2000);

@@ -8,11 +8,8 @@
  */
 package cryptator;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.kohsuke.args4j.CmdLineException;
@@ -35,29 +32,13 @@ import cryptator.tree.GraphizExporter;
 public class Cryptator {
 
 
-	static {
-		configureLoggers();
-	}
-
-	private static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
+	public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
 
 	
-	public final static void configureLoggers() {
-		final InputStream stream = Cryptator.class.getClassLoader().
-				getResourceAsStream("logging.properties");
-		try {
-			LogManager.getLogManager().readConfiguration(stream);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	public Cryptator() {}
+	private Cryptator() {}
 
 	public static void main(String[] args) {
-
+		JULogUtil.configureLoggers();
 		final CryptatorConfig config = parseOptions(args);
 		if(config == null) return;
 		
@@ -77,6 +58,33 @@ public class Cryptator {
 		}
 	}
 
+//	private static boolean parseOptions(CryptaConfig config, String[] args, String cmdParamName, String argumentParamName) {
+//		final CmdLineParser parser = new CmdLineParser(config);
+//		try {
+//			// parse the arguments.
+//			parser.parseArgument(args);
+//			if(checkConfiguration(config)) {
+//				LOGGER.log(Level.CONFIG, "Parse options [OK]\n{0}", config);
+//				return true;
+//			}
+//		} catch( CmdLineException e ) {
+//			System.err.println(e.getMessage());
+//		}
+//
+//		// if there's a problem in the command line,
+//		// you'll get this exception. this will report
+//		// an error message.
+//		System.err.println("java " + cmdParamName + "[options...] "+ argumentParamName);
+//		// print the list of available options
+//		parser.printUsage(System.err);
+//		System.err.println();
+//
+//		// print option sample. This is useful some time
+//		System.err.println("  Example: java "+ cmdParamName  +  " " + parser.printExample(OptionHandlerFilter.ALL) + " " + argumentParamName);
+//		LOGGER.severe("Parse options [FAIL]");
+//		return false;
+//	}
+	
 	private static CryptatorConfig parseOptions(String[] args) {
 		final CryptatorConfig config = new CryptatorConfig();
 		final CmdLineParser parser = new CmdLineParser(config);
