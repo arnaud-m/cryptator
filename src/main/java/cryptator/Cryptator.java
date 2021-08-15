@@ -8,6 +8,9 @@
  */
 package cryptator;
 
+import static cryptator.tree.TreeUtils.writePostorder;
+
+import java.io.ByteArrayOutputStream;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,10 +87,20 @@ public class Cryptator {
 		return solver;
 	}
 
+	public static ICryptaNode parseCryptarithm(String cryptarithm, CryptaParserWrapper parser, Logger logger) throws CryptaParserException  {
+		final ICryptaNode node = parser.parse(cryptarithm);
+		logger.log(Level.INFO, "Parse cryptarithm {0} [OK]", cryptarithm);
+		if(logger.isLoggable(Level.CONFIG)) {
+			final ByteArrayOutputStream os = new ByteArrayOutputStream();
+			writePostorder(node, os);
+			logger.log(Level.CONFIG, "Display postorder internal cryptarithm\n{0}", os);
+		}
+		return node;
+		
+	}
 	private static void solve(String cryptarithm, CryptaParserWrapper parser, ICryptaSolver solver , CryptatorConfig config, BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
 		try {
-			final ICryptaNode node = parser.parse(cryptarithm);
-			LOGGER.log(Level.INFO, "Parse cryptarithm {0} [OK]", cryptarithm);
+			final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
 			final String status = solver.solve(node, config, (s) -> {consumer.accept(node, s);}) ? "OK" : "KO";
 			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
 		} catch (CryptaParserException e) {

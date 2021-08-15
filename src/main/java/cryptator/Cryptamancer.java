@@ -50,17 +50,17 @@ public class Cryptamancer {
 		protected boolean checkArguments() {
 			return config.getArguments().size() == 1;
 		}
-
 	}
 
 	public static ICryptaNode parseCryptarithm(CryptamancerConfig config) {
-		final CryptaParserWrapper parser = new CryptaParserWrapper();	
 		final String cryptarithm = config.getArguments().get(0);
-		LOGGER.log(Level.INFO, "play with the cryptarithm: {0}", cryptarithm);
 		try {
-			return parser.parse(cryptarithm);
+			return Cryptator.parseCryptarithm(
+					cryptarithm,
+					new CryptaParserWrapper(),
+					LOGGER);
 		} catch (CryptaParserException e) {
-			LOGGER.log(Level.SEVERE, "failed to parse the cryptarithm.");
+			LOGGER.log(Level.SEVERE, "Parse cryptarithm " + cryptarithm + " [FAIL]", e);
 			return null;
 		}
 	}
