@@ -82,6 +82,16 @@
 			<artifactId>choco-solver</artifactId>
 			<version>4.10.6</version>
 		</dependency>
+		<dependency>
+			<groupId>guru.nidi</groupId>
+			<artifactId>graphviz-java</artifactId>
+			<version>0.18.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -95,7 +105,7 @@
 					<encoding>UTF-8</encoding>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
-					<!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't
+					<!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't 
 						configured the maven-toolchains-plugin -->
 					<jdkToolchain>
 						<version>9</version>
