@@ -70,16 +70,6 @@ public class Cryptator {
 		}	
 	}
 
-	
-
-	@Deprecated
-	protected static boolean checkConfiguration(CryptaConfig config) {
-		if(config.getArithmeticBase() < 2) LOGGER.severe("The Arithmetic base must be greater than 1.");
-		else if(config.getRelaxMinDigitOccurence() < 0 || config.getRelaxMaxDigitOccurence() < 0) LOGGER.severe("Digit occurences cannot be negative.");
-		else return true;
-		return false;
-	}
-
 	private final static ICryptaSolver buildSolver(CryptatorConfig config) {
 		final ICryptaSolver solver = new CryptaSolver();
 		solver.limitSolution(config.getSolutionLimit());
