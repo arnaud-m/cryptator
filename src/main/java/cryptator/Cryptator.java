@@ -103,13 +103,13 @@ public class Cryptator {
 	}
 
 	private static class DefaultConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
-
-
+		
+		private int solutionCount = 0;
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
-			LOGGER.log(Level.INFO, "Solution found.\n{0}", s);
+			solutionCount++;
+			LOGGER.log(Level.INFO, "Solution #{0}.\n{1}", new Object[] {solutionCount, s});
 		}
-
 	}
 
 	private static class CheckConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
@@ -132,7 +132,6 @@ public class Cryptator {
 				LOGGER.log(Level.WARNING, "Eval cryptarithm solution [FAIL]", e);
 			}		
 		}
-
 	}
 
 	private static class GraphvizConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
