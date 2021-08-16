@@ -15,6 +15,8 @@ import static org.junit.Assert.fail;
 
 import java.util.logging.Level;
 
+import cryptator.solver.gentest.CryptaHeapSolver;
+import cryptator.solver.gentest.CryptaIncrSolver;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,7 +38,7 @@ public class SolverTest {
 
 	public final CryptaParserWrapper parser = new CryptaParserWrapper();
 
-	public final ICryptaSolver solver= new CryptaSolver();
+	public final ICryptaSolver solver= new CryptaIncrSolver();
 
 	public final ICryptaEvaluation eval = new CryptaEvaluation();
 
@@ -175,6 +177,13 @@ public class SolverTest {
 	public void testBinEMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.setArithmeticBase(2);
 		testCryptarithmWithoutSolutions("nrgy = MC ^ 2");
+	}
+
+	@Test
+	public void testQua2EMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		config.setArithmeticBase(4);
+		config.setRelaxMaxDigitOccurence(2);
+		testCryptarithmWithSolutions("nrgy = MC ^ 2");
 	}
 
 	@Test

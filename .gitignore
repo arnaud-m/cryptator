@@ -176,4 +176,8 @@ $RECYCLE.BIN/
 #####=== Parser ===#####
 
 src/main/antlr4-source-folder/
+src/main/antlr4/*.tokens
+src/main/antlr4/*.interp
+src/main/antlr4/*.java
+
 

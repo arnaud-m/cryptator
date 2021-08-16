@@ -35,6 +35,9 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 
 		private CryptaEvaluationException exception;
 
+		private ArithmeticException arithmeticException;
+
+
 
 		public EvaluationConsumer(ICryptaSolution solution, int base) {
 			super();
@@ -47,7 +50,11 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 				int v = 0;
 				for (char c : node.getWord()) {
 					final int digit = solution.getDigit(c);
-					if(digit < 0 || digit >= base) throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
+					if(digit < 0 || digit >= base) {
+						System.out.println(digit);
+						System.out.println(base);
+						throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
+					}
 					v = v * base + digit;
 				}
 				return v;
@@ -59,7 +66,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 		@Override
 		public void accept(ICryptaNode node, int numNode) {
 			// Check for the exception because it cannot be thrown here without changing the method signature.
-			if(exception == null) {
+			if(exception == null && arithmeticException==null) {
 				if(node.isLeaf()) {
 					try {
 						stack.push(getWordValue(node));
@@ -69,7 +76,12 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 				} else {
 					final int b = stack.pop();
 					final int a = stack.pop();
-					stack.push(node.getOperator().getFunction().applyAsInt(a, b));
+					try {
+						stack.push(node.getOperator().getFunction().applyAsInt(a, b));
+					}
+					catch(ArithmeticException e){
+						arithmeticException= e;
+					}
 				}
 			}
 		}
@@ -77,6 +89,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 
 		public int eval() throws CryptaEvaluationException {
 			if(exception != null) throw exception;
+			if(arithmeticException != null) return -1;
 			if(stack.size() != 1) throw new CryptaEvaluationException("Invalid stack size at the end of evaluation.");
 			return stack.peek();
 		}

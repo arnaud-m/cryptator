@@ -9,6 +9,7 @@
 package cryptator.solver.gentest;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import cryptator.solver.CryptaSolutionException;
 import cryptator.specs.ICryptaSolution;
@@ -18,7 +19,7 @@ import cryptator.specs.ICryptaSolution;
 public class CryptaGTSolution implements ICryptaSolution {
 
 
-	public final HashMap<Character, GTVariable> symbolToDigit;
+	public HashMap<Character, GTVariable> symbolToDigit;
 
 
 	public CryptaGTSolution(HashMap<Character, GTVariable> digitToValue) {
@@ -29,11 +30,6 @@ public class CryptaGTSolution implements ICryptaSolution {
 	@Override
 	public int size() {
 		return symbolToDigit.size();
-	}
-
-
-	public final HashMap<Character, GTVariable> getDigitToValue() {
-		return symbolToDigit;
 	}
 
 	@Override
@@ -52,5 +48,13 @@ public class CryptaGTSolution implements ICryptaSolution {
 
 	}
 
+	@Override
+	public Map<Character, ?> getSymbolToDigit() {
+		return symbolToDigit;
+	}
+
+	public void setSymbolToDigit(HashMap<Character, GTVariable> symbolToDigit) {
+		this.symbolToDigit=symbolToDigit;
+	}
 
 }

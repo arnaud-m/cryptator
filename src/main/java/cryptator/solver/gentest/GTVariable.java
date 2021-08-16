@@ -9,7 +9,7 @@
 package cryptator.solver.gentest;
 
 
-
+import java.util.ArrayList;
 
 public class GTVariable {
     private String name;
@@ -19,17 +19,9 @@ public class GTVariable {
 
     public GTVariable(String name, int value, int valMin, int valMax) {
         this.name = name;
-        try {
-            int i = Integer.parseInt(String.valueOf(name));
-            this.value = i;
-            this.valMin = i;
-            this.valMax = i;
-        } catch (NumberFormatException e) {
-            this.value = value;
-            this.valMin = valMin;
-            this.valMax = valMax;
-        }
-
+        this.value = value;
+        this.valMin = valMin;
+        this.valMax = valMax;
     }
 
     public String getName() {
@@ -67,4 +59,5 @@ public class GTVariable {
     public void setValMax(int valMax) {
         this.valMax = valMax;
     }
+
 }

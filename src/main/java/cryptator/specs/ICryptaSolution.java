@@ -9,6 +9,10 @@
 package cryptator.specs;
 
 import cryptator.solver.CryptaSolutionException;
+import cryptator.solver.gentest.GTVariable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public interface ICryptaSolution {
 	
@@ -25,5 +29,6 @@ public interface ICryptaSolution {
 			return defaultValue;
 		}
 	}
-	
+
+	Map<Character, ?> getSymbolToDigit();
 }
