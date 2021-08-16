@@ -48,9 +48,29 @@ public class CryptaGTSolution implements ICryptaSolution {
 		if(v!=-1){
 			return v;
 		}
+		// FIXME Throws an exception while hasDigit returns true !
 		throw new CryptaSolutionException("cant find symbol: " + symbol);
 
 	}
 
+	@Override
+	public int getDigit(char symbol, int defaultValue) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
+	@Override
+	public boolean hasDomain(char symbol) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getDomain(char symbol) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 }

@@ -13,9 +13,8 @@ import java.util.Map;
 
 import cryptator.specs.ICryptaSolution;
 
-public class CryptaSolutionMap implements ICryptaSolution {
+public class CryptaSolutionMap extends AbstractCryptaSolution<Integer> {
 
-	public final Map<Character, Integer> symbolsToDigits;
 			
 	public final static ICryptaSolution parseSolution(String solution) throws CryptaSolutionException {
 		final HashMap<Character, Integer> symbolToDigit = new HashMap<Character, Integer>();
@@ -36,8 +35,7 @@ public class CryptaSolutionMap implements ICryptaSolution {
 	}
 	
 	public CryptaSolutionMap(Map<Character, Integer> symbolsToDigits) {
-		super();
-		this.symbolsToDigits = symbolsToDigits;
+		super(symbolsToDigits);
 	}
 	
 	public final Map<Character, Integer> getSymbolToDigit() {
@@ -45,25 +43,26 @@ public class CryptaSolutionMap implements ICryptaSolution {
 	}
 	
 	@Override
-	public int size() {
-		return symbolsToDigits.size();
-	}
-
-	@Override
 	public boolean hasDigit(char symbol) {
-		return symbolsToDigits.containsKey(Character.valueOf(symbol));
+		return symbolsToDigits.containsKey(symbol);
 	}
 
 	@Override
 	public int getDigit(char symbol) throws CryptaSolutionException {
-		final Integer v = symbolsToDigits.get(Character.valueOf(symbol));
-		if(v == null) throw new CryptaSolutionException("cant find symbol: " + symbol);
-		else return v.intValue();
+		final Integer v = symbolsToDigits.get(symbol);
+		if( v == null ) throw new CryptaSolutionException("cant find symbol: " + symbol);
+		else return v;
 	}
 
 	@Override
-	public String toString() {
-		return symbolsToDigits.toString();
+	public int getDigit(char symbol, int defaultValue) {
+		return symbolsToDigits.getOrDefault(symbol, defaultValue);
 	}
+	
+	@Override
+	protected String getDomain(Integer v) {
+		return v.toString();
+	}
+
 	
 }

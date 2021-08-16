@@ -18,12 +18,10 @@ public interface ICryptaSolution {
 	
 	int getDigit(char symbol) throws CryptaSolutionException;
 	
-	default int getDigit(char symbol, int defaultValue) {
-		try {
-			return getDigit(symbol);
-		} catch (CryptaSolutionException e) {
-			return defaultValue;
-		}
-	}
+	int getDigit(char symbol, int defaultValue);
+	
+	boolean hasDomain(char symbol);
+	
+	String getDomain(char symbol);
 	
 }

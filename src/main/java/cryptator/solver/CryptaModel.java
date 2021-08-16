@@ -20,6 +20,7 @@ public final class CryptaModel {
 
 	public final Model model; 
 	
+	// TODO Define a class implementing ICryptaSolution ?
 	public final Map<Character, IntVar> symbolsToVariables;
 
 	public CryptaModel(Model model, Map<Character, IntVar> symbolsToVariables) {
@@ -36,7 +37,6 @@ public final class CryptaModel {
 		return symbolsToVariables;
 	}
 	
-
 	public ICryptaSolution recordSolution() {
 		final Map<Character, Integer> symbolsToDigits = new HashMap<Character, Integer>();
 		symbolsToVariables.forEach((symbol, var) -> {
