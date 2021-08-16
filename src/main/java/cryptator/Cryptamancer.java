@@ -65,7 +65,6 @@ public class Cryptamancer {
 	}
 
 	public static ICryptaGameEngine buildEngine(ICryptaNode node, CryptaConfig config) {
-		LOGGER.log(Level.CONFIG, "display model configuration\n{0}", config);
 		final CryptaModeler modeler= new CryptaModeler();
 		try {
 			final CryptaGameEngine engine = new CryptaGameEngine();

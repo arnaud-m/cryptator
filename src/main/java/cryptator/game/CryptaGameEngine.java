@@ -36,11 +36,18 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 	@Override
 	public void setUp(CryptaModel model) throws CryptaGameException {
 		this.gameModel = model;
-		this.userModel = makeUserDecisionModel(model);	
-		final Solver solver = gameModel.getModel().getSolver();
-		if( ! solver.solve() ) throw new CryptaGameException("Cryptarithm has no solution.");
-		LOGGER.log(Level.CONFIG, "display the initial cryptarithm solution.\n{0}", gameModel.recordSolution());
+		this.userModel = makeUserDecisionModel(model);			
+		if( ! solveGame() ) throw new CryptaGameException("Cryptarithm has no solution.");
 	}
+	
+	private final boolean solveGame() {
+		final Solver solver = gameModel.getModel().getSolver();
+		if(solver.solve()) {
+			LOGGER.log(Level.CONFIG, "display the current cryptarithm solution.\n{0}", gameModel);
+			return true;
+		} else return false;
+	}
+	
 
 
 	@Override
@@ -82,9 +89,8 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 			propagate(gameModel, decision);
 			return true;
 		} catch (ContradictionException e) {
-			final Model m = gameModel.getModel();
-			LOGGER.log(Level.CONFIG, "solve decision {0} in model {1}", new Object[] {decision, m.getName()});
-			return m.getSolver().solve();
+			LOGGER.log(Level.CONFIG, "solve decision {0} in model {1}", new Object[] {decision, gameModel.getModel().getName()});
+			return solveGame();
 		}
 	}
 
@@ -106,7 +112,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 		// FIXME m.getSolver().restart();
 		LOGGER.log(Level.CONFIG, "solve decision {0} in model {1}", new Object[] {opposite, m.getName()});
 		m.getSolver().reset();
-		if( ! m.getSolver().solve()) throw new CryptaGameException("Cannot refute decision" + decision);
+		if( ! solveGame() ) throw new CryptaGameException("Cannot refute decision" + decision);
 
 	}
 
