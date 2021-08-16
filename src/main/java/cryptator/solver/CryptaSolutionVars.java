@@ -1,0 +1,66 @@
+/**
+ * This file is part of cryptator, https://github.com/arnaud-m/cryptator
+ *
+ * Copyright (c) 2021, Université Côte d'Azur. All rights reserved.
+ *
+ * Licensed under the BSD 3-clause license.
+ * See LICENSE file in the project root for full license information.
+ */
+package cryptator.solver;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.chocosolver.solver.variables.IntVar;
+
+import cryptator.specs.ICryptaSolution;
+
+public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
+
+
+	public CryptaSolutionVars(Map<Character, IntVar> symbolsToDigits) {
+		super(symbolsToDigits);
+	}
+	
+	@Override
+	public boolean hasDigit(char symbol) {
+		final IntVar v = symbolsToDigits.get(symbol);
+		return v != null && v.isInstantiated();
+	}
+
+	@Override
+	public int getDigit(char symbol) throws CryptaSolutionException {
+		final IntVar v = symbolsToDigits.get(symbol);
+		if(v != null && v.isInstantiated()) return v.getValue();
+		else throw new CryptaSolutionException("cant find symbol: " + symbol);
+	}
+
+	
+	@Override
+	public int getDigit(char symbol, int defaultValue) {
+		final IntVar v = symbolsToDigits.get(symbol);
+		if(v != null && v.isInstantiated()) return v.getValue();
+		else return defaultValue;
+	}
+
+	@Override
+	protected final String getDomain(IntVar v) {
+		return v.toString().replaceFirst(".*=\\s*", "");
+	}
+	
+	public ICryptaSolution recordSolution() {
+		final Map<Character, Integer> symbolsToDigits = new HashMap<Character, Integer>();
+		this.symbolsToDigits.forEach((symbol, var) -> {
+			if(var.isInstantiated()) symbolsToDigits.put(symbol, var.getValue());
+		});
+		return new CryptaSolutionMap(symbolsToDigits);
+	}
+	
+	public boolean isTotalSolution() {
+		for (IntVar var : symbolsToDigits.values()) {
+			if(! var.isInstantiated()) return false;
+		}
+		return true;
+	}
+
+}

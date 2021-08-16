@@ -9,7 +9,6 @@
 package cryptator;
 
 import java.util.Scanner;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +26,7 @@ public class Cryptamancer {
 
 	public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
 
-	
+
 	static class CryptamancerOptionsParser extends OptionsParser<CryptamancerConfig> {
 
 		public CryptamancerOptionsParser() {
@@ -41,11 +40,11 @@ public class Cryptamancer {
 				JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaGameEngine.LOGGER);
 			}
 		}
-		
+
 		public String getArgumentName() {
 			return "CRYPTARITHM";
 		}
-		
+
 		@Override
 		protected boolean checkArguments() {
 			return config.getArguments().size() == 1;
@@ -64,7 +63,7 @@ public class Cryptamancer {
 			return null;
 		}
 	}
-	
+
 	public static ICryptaGameEngine buildEngine(ICryptaNode node, CryptaConfig config) {
 		LOGGER.log(Level.CONFIG, "display model configuration\n{0}", config);
 		final CryptaModeler modeler= new CryptaModeler();
@@ -77,8 +76,8 @@ public class Cryptamancer {
 			return null;
 		}
 	}
-		
-	
+
+
 	private static void play(ICryptaGameEngine engine) {
 		final Scanner scanner = new Scanner(System.in);
 		int n = 1;
@@ -88,12 +87,10 @@ public class Cryptamancer {
 				final CryptaGameDecision decision = CryptaGameDecision.parseDecision(scanner);
 				if(decision == null) LOGGER.warning("Cannot parse the decision.");
 				else {
-				final boolean answer = engine.takeDecision(decision);
-				if (answer) LOGGER.info("decision accepted.");
-				else LOGGER.info("decision rejected.");
-				final DisplayPartialSolution display = new DisplayPartialSolution();
-				engine.forEachSymbolDomain(display);
-					LOGGER.log(Level.INFO, "display the current partial solution.\n{0}", display);
+					final boolean answer = engine.takeDecision(decision);
+					if (answer) LOGGER.info("decision accepted.");
+					else LOGGER.info("decision rejected.");
+					LOGGER.log(Level.INFO, "display the current partial solution.\n{0}", engine);
 				}
 			} catch (CryptaGameException e) {
 				LOGGER.log(Level.WARNING, "failure while taking the decision.", e);
@@ -101,44 +98,21 @@ public class Cryptamancer {
 			n++;
 		}
 	}
-	
-	static private class DisplayPartialSolution implements BiConsumer<Character, String> {
 
-		
-		private int length = 2;
-		
-		private final StringBuilder b1 = new StringBuilder();
-		
-		private final StringBuilder b2 = new StringBuilder();
-		
-		@Override
-		public void accept(Character t, String u) {
-			length = Math.max(length, u.length());
-			String format = "%" + length + "s|";
-			b1.append(String.format(format, t));
-			b2.append(String.format(format, u));
-		}
-
-		@Override
-		public String toString() {
-			return b1.toString() + "\n" + b2.toString();
-		}	
-	}
-	
 	public static void main(String[] args) throws Exception {
 		JULogUtil.configureLoggers();
-		
+
 		CryptamancerOptionsParser optparser = new CryptamancerOptionsParser();
 		if( ! optparser.parseOptions(args)) return;
 		final CryptamancerConfig config = optparser.getConfig();
-			
+
 		final ICryptaNode node = parseCryptarithm(config);
 		if(node == null) return;
-		
-		
+
+
 		final ICryptaGameEngine engine = buildEngine(node, config);
 		if(engine == null) return;
-		
+
 		play(engine);
 
 		engine.tearDown();

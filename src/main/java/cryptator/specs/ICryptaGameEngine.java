@@ -19,8 +19,6 @@ public interface ICryptaGameEngine {
 	void setUp(CryptaModel model) throws CryptaGameException;
 	
 	boolean takeDecision(CryptaGameDecision decision) throws CryptaGameException;
-
-	void forEachSymbolDomain(BiConsumer<Character, String> consumer);
 	
 	boolean isSolved();
 	

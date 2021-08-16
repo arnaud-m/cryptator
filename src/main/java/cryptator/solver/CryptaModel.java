@@ -20,34 +20,30 @@ public final class CryptaModel {
 
 	public final Model model; 
 	
-	// TODO Define a class implementing ICryptaSolution ?
-	public final Map<Character, IntVar> symbolsToVariables;
+	public final CryptaSolutionVars solution;
 
 	public CryptaModel(Model model, Map<Character, IntVar> symbolsToVariables) {
 		super();
 		this.model = model;
-		this.symbolsToVariables = symbolsToVariables;
+		this.solution = new CryptaSolutionVars(symbolsToVariables);
 	}
 
 	public final Model getModel() {
 		return model;
 	}
 
-	public final Map<Character, IntVar> getMap() {
-		return symbolsToVariables;
-	}
 	
+	public final CryptaSolutionVars getSolution() {
+		return solution;
+	}
+
 	public ICryptaSolution recordSolution() {
-		final Map<Character, Integer> symbolsToDigits = new HashMap<Character, Integer>();
-		symbolsToVariables.forEach((symbol, var) -> {
-			symbolsToDigits.put(symbol, var.getValue());
-		});
-		return new CryptaSolutionMap(symbolsToDigits);
+		return solution.recordSolution();
 	}
 
 	@Override
 	public String toString() {
-		return symbolsToVariables.values().toString();
+		return solution.toString();
 	}
 	
 	

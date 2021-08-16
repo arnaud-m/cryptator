@@ -11,8 +11,7 @@ package cryptator.solver;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
-
-import org.chocosolver.solver.variables.IntVar;
+import java.util.function.BiConsumer;
 
 import cryptator.specs.ICryptaSolution;
 
@@ -30,6 +29,10 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 		return symbolsToDigits.size();
 	}
 
+	public E getVar(char symbol) {
+		return symbolsToDigits.get(symbol);
+	}
+
 	protected abstract String getDomain(E var);
 
 	@Override
@@ -43,6 +46,10 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 		return v == null ? "?" : getDomain(v);
 	}
 
+	public void forEach(BiConsumer<? super Character, ? super E> action) {
+		symbolsToDigits.forEach(action);
+	}
+	
 	@Override
 	public String toString() {
 		final StringBuilder b1 = new StringBuilder();

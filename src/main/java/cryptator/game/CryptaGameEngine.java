@@ -10,7 +10,6 @@ package cryptator.game;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,35 +42,24 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 		LOGGER.log(Level.CONFIG, "display the initial cryptarithm solution.\n{0}", gameModel.recordSolution());
 	}
 
-	@Override
-	public void forEachSymbolDomain(BiConsumer<Character, String> consumer) {
-		userModel.getMap().forEach((s, v) -> {
-			String str = v.toString();
-			consumer.accept(s, str.replaceFirst(".*=\\s*", ""));	
-		}
-				);
-	}
 
 	@Override
 	public boolean isSolved() {
-		for(IntVar v : userModel.getMap().values()) {
-			if(! v.isInstantiated()) return false;
-		}
-		return true;
+		return userModel.getSolution().isTotalSolution();
 	}
 
 
 	private final static CryptaModel makeUserDecisionModel(CryptaModel model) {
 		Map<Character, IntVar> symbolsToVariables = new HashMap<Character, IntVar>();
 		final Model m = new Model("Cryptarithm-Decisions");
-		model.getMap().forEach( (symbol, var) -> {
+		model.getSolution().forEach( (symbol, var) -> {
 			symbolsToVariables.put(symbol, m.intVar(var.getName(), var.getLB(), var.getUB(), false));
 		});
 		return new CryptaModel(m, symbolsToVariables);
 	}
 
 	private final static Constraint makeDecision(CryptaModel model, CryptaGameDecision decision) throws CryptaGameException {
-		final IntVar var = model.getMap().get(decision.getSymbol());
+		final IntVar var = model.getSolution().getVar(decision.getSymbol());
 		if(var == null) throw new CryptaGameException("Cannot find variable for symbol: " + decision.getSymbol());
 		final IntVar val = model.getModel().intVar(decision.getValue());
 		return ( (ReExpression) decision.getOperator().getExpression().apply(var, val)).decompose();
@@ -100,7 +88,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 		}
 	}
 
-	
+
 	private final void propagateUserDecision(Constraint decision) throws CryptaGameException {
 		try {
 			propagate(userModel, decision);
@@ -143,7 +131,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
 	@Override
 	public String toString() {
-		return "CryptaGameEngine [gameModel=" + gameModel + "\n, decisionModel=" + userModel + "]";
+		return userModel.getSolution().toString();
 	}
 
 
