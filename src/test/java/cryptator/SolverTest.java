@@ -15,7 +15,6 @@ import static org.junit.Assert.fail;
 
 import java.util.logging.Level;
 
-import cryptator.solver.gentest.CryptaHeapSolver;
 import cryptator.solver.gentest.CryptaIncrSolver;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -94,6 +93,11 @@ public class SolverTest {
 	public void testSendMoreMoney3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		config.allowLeadingZeros(true);
 		testCryptarithmWithSolutions("send+more=money");
+	}
+
+	@Test
+	public void testSendMoreMoneySub() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		testCryptarithmWithSolutions("-(send+more)=-money");
 	}
 
 	@Test

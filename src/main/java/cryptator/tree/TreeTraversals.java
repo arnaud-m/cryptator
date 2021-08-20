@@ -94,7 +94,7 @@ public final class TreeTraversals {
 		while(! stack.isEmpty()) {
 			final ICryptaNode n = stack.pop();
 			order.add(n);
-			if(n.isInternalNode()) {
+			if(n!=null && n.isInternalNode()) {
 				stack.push(n.getLeftChild());
 				stack.push(n.getRightChild());
 			}

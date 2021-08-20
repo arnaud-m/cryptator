@@ -34,7 +34,8 @@ public class CryptaGTSolution implements ICryptaSolution {
 
 	@Override
 	public boolean hasDigit(char symbol) {
-		return symbolToDigit.get(symbol) != null;
+		GTVariable var=symbolToDigit.get(symbol);
+		return var != null && var.getValue()!=-1;
 	}
 
 

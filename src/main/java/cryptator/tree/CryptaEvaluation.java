@@ -67,20 +67,24 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 		public void accept(ICryptaNode node, int numNode) {
 			// Check for the exception because it cannot be thrown here without changing the method signature.
 			if(exception == null && arithmeticException==null) {
-				if(node.isLeaf()) {
-					try {
-						stack.push(getWordValue(node));
-					} catch (CryptaEvaluationException e) {
-						exception = e;
-					}
-				} else {
-					final int b = stack.pop();
-					final int a = stack.pop();
-					try {
-						stack.push(node.getOperator().getFunction().applyAsInt(a, b));
-					}
-					catch(ArithmeticException e){
-						arithmeticException= e;
+				if(node==null){
+					stack.push(0);
+				}
+				else {
+					if (node.isLeaf()) {
+						try {
+							stack.push(getWordValue(node));
+						} catch (CryptaEvaluationException e) {
+							exception = e;
+						}
+					} else {
+						final int b = stack.pop();
+						final int a = stack.pop();
+						try {
+							stack.push(node.getOperator().getFunction().applyAsInt(a, b));
+						} catch (ArithmeticException e) {
+							arithmeticException = e;
+						}
 					}
 				}
 			}

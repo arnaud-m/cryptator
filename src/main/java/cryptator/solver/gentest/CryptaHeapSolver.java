@@ -187,14 +187,10 @@ public class CryptaHeapSolver extends AbstractCryptaSolver implements ICryptaSol
             if (solutionLimit > 0) {
                 while (solutionCount < solutionLimit && hasNext()) {
                     solutionCount+=next();
-                    System.out.println(solutionCount);
-
                 }
             } else {
                 while (hasNext()) {
                     solutionCount+=next();
-                    System.out.println(solutionCount);
-
                 }
             }
         }

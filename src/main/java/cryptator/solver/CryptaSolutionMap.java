@@ -11,6 +11,7 @@ package cryptator.solver;
 import java.util.HashMap;
 import java.util.Map;
 
+import cryptator.solver.gentest.GTVariable;
 import cryptator.specs.ICryptaSolution;
 
 public class CryptaSolutionMap implements ICryptaSolution {
@@ -51,7 +52,7 @@ public class CryptaSolutionMap implements ICryptaSolution {
 
 	@Override
 	public boolean hasDigit(char symbol) {
-		return symbolsToDigits.containsKey(Character.valueOf(symbol));
+		return symbolsToDigits.containsKey(Character.valueOf(symbol)) && symbolsToDigits.get(Character.valueOf(symbol))!=null;
 	}
 
 	@Override

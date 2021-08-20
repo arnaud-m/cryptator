@@ -8,6 +8,7 @@ import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.TreeTraversals;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -56,9 +57,7 @@ public abstract class AbstractCryptaSolver implements Iterator {
                     rep++;
                 }
             }
-            if((getMaxOccurences()>0 && rep >getMaxOccurences())
-                    || (getMaxOccurences()==0 && rep > 1)
-                    || (getMinOccurences()>0 && rep < getMinOccurences())) return false;
+            if((getMaxOccurences() > 0 && rep > getMaxOccurences()) && (getMinOccurences() > 0 && rep < getMinOccurences())) return false;
         }
 
         return true;
@@ -76,6 +75,7 @@ public abstract class AbstractCryptaSolver implements Iterator {
         }
         return nbSol;
     }
+
 
     public ICryptaNode getRoot() {
         return root;
@@ -121,7 +121,7 @@ public abstract class AbstractCryptaSolver implements Iterator {
     public HashMap<Character, GTVariable> makeMap(ICryptaNode root){
         HashMap<Character, GTVariable>map=new HashMap<>();
         TreeTraversals.postorderTraversal(root, (node, num) -> {
-                    if(node.isLeaf()){
+                    if(node!=null && node.isLeaf()){
                         for (char c: node.getWord()) {
                             map.put(c, new GTVariable(Character.toString(c), 0, 0, getConfig().getArithmeticBase()));
                         }
