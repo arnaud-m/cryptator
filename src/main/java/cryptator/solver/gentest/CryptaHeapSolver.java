@@ -9,6 +9,7 @@ import cryptator.specs.ICryptaSolver;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class CryptaHeapSolver extends AbstractCryptaSolver implements ICryptaSolver {
@@ -79,6 +80,45 @@ public class CryptaHeapSolver extends AbstractCryptaSolver implements ICryptaSol
         return m;
     }
 
+    public ICryptaSolution heapPermutationIter(int[] a, int size) {
+        int[] compteur=makeArray0(size);
+
+        //écrire A
+
+        // i indique le niveau de la boucle en cours d'incrémentation
+        int i=0;
+
+        while (i<size) {
+
+            if (compteur[ i] <i) {
+                if(i%2==0) {
+                    //échanger A[ 0]et A[ i]
+                    int temp = a[0];
+                    a[0]= a[i];
+                    a[i]= temp;
+                }
+                else {
+                    //échanger A[ compteur[i]],A[i]
+                    int temp = compteur[i];
+                    compteur[i]= a[i];
+                    a[i]= temp;
+                }
+                //écrire A
+
+                compteur[i] += 1; // on incrémente l'indice de boucle après avoir effectué une itération
+                i=0; // on retourne au cas de base de la version récursive
+            }
+            else {
+                // la boucle de niveau i est terminée, on peut donc réinitialiser l'indice et retourner au niveau supérieur
+                compteur[i] =0;
+                i += 1;
+
+            }
+
+        }
+        return null;
+    }
+
 
 
     public int[] nextCombination(int[] combination) {
@@ -108,7 +148,7 @@ public class CryptaHeapSolver extends AbstractCryptaSolver implements ICryptaSol
     }
 
     @Override
-    public Integer next() {
+    public Object next() {
         int nbSol=0;
         nbSol+=check(comb);
 
@@ -118,6 +158,8 @@ public class CryptaHeapSolver extends AbstractCryptaSolver implements ICryptaSol
         comb=nextCombination(comb);
         return nbSol;
     }
+
+
 
     private int heapPermutation3(int[] a, int size) {
         int m = 0;
@@ -182,15 +224,51 @@ public class CryptaHeapSolver extends AbstractCryptaSolver implements ICryptaSol
         setSolutionConsumer(solutionConsumer);
         int solutionCount = 0;
 
+        CryptaCombination c=new CryptaCombination(comb, getSolution(), getConfig(), getMaxOccurences());
+        CryptaPermutation p=new CryptaPermutation(Arrays.copyOf(comb, comb.length));
 
-        if(hasNext()) {
+
+
+//        if(c.hasNext()) {
+//            if (solutionLimit > 0) {
+//                while (solutionCount < solutionLimit && c.hasNext()) {
+//                    solutionCount+=next();
+//                }
+//            } else {
+//                while (hasNext()) {
+//                    solutionCount+=next();
+//                }
+//            }
+//        }
+
+        if(c.hasNext()) {
             if (solutionLimit > 0) {
-                while (solutionCount < solutionLimit && hasNext()) {
-                    solutionCount+=next();
+                while (solutionCount < solutionLimit && c.hasNext()) {
+                    while (solutionCount < solutionLimit && p.hasNext()){
+                        int[] perm=p.next();
+//                        if(Arrays.equals(perm, new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9})){
+//                           System.out.println("heeeeeey");
+//                        }
+                        solutionCount+=check(perm);
+
+                    }
+                    int[] comb=c.next();
+                    System.out.println("comb"+Arrays.toString(comb));
+                    solutionCount+=check(comb);
+                    p.setPermutation(Arrays.copyOf(comb, comb.length));
+                    p.setI(0);
                 }
             } else {
-                while (hasNext()) {
-                    solutionCount+=next();
+                while (c.hasNext()) {
+                    while (p.hasNext()){
+                        int[] perm=p.next();
+                        solutionCount+=check(perm);
+                    }
+                    int[] comb=c.next();
+                    System.out.println("comb"+Arrays.toString(comb));
+                    solutionCount+=check(comb);
+                    p.setPermutation(Arrays.copyOf(comb, comb.length));
+                    p.setI(0);
                 }
             }
         }

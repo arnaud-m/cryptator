@@ -36,12 +36,8 @@ public class GTVariable {
         return value;
     }
 
-    public boolean setValue(int value) {
-        if(value<=valMax && value>=valMin) {
-            this.value = value;
-            return true;
-        }
-        return false;
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public int getValMin() {

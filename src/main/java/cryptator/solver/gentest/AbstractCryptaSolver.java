@@ -30,12 +30,8 @@ public abstract class AbstractCryptaSolver implements Iterator {
         int i=0;
 
         for (GTVariable var : ((HashMap<Character, GTVariable>) solution.getSymbolToDigit()).values()) {
-            if(var.setValue(input[i]%config.getArithmeticBase())){
-                i++;
-            }
-            else{
-                return null;
-            }
+            var.setValue(input[i]%config.getArithmeticBase());
+            i++;
         }
         ICryptaEvaluation chk = new CryptaEvaluation();
         int v;
@@ -53,11 +49,12 @@ public abstract class AbstractCryptaSolver implements Iterator {
         for (int i=0; i<config.getArithmeticBase();i++){
             int rep = 0;
             for (int j=0; j<elements.length && rep<=getMaxOccurences(); j++){
-                if (elements[j]==i) {
+                if (elements[j]%config.getArithmeticBase()==i) {
                     rep++;
                 }
             }
-            if((getMaxOccurences() > 0 && rep > getMaxOccurences()) && (getMinOccurences() > 0 && rep < getMinOccurences())) return false;
+            if((getMaxOccurences()>0 && rep >getMaxOccurences())
+                    || (getMinOccurences()>0 && rep < getMinOccurences())) return false;
         }
 
         return true;
@@ -68,8 +65,9 @@ public abstract class AbstractCryptaSolver implements Iterator {
         if (checkNBrep(elements)) {
             ICryptaSolution solution = checkArray(elements);
             if (solution != null) {
-                solutionConsumer.accept(solution);
 
+                solutionConsumer.accept(solution);
+                System.out.println(Arrays.toString(elements));
                 nbSol += 1;
             }
         }
@@ -110,10 +108,17 @@ public abstract class AbstractCryptaSolver implements Iterator {
     }
 
     public int[] makeArray (int n) {
-
         int[] tab=new int[n];
         for (int i=0; i<n; i++){
             tab[i]=i;
+        }
+        return tab;
+    }
+
+    public int[] makeArray0 (int n) {
+        int[] tab=new int[n];
+        for (int i=0; i<n; i++){
+            tab[i]=0;
         }
         return tab;
     }
@@ -132,7 +137,7 @@ public abstract class AbstractCryptaSolver implements Iterator {
     }
 
     public int getMinOccurences(){
-        int n=getSolution().getSymbolToDigit().size();
+        int n=solution.getSymbolToDigit().size();
         final int b = config.getArithmeticBase();
 
         int minOcc = n/b;
@@ -142,7 +147,7 @@ public abstract class AbstractCryptaSolver implements Iterator {
     }
 
     public int getMaxOccurences() {
-        int n=getSolution().getSymbolToDigit().size();
+        int n=solution.getSymbolToDigit().size();
         final int b = config.getArithmeticBase();
 
         int maxOcc = (n + b - 1) / b;

@@ -144,6 +144,7 @@ public class CryptaIncrSolver extends AbstractCryptaSolver implements ICryptaSol
             }
         }
 
+        System.out.println(solutionCount);
         return solutionCount > 0;
     }
 

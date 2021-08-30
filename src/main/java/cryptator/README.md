@@ -16,7 +16,7 @@ $ java org.antlr.v4.gui.TestRig parser/Parser program -gui #-gui for show the tr
 ^D
 ```
 
-# <u>TO SEE THE GRAPH OF THE EXPRESSION:</u>
+# <u>TO SEE THE GRAPH OF THE STRUCTURE:</u>
 ```bash
 $ dot -Tpdf dot/tree.dot -o graph.pdf
 ```
