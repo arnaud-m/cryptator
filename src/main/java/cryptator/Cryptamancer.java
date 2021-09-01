@@ -81,7 +81,7 @@ public class Cryptamancer {
 		final Scanner scanner = new Scanner(System.in);
 		int n = 1;
 		while( (!engine.isSolved())) {
-			LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision:", n);
+			LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision (symbol operator value):", n);
 			try {
 				final CryptaGameDecision decision = CryptaGameDecision.parseDecision(scanner);
 				if(decision == null) LOGGER.warning("Cannot parse the decision.");

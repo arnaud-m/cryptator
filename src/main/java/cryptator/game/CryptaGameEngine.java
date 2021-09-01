@@ -99,7 +99,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 		try {
 			propagate(userModel, decision);
 		} catch (ContradictionException e) {
-			throw new CryptaGameException("decision solver should not fail !");
+			throw new CryptaGameException("decision solver should not fail!");
 		}
 
 	}
@@ -118,7 +118,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
 	@Override
 	public boolean takeDecision(CryptaGameDecision decision) throws CryptaGameException {
-		LOGGER.log(Level.INFO, "take decision ({0})).", decision);
+		LOGGER.log(Level.INFO, "take decision ({0}).", decision);
 		final Constraint gdec = makeDecision(gameModel, decision);
 		final Constraint ddec = makeDecision(userModel, decision);
 		if(probeGameDecision(gdec)) {

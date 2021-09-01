@@ -8,10 +8,6 @@
 
 Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Université Côte d'Azur).
 
-* Documentation, Support and Issues
-
- Look for the most up-to-date documentation on the web site, or javadoc.
-
 * Download and Installation
 
   In the following, we distinguish two usages:
@@ -19,49 +15,46 @@ Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Univers
     - as a library: the jar file excludes all dependencies.
 
 ** Prerequisites
-  This project works on 32 bits and 64 bits environment.
-
-  This project requires:
-
-  Requirements:
+  This project works on 32 bits and 64 bits environment and requires:
 
   - JDK 8+
   - Maven 3+
 
-** Inside a maven project
-
-First, you must build from source and install it into your local .m2 repository.
-Then, you only have to edit your pom.xml to declare the following library dependency:
-
-#+BEGIN_EXAMPLE
-<dependency>
-   <groupId>fr.univ-cotedazur</groupId>
-   <artifactId>cryptator</artifactId>
-   <version>0.2.0-SNAPSHOT</version>
-</dependency>
-#+END_EXAMPLE
-
 ** As a stand-alone application
-
- The jar file contains all required dependencies.
- The next step is simply to add the jar file to your classpath of your application.
- Note that if your program depends on dependencies declared in the jar file, you should consider using eps4j-core as a library.
-
-** As a library
-
-   The jar file does not contains any dependencies, as of being used as a dependency of another application.
-   The next step is to add the jar file to your classpath of your application and also add the required dependencies.
-
-** Building from source
 
    This project uses the Cross-platform Maven build system.
    : mvn clean package
    or to skip unit tests
    : mvn clean package -DskipTests=true
 
-*** Installing
+   The jar file contains all required dependencies.
+   The next step is simply to run one of the two console applications.
 
-    Once the project has been built, execute
+   Execute the main classes without argument to display the help message.
+*** Running the solver
+
+ : java -cp target/cryptator-0.2.0-SNAPSHOT-with-dependencies.jar cryptator.Cryptator -s 1 'send+more=money'
+
+*** Playing the game
+
+ : java -cp target/cryptator-0.2.0-SNAPSHOT-with-dependencies.jar cryptator.Cryptamancer 'send+more=money'
+
+** As a library
+
+   The jar file does not contains any dependencies, as of being used as a dependency of another application.
+   The next step is to add the jar file to your classpath of your application and also add the required dependencies.
+
+*** Inside a maven project
+
+    First, you must build from source and install it into your local .m2 repository.
     : mvn install
-    or to skip tests
-    : mvn install -DskipTests=true
+
+    Then, you only have to edit your pom.xml to declare the following library dependency:
+
+ #+BEGIN_EXAMPLE
+ <dependency>
+    <groupId>fr.univ-cotedazur</groupId>
+    <artifactId>cryptator</artifactId>
+    <version>0.2.0-SNAPSHOT</version>
+ </dependency>
+ #+END_EXAMPLE
