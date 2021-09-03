@@ -128,6 +128,12 @@ public class SolverTest {
 	}
 	
 	@Test
+	public void testSendMoreMoney9() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("(send+more=money)"));
+		assertEquals(1, testCryptarithmWithSolutions("(((send+more)=(money)))"));
+	}
+	
+	@Test
 	public void testBigCatLionSolutionLimit() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		solver.limitSolution(5);
 		assertEquals(5, testCryptarithmWithSolutions("big + cat = lion"));

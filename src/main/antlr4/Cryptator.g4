@@ -12,11 +12,12 @@ import cryptator.tree.CryptaLeaf;
 
 // Parser Rules
 
-program : equation {}; //additional token to simplify the passage in parameter
+program : equation EOF{}; //additional token to simplify the passage in parameter
 
 equation returns [ICryptaNode node]: //create a node of the tree corresponding to an equation and return this node
-                left=expression COMPARATEUR right=expression EOF{$node=new CryptaNode($COMPARATEUR.getText(), $left.node, $right.node);};
-
+                 '(' equation ')' {$node=$equation.node;}
+                 | left=expression COMPARATEUR right=expression {$node=new CryptaNode($COMPARATEUR.getText(), $left.node, $right.node);};
+                 
 
 expression returns [ICryptaNode node]: //create recursively the tree of expressions with priority and return the root of the tree
             symbol {$node=new CryptaLeaf($symbol.text);} //create a node of the tree corresponding to a leaf and return this node
