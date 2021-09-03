@@ -130,6 +130,7 @@ public class GTSolverTest {
 	public GTSolverTest() {}
 
 	@Test
+	@Ignore
 	public void testTree() throws Exception {
 		(new GraphizExporter()).print(sendMoreMoney, System.out);
 
@@ -187,6 +188,7 @@ public class GTSolverTest {
 
 
 	@Test
+	@Ignore
 	public void testParse() throws CryptaParserException {
 		CryptaParserWrapper parser = new CryptaParserWrapper();
 		ICryptaNode node;
@@ -227,6 +229,7 @@ public class GTSolverTest {
 
 
 	@Test
+	@Ignore
 	public void incremental() throws Exception {
 		long start = System.currentTimeMillis();
 		//algo incremental
@@ -256,6 +259,7 @@ public class GTSolverTest {
 	}
 
 	@Test
+	@Ignore
 	public void heap() throws Exception {
 		long start = System.currentTimeMillis();
 		//algo heap
