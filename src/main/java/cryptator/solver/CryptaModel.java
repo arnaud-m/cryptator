@@ -8,7 +8,6 @@
  */
 package cryptator.solver;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.chocosolver.solver.Model;

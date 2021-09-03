@@ -20,7 +20,7 @@ import cryptator.solver.CryptaSolutionMap;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.tree.CryptaEvaluationException;
-import cryptator.tree.GraphizExporter;
+import cryptator.tree.GraphvizExport;
 
 public class ExportTest {
 	
@@ -40,26 +40,25 @@ public class ExportTest {
 	
 	public final CryptaParserWrapper parser = new CryptaParserWrapper();
 
-	public final GraphizExporter export = new GraphizExporter();
 
 	@Test
 	public void testExport1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
 		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
-		export.print(cryptarithm, outstream);
+		GraphvizExport.exportToGraphviz(cryptarithm);
 	}
 	
 	@Test
 	public void testExport2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
 		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 9");
-		export.print(cryptarithm, solution, outstream);
+		GraphvizExport.exportToGraphviz(cryptarithm, solution);
 	}
 	
 	@Test
 	public void testExport3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
 		final ICryptaNode cryptarithm = parser.parse("SEND+MUCH+MORE=MONEY");
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 9");
-		export.print(cryptarithm, solution, outstream);
+		GraphvizExport.exportToGraphviz(cryptarithm, solution);
 	}
 	
 }

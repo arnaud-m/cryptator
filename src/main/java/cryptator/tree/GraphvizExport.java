@@ -26,9 +26,9 @@ import guru.nidi.graphviz.attribute.Shape;
 import guru.nidi.graphviz.model.Graph;
 import guru.nidi.graphviz.model.Node;
 
-public final class GraphizExport {
+public final class GraphvizExport {
 
-	private GraphizExport() {}
+	private GraphvizExport() {}
 
 	private static Graph exportToGraphviz(ICryptaNode node, GraphvizNodeConsumer consumer) {
 		TreeTraversals.postorderTraversal(node, consumer);

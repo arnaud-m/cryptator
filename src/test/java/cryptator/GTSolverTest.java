@@ -38,7 +38,6 @@ import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
-import cryptator.tree.GraphizExporter;
 
 public class GTSolverTest {
 
@@ -132,7 +131,6 @@ public class GTSolverTest {
 	@Test
 	@Ignore
 	public void testTree() throws Exception {
-		(new GraphizExporter()).print(sendMoreMoney, System.out);
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 

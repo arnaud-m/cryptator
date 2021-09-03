@@ -28,7 +28,7 @@ import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
-import cryptator.tree.GraphizExport;
+import cryptator.tree.GraphvizExport;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.Graph;
@@ -145,7 +145,7 @@ public class Cryptator {
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
 			try {
-				Graph graph = GraphizExport.exportToGraphviz(n, s);
+				Graph graph = GraphvizExport.exportToGraphviz(n, s);
 				File file = File.createTempFile("cryptarithm-", ".svg");
 				Graphviz.fromGraph(graph).width(800).render(Format.SVG).toFile(file);
 				LOGGER.log(Level.INFO, "Export cryptarithm solution to {0} [OK]", file);
