@@ -8,12 +8,16 @@
 
 Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Université Côte d'Azur).
 
+Cryptator is a cryptarithm solver using [[https://en.wikipedia.org/wiki/Constraint_programming][Constraint Programming]].\\
+It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which is an open-source Java library for Constraint Programming.
+
 * About cryptarithms
   [[https://en.wikipedia.org/wiki/Verbal_arithmetic][Cryptarithm]], or alphametic, is a type of mathematical game consisting of a mathematical equation among unknown numbers, whose digits are represented by letters of the alphabet.
 
   - [[http://www.cadaeic.net/alphas.htm][An Alphametic Page]], Mike Keith' - a must for alphametic lovers.
-  - [[http://cryptarithms.awardspace.us/][Cryptarithms Online]], Jorge A. C. B. Soares, contains the Sphinx Collection, Link, books.
+  - [[http://cryptarithms.awardspace.us/][Cryptarithms Online]], Jorge A. C. B. Soares - it contains the Sphinx collection, link, books.
   - [[http://www.tkcs-collins.com/truman/alphamet/alphamet.shtml][An Alphametic Page]], Truman Collins - he has solvers and even generators.
+
 
 * Download and Installation
 
