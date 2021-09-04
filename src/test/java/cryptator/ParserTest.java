@@ -100,10 +100,10 @@ public class ParserTest {
 	public void testParserError3() throws CryptaParserException {
 		parser.parse("send + * more = money");
 	}
-	
+
 	@Test(expected = CryptaParserException.class)
 	public void testParserError4() throws CryptaParserException {
-		parser.parse("aaaaaaaaa <= bbbbbbbbbb");
+		parser.parse("send + more > = money");
 	}
 
 	@Test(expected = CryptaParserException.class)
@@ -121,9 +121,5 @@ public class ParserTest {
 		parser.parse("[send + more] >= money");
 	}
 
-	@Test(expected = CryptaParserException.class)
-	public void testParserError8() throws CryptaParserException {
-		parser.parse("send + more > = money");
-	}
 
 }
