@@ -16,9 +16,10 @@ public class CryptatorConfig extends CryptaConfig {
 	@Option(name="-s", usage="limit the number of solutions returned by the solver")
 	private int solutionLimit;
 
-	@Option(name="-t", usage="limit the time taken by a solver")
+	@Option(name="-t", usage="limit the time taken by a solver (in seconds)")
 	private int timeLimit;
 
+	
 	@Option(name="-c",handler=ExplicitBooleanOptionHandler.class,usage="check solutions by evaluation")
 	private boolean checkSolution;
 
