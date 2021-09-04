@@ -276,4 +276,34 @@ public class SolverTest {
 		testCryptarithmWithoutSolutions("s = m/s + km / h");
 	}
 
+	// From http://colin.barker.pagesperso-orange.fr/crypta.htm
+	@Test
+	public void testBarker1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("oregon+georgia+indiana=arizona"));
+	}
+	
+	@Test
+	public void testBarker2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("carter+reagan+lincoln=clinton"));
+	}
+	
+	@Test
+	public void testBarker3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("pear+plum+apple+grape+lemon=orange"));
+	}
+	
+	@Test
+	public void testBarker4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("copper*neon=iron*silver"));
+	}
+	
+	@Test
+	public void testBarker5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("cinq*six=trente"));
+	}
+	
+	
+	
+	
+	
 }
