@@ -57,7 +57,7 @@ public class SolverTest {
 	private int testCryptarithmWithSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		final int[] sols = new int[1];
 		final ICryptaNode node = parser.parse(cryptarithm);
-		assertTrue(
+		assertTrue(cryptarithm, 
 				solver.solve(node, config, (s) -> {
 					//System.out.println(s);
 					sols[0]++;
@@ -75,7 +75,7 @@ public class SolverTest {
 
 	private void testCryptarithmWithoutSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		final ICryptaNode node = parser.parse(cryptarithm);
-		assertFalse(
+		assertFalse(cryptarithm,
 				solver.solve(node, config, (s) -> {
 					fail("solution should not exist.");
 				} )
@@ -300,6 +300,12 @@ public class SolverTest {
 	@Test
 	public void testBarker5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		assertEquals(1, testCryptarithmWithSolutions("cinq*six=trente"));
+	}
+	
+	@Test
+	@Ignore // Hypothesis: integer overflow
+	public void testBarker6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals(1, testCryptarithmWithSolutions("iron*radium=neon*sodium"));
 	}
 	
 	

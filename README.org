@@ -42,11 +42,11 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
    The next step is simply to run one of the two console applications.
 
    Execute the main classes without argument to display the help message.
-*** Running the solver
+*** Run the solver
 
  : java -cp target/cryptator-0.2.0-SNAPSHOT-with-dependencies.jar cryptator.Cryptator -s 1 'send+more=money'
 
-*** Playing the game
+*** Play the game
 
  : java -cp target/cryptator-0.2.0-SNAPSHOT-with-dependencies.jar cryptator.Cryptamancer 'send+more=money'
 
@@ -69,3 +69,12 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
     <version>0.2.0-SNAPSHOT</version>
  </dependency>
  #+END_EXAMPLE
+
+** Integration tests
+ The tests solve around 150 cryptarithms. \\
+ By default, the tests are not executed by the regular maven lifecycle test execution.
+ Indeed, their names are outside of the standard maven test runner nomenclature.
+
+ Just include it manually by feeding it as a parameter to the runner.
+
+ : mvn test -Dtest=ExtensiveTesting
