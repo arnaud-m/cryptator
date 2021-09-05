@@ -71,7 +71,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
  #+END_EXAMPLE
 
 ** Integration tests
- The tests solve around 150 cryptarithms. \\
+ The tests solve around 150 cryptarithms.
  By default, the tests are not executed by the regular maven lifecycle test execution.
  Indeed, their names are outside of the standard maven test runner nomenclature.
 

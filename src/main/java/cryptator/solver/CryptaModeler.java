@@ -8,11 +8,7 @@
  */
 package cryptator.solver;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.chocosolver.solver.Model;
@@ -24,7 +20,6 @@ import org.chocosolver.solver.variables.IntVar;
 import cryptator.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalNodeConsumer;
 import cryptator.tree.TreeTraversals;
 
 public class CryptaModeler implements ICryptaModeler {
@@ -36,146 +31,84 @@ public class CryptaModeler implements ICryptaModeler {
 		final Model model = new Model("Cryptarithm");
 		final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
 		TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
-		modelerNodeConsumer.cryptarithmEquationConstraint().decompose().post();
+		modelerNodeConsumer.cryptarithmEquationConstraint().post();
 		modelerNodeConsumer.globalCardinalityConstraint().post();
 		return new CryptaModel(model, modelerNodeConsumer.symbolsToVariables);
 	}
 
+}
 
-	private final static class ModelerConsumer implements ITraversalNodeConsumer {
+final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
-		public final Model model;
+	private final Stack<ArExpression> stack = new Stack<ArExpression>();
+	
+	private final Function<char[], IntVar> wordVarBuilder;
 
-		public CryptaConfig config;
-
-		public final Map<Character, IntVar> symbolsToVariables;
-
-		private final Stack<ArExpression> stack = new Stack<ArExpression>();
-
-		private final Consumer<char[]>firstSymbolConstraint;
-
-		private final Function<char[], IntVar> wordVarBuilder;
-
-		public ModelerConsumer(Model model, CryptaConfig config) {
-			super();
-			this.model = model;
-			this.config = config;
-			symbolsToVariables = new HashMap<Character, IntVar>();
-			firstSymbolConstraint = config.allowLeadingZeros() ? 
-					w -> {} : w -> {
-						if(w.length > 0) getSymbolVar(w[0]).gt(0).post();
-					};	
-					wordVarBuilder = config.useHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
-		}
+	public ModelerConsumer(Model model, CryptaConfig config) {
+		super(model, config);
+		wordVarBuilder = config.useHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
+	}
 
 
-		private IntVar createSymbolVar(char symbol) {
-			return model.intVar(String.valueOf(symbol), 0, config.getArithmeticBase()-1, false);
-		}
+	private IntVar createWordVar(char[] word) {
+		return model.intVar(new String(word), 0, (int) Math.pow(config.getArithmeticBase(), word.length) - 1);	
+	}
 
-		private IntVar getSymbolVar(char symbol) {
-			if(! symbolsToVariables.containsKey(symbol)) {
-				symbolsToVariables.put(symbol, createSymbolVar(symbol));
-			} 
-			return symbolsToVariables.get(symbol);
-		}
-
-		private IntVar createWordVar(char[] word) {
-			return model.intVar(new String(word), 0, (int) Math.pow(config.getArithmeticBase(), word.length) - 1);	
-		}
-
-		private final class ExponentiationVarBuilder implements Function<char[], IntVar> {
-
-			@Override
-			public IntVar apply(char[] word) {
-				if(word.length == 0) return model.intVar(0);
-				final int n = word.length;
-				final IntVar[] vars = new IntVar[n];
-				final int[] coeffs = new int[n];
-				for (int i = 0; i < n; i++) {
-					coeffs[i] = (int) Math.pow(config.getArithmeticBase(), n - 1 - i);
-					vars[i] = getSymbolVar(word[i]);
-				}
-				final IntVar wvar = createWordVar(word);
-				model.scalar(vars, coeffs, "=", wvar).post();
-				return wvar;	
-			}			
-		}
-
-		private final class HornerVarBuilder implements Function<char[], IntVar> {
-
-			@Override
-			public IntVar apply(char[] word) {
-				if(word.length == 0) return model.intVar(0);
-				ArExpression tmp = getSymbolVar(word[0]);
-				for (int i = 1; i < word.length; i++) {
-					tmp= tmp.mul(config.getArithmeticBase())
-							.add(getSymbolVar(word[i]));
-				}
-				return tmp.intVar();
-			}			
-		}	
-
-		private final IntVar makeWordVar(char[] word) {
-			firstSymbolConstraint.accept(word);
-			return wordVarBuilder.apply(word);
-		}
+	private final class ExponentiationVarBuilder implements Function<char[], IntVar> {
 
 		@Override
-		public void accept(ICryptaNode node, int numNode) {
-			if(node.isLeaf()) {	
-				stack.push(makeWordVar(node.getWord()));
-			} else {
-				final ArExpression b = stack.pop();
-				final ArExpression a = stack.pop();
-				stack.push(node.getOperator().getExpression().apply(a,  b));
+		public IntVar apply(char[] word) {
+			if(word.length == 0) return model.intVar(0);
+			final int n = word.length;
+			final IntVar[] vars = new IntVar[n];
+			final int[] coeffs = new int[n];
+			for (int i = 0; i < n; i++) {
+				coeffs[i] = (int) Math.pow(config.getArithmeticBase(), n - 1 - i);
+				vars[i] = getSymbolVar(word[i]);
 			}
-		}
+			final IntVar wvar = createWordVar(word);
+			model.scalar(vars, coeffs, "=", wvar).post();
+			return wvar;	
+		}			
+	}
 
-		public ReExpression cryptarithmEquationConstraint() throws CryptaModelException {
-			if(stack.size() != 1) throw new CryptaModelException("Invalid stack size at the end of modeling.");
-			if (stack.peek() instanceof ReExpression) {
-				return (ReExpression) stack.peek();
-			} else 
-				throw new CryptaModelException("Modeling error for the cryptarithm equation constraint.");
-		}
+	private final class HornerVarBuilder implements Function<char[], IntVar> {
 
-		private IntVar[] getGCCVars() {
-			final Collection<IntVar> vars = symbolsToVariables.values();
-			return vars.toArray(new IntVar[vars.size()]);
-		}
-
-		private int[] getGCCValues() {
-			int[] values = new int[config.getArithmeticBase()];
-			for (int i = 0; i < values.length; i++) {
-				values[i] = i;
+		@Override
+		public IntVar apply(char[] word) {
+			if(word.length == 0) return model.intVar(0);
+			ArExpression tmp = getSymbolVar(word[0]);
+			for (int i = 1; i < word.length; i++) {
+				tmp= tmp.mul(config.getArithmeticBase())
+						.add(getSymbolVar(word[i]));
 			}
-			return values;
+			return tmp.intVar();
+		}			
+	}	
+
+	private final IntVar makeWordVar(char[] word) {
+		firstSymbolConstraint.accept(word);
+		return wordVarBuilder.apply(word);
+	}
+
+	@Override
+	public void accept(ICryptaNode node, int numNode) {
+		if(node.isLeaf()) {	
+			stack.push(makeWordVar(node.getWord()));
+		} else {
+			final ArExpression b = stack.pop();
+			final ArExpression a = stack.pop();
+			stack.push(node.getOperator().getExpression().apply(a,  b));
 		}
+	}
 
-		private IntVar[] getGCCOccs(int lb, int ub) {
-			return model.intVarArray("O", config.getArithmeticBase(), lb, ub, false);
-		}
-
-		public Constraint globalCardinalityConstraint() {
-			final IntVar[] vars = getGCCVars();
-			final int n = vars.length;
-			if(n == 0) return model.trueConstraint();
-
-			final int maxOcc = config.getMaxDigitOccurence(n);		
-			if(maxOcc == 1) {
-				return model.allDifferent(vars);
-			} else {
-				final int minOcc = config.getMinDigitOccurence(n);
-				return model.globalCardinality(
-						vars, 
-						getGCCValues(), 
-						getGCCOccs(minOcc, maxOcc), 
-						true);
-
-			}
-		}
-
+	@Override
+	public Constraint cryptarithmEquationConstraint() throws CryptaModelException {
+		if(stack.size() != 1) throw new CryptaModelException("Invalid stack size at the end of modeling.");
+		if (stack.peek() instanceof ReExpression) {
+			return ((ReExpression) stack.peek()).decompose();
+		} else 
+			throw new CryptaModelException("Modeling error for the cryptarithm equation constraint.");
 	}
 
 }

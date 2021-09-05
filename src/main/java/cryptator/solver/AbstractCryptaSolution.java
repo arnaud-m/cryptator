@@ -28,7 +28,7 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 	public final int size() {
 		return symbolsToDigits.size();
 	}
-
+	
 	public E getVar(char symbol) {
 		return symbolsToDigits.get(symbol);
 	}

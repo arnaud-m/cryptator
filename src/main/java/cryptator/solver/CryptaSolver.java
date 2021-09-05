@@ -24,14 +24,19 @@ public class CryptaSolver implements ICryptaSolver {
 	
 	public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
 
-	private final ICryptaModeler modeler = new CryptaModeler();
+	private final ICryptaModeler modeler;
 
 	private long timeLimit = 0;
 
 	private long solutionLimit = 0;
 
-	public CryptaSolver() {}
+	public CryptaSolver() {
+		this(false);
+	}
 
+	public CryptaSolver(boolean bignum) {
+		modeler = bignum ? new CryptaBignumModeler() : new CryptaModeler();
+	}
 
 	public final long getTimeLimit() {
 		return timeLimit;
