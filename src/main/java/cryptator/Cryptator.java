@@ -95,8 +95,8 @@ public class Cryptator {
 	private static void solve(String cryptarithm, CryptaParserWrapper parser, ICryptaSolver solver , CryptatorConfig config, BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
 		try {
 			final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
-			// TODO			if(config.isExportGraphiz()) 
-			
+			// FIXME The checker failure must change the status !
+			// TODO Use also exit code ?
 			final String status = solver.solve(node, config, (s) -> {consumer.accept(node, s);}) ? "OK" : "KO";
 			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
 		} catch (CryptaParserException e) {
