@@ -49,20 +49,38 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 		super(model, config);
 	}
 
-
 	private final ArExpression[] makeWordVars(char[] word) {
 		firstSymbolConstraint.accept(word);
-		ArExpression[] vars = new ArExpression[word.length];
-		for (int i = 0; i < vars.length; i++) {
-			vars[i] = getSymbolVar(word[i]);
+		final int n = word.length;
+		ArExpression[] vars = new ArExpression[n];
+		for (int i = 0; i < n; i++) {
+			vars[i] = getSymbolVar(word[n - 1 - i]);
 		}
+		// little endian
 		return vars;
 	}
 
+
 	private final ArExpression[] applyADD(ArExpression[] a, ArExpression[] b) {
+		final int n = Math.max(a.length, b.length);
 		final ArExpression[] c = new ArExpression[b.length];
 		for (int i = 0; i < a.length; i++) {
 			c[i] = CryptaOperator.ADD.getExpression().apply(a[i], b[i]);
+		}
+		// Can only enter in one loop
+		for (int i = a.length; i < n; i++) {
+			c[i] = a[i];
+		}
+		for (int i = b.length; i < n; i++) {
+			c[i] = b[i];
+		}
+		return c;
+	} 
+
+	private final ArExpression[] applySUB(ArExpression[] a, ArExpression[] b) {
+		final ArExpression[] c = new ArExpression[b.length];
+		for (int i = 0; i < a.length; i++) {
+			c[i] = CryptaOperator.SUB.getExpression().apply(a[i], b[i]);
 		}
 		for (int i = a.length; i < b.length; i++) {
 			c[i] = CryptaOperator.ADD.getExpression().apply(model.intVar(0), b[i]);
@@ -83,24 +101,24 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 			digits = model.intVarArray("D" + exprIndex, n, 0, config.getArithmeticBase()-1);
 			carries = model.intVarArray("C"+ exprIndex, n, 0, IntVar.MAX_INT_BOUND / config.getArithmeticBase());
 			exprIndex++;
-			int m = n - a.length;
-			for (int i = 0; i < m; i++) {
-				postScalar(
-						new IntVar[] {carries[i], digits[i], carries[i+1]},
-						new int[] {config.getArithmeticBase(), 1, -1}
-						);
-			}
-			for (int i = m; i < n - 1; i++) {
-				postScalar(
-						new IntVar[] {carries[i], digits[i], a[i - m].intVar(), carries[i+1]},
-						new int[] {config.getArithmeticBase(), 1, -1, -1}
-						);
-			}
+			// TODO Is it better to use scalar or an expression ? 
 			postScalar(
-					new IntVar[] {carries[n-1], digits[n-1], a[a.length - 1].intVar()},
+					new IntVar[] {carries[0], digits[0], a[0].intVar()},
 					new int[] {config.getArithmeticBase(), 1, -1}
 					);
 
+			for (int i = 1; i < a.length; i++) {
+				postScalar(
+						new IntVar[] {carries[i], digits[i], a[i].intVar(), carries[i-1]},
+						new int[] {config.getArithmeticBase(), 1, -1, -1}
+						);
+			}
+			for (int i = a.length; i < n; i++) {
+				postScalar(
+						new IntVar[] {carries[i], digits[i], carries[i-1]},
+						new int[] {config.getArithmeticBase(), 1, -1}
+						);
+			}
 		}
 
 		private void postScalar(IntVar[] vars, int[] coeffs) {
@@ -117,37 +135,31 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 		for (int i = 0; i < n; i++) {
 			model.post(a1.digits[i].eq(b1.digits[i]).decompose());
 		}
-		model.post(a1.carries[0].eq(b1.carries[0]).decompose());
-    	return new ArExpression[0];
+		model.post(a1.carries[n-1].eq(b1.carries[n-1]).decompose());
+		return new ArExpression[0];
 	}	
 
+	private ArExpression[] applyOperator(CryptaOperator op, ArExpression[] a, ArExpression[] b) {
+		switch (op) {
+		case ADD: return applyADD(a, b);
+		case EQ: return applyEQ(a, b);
+		//case EQ: return new ArExpression[0];
+		default:
+			unsupportedOperator = op;
+			return null;
+		}
+
+	}
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
 		if(unsupportedOperator != null) return;
 		if(node.isLeaf()) {	
 			stack.push(makeWordVars(node.getWord()));
 		} else {
-			final CryptaOperator op = node.getOperator();
 			final ArExpression[] b = stack.pop();
 			final ArExpression[] a = stack.pop();
-			switch (op) {
-			case ADD:
-				stack.push( a.length < b.length ? applyADD(a, b) : applyADD(b, a));
-				break;
-			case EQ:
-				stack.push(applyEQ(a, b));
-				break;
-
-			default:
-				unsupportedOperator = op;
-				break;
-			}
-			//if(op == CryptaOperator.ADD || op == CryptaOperator.SUB) {
-			//} else {
-			//	System.err.println("Bignum operator not supported: " + node.getOperator());
-			// throw new CryptaModelException("Bignum operator not supported: " + node.getOperator());
-			// }
-			// TODO stack.push(node.getOperator().getExpression().apply(a,  b));
+			ArExpression[] expr = applyOperator(node.getOperator(), a, b);
+			if( expr != null) stack.push(expr);
 		}
 	}
 
