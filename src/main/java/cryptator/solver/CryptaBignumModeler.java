@@ -8,6 +8,8 @@
  */
 package cryptator.solver;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 import org.chocosolver.solver.Model;
@@ -20,28 +22,51 @@ import cryptator.CryptaConfig;
 import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalNodeConsumer;
 import cryptator.tree.TreeTraversals;
 
 public class CryptaBignumModeler implements ICryptaModeler {
 
 	public CryptaBignumModeler() {}
 
+	/** bignum model with addition only that uses a little endian representation with a variable number of digits. */
 	@Override
 	public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
+		UnsupportedOperatorDetector detector = new UnsupportedOperatorDetector();
+		TreeTraversals.postorderTraversal(cryptarithm, detector); 
+		if(detector.unsupportedOperators.size() > 0) throw new CryptaModelException("Unsupported bignum operator(s): " + detector.unsupportedOperators);
+
 		final Model model = new Model("Cryptarithm");
 		final AbstractModelerNodeConsumer modelerNodeConsumer = new ModelerBignumConsumer(model, config);
 		TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
 		modelerNodeConsumer.cryptarithmEquationConstraint().post();
 		modelerNodeConsumer.globalCardinalityConstraint().post();
 		return new CryptaModel(model, modelerNodeConsumer.symbolsToVariables);
+
+
 	}
 }
 
+final class UnsupportedOperatorDetector implements ITraversalNodeConsumer {
 
+	public Set<CryptaOperator> unsupportedOperators = new HashSet<>();
+
+	@Override
+	public void accept(ICryptaNode node, int numNode) {
+		switch (node.getOperator()) {
+		case ID:
+		case ADD:
+		case EQ: 
+			break;
+		default:
+			unsupportedOperators.add(node.getOperator());
+			break;
+		}
+
+	}
+}
 
 final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
-
-	private CryptaOperator unsupportedOperator;
 
 	private final Stack<ArExpression[]> stack = new Stack<ArExpression[]>();
 
@@ -62,33 +87,21 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 
 
 	private final ArExpression[] applyADD(ArExpression[] a, ArExpression[] b) {
+		final int m = Math.min(a.length, b.length);
 		final int n = Math.max(a.length, b.length);
-		final ArExpression[] c = new ArExpression[b.length];
-		for (int i = 0; i < a.length; i++) {
+		final ArExpression[] c = new ArExpression[n];
+		for (int i = 0; i < m; i++) {
 			c[i] = CryptaOperator.ADD.getExpression().apply(a[i], b[i]);
 		}
 		// Can only enter in one loop
-		for (int i = a.length; i < n; i++) {
+		for (int i = m; i < a.length; i++) {
 			c[i] = a[i];
 		}
-		for (int i = b.length; i < n; i++) {
+		for (int i = m; i < b.length; i++) {
 			c[i] = b[i];
 		}
 		return c;
 	} 
-
-	private final ArExpression[] applySUB(ArExpression[] a, ArExpression[] b) {
-		final ArExpression[] c = new ArExpression[b.length];
-		for (int i = 0; i < a.length; i++) {
-			c[i] = CryptaOperator.SUB.getExpression().apply(a[i], b[i]);
-		}
-		for (int i = a.length; i < b.length; i++) {
-			c[i] = CryptaOperator.ADD.getExpression().apply(model.intVar(0), b[i]);
-		}
-		return c;
-	} 
-
-	private static int exprIndex = 1;
 
 	class BignumArExpression {
 
@@ -96,11 +109,10 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 
 		public final IntVar[] carries;
 
-		public BignumArExpression(ArExpression[] a, int n) {
+		public BignumArExpression(ArExpression[] a, int n, String suffix) {
 			super();
-			digits = model.intVarArray("D" + exprIndex, n, 0, config.getArithmeticBase()-1);
-			carries = model.intVarArray("C"+ exprIndex, n, 0, IntVar.MAX_INT_BOUND / config.getArithmeticBase());
-			exprIndex++;
+			digits = model.intVarArray("D" + suffix, n, 0, config.getArithmeticBase()-1);
+			carries = model.intVarArray("C"+ suffix, n, 0, IntVar.MAX_INT_BOUND / config.getArithmeticBase());
 			// TODO Is it better to use scalar or an expression ? 
 			postScalar(
 					new IntVar[] {carries[0], digits[0], a[0].intVar()},
@@ -128,55 +140,41 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 	}
 
 
-	private final ArExpression[] applyEQ(ArExpression[] a, ArExpression[] b) {
+	private final void applyEQ(ArExpression[] a, ArExpression[] b) {
 		int n = Math.max(a.length,  b.length);
-		BignumArExpression a1 = new BignumArExpression(a, n);
-		BignumArExpression b1 = new BignumArExpression(b, n);
+		BignumArExpression a1 = new BignumArExpression(a, n, "l");
+		BignumArExpression b1 = new BignumArExpression(b, n, "r");
 		for (int i = 0; i < n; i++) {
 			model.post(a1.digits[i].eq(b1.digits[i]).decompose());
 		}
 		model.post(a1.carries[n-1].eq(b1.carries[n-1]).decompose());
-		return new ArExpression[0];
-	}	
-
-	private ArExpression[] applyOperator(CryptaOperator op, ArExpression[] a, ArExpression[] b) {
-		switch (op) {
-		case ADD: return applyADD(a, b);
-		case EQ: return applyEQ(a, b);
-		//case EQ: return new ArExpression[0];
-		default:
-			unsupportedOperator = op;
-			return null;
-		}
-
 	}
+
+	
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
-		if(unsupportedOperator != null) return;
 		if(node.isLeaf()) {	
 			stack.push(makeWordVars(node.getWord()));
 		} else {
 			final ArExpression[] b = stack.pop();
 			final ArExpression[] a = stack.pop();
-			ArExpression[] expr = applyOperator(node.getOperator(), a, b);
-			if( expr != null) stack.push(expr);
+			switch (node.getOperator()) {
+			case ADD:
+				stack.push(applyADD(a, b));
+				break;
+			case EQ: 
+				applyEQ(a, b);
+				break;
+			default:
+				break;
+			}		
 		}
 	}
 
 	@Override
 	public Constraint cryptarithmEquationConstraint() throws CryptaModelException {
-		//if(unsupportedOperator != null) throw new CryptaModelException("Bignum operator not supported: " + unsupportedOperator);
-		if(stack.size() != 1) throw new CryptaModelException("Invalid stack size at the end of modeling.");
-
-		for (ArExpression expr : stack.peek()) {
-			if (expr instanceof ReExpression) {
-				System.out.println(expr);
-			} else {
-				throw new CryptaModelException("Modeling error for the cryptarithm equation constraint.");
-			}
-		}
-
-		return model.trueConstraint();
+		if(stack.empty()) return model.trueConstraint();
+		else throw new CryptaModelException("Invalid stack size at the end of modeling.");
 	}
 
 }
