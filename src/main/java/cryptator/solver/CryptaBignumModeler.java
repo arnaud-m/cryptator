@@ -77,11 +77,11 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 	private final ArExpression[] makeWordVars(char[] word) {
 		firstSymbolConstraint.accept(word);
 		final int n = word.length;
+		// little endian
 		ArExpression[] vars = new ArExpression[n];
 		for (int i = 0; i < n; i++) {
 			vars[i] = getSymbolVar(word[n - 1 - i]);
 		}
-		// little endian
 		return vars;
 	}
 
@@ -134,7 +134,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 		}
 
 		private void postScalar(IntVar[] vars, int[] coeffs) {
-			model.post(model.scalar(vars, coeffs, "=", 0));
+			model.scalar(vars, coeffs, "=", 0).post();
 		}
 
 	}
@@ -145,9 +145,9 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 		BignumArExpression a1 = new BignumArExpression(a, n, "l");
 		BignumArExpression b1 = new BignumArExpression(b, n, "r");
 		for (int i = 0; i < n; i++) {
-			model.post(a1.digits[i].eq(b1.digits[i]).decompose());
+			a1.digits[i].eq(b1.digits[i]).decompose().post();
 		}
-		model.post(a1.carries[n-1].eq(b1.carries[n-1]).decompose());
+		a1.carries[n-1].eq(b1.carries[n-1]).decompose().post();;
 	}
 
 	
