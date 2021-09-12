@@ -19,7 +19,7 @@ import cryptator.specs.ITraversalNodeConsumer;
 public class CryptaEvaluation implements ICryptaEvaluation {
 
 	@Override
-	public int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException {
+	public long evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException {
 		final EvaluationConsumer evaluationNodeConsumer = new EvaluationConsumer(solution, base);
 		TreeTraversals.postorderTraversal(cryptarithm, evaluationNodeConsumer);
 		return evaluationNodeConsumer.eval();
@@ -29,12 +29,11 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 
 		private final ICryptaSolution solution;
 
-		private final int base;
+		private final long base;
 
-		private final Stack<Integer> stack = new Stack<Integer>();
+		private final Stack<Long> stack = new Stack<>();
 
 		private CryptaEvaluationException exception;
-
 
 		public EvaluationConsumer(ICryptaSolution solution, int base) {
 			super();
@@ -42,9 +41,9 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 			this.base = base;
 		}
 
-		private Integer getWordValue(ICryptaNode node) throws CryptaEvaluationException {
+		private Long getWordValue(ICryptaNode node) throws CryptaEvaluationException {
 			try {
-				int v = 0;
+				long v = 0;
 				for (char c : node.getWord()) {
 					final int digit = solution.getDigit(c);
 					if(digit < 0 || digit >= base) throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
@@ -67,15 +66,15 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 						exception = e;
 					}
 				} else {
-					final int b = stack.pop();
-					final int a = stack.pop();
-					stack.push(node.getOperator().getFunction().applyAsInt(a, b));
+					final long b = stack.pop();
+					final long a = stack.pop();
+					stack.push(node.getOperator().getFunction().applyAsLong(a, b));
 				}
 			}
 		}
 
 
-		public int eval() throws CryptaEvaluationException {
+		public long eval() throws CryptaEvaluationException {
 			if(exception != null) throw exception;
 			if(stack.size() != 1) throw new CryptaEvaluationException("Invalid stack size at the end of evaluation.");
 			return stack.peek();

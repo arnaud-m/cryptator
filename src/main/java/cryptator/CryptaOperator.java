@@ -10,6 +10,7 @@ package cryptator;
 
 import java.util.function.BinaryOperator;
 import java.util.function.IntBinaryOperator;
+import java.util.function.LongBinaryOperator;
 
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 
@@ -30,11 +31,11 @@ public enum CryptaOperator {
 
 	public final String token;
 
-	public final IntBinaryOperator function;
+	public final LongBinaryOperator function;
 
 	public final BinaryOperator<ArExpression> expression;
 
-	private CryptaOperator(String token, IntBinaryOperator function, BinaryOperator<ArExpression> expression) {
+	private CryptaOperator(String token, LongBinaryOperator function, BinaryOperator<ArExpression> expression) {
 		this.token = token;
 		this.function = function;
 		this.expression = expression;
@@ -44,7 +45,7 @@ public enum CryptaOperator {
 		return token;
 	}
 
-	public final IntBinaryOperator getFunction() {
+	public final LongBinaryOperator getFunction() {
 		return function;
 	}
 

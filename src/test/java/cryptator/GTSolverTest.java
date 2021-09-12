@@ -176,7 +176,7 @@ public class GTSolverTest {
 		assertEquals(os.toString(), "big + cat = lion ");
 
 		ICryptaEvaluation chk = new CryptaEvaluation();
-		int v = chk.evaluate(sendMoreMoney, new CryptaGTSolution(sendMorySol), 10);
+		long v = chk.evaluate(sendMoreMoney, new CryptaGTSolution(sendMorySol), 10);
 		assertEquals(v,1);
 
 		sendMorySol.get('y').setValue(0);
@@ -447,7 +447,7 @@ public class GTSolverTest {
 			}
 		}
 		ICryptaEvaluation chk = new CryptaEvaluation();
-		int v;
+		long v;
 		try {
 			v = chk.evaluate(cryptarithm, new CryptaGTSolution(map), 10);
 		} catch (CryptaEvaluationException e) {

@@ -174,7 +174,7 @@ public class CryptaGTSolver {
             }
         }
         ICryptaEvaluation chk = new CryptaEvaluation();
-        int v;
+        long v;
         try {
             v = chk.evaluate(root, new CryptaGTSolution(map), 10);
         } catch (CryptaEvaluationException e) {

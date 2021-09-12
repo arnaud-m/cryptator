@@ -12,7 +12,6 @@ import cryptator.tree.CryptaEvaluationException;
 
 public interface ICryptaEvaluation {
 
-	// TODO Return long instead of int ?
-	int evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException;
+	long evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException;
 
 }

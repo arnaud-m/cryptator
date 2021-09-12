@@ -51,7 +51,7 @@ public class SolverTest {
 	public void setDefaultConfig() {
 		config = new CryptaConfig();
 		solver.limitSolution(100);
-		solver.limitTime(2000);
+		solver.limitTime(5);
 	}
 
 	private int testCryptarithmWithSolutions(String cryptarithm) throws CryptaParserException, CryptaModelException, CryptaSolverException {

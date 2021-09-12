@@ -14,20 +14,36 @@ import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaFeatures;
-
+import static org.junit.Assert.*;
 public class FeaturesTest {
 
 	public final CryptaParserWrapper parser = new CryptaParserWrapper();
 	
 	public FeaturesTest() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Test
-	public void testStats1() throws CryptaParserException {
+	public void testFeatures1() throws CryptaParserException {
 		final ICryptaNode node = parser.parse("send+more=money");
 		final CryptaFeatures feat = new CryptaFeatures(node);
-		System.out.println(feat);
+		assertEquals(3, feat.getWordCount());
+		assertEquals(13, feat.getCharCount());
+		assertEquals(4, feat.getMinWordLength());
+		assertEquals(5, feat.getMaxWordLength());		
+		assertEquals(8, feat.getSymbols().size());
+		assertEquals(2, feat.getOperators().size());	
+	}
+	
+	@Test
+	public void testFeatures2() throws CryptaParserException {
+		final ICryptaNode node = parser.parse("iowa+nevada+indiana=georgia");
+		final CryptaFeatures feat = new CryptaFeatures(node);
+		assertEquals(4, feat.getWordCount());
+		assertEquals(24, feat.getCharCount());
+		assertEquals(4, feat.getMinWordLength());
+		assertEquals(7, feat.getMaxWordLength());		
+		assertEquals(10, feat.getSymbols().size());
+		assertEquals(2, feat.getOperators().size());	
 	}
 	
 }
