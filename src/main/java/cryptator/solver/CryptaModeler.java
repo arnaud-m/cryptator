@@ -12,7 +12,6 @@ import java.util.Stack;
 import java.util.function.Function;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
@@ -31,9 +30,8 @@ public class CryptaModeler implements ICryptaModeler {
 		final Model model = new Model("Cryptarithm");
 		final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
 		TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
-		modelerNodeConsumer.cryptarithmEquationConstraint().post();
-		modelerNodeConsumer.globalCardinalityConstraint().post();
-		return new CryptaModel(model, modelerNodeConsumer.symbolsToVariables);
+		modelerNodeConsumer.postConstraints();
+		return modelerNodeConsumer.buildCryptaModel();
 	}
 
 }
@@ -41,7 +39,7 @@ public class CryptaModeler implements ICryptaModeler {
 final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
 	private final Stack<ArExpression> stack = new Stack<ArExpression>();
-	
+
 	private final Function<char[], IntVar> wordVarBuilder;
 
 	public ModelerConsumer(Model model, CryptaConfig config) {
@@ -87,12 +85,12 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 	}	
 
 	private final IntVar makeWordVar(char[] word) {
-		firstSymbolConstraint.accept(word);
 		return wordVarBuilder.apply(word);
 	}
 
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
+		super.accept(node, numNode);
 		if(node.isLeaf()) {	
 			stack.push(makeWordVar(node.getWord()));
 		} else {
@@ -103,10 +101,10 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 	}
 
 	@Override
-	public Constraint cryptarithmEquationConstraint() throws CryptaModelException {
+	public void postCryptarithmEquationConstraint() throws CryptaModelException {
 		if(stack.size() != 1) throw new CryptaModelException("Invalid stack size at the end of modeling.");
 		if (stack.peek() instanceof ReExpression) {
-			return ((ReExpression) stack.peek()).decompose();
+			((ReExpression) stack.peek()).decompose().post();
 		} else 
 			throw new CryptaModelException("Modeling error for the cryptarithm equation constraint.");
 	}

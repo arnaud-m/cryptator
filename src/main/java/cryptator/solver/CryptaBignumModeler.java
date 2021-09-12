@@ -13,9 +13,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
-import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.CryptaConfig;
@@ -36,14 +34,11 @@ public class CryptaBignumModeler implements ICryptaModeler {
 		TreeTraversals.postorderTraversal(cryptarithm, detector); 
 		if(detector.unsupportedOperators.size() > 0) throw new CryptaModelException("Unsupported bignum operator(s): " + detector.unsupportedOperators);
 
-		final Model model = new Model("Cryptarithm");
+		final Model model = new Model("Cryptarithm-bignum");
 		final AbstractModelerNodeConsumer modelerNodeConsumer = new ModelerBignumConsumer(model, config);
 		TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
-		modelerNodeConsumer.cryptarithmEquationConstraint().post();
-		modelerNodeConsumer.globalCardinalityConstraint().post();
-		return new CryptaModel(model, modelerNodeConsumer.symbolsToVariables);
-
-
+		modelerNodeConsumer.postConstraints();
+		return modelerNodeConsumer.buildCryptaModel();
 	}
 }
 
@@ -75,7 +70,6 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 	}
 
 	private final ArExpression[] makeWordVars(char[] word) {
-		firstSymbolConstraint.accept(word);
 		final int n = word.length;
 		// little endian
 		ArExpression[] vars = new ArExpression[n];
@@ -150,9 +144,10 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 		a1.carries[n-1].eq(b1.carries[n-1]).decompose().post();;
 	}
 
-	
+
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
+		super.accept(node, numNode);
 		if(node.isLeaf()) {	
 			stack.push(makeWordVars(node.getWord()));
 		} else {
@@ -172,9 +167,8 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 	}
 
 	@Override
-	public Constraint cryptarithmEquationConstraint() throws CryptaModelException {
-		if(stack.empty()) return model.trueConstraint();
-		else throw new CryptaModelException("Invalid stack size at the end of modeling.");
+	public void postCryptarithmEquationConstraint() throws CryptaModelException {
+		if(!stack.empty()) throw new CryptaModelException("Invalid stack size at the end of modeling.");
 	}
 
 }

@@ -10,14 +10,16 @@ package cryptator.solver;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Set;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.CryptaConfig;
+import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalNodeConsumer;
 
 public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsumer {
@@ -25,15 +27,15 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 	public final Model model;
 	public final CryptaConfig config;
 	public final Map<Character, IntVar> symbolsToVariables;
-	protected final Consumer<char[]> firstSymbolConstraint;
+	protected final Set<Character> firstSymbols;
+
 
 	public AbstractModelerNodeConsumer(Model model, CryptaConfig config) {
 		super();
 		this.model = model;
 		this.config = config;
 		symbolsToVariables = new HashMap<Character, IntVar>();
-		firstSymbolConstraint = config.allowLeadingZeros() ? 
-				w -> {} : w -> {if(w.length > 0) getSymbolVar(w[0]).gt(0).post();};	
+		firstSymbols = new HashSet<>();		
 	}
 
 	private IntVar createSymbolVar(char symbol) {
@@ -64,11 +66,28 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 		return model.intVarArray("O", config.getArithmeticBase(), lb, ub, false);
 	}
 
-	public Constraint globalCardinalityConstraint() {
+
+	@Override
+	public void accept(ICryptaNode node, int numNode) {
+		if(node.isLeaf()) {
+			final char[] w = node.getWord();
+			if(w.length > 0) firstSymbols.add(node.getWord()[0]);
+		}	
+	}
+
+	private void postFirstSymbolConstraints() {
+		if(! config.allowLeadingZeros()) {
+			for (Character symbol : firstSymbols) {
+				getSymbolVar(symbol).gt(0).post();
+			}
+		}
+	}
+
+	private Constraint globalCardinalityConstraint() {
 		final IntVar[] vars = getGCCVars();
 		final int n = vars.length;
 		if(n == 0) return model.trueConstraint();
-	
+
 		final int maxOcc = config.getMaxDigitOccurence(n);		
 		if(maxOcc == 1) {
 			return model.allDifferent(vars);
@@ -79,10 +98,22 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 					getGCCValues(), 
 					getGCCOccs(minOcc, maxOcc), 
 					true);
-	
+
 		}
 	}
+
+	protected abstract void postCryptarithmEquationConstraint() throws CryptaModelException;
 	
-	public abstract Constraint cryptarithmEquationConstraint() throws CryptaModelException;
+	public void postConstraints() throws CryptaModelException {
+		postFirstSymbolConstraints();
+		globalCardinalityConstraint().post();
+		postCryptarithmEquationConstraint();
+		
+		
+	}
+	
+	public CryptaModel buildCryptaModel() {
+		return new CryptaModel(model, symbolsToVariables);
+	}
 
 }
