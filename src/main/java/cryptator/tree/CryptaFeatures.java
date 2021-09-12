@@ -15,8 +15,9 @@ import java.util.stream.Collectors;
 
 import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalNodeConsumer;
 
-public class CryptaFeatures {
+public class CryptaFeatures implements ITraversalNodeConsumer {
 
 	private int wordCount;
 	
@@ -30,24 +31,31 @@ public class CryptaFeatures {
 	
 	private Set<CryptaOperator> operators = new HashSet<>();
 	
+	public CryptaFeatures() {
+		super();
+	}
+	
 	public CryptaFeatures(ICryptaNode cryptarithm) {
-		TreeTraversals.preorderTraversal(cryptarithm, (node, numNode) -> {
-			if(node.isLeaf()) {
-				final char[] word = node.getWord();
-				final int n = word.length;
-				if(n > 0) {
-					wordCount++;
-					charCount += n;
-					if(n < minWordLength) minWordLength = n;
-					else if(n > maxWordLength) maxWordLength = n;
-					for (char c : word) {
-						symbols.add(c);
-					}
+		TreeTraversals.preorderTraversal(cryptarithm, this);
+	}
+
+	@Override
+	public void accept(ICryptaNode node, int numNode) {
+		if(node.isLeaf()) {
+			final char[] word = node.getWord();
+			final int n = word.length;
+			if(n > 0) {
+				wordCount++;
+				charCount += n;
+				if(n < minWordLength) minWordLength = n;
+				else if(n > maxWordLength) maxWordLength = n;
+				for (char c : word) {
+					symbols.add(c);
 				}
-			} else {
-				operators.add(node.getOperator());
 			}
-		});
+		} else {
+			operators.add(node.getOperator());
+		}
 	}
 
 	public final int getWordCount() {

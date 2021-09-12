@@ -28,6 +28,7 @@ import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
+import cryptator.tree.CryptaFeatures;
 import cryptator.tree.GraphvizExport;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
@@ -46,7 +47,7 @@ public class Cryptator {
 		CryptatorOptionsParser optparser = new CryptatorOptionsParser();
 		if ( !optparser.parseOptions(args)) return;
 		final CryptatorConfig config = optparser.getConfig();
-		
+
 		final ICryptaSolver solver = buildSolver(config);
 
 		final CryptaParserWrapper parser = new CryptaParserWrapper();
@@ -86,16 +87,19 @@ public class Cryptator {
 		if(logger.isLoggable(Level.CONFIG)) {
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();
 			writePostorder(node, os);
-			logger.log(Level.CONFIG, "Display postorder internal cryptarithm\n{0}", os);
+			logger.log(Level.CONFIG, "Display postorder internal cryptarithm:\n{0}", os);
 		}
 		return node;
-		
+
 	}
-	
+
 	private static void solve(String cryptarithm, CryptaParserWrapper parser, ICryptaSolver solver , CryptatorConfig config, BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
 		try {
 			final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
-			//TODO Log statistics for the cryptarithm
+
+			if(LOGGER.isLoggable(Level.INFO)) {
+				LOGGER.log(Level.INFO, "Cryptarithm features:\n{0}", new CryptaFeatures(node));
+			}
 			// FIXME The checker failure must change the status !
 			// TODO Use also exit code ?
 			final String status = solver.solve(node, config, (s) -> {consumer.accept(node, s);}) ? "OK" : "KO";
@@ -110,7 +114,7 @@ public class Cryptator {
 	}
 
 	private static class DefaultConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
-		
+
 		private int solutionCount = 0;
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
@@ -152,7 +156,7 @@ public class Cryptator {
 				LOGGER.log(Level.INFO, "Export cryptarithm solution to {0} [OK]", file);
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, "Export cryptarithm solution [FAIL]", e);
-				
+
 			}
 		}
 	}
@@ -166,7 +170,7 @@ public class Cryptator {
 		if(config.isExportGraphiz()) {
 			consumer = consumer.andThen(new GraphvizConsumer());
 		}
-		
+
 		return consumer;
 	}
 
