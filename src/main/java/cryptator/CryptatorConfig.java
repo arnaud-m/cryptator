@@ -19,6 +19,9 @@ public class CryptatorConfig extends CryptaConfig {
 	@Option(name="-t", usage="limit the time taken by a solver (in seconds)")
 	private int timeLimit;
 	
+	@Option(name="-l",handler=ExplicitBooleanOptionHandler.class,usage="use the bignum model (only + and =)")
+	private boolean useBigNum;
+
 	@Option(name="-c",handler=ExplicitBooleanOptionHandler.class,usage="check solutions by evaluation")
 	private boolean checkSolution;
 
@@ -50,10 +53,15 @@ public class CryptatorConfig extends CryptaConfig {
 		return verbose;
 	}
 	
+	public final boolean useBignum() {
+		return useBigNum;
+	}
+	
 	@Override
 	public String toString() {
 		return super.toString() + 
 				"\nc TIME_LIMIT "+getTimeLimit() + 
-				"\nc SOLUTION_LIMIT "+getSolutionLimit();
+				"\nc SOLUTION_LIMIT "+getSolutionLimit() + 
+				"\nc BIGNUM "+useBignum(); 
 	}
 }

@@ -32,13 +32,14 @@ public class CryptaSolver implements ICryptaSolver {
 	private long solutionLimit = 0;
 
 	public CryptaSolver() {
-		this(false);
+		this(false);		
 	}
 
-	public CryptaSolver(boolean bignum) {
-		modeler = bignum ? new CryptaBignumModeler() : new CryptaModeler();
+	public CryptaSolver(boolean useBignum) {		
+		super();
+		modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
 	}
-
+	
 	public final long getTimeLimit() {
 		return timeLimit;
 	}
