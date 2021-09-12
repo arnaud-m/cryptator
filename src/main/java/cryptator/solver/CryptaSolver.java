@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
 import cryptator.CryptaConfig;
@@ -21,7 +22,7 @@ import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 
 public class CryptaSolver implements ICryptaSolver {
-	
+
 	public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
 
 	private final ICryptaModeler modeler;
@@ -57,6 +58,15 @@ public class CryptaSolver implements ICryptaSolver {
 	}
 
 
+	private final void logOnSolution(CryptaModel m) {
+		if(LOGGER.isLoggable(Level.CONFIG)) {
+			final Solution sol = new Solution(m.getModel());
+			sol.record();
+			LOGGER.log(Level.CONFIG, "Display internal solver solution.\n{0}", sol);
+		}
+	}
+
+
 	@Override
 	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
 		final CryptaModel m = modeler.model(cryptarithm, config);
@@ -66,11 +76,13 @@ public class CryptaSolver implements ICryptaSolver {
 		int solutionCount = 0;;
 		if(solutionLimit > 0) {
 			while(solutionCount < solutionLimit && s.solve()) {
+				logOnSolution(m);
 				solutionConsumer.accept(m.recordSolution());
 				solutionCount++;
 			}
 		} else {
 			while(s.solve()) {
+				logOnSolution(m);
 				solutionConsumer.accept(m.recordSolution());
 				solutionCount++;
 			}
