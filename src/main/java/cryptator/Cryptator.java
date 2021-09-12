@@ -35,6 +35,10 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.Graph;
 
+// TODO Convert Numbers to words: https://stackoverflow.com/a/56395508
+// TODO https://github.com/allegro/tradukisto
+
+// TODO Dictionnaire FR: https://chrplr.github.io/openlexicon/datasets-info/Liste-de-mots-francais-Gutenberg/README-liste-francais-Gutenberg.html
 public class Cryptator {
 
 	public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
