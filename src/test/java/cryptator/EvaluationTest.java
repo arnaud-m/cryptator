@@ -23,6 +23,8 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
+import cryptator.tree.CryptaLeaf;
+import cryptator.tree.CryptaNode;
 
 public class EvaluationTest {
 
@@ -201,6 +203,25 @@ public class EvaluationTest {
 		final ICryptaNode cryptarithm = parser.parse("AB+BA=CBC");
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=9 B=2 C=a");
 		eval.evaluate(cryptarithm, solution, 10);
+	}
+	
+	@Test
+	public void testBignum1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = new CryptaNode("+", 
+				new CryptaLeaf("AAAAAAAAAAAAAAAAAAAAAAAAA".toCharArray()),
+				new CryptaLeaf("BBBBBBBBBBBBBBBBBBBBBBBBB".toCharArray())
+				);
+		
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=1 B=2 C=3");
+		System.out.println(eval.evaluate(cryptarithm, solution, 10));
+		assertEquals("3333333333333333333333333", eval.evaluate(cryptarithm, solution, 10));
+	}
+	
+	@Test
+	public void testBignum2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("AAAAAAAAAAAAAAAAAAAAAAAAA + BBBBBBBBBBBBBBBBBBBBBBBBB = CCCCCCCCCCCCCCCCCCCCCCCCC");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=1 B=2 C=3");
+		assertEquals(1, eval.evaluate(cryptarithm, solution, 10));
 	}
 
 }

@@ -57,7 +57,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 
 		@Override
 		public void accept(ICryptaNode node, int numNode) {
-			// Check for the exception because it cannot be thrown here without changing the method signature.
+			// Check for the exception because it cannot be thrown here.
 			if(exception == null) {
 				if(node.isLeaf()) {
 					try {
@@ -68,6 +68,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 				} else {
 					final long b = stack.pop();
 					final long a = stack.pop();
+					// System.out.println(a+ " " + b);
 					stack.push(node.getOperator().getFunction().applyAsLong(a, b));
 				}
 			}
