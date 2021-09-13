@@ -30,9 +30,9 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 
 		private final ICryptaSolution solution;
 
-		private final long base;
+		private final int base;
 
-		private final Stack<Long> stack = new Stack<>();
+		private final Stack<BigInteger> stack = new Stack<>();
 
 		private CryptaEvaluationException exception;
 
@@ -42,13 +42,14 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 			this.base = base;
 		}
 
-		private Long getWordValue(ICryptaNode node) throws CryptaEvaluationException {
+		private BigInteger getWordValue(ICryptaNode node) throws CryptaEvaluationException {
 			try {
-				long v = 0;
+				BigInteger v = BigInteger.ZERO;
+				final BigInteger b = BigInteger.valueOf(base);
 				for (char c : node.getWord()) {
 					final int digit = solution.getDigit(c);
 					if(digit < 0 || digit >= base) throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
-					v = v * base + digit;
+					v = v.multiply(b).add(BigInteger.valueOf(digit));
 				}
 				return v;
 			} catch (CryptaSolutionException e) {
@@ -67,10 +68,10 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 						exception = e;
 					}
 				} else {
-					final long b = stack.pop();
-					final long a = stack.pop();
+					final BigInteger b = stack.pop();
+					final BigInteger a = stack.pop();
 					// System.out.println(a+ " " + b);
-					stack.push(node.getOperator().getFunction().applyAsLong(a, b));
+					stack.push(node.getOperator().getFunction().apply(a, b));
 				}
 			}
 		}

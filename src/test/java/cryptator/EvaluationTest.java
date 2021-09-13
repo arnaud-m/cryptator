@@ -223,7 +223,6 @@ public class EvaluationTest {
 				);
 		
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=1 B=2 C=3");
-		System.out.println(eval.evaluate(cryptarithm, solution, 10));
 		assertEquals(new BigInteger("3333333333333333333333333"), eval.evaluate(cryptarithm, solution, 10));
 	}
 	
@@ -231,6 +230,13 @@ public class EvaluationTest {
 	public void testBignum2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
 		final ICryptaNode cryptarithm = parser.parse("AAAAAAAAAAAAAAAAAAAAAAAAA + BBBBBBBBBBBBBBBBBBBBBBBBB = CCCCCCCCCCCCCCCCCCCCCCCCC");
 		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=1 B=2 C=3");
+		assertTrueEval(cryptarithm, solution, 10);
+	}
+	
+	@Test
+	public void testBignum3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("AAAAAAAAAAAAAAAAAAAAAAAAD + A + BBBBBBBBBBBBBBBBBBBBBBDDD + BBB = CCCCCCCCCCCCCCCCCCCCCCCDD + CC");
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=1 B=2 C=3 D=0");
 		assertTrueEval(cryptarithm, solution, 10);
 	}
 
