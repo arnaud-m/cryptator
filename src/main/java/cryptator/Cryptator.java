@@ -13,6 +13,7 @@ import static cryptator.tree.TreeUtils.writePostorder;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
@@ -152,7 +153,7 @@ public class Cryptator {
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
 			try {
-				if(eval.evaluate(n, s, base) != 0) {
+				if(eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
 					LOGGER.info("Eval cryptarithm solution [OK]"); 
 					return;
 				}

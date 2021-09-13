@@ -11,6 +11,7 @@ package cryptator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Before;
@@ -62,7 +63,7 @@ final class CryptaSolvingTester {
 					//System.out.println(s);
 					solutionCount.incrementAndGet();
 					try {
-						assertEquals(1, eval.evaluate(node, s, config.getArithmeticBase()));
+						assertEquals(BigInteger.ONE, eval.evaluate(node, s, config.getArithmeticBase()));
 					} catch (CryptaEvaluationException e) {
 						e.printStackTrace();
 						fail();

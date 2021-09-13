@@ -8,6 +8,7 @@
  */
 package cryptator.tree;
 
+import java.math.BigInteger;
 import java.util.Stack;
 
 import cryptator.solver.CryptaSolutionException;
@@ -19,7 +20,7 @@ import cryptator.specs.ITraversalNodeConsumer;
 public class CryptaEvaluation implements ICryptaEvaluation {
 
 	@Override
-	public long evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException {
+	public BigInteger evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException {
 		final EvaluationConsumer evaluationNodeConsumer = new EvaluationConsumer(solution, base);
 		TreeTraversals.postorderTraversal(cryptarithm, evaluationNodeConsumer);
 		return evaluationNodeConsumer.eval();
@@ -75,10 +76,10 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 		}
 
 
-		public long eval() throws CryptaEvaluationException {
+		public BigInteger eval() throws CryptaEvaluationException {
 			if(exception != null) throw exception;
 			if(stack.size() != 1) throw new CryptaEvaluationException("Invalid stack size at the end of evaluation.");
-			return stack.peek();
+			return new BigInteger(stack.peek().toString());
 		}
 	}
 

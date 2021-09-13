@@ -8,10 +8,12 @@
  */
 package cryptator.specs;
 
+import java.math.BigInteger;
+
 import cryptator.tree.CryptaEvaluationException;
 
 public interface ICryptaEvaluation {
 
-	long evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException;
+	BigInteger evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base) throws CryptaEvaluationException;
 
 }
