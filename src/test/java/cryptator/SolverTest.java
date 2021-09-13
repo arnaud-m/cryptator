@@ -36,9 +36,15 @@ final class CryptaSolvingTester {
 
 	public final CryptaParserWrapper parser = new CryptaParserWrapper();
 
-	public final ICryptaSolver solver= new CryptaSolver();
-
+	public final ICryptaSolver solver;
+	
 	public final ICryptaEvaluation eval = new CryptaEvaluation();
+
+	
+	public CryptaSolvingTester(boolean useBignum) {
+		super();
+		this.solver = new CryptaSolver(useBignum);
+	}
 
 	public void reset() {
 		config = new CryptaConfig();
@@ -85,7 +91,7 @@ final class CryptaSolvingTester {
 
 public class SolverTest {
 
-	public CryptaSolvingTester t = new CryptaSolvingTester();
+	public CryptaSolvingTester t = new CryptaSolvingTester(false);
 
 
 	public SolverTest() {}
@@ -393,12 +399,10 @@ public class SolverTest {
 	@Test
 	@Ignore
 	public void testMrazik() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		assertEquals(18, t.testSAT("A = HAPPY / (4*TH + OF*JULY)"));
+		assertEquals("Div and Mult",
+				t.testSAT("A * (4*TH + OF*JULY) = HAPPY"),
+				t.testSAT("A = HAPPY / (4*TH + OF*JULY)")
+				);
 	}	
 
-	@Test
-	@Ignore
-	public void testMrazik2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		assertEquals(18, t.testSAT("A * (4*TH + OF*JULY) = HAPPY"));
-	}	
 }
