@@ -57,6 +57,8 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 		@Override
 		public IntVar apply(char[] word) {
 			if(word.length == 0) return model.intVar(0);
+			if(word.length == 1) return getSymbolVar(word[0]);
+			
 			final int n = word.length;
 			final IntVar[] vars = new IntVar[n];
 			final int[] coeffs = new int[n];
@@ -75,6 +77,7 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 		@Override
 		public IntVar apply(char[] word) {
 			if(word.length == 0) return model.intVar(0);
+			if(word.length == 1) return getSymbolVar(word[0]);		
 			ArExpression tmp = getSymbolVar(word[0]);
 			for (int i = 1; i < word.length; i++) {
 				tmp= tmp.mul(config.getArithmeticBase())
