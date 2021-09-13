@@ -340,29 +340,10 @@ public class SolverTest {
 		t.testUNIQUE("cinq*six=trente");
 	}
 
-	@Test
-	@Ignore // Hypothesis: integer overflow
-	public void testBarker6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.testUNIQUE("iron*radium=neon*sodium");
-	}
-
+	
 	@Test
 	public void testPavlis() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		t.testUNIQUE("SO+MANY+MORE+MEN+SEEM+TO+SAY+THAT+THEY+MAY+SOON+TRY+TO+STAY+AT+HOME+SO+AS+TO+SEE+OR+HEAR+THE+SAME+ONE+MAN+TRY+TO+MEET+THE+TEAM+ON+THE+MOON+AS+HE+HAS+AT+THE+OTHER+TEN=TESTS");
-	}
-
-	@Test
-	@Ignore
-	public void testPrinterError1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		// https://mathworld.wolfram.com/PrintersErrors.html
-		t.testUNIQUE("2^5*9^2 = 2592");
-	}
-
-	@Test
-	@Ignore
-	public void testPrinterError2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		// https://mathworld.wolfram.com/PrintersErrors.html
-		t.testUNIQUE("3^4*425 = 34425");
 	}
 
 	@Test
@@ -372,38 +353,17 @@ public class SolverTest {
 		t.testUNIQUE("UNITED + STATES = AMERICA");
 	}
 
-	//FIXME division operator confusion
-	@Test
-	@Ignore
-	public void testDivision1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		assertEquals("Div and Mult",
-				t.testSAT("ABC = AB * BC"),			
-				t.testSAT("ABC / BC = AB")
-				);
-	}
-
-
-	@Test
-	@Ignore
-	public void testDivision2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		assertEquals("Div and Mult",
-				t.testSAT("A = B * C"),
-				t.testSAT("A / B = C")				
-				);
-	}
-
+	
 	@Test
 	public void testPow1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		t.testSAT("A = B ^ C", 2);
 	}
 
 	@Test
-	@Ignore
-	public void testMrazik() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		assertEquals("Div and Mult",
-				t.testSAT("A * (4*TH + OF*JULY) = HAPPY"),
-				t.testSAT("A = HAPPY / (4*TH + OF*JULY)")
-				);
-	}	
+	public void testPrinterError2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		// https://mathworld.wolfram.com/PrintersErrors.html
+		t.testUNIQUE("3^4*425 = 34425");
+	}
+
 
 }
