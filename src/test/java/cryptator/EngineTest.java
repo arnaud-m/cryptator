@@ -100,15 +100,15 @@ public class EngineTest {
 	public void testSendMoreMoney() throws CryptaModelException, CryptaGameException {
 		setUpEngine("send + more = money");
 			
-		testBadDecision('s', CryptaOperator.NEQ, 9);
+		testBadDecision('s', CryptaOperator.NE, 9);
 		testGoodDecision('r', CryptaOperator.EQ, 8);
-		testBadDecision('d', CryptaOperator.NEQ, 7);
+		testBadDecision('d', CryptaOperator.NE, 7);
 		testBadDecision('e', CryptaOperator.LT, 5);
 		testBadDecision('e', CryptaOperator.GT, 5);
-		testBadDecision('y', CryptaOperator.GEQ, 3);
-		testBadDecision('y', CryptaOperator.LEQ, 1);
+		testBadDecision('y', CryptaOperator.GE, 3);
+		testBadDecision('y', CryptaOperator.LE, 1);
 		testGoodDecision('m', CryptaOperator.EQ, 1);
-		testBadDecision('n', CryptaOperator.NEQ, 6);
+		testBadDecision('n', CryptaOperator.NE, 6);
 		
 		testGoodLastDecision('o', CryptaOperator.EQ, 0);
 	}
@@ -117,10 +117,10 @@ public class EngineTest {
 	public void testDonaldGeraldRobert() throws CryptaModelException, CryptaGameException {
 		setUpEngine("donald+gerald=robert");
 		
-		testBadDecision('a', CryptaOperator.NEQ, 4);
+		testBadDecision('a', CryptaOperator.NE, 4);
 		testGoodDecision('b', CryptaOperator.LT, 4);
 		testGoodDecision('d', CryptaOperator.GT, 4);
-		testBadDecision('t', CryptaOperator.GEQ, 4);
+		testBadDecision('t', CryptaOperator.GE, 4);
 		testGoodDecision('t', CryptaOperator.EQ, 0);
 		testGoodDecision('r', CryptaOperator.EQ, 7);
 		testGoodDecision('b', CryptaOperator.EQ, 3);

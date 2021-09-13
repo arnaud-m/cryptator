@@ -23,11 +23,11 @@ public enum CryptaOperator {
 	POW("^", (a, b) -> (int) Math.pow(a,b), (a, b) -> a.pow(b)), 
 	ID("", (a, b) -> 0, (a, b) -> null),
 	EQ("=", (a, b) -> a == b ? 1 : 0, (a, b) -> a.eq(b)), 
-	NEQ("!=", (a, b) -> a != b ? 1 : 0, (a, b) -> a.ne(b)), 
+	NE("!=", (a, b) -> a != b ? 1 : 0, (a, b) -> a.ne(b)), 
 	LT("<", (a, b) -> a < b ? 1 : 0, (a, b) -> a.lt(b)), 
 	GT(">", (a, b) -> a > b ? 1 : 0, (a, b) -> a.gt(b)), 
-	LEQ("<=", (a, b) -> a <= b ? 1 : 0, (a, b) -> a.le(b)), 
-	GEQ(">=", (a, b) -> a >= b ? 1 : 0, (a, b) -> a.ge(b));
+	LE("<=", (a, b) -> a <= b ? 1 : 0, (a, b) -> a.le(b)), 
+	GE(">=", (a, b) -> a >= b ? 1 : 0, (a, b) -> a.ge(b));
 
 	public final String token;
 
