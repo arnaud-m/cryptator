@@ -8,195 +8,184 @@
  */
 package cryptator;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
-import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.util.tools.ArrayUtils;
 
+
+class CryptaEqnMember {
+
+	private final int offset;;
+	public final BoolVar[] words;
+	public final IntVar[] lengths;
+	public final IntVar maxLength;
+	public final IntVar wordCount;
+
+	public CryptaEqnMember(Model m, String[] words, String prefix) {
+		super();
+		this.offset = prefix.length();
+		this.words = new BoolVar[words.length];
+		for (int i = 0; i < words.length; i++) {
+			this.words[i] = m.boolVar(prefix + words[i]);
+		}	
+
+		lengths = new IntVar[words.length];
+		int maxLen = 0;
+
+		for (int i = 0; i < words.length; i++) {
+			if(maxLen < words[i].length()) maxLen = words[i].length();
+			lengths[i] = this.words[i].mul(words[i].length()).intVar();
+		}
+
+		maxLength = m.intVar(prefix + "maxLen", 0, maxLen);
+		m.max(maxLength, lengths).post();
+
+		wordCount = m.intVar(prefix + "wordCount", 0, words.length);
+		m.sum(this.words, "=", wordCount).post();
+
+	}
+
+	public final BoolVar[] getWords() {
+		return words;
+	}
+
+	public final IntVar[] getLengths() {
+		return lengths;
+	}
+
+	public final IntVar getMaxLength() {
+		return maxLength;
+	}
+
+	public final IntVar getWordCount() {
+		return wordCount;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		for (int i = 0; i < words.length; i++) {
+			// TODO store prefix
+			if(words[i].isInstantiatedTo(1)) b.append(words[i].getName().substring(offset)).append(" + "); 
+		}
+		if(b.length() > 0) b.delete(b.length()-3, b.length());
+		return b.toString();
+	}
+
+
+
+}
 public class CryptaGenListModel {
 
-	private final String[] words;
-
 	Model m;
-	BoolVar[] leftW;
-	BoolVar[] rightW;
 
-	IntVar[] leftLen;
-	IntVar[] rightLen;
+	private final String[] words;
+	
+	private final Map<Character, BoolVar> symbolsToVariables = new HashMap<>();
 
-	IntVar maxLenL;
-	IntVar maxLenR;
+	private CryptaEqnMember l;
 
-	IntVar wordCountL;
+	private CryptaEqnMember r;
 
-	public final Map<Character, BoolVar> symbolsToVariables = new HashMap<>();
+	private IntVar digitCount;
 
 	public CryptaGenListModel(String[] words) {
 		this.words = words;
 	}
 
 
-	private void buildWordVars() {
-		int n = words.length;
-
-		leftW = new BoolVar[n];
-		rightW = new BoolVar[n];
-
-		for (int i = 0; i < n; i++) {
-			leftW[i] = m.boolVar("L_"+words[i]);
-			rightW[i] = m.boolVar("R_"+words[i]);
-			leftW[i].add(rightW[i]).le(1).post();
-		}	
-	}
-	private void buildLenVars() {
-		int n = words.length;
-		leftLen = new IntVar[n];
-		rightLen = new IntVar[n];
-		for (int i = 0; i < words.length; i++) {
-			leftLen[i] = leftW[i].mul(words[i].length()).intVar();
-			rightLen[i] = rightW[i].mul(words[i].length()).intVar();
-		}
-
-		int maxLen = 100;
-		maxLenL = m.intVar("maxLenL", 0, maxLen);
-		maxLenR = m.intVar("maxLenR", 0, maxLen);
-		m.max(maxLenL, leftLen).post();
-		m.max(maxLenR, rightLen).post();
-	}
-	
 	private void postLenConstraint() {
-		maxLenR.ge(maxLenL).post();
+		r.maxLength.ge(l.maxLength).post();
 		// TODO maxLenR.sub(maxLenL).gt(1).imp(wordCountL.ge(10)).post();	
 	}
-	
-	
-	private void buildSymbolVars(Map<Character, ReExpression> symbolsToExpressions) {
+
+
+	private void buildSymbolVars(Map<Character, Collection<BoolVar>> symbolsToExpressions) {
 		for (Character c : symbolsToExpressions.keySet()) {
-			BoolVar var = m.boolVar(String.valueOf(c));
-			symbolsToVariables.put(c, var);
-			symbolsToExpressions.get(c).eq(var).post();
+			BoolVar max = m.boolVar(String.valueOf(c));
+			symbolsToVariables.put(c, max);
+			Collection<BoolVar> varsL = symbolsToExpressions.get(c);
+			BoolVar[] vars = varsL.toArray(new BoolVar[varsL.size()]);
+			m.max(max, vars).post();
 		}
 	}
 	
-	private void postWordCountConstraint() {
-		wordCountL = m.intVar("wcL", 2, words.length);
-		m.sum(leftW, "=", wordCountL).post();
-		m.sum(rightW, "=", 1).post();
+	private void buildMembers() {
+		l = new CryptaEqnMember(m, words, "L_");
+		r = new CryptaEqnMember(m, words, "R_");
+		for (int i = 0; i < words.length; i++) {
+			l.words[i].add(r.words[i]).le(1).post();
+		}
+	}
+	
+	private final IntVar[] buildSymbolVarArray() {
+		return symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
 	}
 	
 	private void postDigitCountingConstraint() {
-		IntVar[] symbols = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
-		m.sum(symbols, "<=", 10).post();
+		final IntVar[] symbols = buildSymbolVarArray();
+		digitCount = m.intVar("digitCount", 0, symbols.length);
+		m.sum(symbols, "=", digitCount).post();	
 	}
-	
-	private Map<Character, ReExpression> buildExpressions() {
-		final Map<Character, ReExpression> symbolsToExpressions = new HashMap<>();
 
-		//IntVar z = m.intVar("maxLen", 0, 1000);
+	private Map<Character, Collection<BoolVar>> buildExpressions() {
+		final Map<Character, Collection<BoolVar>> symbolsToMaxVars = new HashMap<>();
 		for (int i = 0; i < words.length; i++) {
 			for (char c : words[i].toCharArray()) {
-				ReExpression expr = leftW[i].or(rightW[i]);
-				if(! symbolsToExpressions.containsKey(c) ) {
-					symbolsToExpressions.put(c, expr);
-				} else {
-					symbolsToExpressions.replace(
-							c, 
-							symbolsToExpressions.get(c).or(expr)
-							);
-				}
-
+				if(! symbolsToMaxVars.containsKey(c) ) {
+					symbolsToMaxVars.put(c, new ArrayList<>());
+				} 
+				symbolsToMaxVars.get(c).add(l.words[i]);
+				symbolsToMaxVars.get(c).add(r.words[i]);
 			}
 		}
-		return symbolsToExpressions;
+		return symbolsToMaxVars;
 	}
 	public void modeling() {
-		m = new Model();
+		m = new Model("GenerateFromWordList");
 		int n = words.length;
-		buildWordVars();
+
+		// Core Constraints
+		buildMembers();
 		
-		final Map<Character, ReExpression> symbolsToExpressions = buildExpressions();
+		final Map<Character, Collection<BoolVar>> symbolsToExpressions = buildExpressions();
 		buildSymbolVars(symbolsToExpressions);
 		postDigitCountingConstraint();
 		
-		postWordCountConstraint();
-		
-		buildLenVars();
+		// Structural Constraints
+		l.wordCount.ge(2).post();
+		r.wordCount.eq(1).post();
+
 		postLenConstraint();
+
 		
+		digitCount.le(10).post();; //.or(digitCount.eq(20)).or(digitCount.eq(30)).post();
+			
+
+
 		//wordCountL.eq(13).post();
 		System.out.println(m);
-		Solution sol = new Solution(m);
+		Solution sol = new Solution(m, ArrayUtils.append(l.words, r.words, buildSymbolVarArray()));
 		int solutionCount = 0;
-		//Solution sol = new Solution(m);
 		while(m.getSolver().solve()) {
 			solutionCount++;
 			sol.record();
 			//System.out.println(sol);
-			for (IntVar v : leftW) {
-				if(v.isInstantiatedTo(1)) System.out.print(v.getName().substring(2) + " + ");
-			}
-			System.out.print("= ");
-			for (IntVar v : rightW) {
-				if(v.isInstantiatedTo(1)) System.out.print(v.getName().substring(2) + " ");
-			}
-			System.out.println();
+			System.out.println(l + " = " + r);
 		}
 		m.getSolver().printStatistics();
 		System.out.println(solutionCount);
 
 	}
 
-	//	public void modeling() {
-	//		Model m = new Model();
-	//		BoolVar[] x = m.boolVarArray("x", words.length);
-	//		//IntVar[] y = new IntVar[words.length];
-	//		final Map<Character, ReExpression> symbolsToExpressions = new HashMap<>();
-	//
-	//		//IntVar z = m.intVar("maxLen", 0, 1000);
-	//		for (int i = 0; i < words.length; i++) {
-	//			for (char c : words[i].toCharArray()) {
-	//				if(! symbolsToVariables.containsKey(c) ) {
-	//					symbolsToVariables.put(c,  m.boolVar(String.valueOf(c)));
-	//					symbolsToExpressions.put(c,  x[i]);
-	//				} else {
-	//					symbolsToExpressions.replace(
-	//							c, 
-	//							symbolsToExpressions.get(c).or(x[i])
-	//							);
-	//				}
-	//
-	//				BoolVar v = symbolsToVariables.get(c);
-	//
-	//				//v.or(v.not()).post();
-	//				//x[i].le(v).decompose().post();
-	//			}
-	//						//y[i] = x[i].mul(words[i].length()).intVar();
-	//		}
-	//		for (Character c : symbolsToVariables.keySet()) {
-	//			symbolsToExpressions.get(c).eq(symbolsToVariables.get(c)).post();
-	//		}
-	//
-	//		//m.max(z, y).post();
-	//
-	//		IntVar[] symbols = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
-	//		m.sum(symbols, "<=", 10).post();
-	//		System.out.println(m);
-	//				Solution sol = new Solution(m, x);
-	//				int n = 0;
-	//		//Solution sol = new Solution(m);
-	//				while(m.getSolver().solve()) {
-	//					n++;
-	//					sol.record();
-	//					System.out.println(sol);
-	//				}
-	//				System.out.println(n);
-	//
-	//	}
-	
+
 	public static void main(String[] args) {
 		CryptaGenListModel gen = new CryptaGenListModel(args);
 		gen.modeling();
