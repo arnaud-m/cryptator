@@ -17,6 +17,7 @@ import java.util.Set;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaConfig;
 import cryptator.specs.ICryptaNode;
@@ -54,18 +55,9 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 		return vars.toArray(new IntVar[vars.size()]);
 	}
 
-	private int[] getGCCValues() {
-		int[] values = new int[config.getArithmeticBase()];
-		for (int i = 0; i < values.length; i++) {
-			values[i] = i;
-		}
-		return values;
-	}
-
 	private IntVar[] getGCCOccs(int lb, int ub) {
 		return model.intVarArray("O", config.getArithmeticBase(), lb, ub, false);
 	}
-
 
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
@@ -93,9 +85,9 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 			return model.allDifferent(vars);
 		} else {
 			final int minOcc = config.getMinDigitOccurence(n);
+			final int[] values = ArrayUtils.array(0, config.getArithmeticBase() -1);
 			return model.globalCardinality(
-					vars, 
-					getGCCValues(), 
+					vars, values, 
 					getGCCOccs(minOcc, maxOcc), 
 					true);
 
