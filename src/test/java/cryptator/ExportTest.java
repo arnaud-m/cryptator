@@ -8,9 +8,6 @@
  */
 package cryptator;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
@@ -23,18 +20,6 @@ import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.GraphvizExport;
 
 public class ExportTest {
-	
-	static final class NullOutputStream extends OutputStream {
-
-		public final static NullOutputStream INSTANCE = new NullOutputStream();
-		
-		@Override
-		public void write(int b) throws IOException {
-			// DO Nothing
-		}
-	}
-	
-	private final OutputStream outstream = NullOutputStream.INSTANCE;
 	
 	public ExportTest() {}
 	

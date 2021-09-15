@@ -21,11 +21,11 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 
-public class CryptaSolver implements ICryptaSolver {
+public final class CryptaSolver implements ICryptaSolver {
 
 	public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
 
-	private final ICryptaModeler modeler;
+	private ICryptaModeler modeler;
 
 	private long timeLimit = 0;
 
@@ -58,7 +58,14 @@ public class CryptaSolver implements ICryptaSolver {
 		this.solutionLimit = limit;
 	}
 
-
+	public void setBignum() {
+		modeler = new CryptaBignumModeler();
+	}
+	
+	public void unsetBignum() {
+		modeler = new CryptaModeler();
+	}
+	
 	private final void logOnSolution(CryptaModel m) {
 		if(LOGGER.isLoggable(Level.CONFIG)) {
 			final Solution sol = new Solution(m.getModel());

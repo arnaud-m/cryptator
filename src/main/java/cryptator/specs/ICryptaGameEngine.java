@@ -8,8 +8,6 @@
  */
 package cryptator.specs;
 
-import java.util.function.BiConsumer;
-
 import cryptator.game.CryptaGameDecision;
 import cryptator.game.CryptaGameException;
 import cryptator.solver.CryptaModel;
