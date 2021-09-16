@@ -22,6 +22,7 @@ import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaFeatures;
+import cryptator.tree.TreeUtils;
 
 // TODO Convert Numbers to words: https://stackoverflow.com/a/56395508
 // TODO https://github.com/allegro/tradukisto
@@ -91,7 +92,7 @@ public class Cryptator {
 			final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
 
 			if(LOGGER.isLoggable(Level.INFO)) {
-				LOGGER.log(Level.INFO, "Cryptarithm features:\n{0}", new CryptaFeatures(node));
+				LOGGER.log(Level.INFO, "Cryptarithm features:\n{0}", TreeUtils.computeFeatures(node));
 			}
 			
 			final CryptaBiConsumer consumer = buildBiConsumer(config);

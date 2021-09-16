@@ -21,7 +21,9 @@ import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalNodeConsumer;
+import cryptator.tree.CryptaOperatorDetection;
 import cryptator.tree.TreeTraversals;
+import cryptator.tree.TreeUtils;
 
 public class CryptaBignumModeler implements ICryptaModeler {
 
@@ -30,34 +32,14 @@ public class CryptaBignumModeler implements ICryptaModeler {
 	/** bignum model with addition only that uses a little endian representation with a variable number of digits. */
 	@Override
 	public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
-		UnsupportedOperatorDetector detector = new UnsupportedOperatorDetector();
-		TreeTraversals.postorderTraversal(cryptarithm, detector); 
-		if(detector.unsupportedOperators.size() > 0) throw new CryptaModelException("Unsupported bignum operator(s): " + detector.unsupportedOperators);
+		final CryptaOperatorDetection detect = TreeUtils.computeUnsupportedBignumOperator(cryptarithm);
+		if(detect.hasUnsupportedOperator()) throw new CryptaModelException("Unsupported bignum operator(s): " + detect.getUnsupportedOperator());
 
 		final Model model = new Model("Cryptarithm-bignum");
 		final AbstractModelerNodeConsumer modelerNodeConsumer = new ModelerBignumConsumer(model, config);
 		TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
 		modelerNodeConsumer.postConstraints();
 		return modelerNodeConsumer.buildCryptaModel();
-	}
-}
-
-final class UnsupportedOperatorDetector implements ITraversalNodeConsumer {
-
-	public Set<CryptaOperator> unsupportedOperators = new HashSet<>();
-
-	@Override
-	public void accept(ICryptaNode node, int numNode) {
-		switch (node.getOperator()) {
-		case ID:
-		case ADD:
-		case EQ: 
-			break;
-		default:
-			unsupportedOperators.add(node.getOperator());
-			break;
-		}
-
 	}
 }
 

@@ -14,6 +14,8 @@ import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaFeatures;
+import cryptator.tree.TreeUtils;
+
 import static org.junit.Assert.*;
 public class FeaturesTest {
 
@@ -25,7 +27,7 @@ public class FeaturesTest {
 	@Test
 	public void testFeatures1() throws CryptaParserException {
 		final ICryptaNode node = parser.parse("send+more=money");
-		final CryptaFeatures feat = new CryptaFeatures(node);
+		final CryptaFeatures feat = TreeUtils.computeFeatures(node);
 		assertEquals(3, feat.getWordCount());
 		assertEquals(13, feat.getCharCount());
 		assertEquals(4, feat.getMinWordLength());
@@ -37,7 +39,7 @@ public class FeaturesTest {
 	@Test
 	public void testFeatures2() throws CryptaParserException {
 		final ICryptaNode node = parser.parse("iowa+nevada+indiana=georgia");
-		final CryptaFeatures feat = new CryptaFeatures(node);
+		final CryptaFeatures feat = TreeUtils.computeFeatures(node);
 		assertEquals(4, feat.getWordCount());
 		assertEquals(24, feat.getCharCount());
 		assertEquals(4, feat.getMinWordLength());

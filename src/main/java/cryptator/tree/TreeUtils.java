@@ -11,6 +11,8 @@ package cryptator.tree;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import cryptator.CryptaOperator;
+import cryptator.solver.CryptaModelException;
 import cryptator.specs.ICryptaNode;
 
 
@@ -66,9 +68,14 @@ public final class TreeUtils {
 	}
 
 	public static CryptaFeatures computeFeatures(ICryptaNode cryptarithm) {
-		CryptaFeatures feat = new CryptaFeatures();
-		feat.updateFeatures(cryptarithm);
+		final CryptaFeatures feat = new CryptaFeatures();
+		TreeTraversals.preorderTraversal(cryptarithm, feat);
 		return feat;
 	}
-
+	
+	public static CryptaOperatorDetection computeUnsupportedBignumOperator(ICryptaNode cryptarithm) {
+		final CryptaOperatorDetection detect = new CryptaOperatorDetection(CryptaOperator.ID, CryptaOperator.ADD, CryptaOperator.EQ);
+		TreeTraversals.preorderTraversal(cryptarithm, detect);
+		return detect;
+	}
 }

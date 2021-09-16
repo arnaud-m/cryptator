@@ -35,10 +35,6 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 		super();
 	}
 	
-	public CryptaFeatures(ICryptaNode cryptarithm) {
-		updateFeatures(cryptarithm);
-	}
-
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
 		if(node.isLeaf()) {
@@ -80,10 +76,6 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 
 	public final Set<CryptaOperator> getOperators() {
 		return Collections.unmodifiableSet(operators);
-	}
-	
-	public void updateFeatures(ICryptaNode cryptarithm) {
-		TreeTraversals.preorderTraversal(cryptarithm, this);
 	}
 	
 	@Override
