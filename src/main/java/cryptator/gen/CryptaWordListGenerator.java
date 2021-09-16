@@ -6,6 +6,7 @@ import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
 import cryptator.CryptaConfig;
+import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 import cryptator.specs.ICryptaGenerator;
@@ -32,7 +33,7 @@ public class CryptaWordListGenerator implements ICryptaGenerator {
 		Solver s = gen.getModel().getSolver();
 		// Solution sol = new Solution(gen.getModel());
 		GenerateConsumer genConsumer= new GenerateConsumer(
-				new CryptaSolver(false),
+				new AdaptiveSolver(3),
 				new CryptaConfig(), 
 				consumer
 				);

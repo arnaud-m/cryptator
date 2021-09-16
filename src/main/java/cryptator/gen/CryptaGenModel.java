@@ -159,12 +159,12 @@ public class CryptaGenModel {
 
 	public static void main(String[] args) throws CryptaModelException {
 		JULogUtil.configureLoggers();
-		CryptaSolver.LOGGER.setLevel(Level.WARNING);
+		//CryptaSolver.LOGGER.setLevel(Level.WARNING);
 		CryptaWordListGenerator gen = new CryptaWordListGenerator(args);
 		CryptaBiConsumer cons = new CryptaBiConsumer(Cryptator.LOGGER);
 		cons.withCryptarithmLog();
 		cons.withSolutionCheck(10);
-		cons.withGraphvizExport();
+		//cons.withGraphvizExport();
 		gen.generate(cons);
 		
 	}
