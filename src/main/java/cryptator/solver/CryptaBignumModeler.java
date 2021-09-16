@@ -8,8 +8,6 @@
  */
 package cryptator.solver;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 import org.chocosolver.solver.Model;
@@ -20,7 +18,6 @@ import cryptator.CryptaConfig;
 import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalNodeConsumer;
 import cryptator.tree.CryptaOperatorDetection;
 import cryptator.tree.TreeTraversals;
 import cryptator.tree.TreeUtils;

@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import cryptator.CryptaOperator;
-import cryptator.solver.CryptaModelException;
 import cryptator.specs.ICryptaNode;
 
 
