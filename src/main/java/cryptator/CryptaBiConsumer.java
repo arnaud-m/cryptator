@@ -52,15 +52,15 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 	}
 
 	public void withSolutionLog() {
-		internal.andThen(new SolutionLogger());
+		internal = internal.andThen(new SolutionLogger());
 	}
 
 	public void withSolutionCheck(int base) {
-		internal.andThen(new SolutionChecker(base));
+		internal = internal.andThen(new SolutionChecker(base));
 	}
 
 	public void withGraphvizExport() {
-		internal.andThen(new GraphvizConsumer());
+		internal = internal.andThen(new GraphvizConsumer());
 	}
 
 	@Override
