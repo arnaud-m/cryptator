@@ -11,11 +11,6 @@ package cryptator;
 import static cryptator.tree.TreeUtils.writePostorder;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,17 +19,9 @@ import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
-import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
-import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
-import cryptator.tree.CryptaEvaluation;
-import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.CryptaFeatures;
-import cryptator.tree.GraphvizExport;
-import guru.nidi.graphviz.engine.Format;
-import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.model.Graph;
 
 // TODO Convert Numbers to words: https://stackoverflow.com/a/56395508
 // TODO https://github.com/allegro/tradukisto
@@ -99,7 +86,7 @@ public class Cryptator {
 
 	}
 
-	private static int solve(String cryptarithm, CryptaParserWrapper parser, ICryptaSolver solver , CryptatorConfig config) {
+	private static long solve(String cryptarithm, CryptaParserWrapper parser, ICryptaSolver solver , CryptatorConfig config) {
 		try {
 			final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
 
@@ -107,12 +94,11 @@ public class Cryptator {
 				LOGGER.log(Level.INFO, "Cryptarithm features:\n{0}", new CryptaFeatures(node));
 			}
 			
-			final AtomicInteger errorCount = new AtomicInteger();
-			final BiConsumer<ICryptaNode, ICryptaSolution> consumer = buildBiConsumer(config, errorCount);
+			final CryptaBiConsumer consumer = buildBiConsumer(config);
 			final boolean solved = solver.solve(node, config, (s) -> {consumer.accept(node, s);}) ;
-			final String status = errorCount.get() > 0 ? "ERROR" : (solved ? "OK" : "KO");
+			final String status = consumer.getErrorCount() > 0 ? "ERROR" : (solved ? "OK" : "KO");
 			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
-			return errorCount.get();
+			return consumer.getErrorCount();
 		
 		} catch (CryptaParserException e) {
 			LOGGER.log(Level.SEVERE, "Parse cryptarithm " + cryptarithm + " [FAIL]", e);
@@ -124,86 +110,13 @@ public class Cryptator {
 		return 1;
 	}
 
-	private static class DefaultConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
-
-		private int solutionCount = 0;
-			
-		@Override
-		public void accept(ICryptaNode n, ICryptaSolution s) {
-			solutionCount++;
-			LOGGER.log(Level.INFO, "Find cryptarithm solution #{0} [OK]\n{1}", new Object[] {solutionCount, s});
-		}
-	}
-
-
-	private static class CheckConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
-		
-		private final AtomicInteger error;
-		
-		private final int base;
-
-		private final ICryptaEvaluation eval = new CryptaEvaluation();
-
-		public CheckConsumer(int base, AtomicInteger error) {
-			super();
-			this.base = base;
-			this.error = error;
-		}
-
-		@Override
-		public void accept(ICryptaNode n, ICryptaSolution s) {
-			try {
-				if(eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
-					LOGGER.info("Eval cryptarithm solution [OK]"); 
-					return;
-				}
-				else LOGGER.warning("Eval cryptarithm solution [KO]"); 
-			} catch (CryptaEvaluationException e) {
-				LOGGER.log(Level.WARNING, "Eval cryptarithm solution [FAIL]", e);
-			}
-			error.incrementAndGet();
-		}
-	}
-
-	private static class GraphvizConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
-
-		@Override
-		public void accept(ICryptaNode n, ICryptaSolution s) {
-			try {
-				final Graph graph = GraphvizExport.exportToGraphviz(n, s);
-				final File file = File.createTempFile("cryptarithm-", ".svg");
-				Graphviz.fromGraph(graph).width(800).render(Format.SVG).toFile(file);
-				LOGGER.log(Level.INFO, "Export cryptarithm solution [OK]\n{0}", file);
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, "Export cryptarithm solution [FAIL]", e);
-
-			}
-		}
-	}
-
-	private static BiConsumer<ICryptaNode, ICryptaSolution> buildBiConsumer(final CryptatorConfig config, AtomicInteger errorCount) {
-		BiConsumer<ICryptaNode, ICryptaSolution> consumer = new DefaultConsumer();
-		if(config.isCheckSolution()) {
-			consumer = consumer.andThen(new CheckConsumer(config.getArithmeticBase(), errorCount));
-		}
-		if(config.isExportGraphiz()) {
-			consumer = consumer.andThen(new GraphvizConsumer());
-		}
+	private static CryptaBiConsumer buildBiConsumer(final CryptatorConfig config) {
+		CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
+		consumer.withSolutionLog();
+		if(config.isCheckSolution()) consumer.withSolutionCheck(config.getArithmeticBase());
+		if(config.isExportGraphiz()) consumer.withGraphvizExport();
 		return consumer;
 	}
 	
-	public static BiConsumer<ICryptaNode, ICryptaSolution> buildBiConsumer(final CryptatorConfig config) {
-		BiConsumer<ICryptaNode, ICryptaSolution> consumer = new DefaultConsumer();
-		AtomicInteger errorCount = new AtomicInteger();
-		if(config.isCheckSolution()) {
-			consumer = consumer.andThen(new CheckConsumer(config.getArithmeticBase(), errorCount));
-		}
-		if(config.isExportGraphiz()) {
-			consumer = consumer.andThen(new GraphvizConsumer());
-		}
-
-		return consumer;
-	}
-
 
 }

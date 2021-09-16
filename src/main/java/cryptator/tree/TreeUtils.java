@@ -65,6 +65,10 @@ public final class TreeUtils {
 		out.flush();
 	}
 
-
+	public static CryptaFeatures computeFeatures(ICryptaNode cryptarithm) {
+		CryptaFeatures feat = new CryptaFeatures();
+		feat.updateFeatures(cryptarithm);
+		return feat;
+	}
 
 }

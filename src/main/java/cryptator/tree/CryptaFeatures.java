@@ -36,7 +36,7 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 	}
 	
 	public CryptaFeatures(ICryptaNode cryptarithm) {
-		TreeTraversals.preorderTraversal(cryptarithm, this);
+		updateFeatures(cryptarithm);
 	}
 
 	@Override
@@ -82,6 +82,9 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 		return Collections.unmodifiableSet(operators);
 	}
 	
+	public void updateFeatures(ICryptaNode cryptarithm) {
+		TreeTraversals.preorderTraversal(cryptarithm, this);
+	}
 	
 	@Override
 	public String toString() {
