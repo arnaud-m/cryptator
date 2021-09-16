@@ -8,6 +8,7 @@
  */
 package cryptator;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -21,6 +22,7 @@ import cryptator.specs.ICryptaSolution;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.GraphvizExport;
+import cryptator.tree.TreeUtils;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.Graph;
@@ -55,6 +57,10 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 		internal = internal.andThen(new SolutionLogger());
 	}
 
+	public void withCryptarithmLog() {
+		internal = internal.andThen(new CryptarithmLogger());
+	}
+
 	public void withSolutionCheck(int base) {
 		internal = internal.andThen(new SolutionChecker(base));
 	}
@@ -82,6 +88,16 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 		@Override
 		public void accept(ICryptaNode t, ICryptaSolution u) {
 			logger.log(Level.INFO, "Find cryptarithm solution #{0} [OK]\n{1}", new Object[] {solutionCount, u});
+		}
+	}
+
+	private class CryptarithmLogger implements BiConsumer<ICryptaNode, ICryptaSolution> {
+
+		@Override
+		public void accept(ICryptaNode t, ICryptaSolution u) {
+			if(logger.isLoggable(Level.INFO)) {
+				logger.log(Level.INFO, "Find cryptarithm solution #{0} [OK]\n{1}\n{2}", new Object[] {solutionCount, TreeUtils.writeInorder(t), u});
+			}
 		}
 	}
 

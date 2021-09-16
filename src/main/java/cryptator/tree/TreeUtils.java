@@ -8,6 +8,7 @@
  */
 package cryptator.tree;
 
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
@@ -66,6 +67,12 @@ public final class TreeUtils {
 		out.flush();
 	}
 
+	public static String writeInorder(ICryptaNode root) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		TreeUtils.writeInorder(root, out);
+		return out.toString();
+	}
+	
 	public static CryptaFeatures computeFeatures(ICryptaNode cryptarithm) {
 		final CryptaFeatures feat = new CryptaFeatures();
 		TreeTraversals.preorderTraversal(cryptarithm, feat);

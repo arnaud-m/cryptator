@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.logging.Level;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
@@ -26,6 +27,7 @@ import cryptator.CryptaOperator;
 import cryptator.Cryptator;
 import cryptator.JULogUtil;
 import cryptator.solver.CryptaModelException;
+import cryptator.solver.CryptaSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
@@ -157,9 +159,12 @@ public class CryptaGenModel {
 
 	public static void main(String[] args) throws CryptaModelException {
 		JULogUtil.configureLoggers();
+		CryptaSolver.LOGGER.setLevel(Level.WARNING);
 		CryptaWordListGenerator gen = new CryptaWordListGenerator(args);
 		CryptaBiConsumer cons = new CryptaBiConsumer(Cryptator.LOGGER);
-		cons.withSolutionLog();
+		cons.withCryptarithmLog();
+		cons.withSolutionCheck(10);
+		cons.withGraphvizExport();
 		gen.generate(cons);
 		
 	}
