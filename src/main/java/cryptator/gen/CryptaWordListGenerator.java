@@ -1,5 +1,6 @@
 package cryptator.gen;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 import org.chocosolver.solver.Solution;
@@ -17,11 +18,15 @@ public class CryptaWordListGenerator implements ICryptaGenerator {
 
 	public String[] words;
 	
+	public CryptaWordListGenerator(List<String> arguments) {
+		super();
+		this.words = arguments.toArray(new String[arguments.size()]);
+	}
+
 	public CryptaWordListGenerator(String[] words) {
 		super();
 		this.words = words;
 	}
-
 
 	@Override
 	public void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
@@ -34,10 +39,11 @@ public class CryptaWordListGenerator implements ICryptaGenerator {
 		// Solution sol = new Solution(gen.getModel());
 		GenerateConsumer genConsumer= new GenerateConsumer(
 				new AdaptiveSolver(3),
-				new CryptaConfig(), 
+				new CryptaConfig(), //TODO Pass as ctor parameter
 				consumer
 				);
 		while(s.solve()) {
+			// TODO Log cryptarithm here
 			genConsumer.accept(gen.recordCryptarithm());
 		}
 	}

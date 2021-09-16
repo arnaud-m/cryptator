@@ -15,6 +15,7 @@ public class AdaptiveSolver implements ICryptaSolver {
 
 	public final int threshold;
 
+	// FIXME the threshold depends on the base !
 	public AdaptiveSolver(int threshold) {
 		super();
 		this.threshold = threshold;

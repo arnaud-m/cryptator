@@ -13,25 +13,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.logging.Level;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.Solution;
-import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
-import cryptator.CryptaBiConsumer;
 import cryptator.CryptaOperator;
-import cryptator.Cryptator;
-import cryptator.JULogUtil;
-import cryptator.solver.CryptaModelException;
-import cryptator.solver.CryptaSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
-import cryptator.tree.TreeUtils;
 
 
 public class CryptaGenModel {
@@ -156,17 +146,5 @@ public class CryptaGenModel {
 		return new CryptaNode(CryptaOperator.EQ, recordMember(left), recordMember(right));
 	}
 	
-
-	public static void main(String[] args) throws CryptaModelException {
-		JULogUtil.configureLoggers();
-		//CryptaSolver.LOGGER.setLevel(Level.WARNING);
-		CryptaWordListGenerator gen = new CryptaWordListGenerator(args);
-		CryptaBiConsumer cons = new CryptaBiConsumer(Cryptator.LOGGER);
-		cons.withCryptarithmLog();
-		cons.withSolutionCheck(10);
-		//cons.withGraphvizExport();
-		gen.generate(cons);
-		
-	}
 
 }

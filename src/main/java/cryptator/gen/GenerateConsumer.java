@@ -9,7 +9,6 @@ import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
-import cryptator.tree.TreeUtils;
 
 public class GenerateConsumer implements Consumer<ICryptaNode> {
 
@@ -53,15 +52,14 @@ public class GenerateConsumer implements Consumer<ICryptaNode> {
 
 	@Override
 	public void accept(ICryptaNode t) {
-		//TreeUtils.printInorder(t);
 		try {
 			try {
-
 				final SolutionCollect collect = new SolutionCollect();
 				solver.solve(t, config, collect);
 				if(collect.hasUniqueSolution()) {
 					internal.accept(t, collect.getSolution());
 				}
+				// TODO Must also log here 
 			} catch (CryptaSolverException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

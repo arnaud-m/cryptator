@@ -21,13 +21,8 @@ import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
-import cryptator.tree.CryptaFeatures;
 import cryptator.tree.TreeUtils;
 
-// TODO Convert Numbers to words: https://stackoverflow.com/a/56395508
-// TODO https://github.com/allegro/tradukisto
-
-// TODO Dictionnaire FR: https://chrplr.github.io/openlexicon/datasets-info/Liste-de-mots-francais-Gutenberg/README-liste-francais-Gutenberg.html
 public class Cryptator {
 
 	public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
@@ -53,7 +48,7 @@ public class Cryptator {
 		System.exit(exitStatus);
 	}
 
-	static class CryptatorOptionsParser extends OptionsParser<CryptatorConfig> {
+	private static class CryptatorOptionsParser extends OptionsParser<CryptatorConfig> {
 
 		public CryptatorOptionsParser() {
 			super(Cryptator.class, new CryptatorConfig());
