@@ -85,6 +85,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 		public BignumArExpression(ArExpression[] a, int n, String suffix) {
 			super();
 			digits = model.intVarArray("D" + suffix, n, 0, config.getArithmeticBase()-1);
+			// TODO improve the bound ?
 			carries = model.intVarArray("C"+ suffix, n, 0, IntVar.MAX_INT_BOUND / config.getArithmeticBase());
 			// TODO Is it better to use scalar or an expression ? 
 			postScalar(

@@ -16,11 +16,12 @@ import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
 import cryptator.solver.CryptaModelException;
+import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
 
 public class Failing {
 
-	public final CryptaSolvingTester t = new CryptaSolvingTester(false);
+	public final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(true));
 
 	public Failing() {}
 

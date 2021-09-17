@@ -42,9 +42,9 @@ final class CryptaSolvingTester {
 	public final ICryptaEvaluation eval = new CryptaEvaluation();
 
 	
-	public CryptaSolvingTester(boolean useBignum) {
+	public CryptaSolvingTester(ICryptaSolver solver) {
 		super();
-		this.solver = new CryptaSolver(useBignum);
+		this.solver = solver;
 	}
 
 	public void reset() {
@@ -92,7 +92,7 @@ final class CryptaSolvingTester {
 
 public class SolverTest {
 
-	public CryptaSolvingTester t = new CryptaSolvingTester(false);
+	public CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
 
 
 	public SolverTest() {}
