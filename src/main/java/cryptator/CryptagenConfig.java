@@ -8,4 +8,9 @@ public class CryptagenConfig extends CryptaCmdConfig {
 	@Option(name="-d",handler=ExplicitBooleanOptionHandler.class,usage="dry run (generate but do not solve candidate cryptarithms)")
 	private boolean dryRun;
 
+	public final boolean isDryRun() {
+		return dryRun;
+	}
+
+	
 }

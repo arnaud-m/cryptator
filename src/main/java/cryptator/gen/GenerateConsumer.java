@@ -2,6 +2,8 @@ package cryptator.gen;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import cryptator.CryptaConfig;
 import cryptator.solver.CryptaModelException;
@@ -12,11 +14,14 @@ import cryptator.specs.ICryptaSolver;
 
 public class GenerateConsumer implements Consumer<ICryptaNode> {
 
+
 	private final ICryptaSolver solver;
 
 	private final CryptaConfig config;
 
 	private final BiConsumer<ICryptaNode, ICryptaSolution> internal;
+
+	private Logger logger; 
 
 	public GenerateConsumer(ICryptaSolver solver, CryptaConfig config,
 			BiConsumer<ICryptaNode, ICryptaSolution> internal) {
@@ -53,20 +58,15 @@ public class GenerateConsumer implements Consumer<ICryptaNode> {
 	@Override
 	public void accept(ICryptaNode t) {
 		try {
-			try {
-				final SolutionCollect collect = new SolutionCollect();
-				solver.solve(t, config, collect);
-				if(collect.hasUniqueSolution()) {
-					internal.accept(t, collect.getSolution());
-				}
-				// TODO Must also log here 
-			} catch (CryptaSolverException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			final SolutionCollect collect = new SolutionCollect();
+			solver.solve(t, config, collect);
+			if(collect.hasUniqueSolution()) {
+				internal.accept(t, collect.getSolution());
 			}
-
-		} catch (CryptaModelException e) {
-			e.printStackTrace();
+		} catch (CryptaModelException|CryptaSolverException e) {
+			// TODO Must count errors ?
+			// FIXME logger is null !
+			logger.log(Level.WARNING, "failed to solve the cryptarithm", e);
 		}
 	}
 }

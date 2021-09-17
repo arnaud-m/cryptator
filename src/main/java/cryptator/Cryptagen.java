@@ -8,22 +8,12 @@
  */
 package cryptator;
 
-import static cryptator.tree.TreeUtils.writePostorder;
-
-import java.io.ByteArrayOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import cryptator.gen.CryptaWordListGenerator;
-import cryptator.parser.CryptaParserException;
-import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
-import cryptator.solver.CryptaSolverException;
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ICryptaSolver;
-import cryptator.tree.CryptaFeatures;
-import cryptator.tree.TreeUtils;
 
 // TODO Convert Numbers to words: https://stackoverflow.com/a/56395508
 // TODO https://github.com/allegro/tradukisto
@@ -44,12 +34,12 @@ public class Cryptagen {
 		final CryptagenConfig config = optparser.getConfig();
 
 		
-		final CryptaWordListGenerator gen = new CryptaWordListGenerator(config.getArguments());
-		// TODO Must collect errors !
-		gen.generate(buildBiConsumer(config));
+		final CryptaWordListGenerator gen = new CryptaWordListGenerator(config.getArguments(), config, LOGGER);
+		CryptaBiConsumer cons = buildBiConsumer(config);
+		gen.generate(cons);
 		
 				
-		int exitStatus = 0;
+		int exitStatus = (int) cons.getErrorCount();
 		System.exit(exitStatus);
 	}
 
@@ -62,10 +52,15 @@ public class Cryptagen {
 		@Override
 		protected void configureLoggers() {
 			super.configureLoggers();
+			if(config.isDryRun()) {
+					getLogger().setLevel(config.isVerbose() ? Level.FINE : Level.CONFIG);	
+			} else {
 			if(config.isVerbose()) {
-				// TODO JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaSolver.LOGGER);
-				
-			} 
+				JULogUtil.setLevel(Level.CONFIG, getLogger());		
+			} else {
+				JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
+			}
+			}
 		}
 
 		@Override

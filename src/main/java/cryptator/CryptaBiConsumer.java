@@ -96,7 +96,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 		@Override
 		public void accept(ICryptaNode t, ICryptaSolution u) {
 			if(logger.isLoggable(Level.INFO)) {
-				logger.log(Level.INFO, "Find cryptarithm solution #{0} [OK]\n{1}\n{2}", new Object[] {solutionCount, TreeUtils.writeInorder(t), u});
+				logger.log(Level.INFO, "Find cryptarithm #{0} [OK]\n{1}\n{2}", new Object[] {solutionCount, TreeUtils.writeInorder(t), u});
 			}
 		}
 	}
