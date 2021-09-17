@@ -72,6 +72,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		}
 		
 		while(s.solve()) {
+			// TODO Solve subproblems in //
 			cons.accept(gen.recordCryptarithm());
 		}
 		logger.log(Level.FINE, "{0}", s.getMeasures());
