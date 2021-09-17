@@ -23,7 +23,6 @@ import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
-
 public class CryptaGenModel {
 
 	private final String[] words;
@@ -116,14 +115,29 @@ public class CryptaGenModel {
 		postDigitCountConstraint();
 	}
 	
+	// TODO Add to core model ?
 	public void postMemberCardConstraints() {
 		left.wordCount.ge(2).post();
 		right.wordCount.eq(1).post();
 	}
 	
+	// TODO Add to core model ?
 	public void postMemberMaxLenConstraint() {
 		right.maxLength.ge(left.maxLength).post();
-		//TODO maxLenR.sub(maxLenL).gt(1).imp(wordCountL.ge(10)).post();	
+			
+	}
+	
+	public void postLeftMinCardConstraints(int base) {
+		IntVar diff = right.maxLength.sub(left.maxLength).intVar();
+		final int n = words.length;
+		int prod = base;
+		int i = 2;
+		while(prod <= n) {
+			diff.ge(i).imp(left.wordCount.ge(prod)).post();
+			prod *= base;
+			i++;
+		}
+		diff.lt(i).post();
 	}
 	
 	public void postMaxDigitCountConstraint(int max) {

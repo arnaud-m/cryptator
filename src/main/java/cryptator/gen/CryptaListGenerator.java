@@ -53,13 +53,16 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		gen.postMemberCardConstraints();
 		gen.postMemberMaxLenConstraint();
 		gen.postMaxDigitCountConstraint(config.getArithmeticBase());
+		gen.postLeftMinCardConstraints(config.getArithmeticBase());
 		return gen;
 	}
 	
+	// TODO Return information (solution/error count) ?
 	@Override
 	public void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
 		if(words == null || words.length == 0) return;
 		final CryptaGenModel gen = buildModel();
+		logger.log(Level.FINE, "Display model{0}", gen.getModel());
 		final Solver s = gen.getModel().getSolver();
 		
 		Consumer<ICryptaNode> cons = new LogConsumer(gen);
@@ -71,6 +74,8 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		while(s.solve()) {
 			cons.accept(gen.recordCryptarithm());
 		}
+		logger.log(Level.FINE, "{0}", s.getMeasures());
+		
 	}
 
 	private class LogConsumer implements Consumer<ICryptaNode> {
@@ -130,7 +135,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
 			this.internal = internal;
 			this.solver.limitSolution(2);
 		}
-
 
 		@Override
 		public void accept(ICryptaNode t) {
