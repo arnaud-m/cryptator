@@ -44,15 +44,21 @@ public class CryptaWordListGenerator implements ICryptaGenerator {
 		this.config = config;
 		this.logger = logger;
 	}
-
-	@Override
-	public void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
-		if(words == null || words.length == 0) return;
+	
+	
+	private CryptaGenModel buildModel() {
 		final CryptaGenModel gen = new CryptaGenModel(words);
 		gen.postMemberCardConstraints();
 		gen.postMemberMaxLenConstraint();
-		gen.postMaxDigitCountConstraint(10);
-		Solver s = gen.getModel().getSolver();
+		gen.postMaxDigitCountConstraint(config.getArithmeticBase());
+		return gen;
+	}
+	
+	@Override
+	public void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
+		if(words == null || words.length == 0) return;
+		final CryptaGenModel gen = buildModel();
+		final Solver s = gen.getModel().getSolver();
 		
 		Consumer<ICryptaNode> cons = new LogConsumer(gen);
 		
@@ -60,7 +66,8 @@ public class CryptaWordListGenerator implements ICryptaGenerator {
 			GenerateConsumer genConsumer= new GenerateConsumer(
 					new AdaptiveSolver(), 
 					config, 
-					consumer
+					consumer,
+					logger
 					);
 			cons = cons.andThen(genConsumer);
 		}

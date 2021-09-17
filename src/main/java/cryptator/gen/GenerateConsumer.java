@@ -22,21 +22,22 @@ import cryptator.specs.ICryptaSolver;
 
 public class GenerateConsumer implements Consumer<ICryptaNode> {
 
-
 	private final ICryptaSolver solver;
 
 	private final CryptaConfig config;
 
 	private final BiConsumer<ICryptaNode, ICryptaSolution> internal;
 
-	private Logger logger; 
+	private final Logger logger; 
 
+	// TODO Use inner generator class ?
 	public GenerateConsumer(ICryptaSolver solver, CryptaConfig config,
-			BiConsumer<ICryptaNode, ICryptaSolution> internal) {
+			BiConsumer<ICryptaNode, ICryptaSolution> internal, Logger logger) {
 		super();
 		this.solver = solver;
 		this.config = config;
 		this.internal = internal;
+		this.logger = logger;
 		this.solver.limitSolution(2);
 
 	}
@@ -60,7 +61,6 @@ public class GenerateConsumer implements Consumer<ICryptaNode> {
 		public final ICryptaSolution getSolution() {
 			return solution;
 		}
-
 	}
 
 	@Override
@@ -73,7 +73,6 @@ public class GenerateConsumer implements Consumer<ICryptaNode> {
 			}
 		} catch (CryptaModelException|CryptaSolverException e) {
 			// TODO Must count errors ?
-			// FIXME logger is null !
 			logger.log(Level.WARNING, "failed to solve the cryptarithm", e);
 		}
 	}
