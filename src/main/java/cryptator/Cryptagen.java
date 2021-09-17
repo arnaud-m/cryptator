@@ -11,7 +11,7 @@ package cryptator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cryptator.gen.CryptaWordListGenerator;
+import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 
@@ -34,7 +34,7 @@ public class Cryptagen {
 		final CryptagenConfig config = optparser.getConfig();
 
 		
-		final CryptaWordListGenerator gen = new CryptaWordListGenerator(config.getArguments(), config, LOGGER);
+		final CryptaListGenerator gen = new CryptaListGenerator(config.getArguments(), config, LOGGER);
 		CryptaBiConsumer cons = buildBiConsumer(config);
 		gen.generate(cons);
 		

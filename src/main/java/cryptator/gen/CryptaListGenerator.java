@@ -20,12 +20,14 @@ import org.chocosolver.solver.Solver;
 import cryptator.CryptagenConfig;
 import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
+import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaGenerator;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
+import cryptator.specs.ICryptaSolver;
 import cryptator.tree.TreeUtils;
 
-public class CryptaWordListGenerator implements ICryptaGenerator {
+public class CryptaListGenerator implements ICryptaGenerator {
 
 	private String[] words;
 
@@ -34,11 +36,11 @@ public class CryptaWordListGenerator implements ICryptaGenerator {
 	private Logger logger;
 
 
-	public CryptaWordListGenerator(List<String> arguments, CryptagenConfig config, Logger logger) {
+	public CryptaListGenerator(List<String> arguments, CryptagenConfig config, Logger logger) {
 		this(arguments.toArray(new String[arguments.size()]), config, logger);
 	}
 
-	public CryptaWordListGenerator(String[] words, CryptagenConfig config, Logger logger) {
+	public CryptaListGenerator(String[] words, CryptagenConfig config, Logger logger) {
 		super();
 		this.words = words;
 		this.config = config;
@@ -63,14 +65,9 @@ public class CryptaWordListGenerator implements ICryptaGenerator {
 		Consumer<ICryptaNode> cons = new LogConsumer(gen);
 		
 		if(! config.isDryRun()) {
-			GenerateConsumer genConsumer= new GenerateConsumer(
-					new AdaptiveSolver(), 
-					config, 
-					consumer,
-					logger
-					);
-			cons = cons.andThen(genConsumer);
+			cons = cons.andThen(new GenerateConsumer(new AdaptiveSolver(), consumer));
 		}
+		
 		while(s.solve()) {
 			cons.accept(gen.recordCryptarithm());
 		}
@@ -99,5 +96,55 @@ public class CryptaWordListGenerator implements ICryptaGenerator {
 
 	}
 
+	
+	private static class SolutionCollect implements Consumer<ICryptaSolution> {
+
+		private int solutionCount;
+
+		private ICryptaSolution solution;
+
+		@Override
+		public void accept(ICryptaSolution u) {
+			solutionCount++;
+			this.solution = u;
+		}	
+
+		public final boolean hasUniqueSolution() {
+			return solutionCount == 1;
+		}
+
+		public final ICryptaSolution getSolution() {
+			return solution;
+		}
+	}
+
+	private class GenerateConsumer implements Consumer<ICryptaNode> {
+
+		private final ICryptaSolver solver;
+
+		private final BiConsumer<ICryptaNode, ICryptaSolution> internal;
+
+		public GenerateConsumer(ICryptaSolver solver, BiConsumer<ICryptaNode, ICryptaSolution> internal) {
+			super();
+			this.solver = solver;
+			this.internal = internal;
+			this.solver.limitSolution(2);
+		}
+
+
+		@Override
+		public void accept(ICryptaNode t) {
+			try {
+				final SolutionCollect collect = new SolutionCollect();
+				solver.solve(t, config, collect);
+				if(collect.hasUniqueSolution()) {
+					internal.accept(t, collect.getSolution());
+				}
+			} catch (CryptaModelException|CryptaSolverException e) {
+				// TODO Must count errors ?
+				logger.log(Level.WARNING, "failed to solve the cryptarithm", e);
+			}
+		}
+	}
 
 }
