@@ -78,7 +78,7 @@ public final class CryptaSolver implements ICryptaSolver {
 	@Override
 	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
 		final CryptaModel m = modeler.model(cryptarithm, config);
-		LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel().toString());
+		LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel());
 		final Solver s = m.getModel().getSolver();
 		if(timeLimit > 0) s.limitTime(timeLimit * 1000); // in ms
 		int solutionCount = 0;;
