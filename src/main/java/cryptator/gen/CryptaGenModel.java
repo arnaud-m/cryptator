@@ -9,7 +9,6 @@
 package cryptator.gen;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -151,16 +150,23 @@ public class CryptaGenModel {
 		vars[vars.length - 1].eq(1).post();
 	}
 	
-	public void postDoublyTrueConstraint() {
+	public void postDoublyTrueConstraint(int lb) {
 		final int n = words.length;
-		BoolVar[] vars = ArrayUtils.append(left.getWords(), right.getWords());
-		int[] coeffs = new int[2*n];
-		for (int i = 0; i < n; i++) {
-			coeffs[i] = i;
-			coeffs[n + i] = -i;
-		}
-		// TODO Set the lower bound
-		model.scalar(vars, coeffs, "=", 0).post();
+		final IntVar sum = model.intVar("SUM", lb, n - 1);
+		
+		final IntVar[] lvars = new IntVar[n+1];
+		System.arraycopy(left.getWords(), 0, lvars, 0, n);
+		lvars[n] = sum; 
+		
+		final IntVar[] rvars = new IntVar[n+1];
+		System.arraycopy(right.getWords(), 0, rvars, 0, n);
+		rvars[n] = sum; 
+		
+		final int[] coeffs = ArrayUtils.array(0, n);
+		coeffs[n] = -1;
+		
+		model.scalar(lvars, coeffs, "=", 0).post();
+		model.scalar(rvars, coeffs, "=", 0).post();
 	}
 
 	private ICryptaNode recordMember(CryptaEqnMember member) {

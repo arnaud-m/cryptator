@@ -50,7 +50,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		gen.postMaxDigitCountConstraint(config.getArithmeticBase());
 		gen.postLeftMinCardConstraints(config.getArithmeticBase());
 		if(words.hasRightMember()) gen.postRigtMemberConstraint();
-		if(words.isDoublyTrue()) gen.postDoublyTrueConstraint();
+		if(words.isDoublyTrue()) gen.postDoublyTrueConstraint(words.getLB());
 		return gen;
 	}
 	

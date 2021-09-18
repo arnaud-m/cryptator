@@ -24,8 +24,6 @@ import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 
-// TODO Convert Numbers to words: https://stackoverflow.com/a/56395508
-
 // TODO Dictionnaire FR: https://chrplr.github.io/openlexicon/datasets-info/Liste-de-mots-francais-Gutenberg/README-liste-francais-Gutenberg.html
 public class Cryptagen {
 
