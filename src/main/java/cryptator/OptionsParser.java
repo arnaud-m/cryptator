@@ -15,6 +15,8 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.OptionHandlerFilter;
 
+import cryptator.config.CryptaConfig;
+
 public class OptionsParser<E extends CryptaConfig> {
 
 	public final Class<?> mainClass;

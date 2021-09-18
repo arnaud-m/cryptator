@@ -22,6 +22,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import cryptator.config.CryptagenConfig;
 import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;

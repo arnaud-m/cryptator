@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
-import cryptator.CryptaConfig;
+import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;

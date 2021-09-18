@@ -8,7 +8,7 @@
  */
 package cryptator.specs;
 
-import cryptator.CryptaConfig;
+import cryptator.config.CryptaConfig;
 import cryptator.solver.CryptaModel;
 import cryptator.solver.CryptaModelException;
 

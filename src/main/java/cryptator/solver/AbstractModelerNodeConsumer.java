@@ -19,7 +19,7 @@ import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
-import cryptator.CryptaConfig;
+import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalNodeConsumer;
 

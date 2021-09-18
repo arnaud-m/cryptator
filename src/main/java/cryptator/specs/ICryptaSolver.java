@@ -10,7 +10,7 @@ package cryptator.specs;
 
 import java.util.function.Consumer;
 
-import cryptator.CryptaConfig;
+import cryptator.config.CryptaConfig;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolverException;
 

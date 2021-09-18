@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 import org.chocosolver.solver.variables.IntVar;
 
-import cryptator.CryptaConfig;
+import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
