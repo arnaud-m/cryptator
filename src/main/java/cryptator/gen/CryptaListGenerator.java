@@ -35,6 +35,8 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
 	private Logger logger;
 	
+	private int errorCount;
+	
 	public CryptaListGenerator(WordArray words, CryptagenConfig config, Logger logger) {
 		super();
 		this.words = words;
@@ -43,6 +45,12 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	}
 	
 	
+	public final int getErrorCount() {
+		return errorCount;
+	}
+
+
+
 	private CryptaGenModel buildModel() {
 		final CryptaGenModel gen = new CryptaGenModel(words.getWords());
 		gen.postMemberCardConstraints();
@@ -72,7 +80,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
 			cons.accept(gen.recordCryptarithm());
 		}
 		logger.log(Level.FINE, "{0}", s.getMeasures());
-		
 	}
 
 	private class LogConsumer implements Consumer<ICryptaNode> {
@@ -142,7 +149,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 					internal.accept(t, collect.getSolution());
 				}
 			} catch (CryptaModelException|CryptaSolverException e) {
-				// TODO Must count errors ?
+				errorCount++;
 				logger.log(Level.WARNING, "failed to solve the cryptarithm", e);
 			}
 		}

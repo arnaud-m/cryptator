@@ -8,7 +8,6 @@
  */
 package cryptator.cmd;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -34,7 +33,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 	private long solutionCount;
 
-	private long errorCount;
+	private int errorCount;
 
 	BiConsumer<ICryptaNode, ICryptaSolution> internal;
 
@@ -49,7 +48,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 	}
 
 
-	public final long getErrorCount() {
+	public final int getErrorCount() {
 		return errorCount;
 	}
 

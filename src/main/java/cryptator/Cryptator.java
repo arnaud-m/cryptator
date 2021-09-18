@@ -97,9 +97,7 @@ public class Cryptator {
 			final boolean solved = solver.solve(node, config, (s) -> {consumer.accept(node, s);}) ;
 			final String status = consumer.getErrorCount() > 0 ? "ERROR" : (solved ? "OK" : "KO");
 			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
-			// TODO Log consumer.getSolutionCount()
 			return consumer.getErrorCount();
-		
 		} catch (CryptaParserException e) {
 			LOGGER.log(Level.SEVERE, "Parse cryptarithm " + cryptarithm + " [FAIL]", e);
 		} catch (CryptaModelException e) {

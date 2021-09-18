@@ -48,7 +48,7 @@ public class Cryptagen {
 		CryptaBiConsumer cons = buildBiConsumer(config);
 		gen.generate(cons);
 
-		int exitStatus = (int) cons.getErrorCount();
+		int exitStatus = (int) gen.getErrorCount() + cons.getErrorCount();
 		System.exit(exitStatus);
 	}
 
