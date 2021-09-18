@@ -16,9 +16,23 @@ public class CryptagenConfig extends CryptaCmdConfig {
 	@Option(name="-d",handler=ExplicitBooleanOptionHandler.class,usage="dry run (generate but do not solve candidate cryptarithms)")
 	private boolean dryRun;
 
+	@Option(name="-ctry",handler=ExplicitBooleanOptionHandler.class,usage="country code for doubly true cryptarithms)")
+	private String countryCode = "EN";
+	
+	@Option(name="-lang",handler=ExplicitBooleanOptionHandler.class,usage="language code for doubly true cryptarithms)")
+	private String langCode = "en";
+	
 	public final boolean isDryRun() {
 		return dryRun;
 	}
 
+	public final String getCountryCode() {
+		return countryCode;
+	}
+
+	public final String getLangCode() {
+		return langCode;
+	}	
+	
 	
 }

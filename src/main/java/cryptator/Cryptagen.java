@@ -41,7 +41,7 @@ public class Cryptagen {
 		if ( !optparser.parseOptions(args)) return;
 		final CryptagenConfig config = optparser.getConfig();
 
-		final WordArray words = buildWords(config.getArguments());
+		final WordArray words = buildWords(config.getArguments(), config);
 		if(words == null) System.exit(-1);
 		
 		// TODO Sort words ?
@@ -74,7 +74,7 @@ public class Cryptagen {
 	}
 
 
-	private static WordArray buildWords(List<String> arguments) {
+	private static WordArray buildWords(List<String> arguments, CryptagenConfig config) {
 		final int n = arguments.size();
 		assert(n > 0); // already checked
 		if(n == 2) {
@@ -82,7 +82,7 @@ public class Cryptagen {
 				final int lb = Integer.parseInt(arguments.get(0));
 				try {
 					final int ub = Integer.parseInt(arguments.get(1));
-					return new WordArray("EN", "en", lb, ub);
+					return new WordArray(config.getCountryCode(), config.getLangCode(), lb, ub);
 				} catch (NumberFormatException e) {
 					LOGGER.log(Level.SEVERE, "fail reading the second integer argument.", e);
 					return null;

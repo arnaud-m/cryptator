@@ -78,7 +78,7 @@ public class OptionsParser<E extends CryptaConfig> {
 				}
 			} 
 		} catch( CmdLineException e ) {
-			System.err.println(e.getMessage());
+			getLogger().log(Level.SEVERE, "Parse arguments [FAIL]", e);
 		}
 
 		// if there's a problem in the command line,
