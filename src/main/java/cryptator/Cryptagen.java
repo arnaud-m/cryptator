@@ -8,23 +8,25 @@
  */
 package cryptator;
 
+import static cryptator.TransformWord.removeDashes;
+import static cryptator.TransformWord.removeWhitespaces;
+import static cryptator.TransformWord.stripAccents;
+import static cryptator.TransformWord.translate;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cryptator.Cryptagen.WordArray;
 import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 
 // TODO Convert Numbers to words: https://stackoverflow.com/a/56395508
-// TODO https://github.com/allegro/tradukisto
 
 // TODO Dictionnaire FR: https://chrplr.github.io/openlexicon/datasets-info/Liste-de-mots-francais-Gutenberg/README-liste-francais-Gutenberg.html
 public class Cryptagen {
@@ -56,14 +58,17 @@ public class Cryptagen {
 
 	private static List<String> readWords(String filename) {
 		try {
-			Scanner s = new Scanner(new File(filename));
-			List<String> words = new ArrayList<>();
-			while(s.hasNext()) {
-				words.add(s.next());
+			final Scanner s = new Scanner(new File(filename));
+			try {
+				final List<String> words = new ArrayList<>();
+				while (s.hasNext()) {
+					words.add(s.next());
+				}
+				return words;
+			} finally {
+				s.close();
 			}
-			return words;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null; // TODO
@@ -99,13 +104,16 @@ public class Cryptagen {
 		}
 
 
-		public WordArray(Locale locale, int lb, int ub) {
+		public WordArray(String countryCode, String lang, int lb, int ub) {
 			super();
 			this.lb = lb;
 			this.ub = ub;
 			this.words = new String[ub + 1];
 			for (int i = 0; i <= ub; i++) {
-				words[i]= String.valueOf(i);
+				words[i]= translate(countryCode, lang, i);
+				words[i] = stripAccents(words[i]);
+				words[i] = removeWhitespaces(words[i]);
+				words[i] = removeDashes(words[i]);
 			}
 			this.rightMember = null;
 		}
@@ -147,7 +155,7 @@ public class Cryptagen {
 				final int lb = Integer.parseInt(arguments.get(0));
 				try {
 					final int ub = Integer.parseInt(arguments.get(1));
-					return new WordArray(Locale.FRANCE, lb, ub);
+					return new WordArray("EN", "en", lb, ub);
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
