@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import cryptator.cmd.OptionsParser;
 import cryptator.config.CryptaConfig;
 import cryptator.config.CryptamancerConfig;
 import cryptator.game.CryptaGameDecision;

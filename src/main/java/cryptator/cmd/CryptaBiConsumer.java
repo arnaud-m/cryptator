@@ -6,7 +6,7 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator;
+package cryptator.cmd;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

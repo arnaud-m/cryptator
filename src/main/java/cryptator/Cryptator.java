@@ -14,6 +14,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import cryptator.cmd.CryptaBiConsumer;
+import cryptator.cmd.OptionsParser;
 import cryptator.config.CryptatorConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
