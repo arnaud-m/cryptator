@@ -41,14 +41,12 @@ public class Cryptagen {
 		if ( !optparser.parseOptions(args)) return;
 		final CryptagenConfig config = optparser.getConfig();
 
-		System.out.println(config.getArguments());
 		final WordArray words = buildWords(config.getArguments());
-		System.out.println(words);
 		if(words == null) System.exit(-1);
-
+		
 		// TODO Sort words ?
 
-		final CryptaListGenerator gen = new CryptaListGenerator(words.getWords(), config, LOGGER);
+		final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
 		CryptaBiConsumer cons = buildBiConsumer(config);
 		gen.generate(cons);
 

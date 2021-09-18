@@ -8,7 +8,6 @@
  */
 package cryptator.gen;
 
-import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -17,6 +16,7 @@ import java.util.logging.Logger;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
+import cryptator.Cryptagen.WordArray;
 import cryptator.CryptagenConfig;
 import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
@@ -29,18 +29,13 @@ import cryptator.tree.TreeUtils;
 
 public class CryptaListGenerator implements ICryptaGenerator {
 
-	private String[] words;
+	private WordArray words;
 
 	private CryptagenConfig config;
 
 	private Logger logger;
-
-
-	public CryptaListGenerator(List<String> arguments, CryptagenConfig config, Logger logger) {
-		this(arguments.toArray(new String[arguments.size()]), config, logger);
-	}
-
-	public CryptaListGenerator(String[] words, CryptagenConfig config, Logger logger) {
+	
+	public CryptaListGenerator(WordArray words, CryptagenConfig config, Logger logger) {
 		super();
 		this.words = words;
 		this.config = config;
@@ -49,20 +44,19 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	
 	
 	private CryptaGenModel buildModel() {
-		final CryptaGenModel gen = new CryptaGenModel(words);
+		final CryptaGenModel gen = new CryptaGenModel(words.getWords());
 		gen.postMemberCardConstraints();
 		gen.postMemberMaxLenConstraint();
 		gen.postMaxDigitCountConstraint(config.getArithmeticBase());
 		gen.postLeftMinCardConstraints(config.getArithmeticBase());
-		//gen.postRigtMemberConstraint();
-		//gen.postDoublyTrueConstraint();
+		if(words.hasRightMember()) gen.postRigtMemberConstraint();
+		if(words.isDoublyTrue()) gen.postDoublyTrueConstraint();
 		return gen;
 	}
 	
 	// TODO Return information (solution/error count) ?
 	@Override
 	public void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
-		if(words == null || words.length == 0) return;
 		final CryptaGenModel gen = buildModel();
 		logger.log(Level.FINE, "Display model{0}", gen.getModel());
 		final Solver s = gen.getModel().getSolver();
