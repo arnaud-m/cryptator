@@ -9,6 +9,7 @@
 package cryptator.gen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Map;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaNode;
@@ -142,6 +144,24 @@ public class CryptaGenModel {
 	
 	public void postMaxDigitCountConstraint(int max) {
 		digitCount.le(max).post();		
+	}
+	
+	public void postRigtMemberConstraint() {
+		BoolVar[] vars = right.getWords();
+		vars[vars.length - 1].eq(1).post();
+	}
+	
+	public void postDoublyTrueConstraint() {
+		final int n = words.length;
+		BoolVar[] vars = ArrayUtils.append(left.getWords(), right.getWords());
+		int[] coeffs = new int[2*n];
+		for (int i = 0; i < n; i++) {
+			coeffs[i] = i;
+			coeffs[n + i] = -i;
+		}
+		System.out.println(Arrays.toString(words));
+		System.out.println(Arrays.toString(coeffs));
+		model.scalar(vars, coeffs, "=", 0).post();
 	}
 
 	private ICryptaNode recordMember(CryptaEqnMember member) {
