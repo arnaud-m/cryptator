@@ -8,9 +8,9 @@
  */
 package cryptator;
 
+import static cryptator.gen.TransformWord.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import static cryptator.TransformWord.*;
 public class TransformWordTest {
 
 	

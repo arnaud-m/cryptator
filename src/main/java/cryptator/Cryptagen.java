@@ -8,10 +8,10 @@
  */
 package cryptator;
 
-import static cryptator.TransformWord.removeDashes;
-import static cryptator.TransformWord.removeWhitespaces;
-import static cryptator.TransformWord.stripAccents;
-import static cryptator.TransformWord.translate;
+import static cryptator.gen.TransformWord.removeDashes;
+import static cryptator.gen.TransformWord.removeWhitespaces;
+import static cryptator.gen.TransformWord.stripAccents;
+import static cryptator.gen.TransformWord.translate;
 
 import java.io.File;
 import java.io.FileNotFoundException;
