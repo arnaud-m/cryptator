@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
-import cryptator.Cryptagen.WordArray;
+import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;

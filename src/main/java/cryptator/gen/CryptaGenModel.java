@@ -159,8 +159,7 @@ public class CryptaGenModel {
 			coeffs[i] = i;
 			coeffs[n + i] = -i;
 		}
-		System.out.println(Arrays.toString(words));
-		System.out.println(Arrays.toString(coeffs));
+		// TODO Set the lower bound
 		model.scalar(vars, coeffs, "=", 0).post();
 	}
 
