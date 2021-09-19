@@ -1,0 +1,5 @@
+sun
+planets mercury venus earth mars jupiter saturn uranus neptune pluto
+moon phobos deimos ganymede callisto europa io titan triton charon
+comet
+galaxy

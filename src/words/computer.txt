@@ -1,0 +1,15 @@
+computer machine hardware cpu mpu memory rom ram bus 
+keyboard mouse joystick trackball scanner
+display monitor printer
+disk diskette floppy mo 
+modem 
+network internet 
+mail www web
+software language os gui
+file directory folder
+bug error crack hack hacker cracker crash down reboot
+ws unix linux fedora redhat ubuntu debian
+pc microsoft ms windows nt ie
+apple mac imac ibook
+netscape
+

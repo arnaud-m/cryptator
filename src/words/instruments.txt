@@ -1,0 +1,9 @@
+zither lyre balalaika mandolin banjo
+accordion bagpipe harmonica panpipe
+piano organ
+violin cello viola harp guitar 
+saxophone piccolo flute clarinet bassoon oboe horn
+trumpet cornet bugle trombone tuba saxhorn
+drum triangle castanets cymbals tambourine bell xylophone gong
+timpani 
+koto shakuhachi shamisen fue taiko dora
