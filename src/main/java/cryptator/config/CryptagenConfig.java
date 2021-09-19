@@ -25,6 +25,12 @@ public class CryptagenConfig extends CryptaCmdConfig {
 	@Option(name="-t", usage="number of threads (experimental)")
 	private int nthreads = 1;
 	
+	@Option(name="-minop", usage="minimum number of left operands")
+	private int minLeftOperands= 2;
+	
+	@Option(name="-maxop", usage="minimum number of left operands")
+	private int maxLeftOperands= -1;
+	
 	
 	public final boolean isDryRun() {
 		return dryRun;
@@ -40,6 +46,14 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
 	public final int getNthreads() {
 		return nthreads;
+	}
+
+	public final int getMinLeftOperands() {
+		return minLeftOperands;
+	}
+
+	public final int getMaxLeftOperands() {
+		return maxLeftOperands;
 	}
 
 	@Override

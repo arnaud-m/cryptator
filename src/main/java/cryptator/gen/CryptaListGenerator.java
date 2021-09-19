@@ -58,8 +58,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
 	private CryptaGenModel buildModel() {
 		final CryptaGenModel gen = new CryptaGenModel(words.getWords());
-		gen.postMemberCardConstraints();
-		gen.postMemberMaxLenConstraint();
+		gen.postMemberCardConstraints(config.getMinLeftOperands(), config.getMaxLeftOperands());
 		gen.postMaxDigitCountConstraint(config.getArithmeticBase());
 		gen.postLeftMinCardConstraints(config.getArithmeticBase());
 		if(words.hasRightMember()) gen.postRigtMemberConstraint();
@@ -71,8 +70,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		final Consumer<ICryptaNode> cons = new LogConsumer(gen);
 		return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(new AdaptiveSolver(), consumer));
 	}
-	
-	// TODO Return information (solution/error count) ?
 	
 	private static void sequentialSolve(CryptaGenModel gen, Consumer<ICryptaNode> cons) {
 		final Solver s = gen.getModel().getSolver();
@@ -111,7 +108,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		if(logger.isLoggable(Level.FINE)) logger.log(Level.FINE, "{0}", gen.getModel().getSolver().getMeasures());
 	}
 
-	// FIXME consumers are used in parallel !
+	// FIXME are consumers thread-safe ? they are used in parallel !
 	private class LogConsumer implements Consumer<ICryptaNode> {
 		
 		private final Solution solution;

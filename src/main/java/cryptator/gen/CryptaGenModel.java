@@ -109,23 +109,25 @@ public class CryptaGenModel {
 		}
 		return map;
 	}
+	
+	private void postMemberMaxLenConstraint() {
+		right.maxLength.ge(left.maxLength).post();
+			
+	}
 
 	private void buildCoreModel() {
 		postLeftOrRightMemberConstraints();
 		postSymbolPresenceConstraint(buildSymbolWordLists());
 		postDigitCountConstraint();
+		postMemberMaxLenConstraint();
 	}
 	
-	// TODO Add to core model ?
-	public void postMemberCardConstraints() {
-		left.wordCount.ge(2).post();
+	public void postMemberCardConstraints(int min, int max) {
+		if(min > 1) left.wordCount.ge(min).post();
+		else left.wordCount.ge(2).post();
+		if(max >= min) left.wordCount.le(max).post();
+		
 		right.wordCount.eq(1).post();
-	}
-	
-	// TODO Add to core model ?
-	public void postMemberMaxLenConstraint() {
-		right.maxLength.ge(left.maxLength).post();
-			
 	}
 	
 	public void postLeftMinCardConstraints(int base) {

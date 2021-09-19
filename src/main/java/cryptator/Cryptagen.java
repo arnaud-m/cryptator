@@ -123,7 +123,7 @@ public class Cryptagen {
 
 		@Override
 		public String getArgumentName() {
-			return "[WORDS...]";
+			return "WORDS...";
 		}	
 	}
 
