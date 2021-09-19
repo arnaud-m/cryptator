@@ -16,13 +16,13 @@ public class CryptagenConfig extends CryptaCmdConfig {
 	@Option(name="-d",handler=ExplicitBooleanOptionHandler.class,usage="dry run (generate but do not solve candidate cryptarithms)")
 	private boolean dryRun;
 
-	@Option(name="-ctry",handler=ExplicitBooleanOptionHandler.class,usage="country code for doubly true cryptarithms)")
+	@Option(name="-ctry",usage="country code for doubly true cryptarithms)")
 	private String countryCode = "EN";
 	
-	@Option(name="-lang",handler=ExplicitBooleanOptionHandler.class,usage="language code for doubly true cryptarithms)")
+	@Option(name="-lang",usage="language code for doubly true cryptarithms)")
 	private String langCode = "en";
 	
-	@Option(name="-t",handler=ExplicitBooleanOptionHandler.class,usage="number of threads (experimental)")
+	@Option(name="-t", usage="number of threads (experimental)")
 	private int nthreads = 1;
 	
 	
