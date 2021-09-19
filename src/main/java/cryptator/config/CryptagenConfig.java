@@ -22,6 +22,10 @@ public class CryptagenConfig extends CryptaCmdConfig {
 	@Option(name="-lang",handler=ExplicitBooleanOptionHandler.class,usage="language code for doubly true cryptarithms)")
 	private String langCode = "en";
 	
+	@Option(name="-t",handler=ExplicitBooleanOptionHandler.class,usage="number of threads (experimental)")
+	private int nthreads = 1;
+	
+	
 	public final boolean isDryRun() {
 		return dryRun;
 	}
@@ -32,7 +36,17 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
 	public final String getLangCode() {
 		return langCode;
-	}	
+	}
+
+	public final int getNthreads() {
+		return nthreads;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads;
+	}
+	
 	
 	
 }

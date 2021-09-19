@@ -8,6 +8,10 @@
  */
 package cryptator.gen;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -35,18 +39,19 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
 	private Logger logger;
 	
-	private int errorCount;
+	private AtomicInteger errorCount;
 	
 	public CryptaListGenerator(WordArray words, CryptagenConfig config, Logger logger) {
 		super();
 		this.words = words;
 		this.config = config;
 		this.logger = logger;
+		this.errorCount = new AtomicInteger();
 	}
 	
 	
 	public final int getErrorCount() {
-		return errorCount;
+		return errorCount.intValue();
 	}
 
 
@@ -62,26 +67,51 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		return gen;
 	}
 	
+	private Consumer<ICryptaNode> buildConsumer(CryptaGenModel gen, BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
+		final Consumer<ICryptaNode> cons = new LogConsumer(gen);
+		return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(new AdaptiveSolver(), consumer));
+	}
+	
 	// TODO Return information (solution/error count) ?
+	
+	private static void sequentialSolve(CryptaGenModel gen, Consumer<ICryptaNode> cons) {
+		final Solver s = gen.getModel().getSolver();
+		while(s.solve()) {	
+			cons.accept(gen.recordCryptarithm());
+		}
+	}
+	
+	private static void parallelSolve(final CryptaGenModel gen, final Consumer<ICryptaNode> cons, final int nthreads) {
+		final ExecutorService executor = Executors.newFixedThreadPool(nthreads);
+		final Solver s = gen.getModel().getSolver();
+		while(s.solve()) {
+			final ICryptaNode cryptarithm = gen.recordCryptarithm();
+			executor.execute(() -> cons.accept(cryptarithm));
+		}
+		try {
+		    if (!executor.awaitTermination(10000, TimeUnit.MILLISECONDS)) {
+		        executor.shutdownNow();
+		    } 
+		} catch (InterruptedException e) {
+		    executor.shutdownNow();
+		}
+	}
+
 	@Override
 	public void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
 		final CryptaGenModel gen = buildModel();
 		logger.log(Level.FINE, "Display model{0}", gen.getModel());
-		final Solver s = gen.getModel().getSolver();
 		
-		Consumer<ICryptaNode> cons = new LogConsumer(gen);
+		final Consumer<ICryptaNode> cons = buildConsumer(gen, consumer);
 		
-		if(! config.isDryRun()) {
-			cons = cons.andThen(new GenerateConsumer(new AdaptiveSolver(), consumer));
-		}
+		final int nthreads = config.getNthreads();
+		if(nthreads == 1) sequentialSolve(gen, cons);
+		else parallelSolve(gen, cons, nthreads);
 		
-		while(s.solve()) {
-			// TODO Solve subproblems in //
-			cons.accept(gen.recordCryptarithm());
-		}
-		logger.log(Level.FINE, "{0}", s.getMeasures());
+		if(logger.isLoggable(Level.FINE)) logger.log(Level.FINE, "{0}", gen.getModel().getSolver().getMeasures());
 	}
 
+	// FIXME consumers are used in parallel !
 	private class LogConsumer implements Consumer<ICryptaNode> {
 		
 		private final Solution solution;
@@ -149,7 +179,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 					internal.accept(t, collect.getSolution());
 				}
 			} catch (CryptaModelException|CryptaSolverException e) {
-				errorCount++;
+				errorCount.incrementAndGet();
 				logger.log(Level.WARNING, "failed to solve the cryptarithm", e);
 			}
 		}
