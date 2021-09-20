@@ -1,6 +1,7 @@
 #!/bin/sh
 ## sh demo-generate.sh > demo-generate-output.md
 JAR="../../../target/cryptator-*-with-dependencies.jar"
+DIR="../words"
 
 ## Execute the command.
 ## Filter the output: print only the cryptarithm.
@@ -8,7 +9,7 @@ function solve() {
     java -cp $JAR cryptator.Cryptagen -c TRUE $* | sed -n 's/\(.*+.*=.*\)/  - \1/p'
 }
 
-DIR="../../words"
+
 
 echo "# Search cryptarithms with a UNIQUE solution"
 
