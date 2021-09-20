@@ -39,17 +39,14 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
    : mvn clean package -DskipTests=true
 
    The jar file contains all required dependencies.
-   The next step is simply to run one of the two console applications.
+   The next step is simply to run one of the console applications.
 
-   Execute the main classes without argument to display the help message.
-*** Run the solver
+ - *solve a cryptarithm* with [[file:src/main/shell/demo-solve.sh][Cryptator]].
+ - *generate cryptarithms* with [[file:src/main/shell/demo-generate.sh][Cryptagen]] (see the [[file:src/main/shell/demo-generate-output.md][output]]).
+ - *play the game* with [[file:src/main/shell/demo-play.sh][Cryptamancer]].
 
- : java -cp target/cryptator-0.4.0-SNAPSHOT-with-dependencies.jar cryptator.Cryptator -s 1 'send+more=money'
 
-*** Play the game
-
- : java -cp target/cryptator-0.4.0-SNAPSHOT-with-dependencies.jar cryptator.Cryptamancer 'send+more=money'
-
+    Execute the main classe without argument to display the help message.
 ** As a library
 
    The jar file does not contains any dependencies, as of being used as a dependency of another application.

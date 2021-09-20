@@ -1,16 +1,19 @@
 #!/bin/sh
+## sh demo-generate.sh > demo-generate-output.md
+JAR="../../../target/cryptator-*-with-dependencies.jar"
 
-JAR="../../../target/cryptator-0.4.0-SNAPSHOT-with-dependencies.jar"
+## Execute the command.
+## Filter the output: print only the cryptarithm.
 function solve() {
     java -cp $JAR cryptator.Cryptagen -c TRUE $* | sed -n 's/\(.*+.*=.*\)/  - \1/p'
 }
 
 DIR="../../words"
 
-echo "Search cryptarithms with a UNIQUE solution."
+echo "# Search cryptarithms with a UNIQUE solution"
 
 ######
-echo -e "\n## Generate from a word list.\n"
+echo -e "\n## Generate from a word list\n"
 
 echo "- Planets"
 solve $DIR/planets.txt
@@ -20,16 +23,15 @@ echo "- Rainbow colors"
 solve $DIR/rainbow.txt
 
 ######
-echo -e "\n## Generate from a word list with a fixed second member.\n"
+echo -e "\n## Generate from a list with a fixed right member\n"
 
 echo "- Planets"
 solve $DIR/planets.txt planets
-echo "- Rainbow colors"
-solve $DIR/rainbow.txt colors
-solve $DIR/rainbow.txt rainbow
+echo "- Greek alphabet"
+solve  -minop 6 $DIR/alpha.txt greeks
 
 ######
-echo -e "\n## Generate doubly true cryptarithms. each number in [0.100] appears at most once.\n"
+echo -e "\n## Generate doubly true cryptarithms\n\nEach number in [0, 100] appears at most once.\n"
 
 echo "- English"
 solve 1 100
