@@ -9,8 +9,6 @@ function solve() {
     java -cp $JAR cryptator.Cryptagen -c TRUE $* | sed -n 's/\(.*+.*=.*\)/  - \1/p'
 }
 
-
-
 echo "# Search cryptarithms with a UNIQUE solution"
 
 ######

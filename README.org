@@ -42,7 +42,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
    The next step is simply to run one of the console applications.
 
  - *solve a cryptarithm* with [[file:src/main/shell/demo-solve.sh][Cryptator]].
- - *generate cryptarithms* with [[file:src/main/shell/demo-generate.sh][Cryptagen]] (see the [[file:src/main/shell/demo-generate-output.md][output]]).
+ - *generate cryptarithms* with [[file:src/main/shell/demo-generate.sh][Cryptagen]] (see the [[file:src/main/shell/demo-generate-output.md][demo output]]).
  - *play the game* with [[file:src/main/shell/demo-play.sh][Cryptamancer]].
 
 
