@@ -21,15 +21,6 @@ public class CryptaCombination extends CryptaHeapSolver{
 
     @Override
     public boolean hasNext() {
-//        for (int i=0; i<combination.length; i++){
-//            if(combination[i]!=config.getArithmeticBase()-combination.length+i){
-//                System.out.println("true");
-//                return true;
-//            }
-//        }
-//        System.out.println("false");
-//        System.out.println(Arrays.toString(combination));
-//        return false;
         int size=solution.getSymbolToDigit().size();
         int last = size - 1;
         int nbRep=maxOcc==0? 1: maxOcc;
@@ -60,5 +51,7 @@ public class CryptaCombination extends CryptaHeapSolver{
         return combination;
     }
 
-
+    public int[] getCombination() {
+        return combination;
+    }
 }

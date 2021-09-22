@@ -14,7 +14,6 @@ import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
-import cryptator.tree.TreeTraversals;
 
 import java.util.HashMap;
 import java.util.function.Consumer;
@@ -26,47 +25,12 @@ public class CryptaIncrSolver extends AbstractCryptaSolver implements ICryptaSol
 
     private long solutionLimit = 0;
 
-    public CryptaIncrSolver(ICryptaSolution solution) {
-        super(solution);
-    }
 
-    public CryptaIncrSolver(){
-        super();
-    }
+    public CryptaIncrSolver(){}
 
 
 
-
-
-    public ICryptaSolution incrementalSolve(int[] elements, int base, int nbRep) throws Exception {
-
-        if(getSolution().getSymbolToDigit().size()> base *nbRep){
-            throw new Exception("to much different letter");
-        }
-        for(int i = (int) Math.pow(base,elements.length); i>0; i--) {
-            elements[elements.length-1]= elements[elements.length-1]+1;
-            for(int j=elements.length-1; j>=0;j--) {
-                if (elements[j] == base && j - 1 >=0) {
-                    elements[j]=0;
-                    elements[j-1]= elements[j-1]+1;
-                }
-            }
-            if(elements[0]== base){
-                break;
-            }
-            if(checkNBrep(elements)) {
-                    ICryptaSolution res = checkArray(elements);
-                    if (res != null) {
-                        return res;
-                    }
-
-            }
-        }
-
-        return null;
-    }
-
-    private int[] incrementalSolve2(int[] elements)  {
+    private int[] incrementalSolve(int[] elements)  {
         int base=getConfig().getArithmeticBase();
 
         elements[elements.length-1]= elements[elements.length-1]+1;
@@ -95,25 +59,15 @@ public class CryptaIncrSolver extends AbstractCryptaSolver implements ICryptaSol
 
     @Override
     public int[] next() {
-        incrementalSolve2(elements);
+        incrementalSolve(elements);
         return elements;
     }
 
-
-
-    public final long getTimeLimit() {
-        return timeLimit;
-    }
 
     @Override
     public final void limitTime(long limit) {
         this.timeLimit = limit;
     }
-
-    public final long getSolutionLimit() {
-        return solutionLimit;
-    }
-
 
     public final void limitSolution(long limit) {
         this.solutionLimit = limit;
@@ -128,9 +82,14 @@ public class CryptaIncrSolver extends AbstractCryptaSolver implements ICryptaSol
         setSolution(new CryptaGTSolution(map));
         setSolutionConsumer(solutionConsumer);
 
+        if(!config.allowLeadingZeros()) {
+            findFirstLetter();
+        }
+
         elements=makeArray(getSolution().getSymbolToDigit().size());
         int solutionCount = 0;
 
+        solutionCount+=check(elements);
         if(hasNext()) {
             if (solutionLimit > 0) {
                 while (solutionCount < solutionLimit && hasNext()) {
@@ -144,10 +103,7 @@ public class CryptaIncrSolver extends AbstractCryptaSolver implements ICryptaSol
             }
         }
 
-        System.out.println(solutionCount);
         return solutionCount > 0;
     }
 
-
-
-    }
+}

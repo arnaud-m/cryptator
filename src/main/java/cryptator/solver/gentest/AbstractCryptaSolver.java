@@ -8,9 +8,11 @@ import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.TreeTraversals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public abstract class AbstractCryptaSolver implements Iterator {
@@ -18,21 +20,42 @@ public abstract class AbstractCryptaSolver implements Iterator {
     private ICryptaSolution solution;
     private CryptaConfig config;
     private Consumer<ICryptaSolution> solutionConsumer;
+    private ArrayList<GTVariable> firstLetter =new ArrayList<>();
 
-    public AbstractCryptaSolver(ICryptaSolution solution) {
-        this.solution = solution;
+
+    public AbstractCryptaSolver() {}
+
+    ///check leading zero
+
+    public void findFirstLetter() {
+        TreeTraversals.postorderTraversal(root, (node, num) -> {
+                    if(node!= null && node.isLeaf()){
+                        firstLetter.add((cryptator.solver.gentest.GTVariable) solution.getSymbolToDigit().get(node.getWord()[0]));
+                    }
+                }
+        );
     }
-    public AbstractCryptaSolver() {
+
+    public boolean checkLeadingZero() {
+        for(GTVariable v: firstLetter){
+            if(v.getValue()==0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void updateVar(int[] input) {
+        int i = 0;
+        for (GTVariable var : ((HashMap<Character, GTVariable>) solution.getSymbolToDigit()).values()) {
+            var.setValue(input[i] % config.getArithmeticBase());
+            i++;
+        }
     }
 
 
     public ICryptaSolution checkArray(int[] input) {
-        int i=0;
 
-        for (GTVariable var : ((HashMap<Character, GTVariable>) solution.getSymbolToDigit()).values()) {
-            var.setValue(input[i]%config.getArithmeticBase());
-            i++;
-        }
         ICryptaEvaluation chk = new CryptaEvaluation();
         int v;
         try {
@@ -53,8 +76,10 @@ public abstract class AbstractCryptaSolver implements Iterator {
                     rep++;
                 }
             }
-            if((getMaxOccurences()>0 && rep >getMaxOccurences())
-                    || (getMinOccurences()>0 && rep < getMinOccurences())) return false;
+            if((getMaxOccurences()>0 && rep>getMaxOccurences())
+                    || (getMinOccurences()>0 && rep < getMinOccurences())) {
+                return false;
+            }
         }
 
         return true;
@@ -63,48 +88,26 @@ public abstract class AbstractCryptaSolver implements Iterator {
     public int check(int[] elements){
         int nbSol=0;
         if (checkNBrep(elements)) {
-            ICryptaSolution solution = checkArray(elements);
-            if (solution != null) {
-
-                solutionConsumer.accept(solution);
-                System.out.println(Arrays.toString(elements));
-                nbSol += 1;
+            updateVar(elements);
+            if(!config.allowLeadingZeros()){
+                if(checkLeadingZero()){
+                    ICryptaSolution solution = checkArray(elements);
+                    if (solution != null) {
+                        solutionConsumer.accept(solution);
+                        nbSol += 1;
+                    }
+                }
             }
+            else{
+                ICryptaSolution solution = checkArray(elements);
+                if (solution != null) {
+                    solutionConsumer.accept(solution);
+                    nbSol += 1;
+                }
+            }
+
         }
         return nbSol;
-    }
-
-
-    public ICryptaNode getRoot() {
-        return root;
-    }
-
-    public void setRoot(ICryptaNode root) {
-        this.root = root;
-    }
-
-    public ICryptaSolution getSolution() {
-        return solution;
-    }
-
-    public void setSolution(ICryptaSolution solution) {
-        this.solution = solution;
-    }
-
-    public CryptaConfig getConfig() {
-        return config;
-    }
-
-    public void setConfig(CryptaConfig config) {
-        this.config = config;
-    }
-
-    public Consumer<ICryptaSolution> getSolutionConsumer() {
-        return solutionConsumer;
-    }
-
-    public void setSolutionConsumer(Consumer<ICryptaSolution> solutionConsumer) {
-        this.solutionConsumer = solutionConsumer;
     }
 
     public int[] makeArray (int n) {
@@ -154,5 +157,44 @@ public abstract class AbstractCryptaSolver implements Iterator {
         final int deltaMax = config.getRelaxMaxDigitOccurence();
         if (deltaMax > 0) maxOcc = Math.min(n, maxOcc + deltaMax);
         return maxOcc;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return false;
+    }
+
+    @Override
+    public Object next() {
+        return null;
+    }
+
+
+    public ICryptaNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(ICryptaNode root) {
+        this.root = root;
+    }
+
+    public ICryptaSolution getSolution() {
+        return solution;
+    }
+
+    public void setSolution(ICryptaSolution solution) {
+        this.solution = solution;
+    }
+
+    public CryptaConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(CryptaConfig config) {
+        this.config = config;
+    }
+
+    public void setSolutionConsumer(Consumer<ICryptaSolution> solutionConsumer) {
+        this.solutionConsumer = solutionConsumer;
     }
 }

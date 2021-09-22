@@ -49,10 +49,6 @@ public class CryptaPermutation extends CryptaHeapSolver{
         this.permutation = permutation;
     }
 
-    public void setCompteur(int[] compteur) {
-        this.compteur = compteur;
-    }
-
     public void setI(int i) {
         this.i = i;
     }
