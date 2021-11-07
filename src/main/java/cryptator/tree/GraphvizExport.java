@@ -13,7 +13,8 @@ import static guru.nidi.graphviz.attribute.Records.turn;
 import static guru.nidi.graphviz.model.Factory.graph;
 import static guru.nidi.graphviz.model.Factory.node;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import cryptator.solver.CryptaSolutionException;
 import cryptator.specs.ICryptaNode;
@@ -48,7 +49,7 @@ public final class GraphvizExport {
 		private Graph graph =  graph("G").
 				nodeAttr().with(Shape.PLAIN_TEXT, Font.name("arial"));
 		
-		private final Stack<Node> stack = new Stack<>();
+		private final Deque<Node> stack = new ArrayDeque<>();
 		
 		
 		public final Graph getGraph() {

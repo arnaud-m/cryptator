@@ -8,7 +8,8 @@
  */
 package cryptator.solver;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
@@ -40,7 +41,7 @@ public class CryptaBignumModeler implements ICryptaModeler {
 
 final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 
-	private final Stack<ArExpression[]> stack = new Stack<>();
+	private final Deque<ArExpression[]> stack = new ArrayDeque<>();
 
 	public ModelerBignumConsumer(Model model, CryptaConfig config) {
 		super(model, config);
@@ -146,7 +147,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 
 	@Override
 	public void postCryptarithmEquationConstraint() throws CryptaModelException {
-		if(!stack.empty()) throw new CryptaModelException("Invalid stack size at the end of modeling.");
+		if(!stack.isEmpty()) throw new CryptaModelException("Invalid stack size at the end of modeling.");
 	}
 
 }

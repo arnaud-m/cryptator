@@ -54,7 +54,7 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 	public String toString() {
 		final StringBuilder b1 = new StringBuilder();
 		final StringBuilder b2 = new StringBuilder();
-		ArrayList<Character> sortedKeys = new ArrayList<Character>(symbolsToDigits.keySet());
+		ArrayList<Character> sortedKeys = new ArrayList<>(symbolsToDigits.keySet());
 		Collections.sort(sortedKeys);		
 		for (Character symbol : sortedKeys) {
 			final String domain = getDomain(symbolsToDigits.get(symbol));

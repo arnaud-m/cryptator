@@ -8,9 +8,10 @@
  */
 package cryptator.tree;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.ListIterator;
-import java.util.Stack;
 
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalEdgeConsumer;
@@ -53,7 +54,7 @@ public final class TreeTraversals {
 	}
 
 	public static void preorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalConsumer) {
-		final Stack<ICryptaNode> stack = new Stack<>();
+		final Deque<ICryptaNode> stack = new ArrayDeque<>();
 		int num = 1;
 		stack.push(root);
 		while(! stack.isEmpty()) {
@@ -67,7 +68,7 @@ public final class TreeTraversals {
 		}	
 	}
 
-	private static void pushChildren(Stack<TraversalEdge> stack, ICryptaNode n, int num) {
+	private static void pushChildren(Deque<TraversalEdge> stack, ICryptaNode n, int num) {
 		if(n.isInternalNode()) {
 			stack.push(new TraversalEdge(n.getRightChild(), n, num));
 			stack.push(new TraversalEdge(n.getLeftChild(), n, num));
@@ -75,7 +76,7 @@ public final class TreeTraversals {
 	}
 
 	public static void preorderTraversal(ICryptaNode root, ITraversalEdgeConsumer traversalConsumer) {
-		final Stack<TraversalEdge> stack = new Stack<>();
+		final Deque<TraversalEdge> stack = new ArrayDeque<>();
 		int num = 1;
 		pushChildren(stack, root, num);
 		while(! stack.isEmpty()) {
@@ -88,7 +89,7 @@ public final class TreeTraversals {
 	}
 
 	public static void postorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
-		final Stack<ICryptaNode> stack = new Stack<>();
+		final Deque<ICryptaNode> stack = new ArrayDeque<>();
 		final ArrayList<ICryptaNode> order= new ArrayList<>();
 		stack.push(root);
 		while(! stack.isEmpty()) {
@@ -110,7 +111,7 @@ public final class TreeTraversals {
 	public static void inorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
 		// https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
 		int num=1;
-		Stack<ICryptaNode> s = new Stack<>();
+		Deque<ICryptaNode> s = new ArrayDeque<>();
 		ICryptaNode curr = root;
 		while (curr != null || !s.isEmpty()) {
 			while (curr != null) {

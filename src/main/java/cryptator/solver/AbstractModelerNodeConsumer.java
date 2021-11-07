@@ -44,7 +44,7 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 	}
 
 	protected IntVar getSymbolVar(char symbol) {
-		return symbolsToVariables.computeIfAbsent(symbol, s -> createSymbolVar(s));	
+		return symbolsToVariables.computeIfAbsent(symbol, this::createSymbolVar);	
 	}
 
 	private IntVar[] getGCCVars() {

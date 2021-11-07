@@ -8,7 +8,8 @@
  */
 package cryptator.solver;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.Function;
 
 import org.chocosolver.solver.Model;
@@ -23,8 +24,6 @@ import cryptator.tree.TreeTraversals;
 
 public class CryptaModeler implements ICryptaModeler {
 
-	public CryptaModeler() {}
-
 	@Override
 	public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
 		final Model model = new Model("Cryptarithm");
@@ -38,7 +37,7 @@ public class CryptaModeler implements ICryptaModeler {
 
 final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
-	private final Stack<ArExpression> stack = new Stack<>();
+	private final Deque<ArExpression> stack = new ArrayDeque<>();
 
 	private final Function<char[], IntVar> wordVarBuilder;
 

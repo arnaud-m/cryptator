@@ -9,7 +9,8 @@
 package cryptator.tree;
 
 import java.math.BigInteger;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import cryptator.solver.CryptaSolutionException;
 import cryptator.specs.ICryptaEvaluation;
@@ -32,7 +33,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 
 		private final int base;
 
-		private final Stack<BigInteger> stack = new Stack<>();
+		private final Deque<BigInteger> stack = new ArrayDeque<>();
 
 		private CryptaEvaluationException exception;
 

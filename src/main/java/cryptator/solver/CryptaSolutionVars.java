@@ -49,7 +49,7 @@ public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
 	}
 	
 	public ICryptaSolution recordSolution() {
-		final Map<Character, Integer> symbolsToDigits = new HashMap<Character, Integer>();
+		final Map<Character, Integer> symbolsToDigits = new HashMap<>();
 		this.symbolsToDigits.forEach((symbol, variable) -> {
 			if(variable.isInstantiated()) symbolsToDigits.put(symbol, variable.getValue());
 		});
@@ -57,8 +57,8 @@ public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
 	}
 	
 	public boolean isTotalSolution() {
-		for (IntVar var : symbolsToDigits.values()) {
-			if(! var.isInstantiated()) return false;
+		for (IntVar variable : symbolsToDigits.values()) {
+			if(! variable.isInstantiated()) return false;
 		}
 		return true;
 	}

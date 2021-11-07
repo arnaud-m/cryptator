@@ -24,7 +24,7 @@ public class CryptaOperatorDetection implements ITraversalNodeConsumer {
 	private final Set<CryptaOperator> unsupportedOperators = new HashSet<>();
 
 	public CryptaOperatorDetection(CryptaOperator ...supportedOperators) {
-		this.supportedOperators = new HashSet<CryptaOperator>(Arrays.asList(supportedOperators));		
+		this.supportedOperators = new HashSet<>(Arrays.asList(supportedOperators));		
 	}
 	
 	@Override

@@ -16,8 +16,8 @@ import cryptator.specs.ICryptaSolution;
 public class CryptaSolutionMap extends AbstractCryptaSolution<Integer> {
 
 			
-	public final static ICryptaSolution parseSolution(String solution) throws CryptaSolutionException {
-		final HashMap<Character, Integer> symbolToDigit = new HashMap<Character, Integer>();
+	public static final ICryptaSolution parseSolution(String solution) throws CryptaSolutionException {
+		final HashMap<Character, Integer> symbolToDigit = new HashMap<>();
 		final String[] split = solution.split("\\s*[\\s=]\\s*");
 		//System.out.println(Arrays.toString(split));
 		if( split.length % 2 != 0) throw new CryptaSolutionException("Invalid number of splits: " + split.length);
