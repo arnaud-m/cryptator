@@ -12,11 +12,6 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
-import cryptator.CryptaOperator;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaLeaf;
-import cryptator.tree.CryptaNode;
-
 public class CryptaEqnMember {
 
 	public final String[] strWords;
@@ -69,16 +64,16 @@ public class CryptaEqnMember {
 		return wordCount;
 	}
 
-	public ICryptaNode recordMember(CryptaEqnMember member) {
-		ICryptaNode node = null;
-		for (int i = 0; i < words.length; i++) {
-			if(words[i].isInstantiatedTo(1)) {
-				final CryptaLeaf leaf = new CryptaLeaf(strWords[i]);
-				node = node == null ? leaf : new CryptaNode(CryptaOperator.ADD, node, leaf);
-			}
-		}
-		return node;
-	}
+//	public ICryptaNode recordMember(CryptaEqnMember member) {
+//		ICryptaNode node = null;
+//		for (int i = 0; i < words.length; i++) {
+//			if(words[i].isInstantiatedTo(1)) {
+//				final CryptaLeaf leaf = new CryptaLeaf(strWords[i]);
+//				node = node == null ? leaf : new CryptaNode(CryptaOperator.ADD, node, leaf);
+//			}
+//		}
+//		return node;
+//	}
 	
 	@Override
 	public String toString() {

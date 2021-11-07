@@ -44,6 +44,7 @@ public class Cryptamancer {
 			}
 		}
 
+		@Override
 		public String getArgumentName() {
 			return "CRYPTARITHM";
 		}
@@ -62,7 +63,7 @@ public class Cryptamancer {
 					new CryptaParserWrapper(),
 					LOGGER);
 		} catch (CryptaParserException e) {
-			LOGGER.log(Level.SEVERE, "Parse cryptarithm " + cryptarithm + " [FAIL]", e);
+			LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
 			return null;
 		}
 	}

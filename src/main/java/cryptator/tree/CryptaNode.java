@@ -12,16 +12,17 @@ import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaNode;
 
 public class CryptaNode implements ICryptaNode {
-	
+
 	private final CryptaOperator operator;
-	
+
 	private final ICryptaNode leftChild;
-	
+
 	private final ICryptaNode rightChild;
-	
+
 	public CryptaNode(String operator, ICryptaNode leftChild, ICryptaNode rightChild) {
 		this(CryptaOperator.valueOfToken(operator), leftChild, rightChild);
 	}
+
 	public CryptaNode(CryptaOperator operator, ICryptaNode leftChild, ICryptaNode rightChild) {
 		this.operator = operator;
 		this.leftChild = leftChild;
@@ -57,7 +58,7 @@ public class CryptaNode implements ICryptaNode {
 	public boolean isInternalNode() {
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return operator.getToken();

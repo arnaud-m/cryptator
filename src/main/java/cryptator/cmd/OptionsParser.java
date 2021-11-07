@@ -41,7 +41,9 @@ public class OptionsParser<E extends CryptaConfig> {
 		return "CRYPTARITHMS...";
 	}
 
-	protected void configureLoggers() {}
+	protected void configureLoggers() {
+		// For subclasses
+	}
 
 	protected boolean checkConfiguration() {
 		if(config.getArithmeticBase() < 2) {
@@ -87,10 +89,8 @@ public class OptionsParser<E extends CryptaConfig> {
 		System.err.println("java " + getCommandName() + "[options...] "+ getArgumentName());
 		// print the list of available options
 		parser.printUsage(System.err);
-		System.err.println();
-
 		// print option sample. This is useful some time
-		System.err.println("  Example: java "+ getCommandName() +  " " + parser.printExample(OptionHandlerFilter.ALL) + " " + getArgumentName());
+		System.err.println("\n  Example: java "+ getCommandName() +  " " + parser.printExample(OptionHandlerFilter.ALL) + " " + getArgumentName());
 		getLogger().severe("Parse options [FAIL]");
 		return false;
 

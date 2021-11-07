@@ -16,8 +16,6 @@ public class CryptamancerConfig extends CryptaConfig {
 	@Option(name="-v",handler=ExplicitBooleanOptionHandler.class,usage="increase the verbosity of the program")
 	private boolean verbose;
 
-	public CryptamancerConfig() {}
-
 	public final boolean isVerbose() {
 		return verbose;
 	}

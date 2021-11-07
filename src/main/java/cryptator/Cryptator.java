@@ -66,7 +66,7 @@ public class Cryptator {
 		}	
 	}
 
-	private final static ICryptaSolver buildSolver(CryptatorConfig config) {
+	private static final ICryptaSolver buildSolver(CryptatorConfig config) {
 		final CryptaSolver solver = new CryptaSolver(config.useBignum());
 		solver.limitSolution(config.getSolutionLimit());
 		solver.limitTime(config.getTimeLimit());
@@ -94,12 +94,15 @@ public class Cryptator {
 			}
 			
 			final CryptaBiConsumer consumer = buildBiConsumer(config);
-			final boolean solved = solver.solve(node, config, (s) -> {consumer.accept(node, s);}) ;
-			final String status = consumer.getErrorCount() > 0 ? "ERROR" : (solved ? "OK" : "KO");
+			final boolean solved = solver.solve(node, config, s -> consumer.accept(node, s)) ;
+			String status = "ERROR";
+			if(consumer.getErrorCount() == 0) {
+				status = solved ? "OK" : "KO";
+			}
 			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
 			return consumer.getErrorCount();
 		} catch (CryptaParserException e) {
-			LOGGER.log(Level.SEVERE, "Parse cryptarithm " + cryptarithm + " [FAIL]", e);
+			LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
 		} catch (CryptaModelException e) {
 			LOGGER.log(Level.SEVERE, "Model cryptarithm [FAIL]", e);
 		} catch (CryptaSolverException e) {

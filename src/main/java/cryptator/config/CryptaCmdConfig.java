@@ -21,9 +21,6 @@ public class CryptaCmdConfig extends CryptaConfig {
 
 	@Option(name="-v",handler=ExplicitBooleanOptionHandler.class,usage="increase the verbosity of the program")
 	private boolean verbose;
-
-	public CryptaCmdConfig() {}
-
 	
 	public final boolean isExportGraphiz() {
 		return exportGraphiz;

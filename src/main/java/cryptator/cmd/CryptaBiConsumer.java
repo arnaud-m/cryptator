@@ -26,7 +26,6 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.Graph;
 
-
 public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
 	private final Logger logger;
@@ -46,7 +45,6 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 	public final long getSolutionCount() {
 		return solutionCount;
 	}
-
 
 	public final int getErrorCount() {
 		return errorCount;
@@ -75,7 +73,6 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 	private class SolutionCounter implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-
 		@Override
 		public void accept(ICryptaNode t, ICryptaSolution u) {
 			solutionCount++;
@@ -86,7 +83,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 		@Override
 		public void accept(ICryptaNode t, ICryptaSolution u) {
-			logger.log(Level.INFO, "Find cryptarithm solution #{0} [OK]\n{1}", new Object[] {solutionCount, u});
+			logger.log(Level.INFO, "Find cryptarithm solution #{0} [OK]\n{1}", new Object[] { solutionCount, u });
 		}
 	}
 
@@ -94,8 +91,9 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 		@Override
 		public void accept(ICryptaNode t, ICryptaSolution u) {
-			if(logger.isLoggable(Level.INFO)) {
-				logger.log(Level.INFO, "Find cryptarithm #{0} [OK]\n{1}\n{2}", new Object[] {solutionCount, TreeUtils.writeInorder(t), u});
+			if (logger.isLoggable(Level.INFO)) {
+				logger.log(Level.INFO, "Find cryptarithm #{0} [OK]\n{1}\n{2}",
+						new Object[] { solutionCount, TreeUtils.writeInorder(t), u });
 			}
 		}
 	}
@@ -114,11 +112,11 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 		@Override
 		public void accept(ICryptaNode n, ICryptaSolution s) {
 			try {
-				if(eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
-					logger.info("Eval cryptarithm solution [OK]"); 
+				if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
+					logger.info("Eval cryptarithm solution [OK]");
 					return;
-				}
-				else logger.warning("Eval cryptarithm solution [KO]"); 
+				} else
+					logger.warning("Eval cryptarithm solution [KO]");
 			} catch (CryptaEvaluationException e) {
 				logger.log(Level.WARNING, "Eval cryptarithm solution [FAIL]", e);
 			}
@@ -144,4 +142,3 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 	}
 
 }
-

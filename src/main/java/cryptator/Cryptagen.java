@@ -41,29 +41,22 @@ public class Cryptagen {
 
 		final WordArray words = buildWords(config.getArguments(), config);
 		if(words == null) System.exit(-1);
-		
-		// TODO Sort words ?
-
+	
 		final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
 		CryptaBiConsumer cons = buildBiConsumer(config);
 		gen.generate(cons);
 
-		int exitStatus = (int) gen.getErrorCount() + cons.getErrorCount();
+		int exitStatus = gen.getErrorCount() + cons.getErrorCount();
 		System.exit(exitStatus);
 	}
 
 	private static List<String> readWords(String filename) {
-		try {
-			final Scanner s = new Scanner(new File(filename));
-			try {
+		try (final Scanner s = new Scanner(new File(filename))) {
 				final List<String> words = new ArrayList<>();
 				while (s.hasNext()) {
 					words.add(s.next());
 				}
-				return words;
-			} finally {
-				s.close();
-			}
+				return words;			
 		} catch (FileNotFoundException e) {
 			LOGGER.log(Level.SEVERE, "cant read words in file", e);
 			return null;
@@ -90,7 +83,7 @@ public class Cryptagen {
 				// The first argument is not an integer
 			}
 		}
-
+		// TODO Sort words ?
 		if(n <= 2) {
 			final List<String> words = readWords(arguments.get(0));
 			if(words == null) return null;

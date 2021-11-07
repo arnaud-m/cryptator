@@ -60,7 +60,7 @@ public enum CryptaOperator {
 		throw new IllegalArgumentException("Unknown token: " + token);
 	}
 	
-	private final static BigInteger toBigInt(boolean b) {
+	private static final BigInteger toBigInt(boolean b) {
 		return b ? BigInteger.ONE : BigInteger.ZERO;
 	}
 

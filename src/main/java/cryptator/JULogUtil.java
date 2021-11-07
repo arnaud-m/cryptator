@@ -23,7 +23,7 @@ public final class JULogUtil {
 
 	private JULogUtil() {}
 
-	public final static void readResourceConfigurationLoggers(String resourcePath) {
+	public static final void readResourceConfigurationLoggers(String resourcePath) {
 		final InputStream stream = Cryptator.class.getClassLoader().
 				getResourceAsStream(resourcePath);
 		try {
@@ -34,11 +34,11 @@ public final class JULogUtil {
 		}
 	}
 	
-	public final static void configureLoggers() {
+	public static final void configureLoggers() {
 		readResourceConfigurationLoggers(PROPERTIES);
 	}
 
-	public final static void configureTestLoggers() {
+	public static final void configureTestLoggers() {
 		readResourceConfigurationLoggers(PROPERTIES);
 		setLevel(Level.WARNING, 
 				Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, 
@@ -46,7 +46,7 @@ public final class JULogUtil {
 				);
 	}
 	
-	public final static void setLevel(Level level, Logger...loggers) {
+	public static final void setLevel(Level level, Logger...loggers) {
 		for (Logger logger : loggers) {
 			logger.setLevel(level);
 		}

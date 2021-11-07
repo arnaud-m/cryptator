@@ -38,10 +38,8 @@ public class CryptaConfig {
 
 	// receives other command line parameters than options
 	@Argument
-	private List<String> arguments = new ArrayList<String>();
+	private List<String> arguments = new ArrayList<>();
 
-	public CryptaConfig() {}
-	
 	public final boolean allowLeadingZeros() {
 		return allowLeadingZeros;
 	}

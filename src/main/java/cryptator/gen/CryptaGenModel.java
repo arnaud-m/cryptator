@@ -51,9 +51,7 @@ public class CryptaGenModel {
 		final Map<Character, BoolVar> symbolsToVariables = new HashMap<>();
 		for (int i = 0; i < words.length; i++) {
 			for (char c : words[i].toCharArray()) {
-				if(! symbolsToVariables.containsKey(c) ) {
-					symbolsToVariables.put(c, model.boolVar(String.valueOf(c)));
-				} 
+				symbolsToVariables.computeIfAbsent(c, s -> model.boolVar(String.valueOf(s)));
 			}
 		}
 		return symbolsToVariables;
@@ -99,10 +97,7 @@ public class CryptaGenModel {
 		final Map<Character, List<BoolVar>> map = new HashMap<>();
 		for (int i = 0; i < words.length; i++) {
 			for (char c : words[i].toCharArray()) {
-				if(! map.containsKey(c) ) {
-					map.put(c, new ArrayList<>());
-				}
-				final Collection<BoolVar> list = map.get(c);
+				final Collection<BoolVar> list = map.computeIfAbsent(c, s -> new ArrayList<>());
 				list.add(left.words[i]);
 				list.add(right.words[i]);
 			}
