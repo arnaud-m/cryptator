@@ -53,7 +53,7 @@ public final class TreeTraversals {
 	}
 
 	public static void preorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalConsumer) {
-		final Stack<ICryptaNode> stack = new Stack<ICryptaNode>();
+		final Stack<ICryptaNode> stack = new Stack<>();
 		int num = 1;
 		stack.push(root);
 		while(! stack.isEmpty()) {
@@ -75,7 +75,7 @@ public final class TreeTraversals {
 	}
 
 	public static void preorderTraversal(ICryptaNode root, ITraversalEdgeConsumer traversalConsumer) {
-		final Stack<TraversalEdge> stack = new Stack<TraversalEdge>();
+		final Stack<TraversalEdge> stack = new Stack<>();
 		int num = 1;
 		pushChildren(stack, root, num);
 		while(! stack.isEmpty()) {
@@ -88,8 +88,8 @@ public final class TreeTraversals {
 	}
 
 	public static void postorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
-		final Stack<ICryptaNode> stack = new Stack<ICryptaNode>();
-		final ArrayList<ICryptaNode> order= new ArrayList<ICryptaNode>();
+		final Stack<ICryptaNode> stack = new Stack<>();
+		final ArrayList<ICryptaNode> order= new ArrayList<>();
 		stack.push(root);
 		while(! stack.isEmpty()) {
 			final ICryptaNode n = stack.pop();
@@ -110,9 +110,9 @@ public final class TreeTraversals {
 	public static void inorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
 		// https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
 		int num=1;
-		Stack<ICryptaNode> s = new Stack<ICryptaNode>();
+		Stack<ICryptaNode> s = new Stack<>();
 		ICryptaNode curr = root;
-		while (curr != null || s.size() > 0) {
+		while (curr != null || !s.isEmpty()) {
 			while (curr != null) {
 				s.push(curr);
 				curr = curr.getLeftChild();

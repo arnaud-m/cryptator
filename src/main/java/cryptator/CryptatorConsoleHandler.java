@@ -22,8 +22,8 @@ public class CryptatorConsoleHandler extends StreamHandler {
 	    }
 
 	    @Override
-	    public synchronized void publish(LogRecord record) {
-	        super.publish(record);
+	    public synchronized void publish(LogRecord logRecord) {
+	        super.publish(logRecord);
 	        flush();
 	    }
 

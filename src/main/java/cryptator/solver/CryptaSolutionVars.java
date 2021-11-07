@@ -50,8 +50,8 @@ public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
 	
 	public ICryptaSolution recordSolution() {
 		final Map<Character, Integer> symbolsToDigits = new HashMap<Character, Integer>();
-		this.symbolsToDigits.forEach((symbol, var) -> {
-			if(var.isInstantiated()) symbolsToDigits.put(symbol, var.getValue());
+		this.symbolsToDigits.forEach((symbol, variable) -> {
+			if(variable.isInstantiated()) symbolsToDigits.put(symbol, variable.getValue());
 		});
 		return new CryptaSolutionMap(symbolsToDigits);
 	}

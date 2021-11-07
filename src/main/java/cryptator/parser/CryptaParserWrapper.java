@@ -18,8 +18,6 @@ import cryptator.specs.ICryptaParser;
 
 public class CryptaParserWrapper implements ICryptaParser {
 
-	public CryptaParserWrapper() {}
-
 	@Override
 	public ICryptaNode parse(String cryptarithm) throws CryptaParserException {
         final CharStream input = CharStreams.fromString(cryptarithm);

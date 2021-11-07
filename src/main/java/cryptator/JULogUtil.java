@@ -19,7 +19,7 @@ import cryptator.solver.CryptaSolver;
 
 public final class JULogUtil {
 	
-	private final static String PROPERTIES = "logging.properties";
+	private static final String PROPERTIES = "logging.properties";
 
 	private JULogUtil() {}
 
@@ -52,7 +52,7 @@ public final class JULogUtil {
 		}
 	}
 	
-	// TODO public final static flushLogs() {
+	// TODO public static final flushLogs() {
 	
 
 }

@@ -18,7 +18,7 @@ import cryptator.specs.ICryptaNode;
 
 public final class TreeUtils {
 
-	public final static String ZERO = "_0";
+	public static final String ZERO = "_0";
 	
 	private TreeUtils() {}
 
@@ -31,10 +31,7 @@ public final class TreeUtils {
 	
 	public static void writePreorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
-		TreeTraversals.preorderTraversal(root, (node, num) -> {
-			writeWord(node, out);
-		}
-				);
+		TreeTraversals.preorderTraversal(root, (node, num) -> writeWord(node, out));
 		out.flush();
 	}
 
@@ -46,10 +43,7 @@ public final class TreeUtils {
 
 	public static void writePostorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
-		TreeTraversals.postorderTraversal(root, (node, num) -> {
-			writeWord(node, out);
-		}
-				);
+		TreeTraversals.postorderTraversal(root, (node, num) -> writeWord(node, out));
 		out.flush();
 	}
 
@@ -60,10 +54,7 @@ public final class TreeUtils {
 
 	public static void writeInorder(ICryptaNode root, OutputStream outstream) {
 		final PrintWriter out = new PrintWriter(outstream);
-		TreeTraversals.inorderTraversal(root, (node, num) -> {
-			writeWord(node, out);
-		}
-				);
+		TreeTraversals.inorderTraversal(root, (node, num) -> writeWord(node, out));
 		out.flush();
 	}
 

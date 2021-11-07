@@ -54,8 +54,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		return errorCount.intValue();
 	}
 
-
-
 	private CryptaGenModel buildModel() {
 		final CryptaGenModel gen = new CryptaGenModel(words.getWords());
 		gen.postMemberCardConstraints(config.getMinLeftOperands(), config.getMaxLeftOperands());

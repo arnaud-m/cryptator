@@ -24,8 +24,6 @@ import cryptator.tree.TreeUtils;
 
 public class CryptaBignumModeler implements ICryptaModeler {
 
-	public CryptaBignumModeler() {}
-
 	/** bignum model with addition only that uses a little endian representation with a variable number of digits. */
 	@Override
 	public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
@@ -42,7 +40,7 @@ public class CryptaBignumModeler implements ICryptaModeler {
 
 final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 
-	private final Stack<ArExpression[]> stack = new Stack<ArExpression[]>();
+	private final Stack<ArExpression[]> stack = new Stack<>();
 
 	public ModelerBignumConsumer(Model model, CryptaConfig config) {
 		super(model, config);
@@ -121,7 +119,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 		for (int i = 0; i < n; i++) {
 			a1.digits[i].eq(b1.digits[i]).decompose().post();
 		}
-		a1.carries[n-1].eq(b1.carries[n-1]).decompose().post();;
+		a1.carries[n-1].eq(b1.carries[n-1]).decompose().post();
 	}
 
 

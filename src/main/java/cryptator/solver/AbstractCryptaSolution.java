@@ -19,7 +19,7 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 
 	protected final Map<Character, E> symbolsToDigits;
 
-	public AbstractCryptaSolution(Map<Character, E> symbolsToDigits) {
+	protected AbstractCryptaSolution(Map<Character, E> symbolsToDigits) {
 		super();
 		this.symbolsToDigits = symbolsToDigits;
 	}
@@ -33,7 +33,7 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 		return symbolsToDigits.get(symbol);
 	}
 
-	protected abstract String getDomain(E var);
+	protected abstract String getDomain(E variable);
 
 	@Override
 	public final boolean hasDomain(char symbol) {

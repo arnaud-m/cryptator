@@ -31,11 +31,11 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 	protected final Set<Character> firstSymbols;
 
 
-	public AbstractModelerNodeConsumer(Model model, CryptaConfig config) {
+	protected AbstractModelerNodeConsumer(Model model, CryptaConfig config) {
 		super();
 		this.model = model;
 		this.config = config;
-		symbolsToVariables = new HashMap<Character, IntVar>();
+		symbolsToVariables = new HashMap<>();
 		firstSymbols = new HashSet<>();		
 	}
 
@@ -44,10 +44,7 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 	}
 
 	protected IntVar getSymbolVar(char symbol) {
-		if(! symbolsToVariables.containsKey(symbol)) {
-			symbolsToVariables.put(symbol, createSymbolVar(symbol));
-		} 
-		return symbolsToVariables.get(symbol);
+		return symbolsToVariables.computeIfAbsent(symbol, s -> createSymbolVar(s));	
 	}
 
 	private IntVar[] getGCCVars() {
@@ -95,15 +92,15 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 	}
 
 	protected abstract void postCryptarithmEquationConstraint() throws CryptaModelException;
-	
+
 	public void postConstraints() throws CryptaModelException {
 		postFirstSymbolConstraints();
 		globalCardinalityConstraint().post();
 		postCryptarithmEquationConstraint();
-		
-		
+
+
 	}
-	
+
 	public CryptaModel buildCryptaModel() {
 		return new CryptaModel(model, symbolsToVariables);
 	}

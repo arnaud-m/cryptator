@@ -38,7 +38,7 @@ public class CryptaModeler implements ICryptaModeler {
 
 final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
-	private final Stack<ArExpression> stack = new Stack<ArExpression>();
+	private final Stack<ArExpression> stack = new Stack<>();
 
 	private final Function<char[], IntVar> wordVarBuilder;
 
@@ -48,10 +48,7 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 	}
 
 
-	private IntVar createWordVar(char[] word) {
-		return model.intVar(new String(word), 0, (int) Math.pow(config.getArithmeticBase(), word.length) - 1);	
-	}
-
+	
 	private final class ExponentiationVarBuilder implements Function<char[], IntVar> {
 
 		@Override
@@ -63,13 +60,18 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 			final IntVar[] vars = new IntVar[n];
 			final int[] coeffs = new int[n];
 			for (int i = 0; i < n; i++) {
-				coeffs[i] = (int) Math.pow(config.getArithmeticBase(), n - 1 - i);
+				coeffs[i] = (int) Math.pow(config.getArithmeticBase(), n - 1. - i);
 				vars[i] = getSymbolVar(word[i]);
 			}
 			final IntVar wvar = createWordVar(word);
 			model.scalar(vars, coeffs, "=", wvar).post();
 			return wvar;	
 		}			
+		
+		private IntVar createWordVar(char[] word) {
+			return model.intVar(new String(word), 0, (int) Math.pow(config.getArithmeticBase(), word.length) - 1);	
+		}
+
 	}
 
 	private final class HornerVarBuilder implements Function<char[], IntVar> {

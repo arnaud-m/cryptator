@@ -81,7 +81,7 @@ public final class CryptaSolver implements ICryptaSolver {
 		LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel());
 		final Solver s = m.getModel().getSolver();
 		if(timeLimit > 0) s.limitTime(timeLimit * 1000); // in ms
-		int solutionCount = 0;;
+		int solutionCount = 0;
 		if(solutionLimit > 0) {
 			while(solutionCount < solutionLimit && s.solve()) {
 				logOnSolution(m);

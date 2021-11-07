@@ -75,10 +75,10 @@ public class CryptaGenModel {
 	}
 
 	private void postSymbolPresenceConstraint(Map<Character, List<BoolVar>> symbolsToExpressions) {
-		for (Character c : symbolsToExpressions.keySet()) {
-			final Collection<BoolVar> varsL = symbolsToExpressions.get(c);
+		for (Map.Entry<Character, List<BoolVar>> entry : symbolsToExpressions.entrySet()) {
+			final Collection<BoolVar> varsL = entry.getValue();
 			final BoolVar[] vars = varsL.toArray(new BoolVar[varsL.size()]);
-			model.max(symbolsToVariables.get(c), vars).post();
+			model.max(symbolsToVariables.get(entry.getKey()), vars).post();
 		}
 	}
 

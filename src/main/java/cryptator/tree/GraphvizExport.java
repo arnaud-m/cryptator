@@ -45,7 +45,7 @@ public final class GraphvizExport {
 
 	private static class GraphvizNodeConsumer implements ITraversalNodeConsumer {
 		
-		public Graph graph =  graph("G").
+		private Graph graph =  graph("G").
 				nodeAttr().with(Shape.PLAIN_TEXT, Font.name("arial"));
 		
 		private final Stack<Node> stack = new Stack<>();
@@ -96,6 +96,7 @@ public final class GraphvizExport {
 			this.solution = solution;
 		}
 
+		@Override
 		protected Node makeWordNode(ICryptaNode node, int numNode) {
 			final Node n = makeNode(numNode);
 			if(node.getWord().length == 0)  {
