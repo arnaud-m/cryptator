@@ -64,7 +64,6 @@ public class Failing {
 	}
 
 	@Test
-	@Ignore
 	//FIXME confusion between division operator (integer/real)
 	public void testMrazik() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		assertEquals("Div and Mult",

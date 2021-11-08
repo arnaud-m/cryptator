@@ -44,11 +44,11 @@ public final class CryptaGameDecision {
 		return symbol + " " + operator.getToken() + " " + value;
 	}
 	
-	public final static CryptaGameDecision parseDecision(String decision) {
+	public static final CryptaGameDecision parseDecision(String decision) {
 		return parseDecision(new Scanner(decision));
 	}
 	
-	public final static CryptaGameDecision parseDecision(Scanner s) {
+	public static final CryptaGameDecision parseDecision(Scanner s) {
 		if(s.hasNext()) {
 			final String symbol = s.next();
 			if(symbol.length() == 1 && s.hasNext()) {

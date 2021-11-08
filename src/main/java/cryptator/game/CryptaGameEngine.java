@@ -31,8 +31,6 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
 	private CryptaModel userModel;
 
-	public CryptaGameEngine() {}
-
 	@Override
 	public void setUp(CryptaModel model) throws CryptaGameException {
 		this.gameModel = model;
@@ -56,20 +54,20 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 	}
 
 
-	private final static CryptaModel makeUserDecisionModel(CryptaModel model) {
-		Map<Character, IntVar> symbolsToVariables = new HashMap<Character, IntVar>();
+	private static final CryptaModel makeUserDecisionModel(CryptaModel model) {
+		Map<Character, IntVar> symbolsToVariables = new HashMap<>();
 		final Model m = new Model("Cryptarithm-Decisions");
-		model.getSolution().forEach( (symbol, var) -> {
-			symbolsToVariables.put(symbol, m.intVar(var.getName(), var.getLB(), var.getUB(), false));
-		});
+		model.getSolution().forEach( (symbol, ivar) -> 
+			symbolsToVariables.put(symbol, m.intVar(ivar.getName(), ivar.getLB(), ivar.getUB(), false))
+		);
 		return new CryptaModel(m, symbolsToVariables);
 	}
 
-	private final static Constraint makeDecision(CryptaModel model, CryptaGameDecision decision) throws CryptaGameException {
-		final IntVar var = model.getSolution().getVar(decision.getSymbol());
-		if(var == null) throw new CryptaGameException("Cannot find variable for symbol: " + decision.getSymbol());
+	private static final Constraint makeDecision(CryptaModel model, CryptaGameDecision decision) throws CryptaGameException {
+		final IntVar ivar = model.getSolution().getVar(decision.getSymbol());
+		if(ivar == null) throw new CryptaGameException("Cannot find variable for symbol: " + decision.getSymbol());
 		final IntVar val = model.getModel().intVar(decision.getValue());
-		return ( (ReExpression) decision.getOperator().getExpression().apply(var, val)).decompose();
+		return ( (ReExpression) decision.getOperator().getExpression().apply(ivar, val)).decompose();
 	}
 
 	private final void propagate(CryptaModel model, Constraint decision) throws ContradictionException {
@@ -80,11 +78,6 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 	}
 
 	private final boolean probeGameDecision(Constraint decision) {
-		//		final Model m = gameModel.getModel();
-		//		m.post(decision);	
-		//		m.getSolver().reset();
-		//		return m.getSolver().solve();
-
 		try {
 			propagate(gameModel, decision);
 			return true;
@@ -132,7 +125,9 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 	}
 
 	@Override
-	public void tearDown() {}
+	public void tearDown() {
+		// Do nothing
+	}
 
 
 	@Override
