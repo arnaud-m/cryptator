@@ -89,6 +89,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		    } 
 		} catch (InterruptedException e) {
 		    executor.shutdownNow();
+		    Thread.currentThread().interrupt();
 		}
 	}
 

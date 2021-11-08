@@ -20,7 +20,9 @@ import cryptator.solver.CryptaSolutionException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ITraversalNodeConsumer;
+import guru.nidi.graphviz.attribute.Attributes;
 import guru.nidi.graphviz.attribute.Font;
+import guru.nidi.graphviz.attribute.ForNode;
 import guru.nidi.graphviz.attribute.Label;
 import guru.nidi.graphviz.attribute.Records;
 import guru.nidi.graphviz.attribute.Shape;
@@ -96,31 +98,28 @@ public final class GraphvizExport {
 		public GraphvizSolutionNodeConsumer(ICryptaSolution solution) {
 			this.solution = solution;
 		}
+		
+		private final Attributes<ForNode> makeRecords(char[] word) {
+			final String[] records = new String[word.length];
+			for (int i = 0; i < word.length; i++) {
+				String digit = "?";
+					try {
+						digit = String.valueOf(solution.getDigit(word[i]));
+					} catch (CryptaSolutionException e) {}
+				records[i] = turn(
+						rec(String.valueOf(word[i])), 
+						rec(String.valueOf(digit)));
+		
+			}
+			return Records.of(records);
+		}
 
 		@Override
 		protected Node makeWordNode(ICryptaNode node, int numNode) {
 			final Node n = makeNode(numNode);
-			if(node.getWord().length == 0)  {
-				return withZeroLabel(n);  
-			} else {
-				if(node.isInternalNode()) return withWordLabel(n, node);
-				else {
-					char[] word = node.getWord();
-					String[] records = new String[word.length];
-					for (int i = 0; i < word.length; i++) {
-						if(solution.hasDigit(word[i]))
-							try {
-								records[i] = turn(
-										rec(String.valueOf(word[i])), 
-										rec(String.valueOf(solution.getDigit(word[i]))));
-							} catch (CryptaSolutionException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-					}
-					return n.with(Records.of(records));
-				}
-			}
+			if(node.getWord().length == 0)  return withZeroLabel(n);  
+			else if (node.isInternalNode()) return withWordLabel(n, node);
+			else return n.with(makeRecords(node.getWord()));
 		}
 		
 	}
