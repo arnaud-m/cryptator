@@ -37,23 +37,23 @@ public final class GraphvizExport {
 		TreeTraversals.postorderTraversal(node, consumer);
 		return consumer.getGraph();
 	}
-	
+
 	public static Graph exportToGraphviz(ICryptaNode node) {
 		return exportToGraphviz(node, new GraphvizNodeConsumer());
 	}
-	
+
 	public static Graph exportToGraphviz(ICryptaNode node, ICryptaSolution solution) {
 		return exportToGraphviz(node, new GraphvizSolutionNodeConsumer(solution));
 	}
 
 	private static class GraphvizNodeConsumer implements ITraversalNodeConsumer {
-		
+
 		private Graph graph =  graph("G").
 				nodeAttr().with(Shape.PLAIN_TEXT, Font.name("arial"));
-		
+
 		private final Deque<Node> stack = new ArrayDeque<>();
-		
-		
+
+
 		public final Graph getGraph() {
 			return graph;
 		}
@@ -61,15 +61,15 @@ public final class GraphvizExport {
 		protected final Node makeNode(int numNode) {
 			return node(String.valueOf(numNode));
 		}
-		
+
 		protected Node withZeroLabel(Node n) {
 			return n.with(Label.of("0"));  
 		}
-		
+
 		protected Node withWordLabel(Node n, ICryptaNode node) {
 			return n.with(Label.of(new String(node.getWord())));  
 		}
-		
+
 		protected Node makeWordNode(ICryptaNode node, int numNode) {
 			final Node n = makeNode(numNode);
 			if(node.getWord().length == 0)  {
@@ -78,7 +78,7 @@ public final class GraphvizExport {
 				return withWordLabel(n, node); 
 			}
 		}
-				
+
 		@Override
 		public final void accept(ICryptaNode node, int numNode) {
 			Node n = makeWordNode(node, numNode);
@@ -90,26 +90,28 @@ public final class GraphvizExport {
 			stack.push(n);
 		}		
 	}
-	
+
 	private static class GraphvizSolutionNodeConsumer extends GraphvizNodeConsumer {
-		
+
 		private final ICryptaSolution solution;
-		
+
 		public GraphvizSolutionNodeConsumer(ICryptaSolution solution) {
 			this.solution = solution;
 		}
-		
+
 		private final Attributes<ForNode> makeRecords(char[] word) {
 			final String[] records = new String[word.length];
 			for (int i = 0; i < word.length; i++) {
 				String digit = "?";
-					try {
-						digit = String.valueOf(solution.getDigit(word[i]));
-					} catch (CryptaSolutionException e) {}
+				try {
+					digit = String.valueOf(solution.getDigit(word[i]));
+				} catch (CryptaSolutionException e) { 
+					// default digit already set
+				}
 				records[i] = turn(
 						rec(String.valueOf(word[i])), 
 						rec(String.valueOf(digit)));
-		
+
 			}
 			return Records.of(records);
 		}
@@ -121,7 +123,7 @@ public final class GraphvizExport {
 			else if (node.isInternalNode()) return withWordLabel(n, node);
 			else return n.with(makeRecords(node.getWord()));
 		}
-		
+
 	}
 
 }

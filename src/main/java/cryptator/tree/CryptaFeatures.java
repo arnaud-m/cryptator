@@ -87,8 +87,8 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 		b.append("\nc OPERATOR_COUNT ").append(operators.size());
 		b.append("\nc MIN_WORD_LEN ").append(minWordLength);
 		b.append("\nc MAX_WORD_LEN ").append(maxWordLength);
-		b.append("\nc SYMBOLS ").append(symbols.stream().map(n -> String.valueOf(n)).collect(Collectors.joining()));
-		b.append("\nc OPERATORS ").append(operators.stream().map(n -> String.valueOf(n)).collect(Collectors.joining(" ", "", "")));	
+		b.append("\nc SYMBOLS ").append(symbols.stream().map(String::valueOf).collect(Collectors.joining()));
+		b.append("\nc OPERATORS ").append(operators.stream().map(String::valueOf).collect(Collectors.joining(" ", "", "")));	
 		return b.toString();
 	}
 

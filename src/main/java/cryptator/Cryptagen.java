@@ -24,7 +24,6 @@ import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 
-// TODO Dictionnaire FR: https://chrplr.github.io/openlexicon/datasets-info/Liste-de-mots-francais-Gutenberg/README-liste-francais-Gutenberg.html
 public class Cryptagen {
 
 	public static final Logger LOGGER = Logger.getLogger(Cryptagen.class.getName());
@@ -41,7 +40,7 @@ public class Cryptagen {
 
 		final WordArray words = buildWords(config.getArguments(), config);
 		if(words == null) System.exit(-1);
-	
+
 		final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
 		CryptaBiConsumer cons = buildBiConsumer(config);
 		gen.generate(cons);
@@ -51,46 +50,49 @@ public class Cryptagen {
 	}
 
 	private static List<String> readWords(String filename) {
+		final List<String> words = new ArrayList<>();
 		try (final Scanner s = new Scanner(new File(filename))) {
-				final List<String> words = new ArrayList<>();
-				while (s.hasNext()) {
-					words.add(s.next());
-				}
-				return words;			
+			while (s.hasNext()) {
+				words.add(s.next());
+			}
 		} catch (FileNotFoundException e) {
 			LOGGER.log(Level.SEVERE, "cant read words in file", e);
-			return null;
 		}
-		
+		return words;			
 	}
 
 
-	private static WordArray buildWords(List<String> arguments, CryptagenConfig config) {
-		final int n = arguments.size();
-		assert(n > 0); // already checked
-		if(n == 2) {
-			try {
-				final int lb = Integer.parseInt(arguments.get(0));
-				try {
-					final int ub = Integer.parseInt(arguments.get(1));
-					return new WordArray(config.getCountryCode(), config.getLangCode(), lb, ub);
-				} catch (NumberFormatException e) {
-					LOGGER.log(Level.SEVERE, "fail reading the second integer argument.", e);
-					return null;
-				}
-			} catch (NumberFormatException e) {
-				// Do nothing. 
-				// The first argument is not an integer
-			}
+	private static WordArray buildNumbers(List<String> arguments, CryptagenConfig config) {
+		final int lb = Integer.parseInt(arguments.get(0));
+		try {
+			final int ub = Integer.parseInt(arguments.get(1));
+			return new WordArray(config.getCountryCode(), config.getLangCode(), lb, ub);
+		} catch (NumberFormatException e) {
+			LOGGER.log(Level.SEVERE, "fail reading the second integer argument.", e);
+			return null;
 		}
-		// TODO Sort words ?
-		if(n <= 2) {
+	}
+
+	private static WordArray buildWords(List<String> arguments, CryptagenConfig config) {
+		switch(arguments.size()) {
+		case 1: {
 			final List<String> words = readWords(arguments.get(0));
-			if(words == null) return null;
-			return n == 1 ? new WordArray(words, null) : new WordArray(words, arguments.get(1));	
-		} else {
+			return words.isEmpty() ? null : new WordArray(words, null);
+		}
+		case 2: {
+			try {
+				return buildNumbers(arguments, config);
+			} catch (NumberFormatException e) {
+				// Cannot build a number list.
+				// So, the first argument must be the pathname of a words list
+				final List<String> words = readWords(arguments.get(0));
+				return words.isEmpty() ? null : new WordArray(words, arguments.get(1));
+			}
+		} default : {
 			return new WordArray(arguments, null);
-		}	
+		}
+
+		}
 	}
 
 
