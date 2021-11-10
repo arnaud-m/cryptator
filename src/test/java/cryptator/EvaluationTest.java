@@ -60,7 +60,7 @@ public class EvaluationTest {
 	public void testSolutionException() throws CryptaSolutionException {
 		final String solution = "A  1 B =   2 C  3  D=4 E   =  5";
 		final ICryptaSolution s = CryptaSolutionMap.parseSolution(solution);
-		assertEquals(1, s.getDigit('F'));
+		s.getDigit('F');
 	}
 	
 	@Test(expected = CryptaSolutionException.class)
@@ -180,39 +180,36 @@ public class EvaluationTest {
 	}
 
 	
+	public void testPartialSolution(String cryptarithm, String partialSolution) throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode node = parser.parse(cryptarithm);
+		final ICryptaSolution solution = CryptaSolutionMap.parseSolution(partialSolution);
+		eval.evaluate(node, solution, 10);
+	}
+
+	
 	@Test(expected=CryptaEvaluationException.class)
 	public void testEvalPartialSolution() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
-		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8");
-		eval.evaluate(cryptarithm, solution, 10);
+		testPartialSolution("SEND+MORE=MONEY", "O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8");
 	}
 
 	@Test(expected=CryptaEvaluationException.class)
 	public void testEvalPartialSolution2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-		final ICryptaNode cryptarithm = parser.parse("AB+BA=CBC");
-		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=9 B=2");
-		eval.evaluate(cryptarithm, solution, 10);
+		testPartialSolution("AB+BA=CBC", "A=9 B=2");
 	}
 	
 	@Test(expected=CryptaEvaluationException.class)
 	public void testEvalWithInvalidDigit1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
-		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 10");
-		eval.evaluate(cryptarithm, solution, 10);
+		testPartialSolution("SEND+MORE=MONEY", "O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = 10");
 	}
 
 	@Test(expected=CryptaEvaluationException.class)
 	public void testEvalWithInvalidDigit2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY");
-		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = -9");
-		eval.evaluate(cryptarithm, solution, 10);
+		testPartialSolution("SEND+MORE=MONEY", "O = 0 M = 1 Y = 2 E = 5 N = 6 D = 7 R = 8 S = -9");
 	}
 
 	@Test(expected=CryptaSolutionException.class)
 	public void testEvalWithInvalidDigit3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-		final ICryptaNode cryptarithm = parser.parse("AB+BA=CBC");
-		final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=9 B=2 C=a");
-		eval.evaluate(cryptarithm, solution, 10);
+		testPartialSolution("AB+BA=CBC", "A=9 B=2 C=a");
 	}
 	
 	@Test

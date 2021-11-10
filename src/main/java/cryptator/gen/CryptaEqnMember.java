@@ -42,10 +42,6 @@ public class CryptaEqnMember {
 		wordCount = m.intVar(prefix + "wordCount", 0, words.length);
 		m.sum(this.words, "=", wordCount).post();
 
-		//      IntVar[] lengthOccurences;
-		//		lengthOccurences = m.intVarArray(prefix +"lenOccs", maxLen + 1, 0, words.length);
-		//		int[] values = ArrayUtils.array(0, maxLen);
-		//		m.globalCardinality(lengths, values, lengthOccurences, true).post();
 	}
 
 	public final BoolVar[] getWords() {
