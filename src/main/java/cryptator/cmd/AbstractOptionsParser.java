@@ -17,13 +17,13 @@ import org.kohsuke.args4j.OptionHandlerFilter;
 
 import cryptator.config.CryptaConfig;
 
-public class OptionsParser<E extends CryptaConfig> {
+public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
-	public final Class<?> mainClass;
+	protected final Class<?> mainClass;
 
-	public final E config;
+	protected final E config;
 
-	public OptionsParser(Class<?> mainClass, E config) {
+	protected AbstractOptionsParser(Class<?> mainClass, E config) {
 		super();
 		this.mainClass = mainClass;
 		this.config = config;
@@ -33,17 +33,13 @@ public class OptionsParser<E extends CryptaConfig> {
 		return Logger.getLogger(mainClass.getName());
 	}
 
-	public final String getCommandName() {
+	protected final String getCommandName() {
 		return mainClass.getName();
 	}
 
-	public String getArgumentName() {
-		return "CRYPTARITHMS...";
-	}
+	protected abstract String getArgumentName();
 
-	protected void configureLoggers() {
-		// For subclasses
-	}
+	protected abstract void configureLoggers();
 
 	protected boolean checkConfiguration() {
 		if(config.getArithmeticBase() < 2) {

@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import cryptator.cmd.CryptaBiConsumer;
-import cryptator.cmd.OptionsParser;
+import cryptator.cmd.AbstractOptionsParser;
 import cryptator.config.CryptatorConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
@@ -52,15 +52,19 @@ public class Cryptator {
 		System.exit(exitStatus);
 	}
 
-	private static class CryptatorOptionsParser extends OptionsParser<CryptatorConfig> {
+	private static class CryptatorOptionsParser extends AbstractOptionsParser<CryptatorConfig> {
 
 		public CryptatorOptionsParser() {
 			super(Cryptator.class, new CryptatorConfig());
 		}
 
 		@Override
+		public String getArgumentName() {
+			return "CRYPTARITHMS...";
+		}
+
+		@Override
 		protected void configureLoggers() {
-			super.configureLoggers();
 			if(config.isVerbose()) {
 				JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaSolver.LOGGER);
 			}

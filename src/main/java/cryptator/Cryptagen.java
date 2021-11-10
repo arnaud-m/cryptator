@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import cryptator.cmd.CryptaBiConsumer;
-import cryptator.cmd.OptionsParser;
+import cryptator.cmd.AbstractOptionsParser;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.gen.CryptaListGenerator;
@@ -96,7 +96,7 @@ public class Cryptagen {
 	}
 
 
-	private static class CryptagenOptionsParser extends OptionsParser<CryptagenConfig> {
+	private static class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
 
 		public CryptagenOptionsParser() {
 			super(Cryptagen.class, new CryptagenConfig());
@@ -104,7 +104,6 @@ public class Cryptagen {
 
 		@Override
 		protected void configureLoggers() {
-			super.configureLoggers();
 			if(config.isDryRun()) {
 				getLogger().setLevel(config.isVerbose() ? Level.FINE : Level.CONFIG);	
 			} else {

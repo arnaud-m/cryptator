@@ -12,7 +12,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cryptator.cmd.OptionsParser;
+import cryptator.cmd.AbstractOptionsParser;
 import cryptator.config.CryptaConfig;
 import cryptator.config.CryptamancerConfig;
 import cryptator.game.CryptaGameDecision;
@@ -30,7 +30,7 @@ public class Cryptamancer {
 	public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
 
 
-	static class CryptamancerOptionsParser extends OptionsParser<CryptamancerConfig> {
+	static class CryptamancerOptionsParser extends AbstractOptionsParser<CryptamancerConfig> {
 
 		public CryptamancerOptionsParser() {
 			super(Cryptamancer.class, new CryptamancerConfig());
@@ -38,7 +38,6 @@ public class Cryptamancer {
 
 		@Override
 		protected void configureLoggers() {
-			super.configureLoggers();
 			if(config.isVerbose()) {
 				JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaGameEngine.LOGGER);
 			}
