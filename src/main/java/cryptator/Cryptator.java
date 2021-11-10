@@ -48,6 +48,7 @@ public class Cryptator {
 		for (String cryptarithm : config.getArguments()) {
 			exitStatus += solve(cryptarithm, parser, solver, config);
 		}
+		JULogUtil.flushLogs();
 		System.exit(exitStatus);
 	}
 

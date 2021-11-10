@@ -10,6 +10,8 @@ package cryptator;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -52,7 +54,24 @@ public final class JULogUtil {
 		}
 	}
 	
-	// TODO public static final flushLogs() {
-	
+	public static final void flushLogs(Logger logger) {
+		logger.log(Level.FINE, "Flush logger {0}", logger.getName());	
+		for (Handler handler: logger.getHandlers()) {
+			handler.flush();
+		}
+	}
+			
+	public static final void flushLogs() {
+		final LogManager manager = LogManager.getLogManager();
+        final Enumeration<String> names = manager.getLoggerNames();
+        final String pkg = JULogUtil.class.getPackage().getName();
+        while(names.hasMoreElements()){
+            final String name = names.nextElement();
+        	if(name.startsWith(pkg)){
+               flushLogs(manager.getLogger(name));
+            }
+        }
+
+	}
 
 }
