@@ -13,6 +13,9 @@ import java.util.function.BinaryOperator;
 
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 
+/**
+ * @see https://en.wikipedia.org/wiki/Relational_operator
+ */
 public enum CryptaOperator {
 	ADD("+", (a, b) -> a.add(b), (a, b) -> a.add(b)),
 	SUB("-", (a, b) -> a.subtract(b), (a, b) -> a.sub(b)), 
