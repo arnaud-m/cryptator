@@ -32,7 +32,7 @@ word :  //additional token to simplify the passage in parameter
     
 modORpow : '%' | '^';
 
-divORmul : '/' | '*';
+divORmul : '/' | '//' | '*';
 
 addORsub : '+' | sub;
 

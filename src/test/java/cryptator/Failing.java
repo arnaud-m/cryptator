@@ -47,25 +47,6 @@ public class Failing {
 
 
 	@Test
-	//FIXME confusion between division operator (integer/real)
-	public void testDivision1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		assertEquals("Div and Mult",
-				t.testSAT("AB = C * BC"),			
-				t.testSAT("AB / BC = C")
-				);
-	}
-
-
-	@Test
-	//FIXME confusion between division operator (integer/real)
-	public void testDivision2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		assertEquals("Div and Mult",
-				t.testSAT("A = B * C"),
-				t.testSAT("A / B = C")				
-				);
-	}
-
-	@Test
 	@Ignore 
 	public void testMrazik() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		// Take around 1 minute

@@ -366,5 +366,38 @@ public class SolverTest {
 		t.testUNIQUE("3^4*425 = 34425");
 	}
 
+	@Test
+	public void testDivision1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals("Div and Mult",
+				t.testSAT("AB = C * BC"),			
+				t.testSAT("AB / BC = C")
+				);
+	}
+
+
+	@Test
+	public void testDivision2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals("Div and Mult",
+				t.testSAT("A = B * C"),
+				t.testSAT("A / B = C")				
+				);
+	}
+	
+	@Test
+	public void testFloorDivision1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals("Floor Division",
+				25,
+				t.testSAT("A // B = C")				
+				);
+	}
+	
+	@Test
+	public void testFloorDivision2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		assertEquals("Floor Division",
+				176,
+				t.testSAT("AC // B = D")				
+				);
+	}
+
 
 }
