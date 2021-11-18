@@ -12,6 +12,8 @@ import java.math.BigInteger;
 import java.util.function.BinaryOperator;
 
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
+import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.util.tools.VariableUtils;
 
 /**
  * @see https://en.wikipedia.org/wiki/Relational_operator
@@ -20,7 +22,8 @@ public enum CryptaOperator {
 	ADD("+", (a, b) -> a.add(b), (a, b) -> a.add(b)),
 	SUB("-", (a, b) -> a.subtract(b), (a, b) -> a.sub(b)), 
 	MUL("*", (a, b) -> a.multiply(b), (a, b) -> a.mul(b)), 
-	DIV("/", (a, b) -> a.divide(b), (a, b) -> a.div(b)), 
+	DIV("//", (a, b) -> a.divide(b), (a, b) -> a.div(b)),
+	FDIV("/", (a, b) -> fdiv(a, b), (a, b) -> fdiv(a, b)),
 	MOD("%", (a, b) -> a.mod(b), (a, b) -> a.mod(b)), 
 	POW("^", (a, b) -> a.pow(b.intValue()), (a, b) -> a.pow(b)), 
 	ID("", (a, b) -> BigInteger.ZERO, (a, b) -> null),
@@ -67,4 +70,19 @@ public enum CryptaOperator {
 		return b ? BigInteger.ONE : BigInteger.ZERO;
 	}
 
+	private static final BigInteger fdiv(BigInteger a, BigInteger b) {
+		final BigInteger[] r = a.divideAndRemainder(b);
+		if(r[1].equals(BigInteger.ZERO)) return r[0];
+		else throw new ArithmeticException("The remainder of the division is non-zero.");
+	}
+	
+	private static final ArExpression fdiv(ArExpression a, ArExpression b) {
+		final IntVar va = a.intVar();
+		final IntVar vb = b.intVar();
+		final int[] bounds = VariableUtils.boundsForDivision(va, vb);
+		final IntVar q = a.getModel().intVar(bounds[0], bounds[1]);
+		// Post auxiliary constraint to emulate floor division.
+		q.mul(b).eq(a).post();
+		return q;
+	}
 }
