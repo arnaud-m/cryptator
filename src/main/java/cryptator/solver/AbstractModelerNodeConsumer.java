@@ -65,7 +65,7 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 	}
 
 	private void postFirstSymbolConstraints() {
-		if(! config.allowLeadingZeros()) {
+		if(! config.getAllowLeadingZeros()) {
 			for (Character symbol : firstSymbols) {
 				getSymbolVar(symbol).gt(0).post();
 			}

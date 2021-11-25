@@ -40,11 +40,11 @@ public class CryptaConfig {
 	@Argument
 	private List<String> arguments = new ArrayList<>();
 
-	public final boolean allowLeadingZeros() {
+	public final boolean getAllowLeadingZeros() {
 		return allowLeadingZeros;
 	}
 
-	public final void allowLeadingZeros(boolean allowLeadingZeros) {
+	public final void setAllowLeadingZeros(boolean allowLeadingZeros) {
 		this.allowLeadingZeros = allowLeadingZeros;
 	}
 
@@ -56,11 +56,11 @@ public class CryptaConfig {
 		this.arithmeticBase = arithmeticBase;
 	}
 
-	public final boolean useHornerScheme() {
+	public final boolean getHornerScheme() {
 		return hornerScheme;
 	}
 
-	public final void useHornerScheme(boolean useHornerScheme) {
+	public final void setHornerScheme(boolean useHornerScheme) {
 		this.hornerScheme = useHornerScheme;
 	}
 

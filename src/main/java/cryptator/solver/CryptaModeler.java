@@ -43,7 +43,7 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
 	public ModelerConsumer(Model model, CryptaConfig config) {
 		super(model, config);
-		wordVarBuilder = config.useHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
+		wordVarBuilder = config.getHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
 	}
 
 

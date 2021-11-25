@@ -110,7 +110,7 @@ public class SolverTest {
 
 		@Test
 	public void testSendMoreMoney1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.config.useHornerScheme(true);
+		t.config.setHornerScheme(true);
 		t.testUNIQUE("send+more=money");
 	}
 
@@ -123,7 +123,7 @@ public class SolverTest {
 
 	@Test
 	public void testSendMoreMoney3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.config.allowLeadingZeros(true);
+		t.config.setAllowLeadingZeros(true);
 		t.solver.limitSolution(100);
 		t.testSAT("send+more=money");;
 	}
@@ -178,14 +178,14 @@ public class SolverTest {
 	@Test
 	public void testBigCatLion2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		t.config.setArithmeticBase(16);
-		t.config.useHornerScheme(true);
+		t.config.setHornerScheme(true);
 		t.solver.limitSolution(100);
 		t.testSAT("big + cat = lion");
 	}
 
 	@Test
 	public void testBigCatLion3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.config.allowLeadingZeros(true);
+		t.config.setAllowLeadingZeros(true);
 		t.solver.limitSolution(100);
 		t.testSAT("big + cat = lion");
 	}
@@ -202,7 +202,7 @@ public class SolverTest {
 
 	@Test
 	public void testBigCatBig3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.config.allowLeadingZeros(true);
+		t.config.setAllowLeadingZeros(true);
 		t.testUNSAT("big * cat = big");
 	}
 
@@ -220,14 +220,14 @@ public class SolverTest {
 	@Test
 	public void testDonaldGeraldRobert3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		t.config.setArithmeticBase(2);
-		t.config.useHornerScheme(true);
+		t.config.setHornerScheme(true);
 		t.testUNSAT("donald + gerald = robert");
 	}
 
 	@Test
 	public void testDonaldGeraldRobert4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		t.config.setArithmeticBase(2);
-		t.config.allowLeadingZeros();
+		t.config.getAllowLeadingZeros();
 		t.config.setRelaxMinDigitOccurence(1);
 		t.testUNSAT("donald + gerald = robert");
 	}
@@ -235,7 +235,7 @@ public class SolverTest {
 	@Test
 	public void testDonaldGeraldRobert5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
 		t.config.setArithmeticBase(2);
-		t.config.allowLeadingZeros();
+		t.config.getAllowLeadingZeros();
 		t.config.setRelaxMinDigitOccurence(1);
 		t.config.setRelaxMaxDigitOccurence(1);
 		t.testUNSAT("donald + gerald = robert");
@@ -269,7 +269,7 @@ public class SolverTest {
 
 	@Test
 	public void testGE() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.config.useHornerScheme(true);
+		t.config.setHornerScheme(true);
 		t.solver.limitSolution(100);
 		t.testSAT("BAC > B * A * C");
 	}
@@ -282,7 +282,7 @@ public class SolverTest {
 
 	@Test
 	public void testLE() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.config.useHornerScheme(true);
+		t.config.setHornerScheme(true);
 		t.solver.limitSolution(100);
 		t.testSAT("B * A / C < B + A * C");
 	}
