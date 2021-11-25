@@ -75,4 +75,11 @@ public final class TreeUtils {
 		TreeTraversals.preorderTraversal(cryptarithm, detect);
 		return detect;
 	}
+	
+	public static char[] computeSymbols(ICryptaNode cryptarithm) {
+		final CryptaSymbols sym = new CryptaSymbols();
+		TreeTraversals.preorderTraversal(cryptarithm, sym);
+		return sym.getSymbols();
+	}
+	
 }

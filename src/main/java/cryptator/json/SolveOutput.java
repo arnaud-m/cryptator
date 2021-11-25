@@ -1,11 +1,11 @@
 package cryptator.json;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import cryptator.solver.CryptaSolutionException;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
@@ -18,15 +18,11 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
 
 	private int base;
 
-	private char[] letters;
+	private char[] symbols;
 	
-	private List<int[]> solutions;
+	private List<int[]> solutions = new ArrayList<>();
 
 	private int invalidSolution;
-
-	// TODO Remove the annotation and give test scope to jakcson.
-	@JsonIgnore
-	private final ICryptaEvaluation eval = new CryptaEvaluation();
 
 	public SolveOutput() {
 		super();
@@ -58,13 +54,13 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
 	public void setBase(int base) {
 		this.base = base;
 	}
-
-	public char[] getLetters() {
-		return letters;
+	
+	public char[] getSymbols() {
+		return symbols;
 	}
 
-	public void setLetters(char[] letters) {
-		this.letters = letters;
+	public void setSymbols(char[] symbols) {
+		this.symbols = symbols;
 	}
 
 	public List<int[]> getSolutions() {
@@ -83,18 +79,19 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
 		this.invalidSolution = invalidSolution;
 	}
 
-	public ICryptaEvaluation getEval() {
-		return eval;
-	}
-
 	@Override
 	public void accept(ICryptaNode n, ICryptaSolution s) {
+		final ICryptaEvaluation eval = new CryptaEvaluation();
 		try {
 			if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) == 0) invalidSolution++;
 			else {
-				// TODO Record solution
+				int[] solution = new int[symbols.length];
+				for (int i = 0; i < solution.length; i++) {
+					solution[i] = s.getDigit(symbols[i]);
+				}
+				solutions.add(solution);
 			}
-		} catch (CryptaEvaluationException e) {
+		} catch (CryptaEvaluationException|CryptaSolutionException e) {
 			invalidSolution++;
 		}
 	}

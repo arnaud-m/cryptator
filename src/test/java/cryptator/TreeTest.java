@@ -8,9 +8,10 @@
  */
 package cryptator;
 
-import static cryptator.tree.TreeUtils.writeInorder;
+import static cryptator.tree.TreeUtils.*;
 import static cryptator.tree.TreeUtils.writePostorder;
 import static cryptator.tree.TreeUtils.writePreorder;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
+import cryptator.tree.TreeUtils;
 
 public class TreeTest {
 
@@ -41,6 +43,8 @@ public class TreeTest {
 		TreeTest.testPreorder("= + send more money ", sendMoreMoney);
 		TreeTest.testPostorder("send more + money = ", sendMoreMoney);
 		TreeTest.testInorder("send + more = money ", sendMoreMoney);
+		
+		assertArrayEquals("demnorsy".toCharArray(), computeSymbols(sendMoreMoney));
 	}
 
 	@Test
@@ -63,6 +67,9 @@ public class TreeTest {
 		TreeTest.testPreorder("= + send + much more money ", sendMoreMoney);
 		TreeTest.testPostorder("send much more + + money = ", sendMoreMoney);
 		TreeTest.testInorder("send + much + more = money ", sendMoreMoney);
+		
+		assertArrayEquals("cdehmnorsuy".toCharArray(), computeSymbols(sendMoreMoney));
+		
 	}
 
 	public static void testInorder(String expected, ICryptaNode node) {

@@ -22,6 +22,7 @@ public class CryptatorConfig extends CryptaCmdConfig {
 	@Option(name="-l",handler=ExplicitBooleanOptionHandler.class,usage="use the bignum model (only + and =)")
 	private boolean useBigNum;
 
+	
 	public final int getSolutionLimit() {
 		return solutionLimit;
 	}
@@ -34,6 +35,18 @@ public class CryptatorConfig extends CryptaCmdConfig {
 		return useBigNum;
 	}
 	
+	public final void setSolutionLimit(int solutionLimit) {
+		this.solutionLimit = solutionLimit;
+	}
+
+	public final void setTimeLimit(int timeLimit) {
+		this.timeLimit = timeLimit;
+	}
+
+	public final void setUseBigNum(boolean useBigNum) {
+		this.useBigNum = useBigNum;
+	}
+
 	@Override
 	public String toString() {
 		return super.toString() + 
