@@ -82,7 +82,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 		// if there's a problem in the command line,
 		// you'll get this exception. this will report
 		// an error message.
-		System.err.println("java " + getCommandName() + "[options...] "+ getArgumentName());
+		System.err.println("java " + getCommandName() + " [options...] "+ getArgumentName());
 		// print the list of available options
 		parser.printUsage(System.err);
 		// print option sample. This is useful some time

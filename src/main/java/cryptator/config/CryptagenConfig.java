@@ -28,7 +28,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
 	@Option(name="-minop", usage="minimum number of left operands")
 	private int minLeftOperands= 2;
 	
-	@Option(name="-maxop", usage="minimum number of left operands")
+	@Option(name="-maxop", usage="maximum number of left operands")
 	private int maxLeftOperands= -1;
 	
 	
