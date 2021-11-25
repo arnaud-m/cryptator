@@ -71,7 +71,7 @@ public class Cryptator {
 		}	
 	}
 
-	private static final ICryptaSolver buildSolver(CryptatorConfig config) {
+	public static final ICryptaSolver buildSolver(CryptatorConfig config) {
 		final CryptaSolver solver = new CryptaSolver(config.useBignum());
 		solver.limitSolution(config.getSolutionLimit());
 		solver.limitTime(config.getTimeLimit());

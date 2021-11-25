@@ -48,6 +48,14 @@ public final class JULogUtil {
 				);
 	}
 	
+	public static final void configureJsonLoggers() {
+		readResourceConfigurationLoggers(PROPERTIES);
+		setLevel(Level.INFO, 
+				Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, 
+				CryptaSolver.LOGGER, CryptaGameEngine.LOGGER
+				);
+	}
+	
 	public static final void setLevel(Level level, Logger...loggers) {
 		for (Logger logger : loggers) {
 			logger.setLevel(level);

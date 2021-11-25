@@ -51,8 +51,7 @@
 		<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
 		<!-- Java source/target to use for compilation. -->
 		<javac.target>1.8</javac.target>
-		<!-- Name of the benchmark Uber-JAR to generate. -->
-		<uberjar.name>benchmarks</uberjar.name>
+		<javac.source>1.8</javac.source>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/args4j/args4j -->
@@ -104,6 +103,12 @@
 	    <artifactId>icu4j</artifactId>
 	    <version>69.1</version>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+	<dependency>
+    	<groupId>com.fasterxml.jackson.core</groupId>
+    	<artifactId>jackson-databind</artifactId>
+    	<version>2.13.0</version>
+	</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -120,7 +125,7 @@
 					<!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't
 						configured the maven-toolchains-plugin -->
 					<jdkToolchain>
-						<version>9</version>
+						<version>8</version>
 					</jdkToolchain>
 					<release>8</release>
 				</configuration>

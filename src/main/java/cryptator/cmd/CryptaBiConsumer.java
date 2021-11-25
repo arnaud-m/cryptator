@@ -116,9 +116,9 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 					logger.info("Eval cryptarithm solution [OK]");
 					return;
 				} else
-					logger.warning("Eval cryptarithm solution [KO]");
+					logger.severe("Eval cryptarithm solution [KO]");
 			} catch (CryptaEvaluationException e) {
-				logger.log(Level.WARNING, "Eval cryptarithm solution [FAIL]", e);
+				logger.log(Level.SEVERE, "Eval cryptarithm solution [FAIL]", e);
 			}
 			errorCount++;
 		}

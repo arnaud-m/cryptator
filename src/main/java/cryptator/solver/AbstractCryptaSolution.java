@@ -55,6 +55,8 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 		final StringBuilder b1 = new StringBuilder();
 		final StringBuilder b2 = new StringBuilder();
 		ArrayList<Character> sortedKeys = new ArrayList<>(symbolsToDigits.keySet());
+		// TODO The keys are sorted each time.
+		// An abstract method should return the sorted keys allowing to sort keys only once if possible.
 		Collections.sort(sortedKeys);		
 		for (Character symbol : sortedKeys) {
 			final String domain = getDomain(symbolsToDigits.get(symbol));
