@@ -34,12 +34,8 @@ public class CryptaSolutionMap extends AbstractCryptaSolution<Integer> {
 		return new CryptaSolutionMap(symbolToDigit);
 	}
 	
-	public CryptaSolutionMap(Map<Character, Integer> symbolsToDigits) {
+	protected CryptaSolutionMap(Map<Character, Integer> symbolsToDigits) {
 		super(symbolsToDigits);
-	}
-	
-	public final Map<Character, Integer> getSymbolToDigit() {
-		return symbolsToDigits;
 	}
 	
 	@Override

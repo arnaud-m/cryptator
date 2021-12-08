@@ -177,3 +177,6 @@ $RECYCLE.BIN/
 
 src/main/antlr4-source-folder/
 
+#####=== R ===#####
+.Rhistory
+src/main/R/L*.txt

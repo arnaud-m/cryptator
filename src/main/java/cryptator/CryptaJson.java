@@ -1,3 +1,11 @@
+/**
+ * This file is part of cryptator, https://github.com/arnaud-m/cryptator
+ *
+ * Copyright (c) 2021, Université Côte d'Azur. All rights reserved.
+ *
+ * Licensed under the BSD 3-clause license.
+ * See LICENSE file in the project root for full license information.
+ */
 package cryptator;
 
 import cryptator.config.CryptatorConfig;
@@ -20,7 +28,7 @@ public class CryptaJson {
 	public static SolveOutput solve(SolveInput input) throws CryptaModelException, CryptaSolverException {
 		final CryptaParserWrapper parser = new CryptaParserWrapper();
 		final ICryptaNode node = parser.parse(input.getCryptarithm());
-		CryptatorConfig config = input.getConfig();
+		final CryptatorConfig config = input.getConfig();
 		
 		final SolveOutput output = new SolveOutput(input);
 		output.setSymbols(TreeUtils.computeSymbols(node));

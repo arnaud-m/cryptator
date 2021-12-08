@@ -21,6 +21,7 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 
 	protected AbstractCryptaSolution(Map<Character, E> symbolsToDigits) {
 		super();
+		// TODO Copy the map so that it is immutable ?
 		this.symbolsToDigits = symbolsToDigits;
 	}
 
