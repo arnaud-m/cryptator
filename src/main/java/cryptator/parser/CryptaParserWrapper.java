@@ -19,14 +19,14 @@ import cryptator.specs.ICryptaParser;
 public class CryptaParserWrapper implements ICryptaParser {
 
 	@Override
-	public ICryptaNode parse(String cryptarithm) throws CryptaParserException {
+	public ICryptaNode parse(final String cryptarithm) throws CryptaParserException {
         final CharStream input = CharStreams.fromString(cryptarithm);
-        cryptator.parser.CryptatorLexer lexer = new cryptator.parser.CryptatorLexer(input);
+        final CryptatorLexer lexer = new CryptatorLexer(input);
         lexer.removeErrorListeners();
         lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
 
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        cryptator.parser.CryptatorParser parser = new cryptator.parser.CryptatorParser(tokens);
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final CryptatorParser parser = new CryptatorParser(tokens);
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         cryptator.parser.CryptatorParser.ProgramContext ctx = parser.program();

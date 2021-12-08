@@ -28,7 +28,7 @@ expression returns [ICryptaNode node]: //create recursively the tree of expressi
             | e1=expression addORsub e2=expression {$node=new CryptaNode($addORsub.text, $e1.node, $e2.node);};
 
 word :  //additional token to simplify the passage in parameter
-    (LETTER)+; 
+    (SYMBOL)+; 
     
 modORpow : '%' | '^';
 
@@ -42,7 +42,7 @@ sub : '-';
 
 COMPARATOR : '=' | '!=' | '<' | '>' | '<=' | '>=';
 
-LETTER : [a-zA-Z0-9_] {};
+SYMBOL : [a-zA-Z0-9\u0080-\uFFFF] {};
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
 
