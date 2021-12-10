@@ -5,9 +5,10 @@
  - [[https://tamura70.gitlab.io/web-puzzle/cryptarithm/][Cryptarithmetic Puzzle Solver]]
    - ~alpha.txt~, ~astro.txt~, ~computer.txt~, ~elements.txt~, ~europeans.txt~, ~instruments.txt~, ~rainbow.txt~, ~vegetables.txt~.
  - [[https://github.com/DOREMUS-ANR/music-embeddings][DOREMUS Music Embeddings]]
+   - ~artist.txt~, ~genre.txt, ~mop.txt~.
  - [[https://sofdem.github.io/gccat/][Global Constraint Catalog]]
-   - ~gccat.txt~
+   - ~gccat.txt~.
  - [[https://archive.org/details/Greek-englishWord-listContainingAbout1000MostCommonGreekWordsTxt][Greek-English word-list containing about 1000 most common Greek words]]
-   - ~common-greek-words.txt~
+   - ~common-greek-words.txt~.
  - [[https://chrplr.github.io/openlexicon/datasets-info/Liste-de-mots-francais-Gutenberg/README-liste-francais-Gutenberg.html][Liste de mots français Gutenberg]]
-   - ~french-words.txt~
+   - ~french-words.txt~.
