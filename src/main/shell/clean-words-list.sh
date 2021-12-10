@@ -3,14 +3,14 @@
 TMP1=`mktemp`
 TMP2=`mktemp`
 
-for DICT in $* ; do
+for FILE in $* ; do
     ## Remove all diacritics
     ## https://stackoverflow.com/questions/10207354/how-to-remove-all-of-the-diacritics-from-a-file
-    cat $DICT | iconv -f utf8 -t ascii//TRANSLIT//IGNORE > $TMP1
+    cat $FILE | iconv -f utf8 -t ascii//TRANSLIT//IGNORE > $TMP1
     ## Convert to lowercase
     cat $TMP1 | tr '[:upper:]' '[:lower:]' > $TMP2
-    ## Remove non alphanumerics
-    sed 's/[^a-z0-9]//g' $TMP2 > $TMP1
+    ## Remove non alphanumerics and blank lines
+    sed -e 's/[^a-z0-9]//g' -e '/^[[:space:]]*$/d'  $TMP2 > $TMP1
     ## Remove duplicates
-    uniq $TMP1 > $DICT.clean
+    sort -u $TMP1 > $FILE.clean
 done
