@@ -12,3 +12,5 @@
    - ~common-greek-words.txt~.
  - [[https://chrplr.github.io/openlexicon/datasets-info/Liste-de-mots-francais-Gutenberg/README-liste-francais-Gutenberg.html][Liste de mots français Gutenberg]]
    - ~french-words.txt~.
+ - [[https://www.kevmrc.com/most-popular-sports-in-the-world][The 30 Most Popular Sports in the World]] and [[https://7esl.com/sports-and-games-vocabulary/][Sports and Games Vocabulary]]
+   - ~sports.txt~
