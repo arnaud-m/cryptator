@@ -8,7 +8,17 @@
  */
 package cryptator.specs;
 
+/**
+ * The Interface ITraversalNodeConsumer visits nodes when traversing the cryptarithm tree.
+ */
 public interface ITraversalNodeConsumer {
 	
+	/**
+	 * Handle the node during a traversal of the cryptarithm tree.
+	 * The positions of the node in the traversal ordering is also given as parameter.
+	 *
+	 * @param node the visited node in the tree
+	 * @param numNode the position in the traversal ordering starting at 0.
+	 */
 	void accept(ICryptaNode node, int numNode);
 }

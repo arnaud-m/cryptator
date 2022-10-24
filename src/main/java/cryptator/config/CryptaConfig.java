@@ -16,11 +16,12 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
-
+/**
+ * A bean object that stores the common configuration.
+ * This is designed for args4j command line, but it is not restricted to it.
+ */
 public class CryptaConfig {
-	/**
-	 * Base, or radix, of the positional Numeral System
-	 */
+
 	@Option(name="-b", usage="Base (or radix) of the positional numeral system used for the cryptarithm (> 1)")
 	private int arithmeticBase = 10;
 
@@ -36,7 +37,9 @@ public class CryptaConfig {
 	@Option(name="-max", usage="relaxation of the maximum number of occurences of a digit (>=0)")
 	private int relaxMaxDigitOccurence = 0;
 
-	// receives other command line parameters than options
+	/**
+	 * Receives other command line parameters than options
+	 */
 	@Argument
 	private List<String> arguments = new ArrayList<>();
 

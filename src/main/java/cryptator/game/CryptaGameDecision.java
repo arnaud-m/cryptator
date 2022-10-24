@@ -10,16 +10,32 @@ package cryptator.game;
 
 import java.util.Scanner;
 
+
 import cryptator.CryptaOperator;
 
+/**
+ * The Class CryptaGameDecision represents the decision of a player for solving a cryptarithm.
+ * It is inspired by the branching decision of the choco solver: org.chocosolver.solver.search.strategy.decision.Decision.
+ * 
+ */
 public final class CryptaGameDecision {
 
+	/** The symbol. */
 	public final char symbol;
 
+	/** The operator. */
 	public final CryptaOperator operator;
 	
+	/** The value. */
 	public final int value;
 
+	/**
+	 * Instantiates a new game decision.
+	 *
+	 * @param symbol the symbol
+	 * @param operator the operator
+	 * @param value the value
+	 */
 	public CryptaGameDecision(char symbol, CryptaOperator operator, int value) {
 		super();
 		this.symbol = symbol;
@@ -27,27 +43,59 @@ public final class CryptaGameDecision {
 		this.value = value;
 	}
 
+	/**
+	 * Gets the decision symbol.
+	 *
+	 * @return the symbol
+	 */
 	public final char getSymbol() {
 		return symbol;
 	}
 
+	/**
+	 * Gets the decision relational arithmetic operator.
+	 *
+	 * @return the operator
+	 */
 	public final CryptaOperator getOperator() {
 		return operator;
 	}
 
+	/**
+	 * Gets the decision value.
+	 *
+	 * @return the value
+	 */
 	public final int getValue() {
 		return value;
 	}
 	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		return symbol + " " + operator.getToken() + " " + value;
 	}
 	
+	/**
+	 * Parses the decision.
+	 *
+	 * @param decision the decision
+	 * @return the crypta game decision
+	 */
 	public static final CryptaGameDecision parseDecision(String decision) {
 		return parseDecision(new Scanner(decision));
 	}
 	
+	/**
+	 * Parses the decision from a scanner.
+	 *
+	 * @param s the scanner to be parsed
+	 * @return the parsed game decision
+	 */
 	public static final CryptaGameDecision parseDecision(Scanner s) {
 		if(s.hasNext()) {
 			final String symbol = s.next();

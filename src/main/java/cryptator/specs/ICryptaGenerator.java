@@ -12,8 +12,18 @@ import java.util.function.BiConsumer;
 
 import cryptator.solver.CryptaModelException;
 
+/**
+ * The Interface ICryptaGenerator generates new cryptarithms.
+ */
 public interface ICryptaGenerator {
 
+	/**
+	 * Generate cryptarithms and feed them to the consumer.
+	 * Usually, there must be a unique solution to the cryptarithm.
+	 *
+	 * @param consumer the consumer that handles the generated cryptarithm along with its solution.
+	 * @throws CryptaModelException if there was an error during the generation.
+	 */
 	void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException;
 
 }

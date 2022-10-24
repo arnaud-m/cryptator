@@ -15,7 +15,7 @@ public interface ICryptaParser {
 	/**
 	 * Parse a cryptarithm 
 	 * @param cryptarithm encoded using the antlr4 grammar
-	 * @return the root of a complete binary tree that represent the cryptarithm.
+	 * @return the root of a complete binary tree (AST) that represent the cryptarithm.
 	 * @throws CryptaParserException on failure. 
 	 */
 	ICryptaNode parse(String cryptarithm) throws CryptaParserException;

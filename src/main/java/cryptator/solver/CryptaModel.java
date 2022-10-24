@@ -15,27 +15,52 @@ import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.specs.ICryptaSolution;
 
+/**
+ * The Class CryptaModel encapsulates the choco model and solution.
+ */
 public final class CryptaModel {
 
+	/** The model. */
 	public final Model model; 
 	
+	/** The solution. */
 	public final CryptaSolutionVars solution;
 
+	/**
+	 * Instantiates a new model.
+	 *
+	 * @param model the model
+	 * @param symbolsToVariables the symbols to variables used to instantiate the solution
+	 */
 	public CryptaModel(Model model, Map<Character, IntVar> symbolsToVariables) {
 		super();
 		this.model = model;
 		this.solution = new CryptaSolutionVars(symbolsToVariables);
 	}
 
+	/**
+	 * Gets the model.
+	 *
+	 * @return the model
+	 */
 	public final Model getModel() {
 		return model;
 	}
-
 	
+	/**
+	 * Gets the solution associated to the solver.
+	 *
+	 * @return the solution
+	 */
 	public final CryptaSolutionVars getSolution() {
 		return solution;
 	}
 
+	/**
+	 * Record a solution into a new solution object independent from the solver.
+	 *
+	 * @return the new solution
+	 */
 	public ICryptaSolution recordSolution() {
 		return solution.recordSolution();
 	}
@@ -44,8 +69,5 @@ public final class CryptaModel {
 	public String toString() {
 		return solution.toString();
 	}
-	
-	
-	
-	
+		
 }

@@ -14,6 +14,7 @@ import cryptator.config.CryptaConfig;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolverException;
 
+
 public interface ICryptaSolver {
 
 	void limitTime(long limit);
