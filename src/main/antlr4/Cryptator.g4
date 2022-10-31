@@ -14,9 +14,10 @@ import cryptator.tree.CryptaLeaf;
 
 program : equation EOF{}; //additional token to simplify the passage in parameter
 
-equation returns [ICryptaNode node]: //create a node of the tree corresponding to an equation and return this node
-                 '(' equation ')' {$node=$equation.node;}
-                 | left=expression COMPARATOR right=expression {$node=new CryptaNode($COMPARATOR.getText(), $left.node, $right.node);};
+equation returns [ICryptaNode node]  //create a node of the tree corresponding to an equation and return this node
+        : '(' equation ')' {$node=$equation.node;}
+        | left=expression COMPARATOR right=expression {$node=new CryptaNode($COMPARATOR.getText(), $left.node, $right.node);}
+        | e1=equation logicOperator e2=equation {$node=new CryptaNode($logicOperator.text, $e1.node, $e2.node);};
                  
 
 expression returns [ICryptaNode node]: //create recursively the tree of expressions with priority and return the root of the tree
@@ -37,6 +38,8 @@ divORmul : '/' | '//' | '*';
 addORsub : '+' | sub;
 
 sub : '-';
+
+logicOperator : ';';
 
 // Lexer Rules
 
