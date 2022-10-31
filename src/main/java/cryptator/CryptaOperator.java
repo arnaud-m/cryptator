@@ -35,7 +35,7 @@ public enum CryptaOperator {
     LE("<=", (a, b) -> toBigInt(a.compareTo(b) <= 0), (a, b) -> a.le(b)),
     GE(">=", (a, b) -> toBigInt(a.compareTo(b) >= 0), (a, b) -> a.ge(b)),
 
-    AND(";", (a, b) -> toBigInt(a.compareTo(b) == 0), (a, b) -> ((ReExpression) a).and((ReExpression) b));
+    AND(";", (a, b) -> toBigInt(a.min(b).compareTo(BigInteger.ONE) == 0), (a, b) -> ((ReExpression) a).and((ReExpression) b));
 
     public final String token;
 
