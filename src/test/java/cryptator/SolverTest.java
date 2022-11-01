@@ -1,8 +1,8 @@
 /**
  * This file is part of cryptator, https://github.com/arnaud-m/cryptator
- * <p>
+ *
  * Copyright (c) 2022, Université Côte d'Azur. All rights reserved.
- * <p>
+ *
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
@@ -419,6 +419,7 @@ public class SolverTest {
         t.testUNIQUE("a*a=b;b=a+a");
     }
 
+
     //    ABC   *  DE = CFGH
     //      +      *      -
     //    JDHJ +  DGC = JGKK
@@ -432,5 +433,29 @@ public class SolverTest {
                 "ABC + JDHJ = JEDK; " +
                 "DE * DGC = EBAH; " +
                 "CFGH-JGKK=FAGH");
+    }
+
+    @Test
+    public void testSendMoreMoneyList() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNIQUE("send+more=money; d+e>=y");
+    }
+
+    @Test
+    public void testSendMoreMoneyList1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNIQUE("send+more=money; -send -more= -money");
+    }
+
+    @Test
+    public void testSendMoreMoneyList2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testNotUNIQUE("send+more=money; a+b=c");
+    }
+
+    @Test
+    public void testSendMoreMoneyList3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testSAT("send+more=money; a+b=c");
     }
 }
