@@ -1,8 +1,8 @@
 /**
  * This file is part of cryptator, https://github.com/arnaud-m/cryptator
- *
+ * <p>
  * Copyright (c) 2022, Université Côte d'Azur. All rights reserved.
- *
+ * <p>
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
@@ -342,16 +342,6 @@ public class SolverTest {
     }
 
     @Test
-    public void testUnique1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("aa+b=cd;a*a=a");
-    }
-
-    @Test
-    public void testNotUnique1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testNotUNIQUE("aa+b=cd");
-    }
-
-    @Test
     public void testPavlis() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.testUNIQUE("SO+MANY+MORE+MEN+SEEM+TO+SAY+THAT+THEY+MAY+SOON+TRY+TO+STAY+AT+HOME+SO+AS+TO+SEE+OR+HEAR+THE+SAME+ONE+MAN+TRY+TO+MEET+THE+TEAM+ON+THE+MOON+AS+HE+HAS+AT+THE+OTHER+TEN=TESTS");
     }
@@ -408,5 +398,39 @@ public class SolverTest {
         );
     }
 
+    // Start AND tests
+    @Test
+    public void testAndUnique1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("aa+b=cd; a*a=a");
+    }
 
+    @Test
+    public void testAndNotUnique1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testNotUNIQUE("aa+b=cd");
+    }
+
+    @Test
+    public void testAndUNSAT1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNSAT("a*a=a; a*a=a+a; a+a!=a");
+    }
+
+    @Test
+    public void testAndNotUnique2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("a*a=b;b=a+a");
+    }
+
+    //    ABC   *  DE = CFGH
+    //      +      *      -
+    //    JDHJ +  DGC = JGKK
+    //    ------------------
+    //    JEDK + EBAH = FAGH
+    @Test
+    public void testCrossNumber1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("ABC * DE = CFGH; " +
+                "JDHJ + DGC = JGKK; " +
+                "JEDK + EBAH = FAGH; " +
+                "ABC + JDHJ = JEDK; " +
+                "DE * DGC = EBAH; " +
+                "CFGH-JGKK=FAGH");
+    }
 }

@@ -176,35 +176,6 @@ public class EvaluationTest {
         assertTrueEval(cryptarithm, solution, 4);
     }
 
-    @Test
-    public void testEvaluation10() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-        final ICryptaNode cryptarithm = parser.parse("aa+b=cd;a*a=a");
-        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=1 b=9 c=2 d=0");
-        assertTrueEval(cryptarithm, solution, 10);
-    }
-
-    @Test
-    public void testEvaluation11() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-        final ICryptaNode cryptarithm = parser.parse("aa+b=cd;a*a=a");
-        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=2 b=9 c=3 d=1");
-        assertFalseEval(cryptarithm, solution, 10);
-    }
-
-    @Test
-    public void testEvaluation13() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-        final ICryptaNode cryptarithm = parser.parse("aa+b=cd;a*a=a");
-        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=5 b=6 c=7 d=8");
-        assertFalseEval(cryptarithm, solution, 10);
-    }
-
-
-    @Test
-    public void testEvaluation12() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
-        final ICryptaNode cryptarithm = parser.parse("aa+b=cd");
-        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=2 b=9 c=3 d=1");
-        assertTrueEval(cryptarithm, solution, 10);
-    }
-
 
     public void testPartialSolution(String cryptarithm, String partialSolution) throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
         final ICryptaNode node = parser.parse(cryptarithm);
@@ -260,6 +231,35 @@ public class EvaluationTest {
     public void testBignum3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
         final ICryptaNode cryptarithm = parser.parse("AAAAAAAAAAAAAAAAAAAAAAAAD + A + BBBBBBBBBBBBBBBBBBBBBBDDD + BBB = CCCCCCCCCCCCCCCCCCCCCCCDD + CC");
         final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=1 B=2 C=3 D=0");
+        assertTrueEval(cryptarithm, solution, 10);
+    }
+
+    // Start AND tests (the and is represented by the ";" symbol).
+    @Test
+    public void testEvaluationAnd1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("aa+b=cd;a*a=a");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=1 b=9 c=2 d=0");
+        assertTrueEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationAnd2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("aa+b=cd;a*a=a");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=2 b=9 c=3 d=1");
+        assertFalseEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationAnd3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("aa+b=cd;a*a=a");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=5 b=6 c=7 d=8");
+        assertFalseEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationAnd4() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("aa+b=cd");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=2 b=9 c=3 d=1");
         assertTrueEval(cryptarithm, solution, 10);
     }
 

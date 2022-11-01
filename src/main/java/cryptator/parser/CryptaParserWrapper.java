@@ -9,17 +9,16 @@
 package cryptator.parser;
 
 
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ICryptaParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ICryptaParser;
-
 public class CryptaParserWrapper implements ICryptaParser {
 
-	@Override
-	public ICryptaNode parse(final String cryptarithm) throws CryptaParserException {
+    @Override
+    public ICryptaNode parse(final String cryptarithm) throws CryptaParserException {
         final CharStream input = CharStreams.fromString(cryptarithm);
         final CryptatorLexer lexer = new CryptatorLexer(input);
         lexer.removeErrorListeners();
@@ -30,7 +29,7 @@ public class CryptaParserWrapper implements ICryptaParser {
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         cryptator.parser.CryptatorParser.ProgramContext ctx = parser.program();
-        return ctx.equation().node;  
+        return ctx.conjunctions().node;
     }
 
 }
