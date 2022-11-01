@@ -434,6 +434,16 @@ public class SolverTest {
                 "DE * DGC = EBAH; " +
                 "CFGH-JGKK=FAGH");
     }
+    @Test
+    public void testCrossNumber2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNSAT("ABC * DE = CFGH; " +
+                "JDHJ + DGC = JGKK; " +
+                "JEDK + EBAH = FAGH; " +
+                "ABC + JDHJ = JEDK; " +
+                "DE * DGC = EBAH; " +
+                "CFGH-JGKK=FAGA");
+    }
+
 
     @Test
     public void testSendMoreMoneyList() throws CryptaParserException, CryptaModelException, CryptaSolverException {
@@ -457,5 +467,11 @@ public class SolverTest {
     public void testSendMoreMoneyList3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.config.setHornerScheme(true);
         t.testSAT("send+more=money; a+b=c");
+    }
+
+    @Test
+    public void testSendMoreMoneyList4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNSAT("send+more=money; s+e=n");
     }
 }
