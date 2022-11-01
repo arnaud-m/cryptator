@@ -28,7 +28,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
 ** Prerequisites
   This project works on 32 bits and 64 bits environment and requires:
 
-  - JDK 8+
+  - JDK 11+
   - Maven 3+
 
 ** As a stand-alone application
@@ -64,7 +64,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
  <dependency>
     <groupId>fr.univ-cotedazur</groupId>
     <artifactId>cryptator</artifactId>
-    <version>0.4.1</version>
+    <version>0.5.0-SNAPSHOT</version>
  </dependency>
  #+END_EXAMPLE
 
