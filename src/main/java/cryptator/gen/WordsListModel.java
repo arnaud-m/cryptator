@@ -36,7 +36,7 @@ public class WordsListModel {
 	public WordsListModel(Model model, String[] words) {
 		this.model = model;		
 		this.words = words;
-		wordVariables = model.boolVarArray("w", words.length);
+		wordVariables = buildWordVars(model, words, "");
 		wordCount = buildCountVariable(model, "wordCount", wordVariables);
 		symbolsToVariables = buildSymbolVars(model, words);
 		symbolCount = buildSymbolCountVariable(model, symbolsToVariables);
@@ -52,6 +52,14 @@ public class WordsListModel {
 	}
 
 
+	protected static BoolVar[] buildWordVars(Model model, String[] words, String prefix) {
+		final BoolVar[] vars = new BoolVar[words.length];
+		for (int i = 0; i < words.length; i++) {
+			vars[i] = model.boolVar(prefix + words[i]);
+		}
+		return vars;
+	}
+	
 	private static Map<Character, BoolVar> buildSymbolVars(Model model, String[] words) {
 		final Map<Character, BoolVar> symbolsToVariables = new HashMap<>();
 		for (int i = 0; i < words.length; i++) {

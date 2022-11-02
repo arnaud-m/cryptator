@@ -17,7 +17,7 @@ import cryptator.gen.WordsListModel;
 
 public class WordsListModelTest {
 	
-	private final String[] words = new String[] {"0", "1", "10", "11", "100", "101", "110", "111", "1000"};
+	private final String[] words = new String[] {"a", "b", "ba", "bb", "baa", "bab", "bba", "bbb", "baaa"};
 	
 	@Test
 	public void testWLModel1() {
