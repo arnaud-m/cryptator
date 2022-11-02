@@ -2,7 +2,7 @@ name : CyptatorTest
 on : push
 jobs :
  tests:
-  run-on: ubuntu-latest
+  runs-on: ubuntu-latest
   steps:
    - name: Checkhout the repository
      uses: actions/checkout@v3
