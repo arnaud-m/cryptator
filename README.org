@@ -4,6 +4,7 @@
 #+OPTIONS: @:t ::t |:t ^:t f:t
 #+LANGUAGE: en
 #+TITLE: Cryptator
+[[https://github.com/arnaud-m/cryptator/actions][file:https://github.com/arnaud-m/cryptator/workflows/CryptatorTest/badge.svg]]
 [[https://opensource.org/licenses/BSD-3-Clause][https://img.shields.io/badge/License-BSD%203--Clause-blue.svg]]
 
 Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Université Côte d'Azur).
