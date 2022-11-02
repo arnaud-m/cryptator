@@ -16,7 +16,7 @@ program : conjunctions EOF{}; //additional token to simplify the passage in para
 
 conjunctions returns [ICryptaNode node]  //create a node of conjuncts
         : equation {$node=$equation.node;}
-        |  e1=equation logicOperator e2=conjunctions {$node=new CryptaNode($logicOperator.text, $e1.node, $e2.node);};
+        |  e1=equation and e2=conjunctions {$node=new CryptaNode($and.text, $e1.node, $e2.node);};
 
 equation returns [ICryptaNode node]  //create a node of the tree corresponding to an equation and return this node
         : '(' equation ')' {$node=$equation.node;}
@@ -42,7 +42,7 @@ addORsub : '+' | sub;
 
 sub : '-';
 
-logicOperator : ';';
+and : ';';
 
 // Lexer Rules
 
