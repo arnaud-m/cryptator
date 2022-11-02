@@ -6,6 +6,8 @@
 #+TITLE: Cryptator
 [[https://opensource.org/licenses/BSD-3-Clause][https://img.shields.io/badge/License-BSD%203--Clause-blue.svg]]
 
+[[https://github.com/arnaud-m/cryptator/actions/workflows/CryptatorTest.yml][file:https://github.com/arnaud-m/cryptator/actions/workflows/CryptatorTest.yml/badge.svg]]
+
 Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Université Côte d'Azur).
 
 Cryptator is a cryptarithm solver using [[https://en.wikipedia.org/wiki/Constraint_programming][Constraint Programming]].\\
@@ -28,7 +30,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
 ** Prerequisites
   This project works on 32 bits and 64 bits environment and requires:
 
-  - JDK 8+
+  - JDK 11+
   - Maven 3+
 
 ** As a stand-alone application
@@ -64,7 +66,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
  <dependency>
     <groupId>fr.univ-cotedazur</groupId>
     <artifactId>cryptator</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.5.0-SNAPSHOT</version>
  </dependency>
  #+END_EXAMPLE
 
