@@ -29,7 +29,7 @@ public class CryptaParserWrapper implements ICryptaParser {
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         cryptator.parser.CryptatorParser.ProgramContext ctx = parser.program();
-        return ctx.conjunctions().node;
+        return ctx.equations().node;
     }
 
 }
