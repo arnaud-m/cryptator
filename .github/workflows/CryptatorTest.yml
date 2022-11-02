@@ -11,5 +11,6 @@ jobs :
      with:
       java-version: '11'
       distribution: 'adopt'
+      cache: 'maven'
    - name: Test with Maven
-     run: mvn -B test -Dtest=ExtensiveTesting
+     run: mvn -B test -Dtest=ExtensiveTesting --file pom.xml
