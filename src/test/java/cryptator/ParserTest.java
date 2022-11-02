@@ -153,13 +153,47 @@ public class ParserTest {
     }
 
     @Test
-    public void testParserErrorAND() throws CryptaParserException {
-        parser.parse("send+more=money;; d+e>=y");
+    public void testParserAND4() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("send+more=money;; d+e>=y");
+
+        testPreorder("; = + send more money >= + d e y ", node);
+        testPostorder("send more + money = d e + y >= ; ", node);
+        testInorder("send + more = money ; d + e >= y ", node);
+
     }
 
     @Test
+    public void testParserAND5() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("A = B;; A = B");
+        testPreorder("; = A B = A B ", node);
+        testPostorder("A B = A B = ; ", node);
+        testInorder("A = B ; A = B ", node);
+    }
+
+    @Test
+    public void testParserAND6() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("A = B;; A = B;;;;;");
+        testPreorder("; = A B = A B ", node);
+        testPostorder("A B = A B = ; ", node);
+        testInorder("A = B ; A = B ", node);
+    }
+
+    @Test
+    public void testParserAND7() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("a=b;");
+        testPreorder("= a b ", node);
+        testPostorder("a b = ", node);
+        testInorder("a = b ", node);
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserErrorAND1() throws CryptaParserException {
+        parser.parse("a=b b=c");
+    }
+
+    @Test(expected = CryptaParserException.class)
     public void testParserErrorAND2() throws CryptaParserException {
-        parser.parse("A = B;; A = B");
+        parser.parse("; a=b");
     }
 
     @Test(expected = CryptaParserException.class)
@@ -184,11 +218,7 @@ public class ParserTest {
 
     @Test(expected = CryptaParserException.class)
     public void testParserErrorAND7() throws CryptaParserException {
-        parser.parse("; a=b");
+        parser.parse(";a=b; b=c;");
     }
 
-    @Test
-    public void testParserErrorAND8() throws CryptaParserException {
-        parser.parse("a=b;");
-    }
 }

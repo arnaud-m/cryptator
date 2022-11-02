@@ -474,4 +474,16 @@ public class SolverTest {
         t.config.setHornerScheme(true);
         t.testUNSAT("send+more=money; s+e=n");
     }
+
+    @Test
+    public void testSendMoreMoneyList5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNSAT("send+more=money;;; s+e=n");
+    }
+
+    @Test
+    public void testSendMoreMoneyList6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNSAT("send+more=money; s+e=n;");
+    }
 }
