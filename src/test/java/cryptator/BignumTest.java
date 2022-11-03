@@ -77,7 +77,7 @@ public class BignumTest {
      *       +             +               +               +             +
      * PROTECTORATE + ARISTOCRATIC + PRESCRIPTION + PROSOPOPOEIA = TRANSOCEANIC
      *       =             =               =               =             =
-     * TRANSOCEANIC + TRANSOCEANIC + TRANSOCEANIC + TRANSOCEANIC = A
+     * TRANSOCEANIC + TRANSOCEANIC + TRANSOCEANIC + TRANSOCEANIC = OSNETOPPCESSC
      */
 
     @Test

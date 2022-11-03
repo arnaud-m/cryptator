@@ -88,7 +88,6 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 			digits = model.intVarArray("D" + suffix, n, 0, config.getArithmeticBase()-1);
 			// TODO improve the bound ?
 			carries = model.intVarArray("C"+ suffix, n, 0, IntVar.MAX_INT_BOUND / config.getArithmeticBase());
-			// TODO Is it better to use scalar or an expression ?
 			postScalar(
 					new IntVar[] {carries[0], digits[0], a[0].intVar()},
 					new int[] {config.getArithmeticBase(), 1, -1}
@@ -140,13 +139,14 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 				break;
 			case EQ:
 				applyEQ(a, b);
+				if(!stack.isEmpty()) throw new IllegalStateException("Stack is not empty after accepting a relational operator."); 
 				break;
 			default:
 				//	Should never be in the default case, this exception is
 				//  a program break in order to recall to modify the switch if
 				//  a new operator in BigNum is added.
 				//  Example case : we remove the MUL operator in computeUnsupportedBignumOperator
-				throw new RuntimeException("Operator not implemented");
+				throw new IllegalStateException("Bignum operator is not yet implemented");
 			}
 		}
 	}
