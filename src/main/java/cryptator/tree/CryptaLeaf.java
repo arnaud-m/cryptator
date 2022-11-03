@@ -13,52 +13,67 @@ import cryptator.specs.ICryptaNode;
 
 public class CryptaLeaf implements ICryptaNode {
 
-	private final char[] word;
-	
-	public CryptaLeaf() {
-		this(new char[0]);
-	}
-	
-	public CryptaLeaf(String word) {
-		this(word.toCharArray());
-	}
-	
-	public CryptaLeaf(char[] word) {
-		this.word = word;
-	}
-	
-	@Override
-	public CryptaOperator getOperator() {
-		return CryptaOperator.ID;
-	}
+    private final char[] word;
+    private final boolean isConstant;
 
-	@Override
-	public char[] getWord() {
-		return word;
-	}
+    public CryptaLeaf() {
+        this(new char[0]);
+    }
 
-	@Override
-	public ICryptaNode getLeftChild() {
-		return null;
-	}
+    public CryptaLeaf(String word) {
+        this(word.toCharArray());
+    }
 
-	@Override
-	public ICryptaNode getRightChild() {
-		return null;
-	}
+    public CryptaLeaf(String word, boolean isConstant) {
+        this(word.toCharArray(), isConstant);
+    }
 
-	@Override
-	public boolean isLeaf() {
-		return true;
-	}
+    public CryptaLeaf(char[] word) {
+        this(word, false);
+    }
 
-	@Override
-	public boolean isInternalNode() {
-		return false;
-	}
-	
-	@Override
-	public String toString() {
-		return new String(word);
-	}
+    public CryptaLeaf(char[] word, boolean isConstant) {
+        this.word = word;
+        this.isConstant = isConstant;
+    }
+
+    @Override
+    public CryptaOperator getOperator() {
+        return CryptaOperator.ID;
+    }
+
+    @Override
+    public char[] getWord() {
+        return word;
+    }
+
+    @Override
+    public ICryptaNode getLeftChild() {
+        return null;
+    }
+
+    @Override
+    public ICryptaNode getRightChild() {
+        return null;
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return true;
+    }
+
+    @Override
+    public boolean isConstant() {
+        return isConstant;
+    }
+
+    @Override
+    public boolean isInternalNode() {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return new String(word);
+    }
 }
