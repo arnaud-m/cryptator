@@ -1,8 +1,8 @@
 /**
  * This file is part of cryptator, https://github.com/arnaud-m/cryptator
- *
+ * <p>
  * Copyright (c) 2022, Université Côte d'Azur. All rights reserved.
- *
+ * <p>
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
@@ -159,7 +159,6 @@ public class ParserTest {
         testPreorder("; = + send more money >= + d e y ", node);
         testPostorder("send more + money = d e + y >= ; ", node);
         testInorder("send + more = money ; d + e >= y ", node);
-
     }
 
     @Test
@@ -219,6 +218,26 @@ public class ParserTest {
     @Test(expected = CryptaParserException.class)
     public void testParserErrorAND7() throws CryptaParserException {
         parser.parse(";a=b; b=c;");
+    }
+
+    // Test on parse integers
+    @Test
+    public void testParserInteger1() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("send+more='1234';; d+e>=y");
+
+        testPreorder("; = + send more 1234 >= + d e y ", node);
+        testPostorder("send more + 1234 = d e + y >= ; ", node);
+        testInorder("send + more = 1234 ; d + e >= y ", node);
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError1() throws CryptaParserException {
+        parser.parse("send + more >= money; 1 + 'aabc' = 3");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError2() throws CryptaParserException {
+        parser.parse("send + more >= money; 1 + '12a45' = 3");
     }
 
 }

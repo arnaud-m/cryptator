@@ -25,7 +25,7 @@ equation returns [ICryptaNode node]  //create a node of the tree corresponding t
 
 expression returns [ICryptaNode node] //create recursively the tree of expressions with priority and return the root of the tree
             : word {$node=new CryptaLeaf($word.text);} //create a node of the tree corresponding to a leaf and return this node
-            | '\'' number '\'' {$node=new CryptaLeaf($word.text);}
+            | '\'' number '\'' {$node=new CryptaLeaf($number.text);}
             | '(' expression ')' {$node=$expression.node;}
             | e1=expression modORpow e2=expression {$node=new CryptaNode($modORpow.text, $e1.node, $e2.node);} //create a node of the tree corresponding to an operation and return this node
             | sub expression {$node=new CryptaNode($sub.text, new CryptaLeaf(), $expression.node);}
@@ -33,7 +33,7 @@ expression returns [ICryptaNode node] //create recursively the tree of expressio
             | e1=expression addORsub e2=expression {$node=new CryptaNode($addORsub.text, $e1.node, $e2.node);};
 
 word :  //additional token to simplify the passage in parameter
-    (SYMBOL)+;
+    (SYMBOL|DIGIT)+;
 
 number : (DIGIT)+;
     
@@ -49,7 +49,7 @@ sub : '-';
 
 COMPARATOR : '=' | '!=' | '<' | '>' | '<=' | '>=';
 
-SYMBOL : [a-zA-Z0-9\u0080-\uFFFF] {};
+SYMBOL : [a-zA-Z\u0080-\uFFFF] {};
 
 DIGIT : [0-9] {};
 
