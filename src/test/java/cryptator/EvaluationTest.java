@@ -263,4 +263,16 @@ public class EvaluationTest {
         assertTrueEval(cryptarithm, solution, 10);
     }
 
+    @Test
+    public void testEvaluationAnd5() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("ABC * DE = CFGH; " +
+                "JDHJ + DGC = JGKK; " +
+                "JEDK + EBAH = FAGH; " +
+                "ABC + JDHJ = JEDK; " +
+                "DE * DGC = EBAH; " +
+                "CFGH-JGKK=FAGH");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("A=3 B=7 C=9 D=2 E=6 F=8 G=5 H=4 J=1 K=0");
+        assertTrueEval(cryptarithm, solution, 10);
+    }
+
 }
