@@ -12,11 +12,15 @@ import cryptator.tree.CryptaLeaf;
 
 // Parser Rules
 
-program : equation EOF{}; //additional token to simplify the passage in parameter
+program : equations EOF{}; //additional token to simplify the passage in parameter
 
-equation returns [ICryptaNode node]: //create a node of the tree corresponding to an equation and return this node
-                 '(' equation ')' {$node=$equation.node;}
-                 | left=expression COMPARATOR right=expression {$node=new CryptaNode($COMPARATOR.getText(), $left.node, $right.node);};
+equations returns [ICryptaNode node]  //create a node of conjuncts
+        : equation (AND*) {$node=$equation.node;}
+        |  e1=equation (AND+) e2=equations (AND*) {$node=new CryptaNode($AND.getText(), $e1.node, $e2.node);};
+
+equation returns [ICryptaNode node]  //create a node of the tree corresponding to an equation and return this node
+        : '(' equation ')' {$node=$equation.node;}
+        | left=expression COMPARATOR right=expression {$node=new CryptaNode($COMPARATOR.getText(), $left.node, $right.node);};
                  
 
 expression returns [ICryptaNode node]: //create recursively the tree of expressions with priority and return the root of the tree
@@ -46,3 +50,4 @@ SYMBOL : [a-zA-Z0-9\u0080-\uFFFF] {};
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
 
+AND : ';';
