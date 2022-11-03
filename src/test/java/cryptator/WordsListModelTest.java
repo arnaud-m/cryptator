@@ -22,7 +22,7 @@ public class WordsListModelTest {
 	@Test
 	public void testWLModel1() {
 		WordsListModel m = new WordsListModel(new Model(), words);
-		m.postMaxDigitCountConstraint(1);
+		m.postMaxSymbolCountConstraint(1);
 		assertEquals(9, m.getModel().getSolver().streamSolutions().count());
 	}
 	
@@ -43,7 +43,7 @@ public class WordsListModelTest {
 	@Test
 	public void testWLModel4() {
 		WordsListModel m = new WordsListModel(new Model(), words);
-		m.postMaxDigitCountConstraint(1);
+		m.postMaxSymbolCountConstraint(1);
 		m.postMaxWordCountConstraint(2);
 		assertEquals(8, m.getModel().getSolver().streamSolutions().count());
 	}

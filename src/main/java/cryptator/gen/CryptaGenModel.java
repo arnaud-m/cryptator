@@ -8,12 +8,6 @@
  */
 package cryptator.gen;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
@@ -24,86 +18,26 @@ import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
-public class CryptaGenModel {
-
-	private final String[] words;
-
-	private final Model model;
+public class CryptaGenModel extends WordsListModel {
 
 	private final CryptaEqnMember left;
 
 	private final CryptaEqnMember right;
 
-	private final Map<Character, BoolVar> symbolsToVariables;
-	private final IntVar digitCount;
-
 	public CryptaGenModel(String[] words) {
-		this.words = words;
-		model = new Model("Generate");		
+		super(new Model("Generate"), words);		
 		left = new CryptaEqnMember(model, words, "L_");
 		right = new CryptaEqnMember(model, words, "R_");
-		symbolsToVariables = buildSymbolVars(words, model);
-		digitCount = model.intVar("digitCount", 0, symbolsToVariables.size());
 		buildCoreModel();
 	}
 
-	private static Map<Character, BoolVar> buildSymbolVars(String[] words, Model model) {
-		final Map<Character, BoolVar> symbolsToVariables = new HashMap<>();
-		for (int i = 0; i < words.length; i++) {
-			for (char c : words[i].toCharArray()) {
-				symbolsToVariables.computeIfAbsent(c, s -> model.boolVar(String.valueOf(s)));
-			}
-		}
-		return symbolsToVariables;
-	}
-
-	
-	public final String[] getWords() {
-		return words;
-	}
-
-	public final Model getModel() {
-		return model;
-	}
-
-	public final CryptaEqnMember getLeft() {
-		return left;
-	}
-
-	public final CryptaEqnMember getRight() {
-		return right;
-	}
-
-	private void postSymbolPresenceConstraint(Map<Character, List<BoolVar>> symbolsToExpressions) {
-		for (Map.Entry<Character, List<BoolVar>> entry : symbolsToExpressions.entrySet()) {
-			final Collection<BoolVar> varsL = entry.getValue();
-			final BoolVar[] vars = varsL.toArray(new BoolVar[varsL.size()]);
-			model.max(symbolsToVariables.get(entry.getKey()), vars).post();
-		}
-	}
 
 	private void postLeftOrRightMemberConstraints() {
 		for (int i = 0; i < words.length; i++) {
-			left.words[i].add(right.words[i]).le(1).post();
+			left.words[i].add(right.words[i]).eq(wordVariables[i]).post();
 		}
 	}
 
-	private void postDigitCountConstraint() {
-		final IntVar[] symbols = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
-		model.sum(symbols, "=", digitCount).post();	
-	}
-
-	private Map<Character, List<BoolVar>> buildSymbolWordLists() {
-		final Map<Character, List<BoolVar>> map = new HashMap<>();
-		for (int i = 0; i < words.length; i++) {
-			for (char c : words[i].toCharArray()) {
-				final Collection<BoolVar> list = map.computeIfAbsent(c, s -> new ArrayList<>());
-				list.add(left.words[i]);
-				list.add(right.words[i]);
-			}
-		}
-		return map;
-	}
 	
 	private void postMemberMaxLenConstraint() {
 		right.maxLength.ge(left.maxLength).post();
@@ -112,8 +46,6 @@ public class CryptaGenModel {
 
 	private void buildCoreModel() {
 		postLeftOrRightMemberConstraints();
-		postSymbolPresenceConstraint(buildSymbolWordLists());
-		postDigitCountConstraint();
 		postMemberMaxLenConstraint();
 	}
 	
@@ -122,6 +54,8 @@ public class CryptaGenModel {
 		else left.wordCount.ge(2).post();
 		if(max >= min) left.wordCount.le(max).post();
 		
+		// TODO Option to relax the constraint (allow subtractions in the bignum model)
+		// Would need to break reflexion symmetry
 		right.wordCount.eq(1).post();
 	}
 	
@@ -138,11 +72,7 @@ public class CryptaGenModel {
 		diff.lt(i).post();
 	}
 	
-	public void postMaxDigitCountConstraint(int max) {
-		digitCount.le(max).post();		
-	}
-	
-	public void postRigtMemberConstraint() {
+	public void postRightMemberConstraint() {
 		BoolVar[] vars = right.getWords();
 		vars[vars.length - 1].eq(1).post();
 	}
