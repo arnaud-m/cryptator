@@ -434,6 +434,7 @@ public class SolverTest {
                 "DE * DGC = EBAH; " +
                 "CFGH-JGKK=FAGH");
     }
+
     @Test
     public void testCrossNumber2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.testUNSAT("ABC * DE = CFGH; " +
@@ -485,5 +486,98 @@ public class SolverTest {
     public void testSendMoreMoneyList6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.config.setHornerScheme(true);
         t.testUNSAT("send+more=money; s+e=n;");
+    }
+
+    // Long multiplication with integer
+    /*
+        SEE * SO = MIMEO
+        MIMEO = EMOO + 10*MESS
+        SEE * O = EMOO
+        SEE * S = MESS
+     */
+    @Test
+    public void testEvaluationLongMultiplication1() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "SEE * SO = MIMEO; MIMEO = EMOO + '10'*MESS;SEE * O = EMOO;SEE * S = MESS";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    /*
+             C U T
+               I T
+           ---------
+           B U S T
+         T N N T
+         -----------
+         T E N E T
+     */
+    @Test
+    public void testEvaluationLongMultiplication2() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "CUT * T = BUST; CUT * I = TNNT; TNNT * '10' + BUST = TENET; TENET = CUT * IT";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    /*
+                R E D
+                  A S
+             ---------
+              A R C S
+              R E D
+             ---------
+              C D T S
+     */
+    @Test
+    public void testEvaluationLongMultiplication3() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "RED * S = ARCS; RED * A = RED; RED * '10' + ARCS = CDTS; CDTS = RED * AS";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    @Test
+    public void testEvaluationLongMultiplicationFail3() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "RED * S = ARCS; RED * A = RED; RED * '10' + ARCS = CDTS; CDTS = RED * AS + '1'";
+        t.testUNSAT(cryptarithm);
+    }
+
+    /*
+                H O W
+                  W E
+             ---------
+              H A I L
+              P A L
+             ---------
+              L H A L
+     */
+    @Test
+    public void testEvaluationLongMultiplication4() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "HOW * E = HAIL; HOW * W = PAL; HAIL + PAL * '10' = LHAL; HOW * WE = LHAL";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    // LONG DIVISION
+    /*
+                    K M
+              -----------
+       A K A / D A D D Y
+               D Y N A
+              -----------
+                 A R M Y
+                 A R K A
+                ---------
+                     R A
+     */
+    @Test
+    public void testEvaluationLongDivision1() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "AKA * K = DYNA; DADD - DYNA = ARM; AKA * M = ARKA; ARMY - ARKA = RA; AKA * KM + RA = DADDY";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    @Test
+    public void testEvaluationLongDivisionFail1() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "AKA * K = DYNA; DADD + DYNA = ARM; AKA * M = ARKA; ARMY - ARKA = RA; AKA * KM + RA = DADDY";
+        t.testUNSAT(cryptarithm);
     }
 }

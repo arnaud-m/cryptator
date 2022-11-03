@@ -225,9 +225,9 @@ public class ParserTest {
     public void testParserInteger1() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more='1234';; d+e>=y");
 
-        testPreorder("; = + send more 1234 >= + d e y ", node);
-        testPostorder("send more + 1234 = d e + y >= ; ", node);
-        testInorder("send + more = 1234 ; d + e >= y ", node);
+        testPreorder("; = + send more '1234' >= + d e y ", node);
+        testPostorder("send more + '1234' = d e + y >= ; ", node);
+        testInorder("send + more = '1234' ; d + e >= y ", node);
     }
 
     @Test(expected = CryptaParserException.class)

@@ -8,70 +8,70 @@
  */
 package cryptator.solver;
 
-import java.util.function.Consumer;
-
-import org.chocosolver.solver.variables.IntVar;
-
 import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 import cryptator.specs.ITraversalNodeConsumer;
 import cryptator.tree.TreeTraversals;
+import org.chocosolver.solver.variables.IntVar;
+
+import java.util.function.Consumer;
 
 public class AdaptiveSolver implements ICryptaSolver {
 
-	public final CryptaSolver solver = new CryptaSolver();
+    public final CryptaSolver solver = new CryptaSolver();
 
-	public AdaptiveSolver() {
-		super();
-	}
+    public AdaptiveSolver() {
+        super();
+    }
 
-	public static int computeThreshold(int base) {
-		final int n = IntVar.MAX_INT_BOUND;
-		int prod = base; 
-		int i = 1;
-		while(prod < n) {
-			i++;
-			prod *= base;
-		}
-		return i;
-	}
-	@Override
-	public void limitTime(long limit) {
-		solver.limitTime(limit);
-	}
+    public static int computeThreshold(int base) {
+        final int n = IntVar.MAX_INT_BOUND;
+        int prod = base;
+        int i = 1;
+        while (prod < n) {
+            i++;
+            prod *= base;
+        }
+        return i;
+    }
 
-	@Override
-	public void limitSolution(long limit) {
-		solver.limitSolution(limit);
-	}
+    @Override
+    public void limitTime(long limit) {
+        solver.limitTime(limit);
+    }
 
-	@Override
-	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer)
-			throws CryptaModelException, CryptaSolverException {
-		MaxLenConsumer cons = new MaxLenConsumer();
-		TreeTraversals.preorderTraversal(cryptarithm, cons);
-		final int threshold = computeThreshold(config.getArithmeticBase());
-		if(cons.getMaxLength() > threshold) solver.setBignum();
-		else solver.unsetBignum();
-		return solver.solve(cryptarithm, config, solutionConsumer);
-	}
+    @Override
+    public void limitSolution(long limit) {
+        solver.limitSolution(limit);
+    }
 
-	private static class MaxLenConsumer implements ITraversalNodeConsumer {
+    @Override
+    public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer)
+            throws CryptaModelException, CryptaSolverException {
+        MaxLenConsumer cons = new MaxLenConsumer();
+        TreeTraversals.preorderTraversal(cryptarithm, cons);
+        final int threshold = computeThreshold(config.getArithmeticBase());
+        if (cons.getMaxLength() > threshold) solver.setBignum();
+        else solver.unsetBignum();
+        return solver.solve(cryptarithm, config, solutionConsumer);
+    }
 
-		private int maxLen;
+    private static class MaxLenConsumer implements ITraversalNodeConsumer {
 
-		public final int getMaxLength() {
-			return maxLen;
-		}
+        private int maxLen;
 
-		@Override
-		public void accept(ICryptaNode node, int numNode) {
-			if(node.isLeaf()) {
-				final int len = node.getWord().length;
-				if(len > maxLen) maxLen = len;
-			}
-		}	
-	}
+        public final int getMaxLength() {
+            return maxLen;
+        }
+
+        @Override
+        public void accept(ICryptaNode node, int numNode) {
+            if (node.isLeaf() && !node.isConstant()) {
+                final int len = node.getWord().length;
+                if (len > maxLen) maxLen = len;
+            }
+        }
+    }
 }

@@ -24,10 +24,6 @@ public class CryptaLeaf implements ICryptaNode {
         this(word.toCharArray());
     }
 
-    public CryptaLeaf(String word, boolean isConstant) {
-        this(word.toCharArray(), isConstant);
-    }
-
     public CryptaLeaf(char[] word) {
         this(word, false);
     }

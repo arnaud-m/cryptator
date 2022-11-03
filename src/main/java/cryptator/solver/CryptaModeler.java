@@ -11,6 +11,7 @@ package cryptator.solver;
 import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
+import cryptator.tree.CryptaConstant;
 import cryptator.tree.TreeTraversals;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
@@ -53,7 +54,9 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
     public void accept(ICryptaNode node, int numNode) {
         super.accept(node, numNode);
         if (node.isLeaf()) {
-            stack.push(makeWordVar(node.getWord()));
+            stack.push(node instanceof CryptaConstant constant ?
+                    model.intVar(constant.getConstant()) :
+                    makeWordVar(node.getWord()));
         } else {
             final ArExpression b = stack.pop();
             final ArExpression a = stack.pop();

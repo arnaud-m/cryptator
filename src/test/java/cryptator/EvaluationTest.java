@@ -275,4 +275,32 @@ public class EvaluationTest {
         assertTrueEval(cryptarithm, solution, 10);
     }
 
+    // Integer test evaluation
+    @Test
+    public void testEvaluationInteger1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("a='2'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=2");
+        assertTrueEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationInteger2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("a+'22'='31'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=9");
+        assertTrueEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationInteger3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("a+'22'='31'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=8");
+        assertFalseEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationIntegerFail1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("a+'22'='31'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=8");
+        assertFalseEval(cryptarithm, solution, 10);
+    }
 }
