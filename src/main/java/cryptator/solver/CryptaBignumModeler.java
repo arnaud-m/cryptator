@@ -9,10 +9,12 @@
 package cryptator.solver;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
+import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.CryptaOperator;
@@ -73,7 +75,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 			c[i] = b[i];
 		}
 		return c;
-	} 
+	}
 
 	class BignumArExpression {
 
@@ -86,7 +88,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 			digits = model.intVarArray("D" + suffix, n, 0, config.getArithmeticBase()-1);
 			// TODO improve the bound ?
 			carries = model.intVarArray("C"+ suffix, n, 0, IntVar.MAX_INT_BOUND / config.getArithmeticBase());
-			// TODO Is it better to use scalar or an expression ? 
+			// TODO Is it better to use scalar or an expression ?
 			postScalar(
 					new IntVar[] {carries[0], digits[0], a[0].intVar()},
 					new int[] {config.getArithmeticBase(), 1, -1}
@@ -121,27 +123,31 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 			a1.digits[i].eq(b1.digits[i]).decompose().post();
 		}
 		a1.carries[n-1].eq(b1.carries[n-1]).decompose().post();
-	}
 
+	}
 
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
 		super.accept(node, numNode);
-		if(node.isLeaf()) {	
+		if(node.isLeaf()) {
 			stack.push(makeWordVars(node.getWord()));
-		} else {
+		} else if (!node.getOperator().equals(CryptaOperator.AND)) {
 			final ArExpression[] b = stack.pop();
 			final ArExpression[] a = stack.pop();
 			switch (node.getOperator()) {
 			case ADD:
 				stack.push(applyADD(a, b));
 				break;
-			case EQ: 
+			case EQ:
 				applyEQ(a, b);
 				break;
 			default:
-				break;
-			}		
+				//	Should never be in the default case, this exception is
+				//  a program break in order to recall to modify the switch if
+				//  a new operator in BigNum is added.
+				//  Example case : we remove the MUL operator in computeUnsupportedBignumOperator
+				throw new RuntimeException("Operator not implemented");
+			}
 		}
 	}
 
