@@ -9,21 +9,25 @@
 package cryptator.tree;
 
 public class CryptaConstant extends CryptaLeaf {
-    public CryptaConstant() {
-        this(new char[0]);
-    }
+	public CryptaConstant() {
+		super();
+	}
 
-    public CryptaConstant(String word) {
-        this(word.toCharArray());
-    }
+	public CryptaConstant(String word) {
+		super(word);
+	}
 
-    public CryptaConstant(char[] word) {
-        super(word, true);
-    }
+	public CryptaConstant(char[] word) {
+		super(word);
+	}
 
+	@Override
+	public boolean isConstant() {
+		return true;
+	}
 
-    // TODO : convert to base of cryptarithm
-    public int getConstant() {
-        return Integer.parseInt(new String(getWord()));
-    }
+	// TODO : convert to base of cryptarithm
+	public int getConstant() {
+		return Integer.parseInt(new String(getWord()));
+	}
 }
