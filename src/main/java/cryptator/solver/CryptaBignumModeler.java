@@ -8,19 +8,21 @@
  */
 package cryptator.solver;
 
-import cryptator.CryptaOperator;
-import cryptator.config.CryptaConfig;
-import cryptator.specs.ICryptaModeler;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaOperatorDetection;
-import cryptator.tree.TreeTraversals;
-import cryptator.tree.TreeUtils;
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.variables.IntVar;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import cryptator.CryptaOperator;
+import cryptator.config.CryptaConfig;
+import cryptator.specs.ICryptaModeler;
+import cryptator.specs.ICryptaNode;
+import cryptator.tree.CryptaConstant;
+import cryptator.tree.CryptaOperatorDetection;
+import cryptator.tree.TreeTraversals;
+import cryptator.tree.TreeUtils;
 
 public class CryptaBignumModeler implements ICryptaModeler {
 
@@ -59,12 +61,12 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return vars;
     }
 
-    private ArExpression[] makeConstantVars(char[] word) {
-        final int n = word.length;
-        // little endian
+    private ArExpression[] makeConstantVars(CryptaConstant constant) {
+        var ints =constant.changeBaseLittleEndian(config.getArithmeticBase());
+        final int n = ints.length;
         ArExpression[] vars = new ArExpression[n];
         for (int i = 0; i < n; i++) {
-            vars[i] = model.intVar(Character.getNumericValue(word[n - 1 - i]));
+            vars[i] = model.intVar(ints[i]);
         }
         return vars;
     }
@@ -78,8 +80,12 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
             c[i] = CryptaOperator.ADD.getExpression().apply(a[i], b[i]);
         }
         // Can only enter in one loop
-        if (a.length - m >= 0) System.arraycopy(a, m, c, m, a.length - m);
-        System.arraycopy(b, m, c, m, b.length - m);
+        for (int i = m; i < a.length; i++) {
+            c[i] = a[i];
+        }
+        for (int i = m; i < b.length; i++) {
+            c[i] = b[i];
+        }
         return c;
     }
 
@@ -91,32 +97,29 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
             a1.digits[i].eq(b1.digits[i]).decompose().post();
         }
         a1.carries[n - 1].eq(b1.carries[n - 1]).decompose().post();
-
     }
 
     @Override
     public void accept(ICryptaNode node, int numNode) {
         super.accept(node, numNode);
         if (node.isLeaf()) {
-            stack.push(node.isConstant() ? makeConstantVars(node.getWord()) : makeWordVars(node.getWord()));
+            stack.push(node instanceof CryptaConstant c ? makeConstantVars(c) : makeWordVars(node.getWord()));
         } else if (!node.getOperator().equals(CryptaOperator.AND)) {
             final ArExpression[] b = stack.pop();
             final ArExpression[] a = stack.pop();
             switch (node.getOperator()) {
-                case ADD:
-                    stack.push(applyADD(a, b));
-                    break;
-                case EQ:
+                case ADD -> stack.push(applyADD(a, b));
+                case EQ -> {
                     applyEQ(a, b);
                     if (!stack.isEmpty())
                         throw new IllegalStateException("Stack is not empty after accepting a relational operator.");
-                    break;
-                default:
+                }
+                default ->
                     //	Should never be in the default case, this exception is
                     //  a program break in order to recall to modify the switch if
                     //  a new operator in BigNum is added.
                     //  Example case : we remove the MUL operator in computeUnsupportedBignumOperator
-                    throw new IllegalStateException("Bignum operator is not yet implemented");
+                        throw new IllegalStateException("Bignum operator is not yet implemented");
             }
         }
     }

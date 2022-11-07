@@ -8,6 +8,16 @@
  */
 package cryptator;
 
+import static org.junit.Assert.*;
+
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import cryptator.config.CryptaConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
@@ -19,15 +29,6 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.junit.Assert.*;
 
 
 final class CryptaSolvingTester {
@@ -119,6 +120,19 @@ public class SolverTest {
         t.config.setArithmeticBase(16);
         t.solver.limitSolution(100);
         t.testSAT("send+more=money");
+    }
+    @Test
+    public void testSetBase1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        var test = "r='36'";
+        t.config.setArithmeticBase(40);
+        t.testUNIQUE(test);
+    }
+
+    @Test
+    public void testSetBase2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        var test = "1AB52='109394'";
+        t.config.setArithmeticBase(16);
+        t.testUNIQUE(test);
     }
 
     @Test

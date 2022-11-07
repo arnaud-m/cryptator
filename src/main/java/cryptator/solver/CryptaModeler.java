@@ -8,19 +8,20 @@
  */
 package cryptator.solver;
 
-import cryptator.config.CryptaConfig;
-import cryptator.specs.ICryptaModeler;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaConstant;
-import cryptator.tree.TreeTraversals;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.function.Function;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.function.Function;
+import cryptator.config.CryptaConfig;
+import cryptator.specs.ICryptaModeler;
+import cryptator.specs.ICryptaNode;
+import cryptator.tree.CryptaConstant;
+import cryptator.tree.TreeTraversals;
 
 public class CryptaModeler implements ICryptaModeler {
 
@@ -66,7 +67,6 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
     @Override
     public void postCryptarithmEquationConstraint() throws CryptaModelException {
-//		TODO : modify here !!
         if (stack.size() != 1) throw new CryptaModelException("Invalid stack size at the end of modeling.");
         if (stack.peek() instanceof ReExpression) {
             ((ReExpression) stack.peek()).decompose().post();
