@@ -39,7 +39,7 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 		if (node.isConstantLeaf()){
 			constantCount++;
 			constants.add(((CryptaConstant) node).getConstant());
-		} else if(node.isConstantLeaf() || node.isWordLeaf()) {
+		} else if(node.isWordLeaf()) {
 			final char[] word = node.getWord();
 			final int n = word.length;
 			if(n > 0) {
