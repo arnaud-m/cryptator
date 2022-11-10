@@ -8,16 +8,6 @@
  */
 package cryptator;
 
-import static org.junit.Assert.*;
-
-import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import cryptator.config.CryptaConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
@@ -29,6 +19,15 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.Assert.*;
 
 
 final class CryptaSolvingTester {
@@ -593,5 +592,19 @@ public class SolverTest {
     public void testEvaluationLongDivisionFail1() throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "AKA * K = DYNA; DADD + DYNA = ARM; AKA * M = ARKA; ARMY - ARKA = RA; AKA * KM + RA = DADDY";
         t.testUNSAT(cryptarithm);
+    }
+
+    // Test from issue 25
+    // 9END+M08E=10NEY is wrong because M is already assigned 1.
+    @Test
+    public void testEvaluationIssue_25_1() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "9END+M08E=10NEY;1='1';0='0';9='9';8='8'";
+        t.testUNSAT(cryptarithm);
+    }
+    @Test
+    public void testEvaluationIssue_25_2() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        // TODO : modify this line for issue 39 to accept W = 0
+        var cryptarithm = "W='4'";
+        t.testUNIQUE(cryptarithm);
     }
 }

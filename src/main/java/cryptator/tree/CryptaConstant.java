@@ -30,8 +30,13 @@ public class CryptaConstant extends CryptaLeaf {
 	}
 
 	@Override
-	public boolean isConstant() {
+	public boolean isConstantLeaf() {
 		return true;
+	}
+
+	@Override
+	public boolean isWordLeaf() {
+		return false;
 	}
 
 	public int getConstant() {

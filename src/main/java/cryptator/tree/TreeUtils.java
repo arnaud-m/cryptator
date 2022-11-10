@@ -24,11 +24,11 @@ public final class TreeUtils {
     }
 
     private static void writeWord(ICryptaNode node, PrintWriter out) {
-        if (node.isConstant()) out.write("'");
+        if (node.isConstantLeaf()) out.write("'");
         char[] w = node.getWord();
         if (w.length > 0) out.write(node.getWord());
         else out.write(ZERO);
-        if (node.isConstant()) out.write("'");
+        if (node.isConstantLeaf()) out.write("'");
         out.write(" ");
     }
 

@@ -53,7 +53,7 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 
     @Override
     public void accept(ICryptaNode node, int numNode) {
-        if (node.isLeaf() && !node.isConstant()) {
+        if (node.isWordLeaf()) {
             final char[] w = node.getWord();
             if (w.length > 0) firstSymbols.add(node.getWord()[0]);
         }

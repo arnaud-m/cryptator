@@ -50,12 +50,12 @@ public class CryptaNode implements ICryptaNode {
 	}
 
 	@Override
-	public boolean isLeaf() {
+	public boolean isConstantLeaf() {
 		return false;
 	}
 
 	@Override
-	public boolean isConstant() {
+	public boolean isWordLeaf() {
 		return false;
 	}
 

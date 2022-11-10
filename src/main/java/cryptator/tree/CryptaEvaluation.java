@@ -65,7 +65,7 @@ public class CryptaEvaluation implements ICryptaEvaluation {
         public void accept(ICryptaNode node, int numNode) {
             // Check for the exception because it cannot be thrown here.
             if (exception == null) {
-                if (node.isLeaf()) {
+                if (node.isWordLeaf() || node.isConstantLeaf()) {
                     try {
                         stack.push(getWordValue(node));
                     } catch (CryptaEvaluationException e) {

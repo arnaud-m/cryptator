@@ -8,13 +8,6 @@
  */
 package cryptator.solver;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
-import org.chocosolver.solver.Model;
-import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
-import org.chocosolver.solver.variables.IntVar;
-
 import cryptator.CryptaOperator;
 import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
@@ -23,6 +16,12 @@ import cryptator.tree.CryptaConstant;
 import cryptator.tree.CryptaOperatorDetection;
 import cryptator.tree.TreeTraversals;
 import cryptator.tree.TreeUtils;
+import org.chocosolver.solver.Model;
+import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
+import org.chocosolver.solver.variables.IntVar;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class CryptaBignumModeler implements ICryptaModeler {
 
@@ -102,8 +101,10 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
     @Override
     public void accept(ICryptaNode node, int numNode) {
         super.accept(node, numNode);
-        if (node.isLeaf()) {
-            stack.push(node instanceof CryptaConstant c ? makeConstantVars(c) : makeWordVars(node.getWord()));
+        if (node.isConstantLeaf()){
+            stack.push(makeConstantVars((CryptaConstant) node));
+        } else if (node.isWordLeaf()){
+            stack.push(makeWordVars(node.getWord()));
         } else if (!node.getOperator().equals(CryptaOperator.AND)) {
             final ArExpression[] b = stack.pop();
             final ArExpression[] a = stack.pop();
