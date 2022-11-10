@@ -69,4 +69,12 @@ public interface ICryptaNode {
      * @return true, if it is internal node
      */
     boolean isInternalNode();
+
+    /**
+     * Transform parsed node to string.
+     * For example parse(inOrderPrint(parse("a+'8'=b"))) is the same as parse("a+'8'=b")
+     *
+     * @return the string representation of the node accepted by the parser
+     */
+    String write();
 }

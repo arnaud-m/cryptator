@@ -66,4 +66,9 @@ public class CryptaLeaf implements ICryptaNode {
 	public String toString() {
 		return new String(word);
 	}
+
+	@Override
+	public String write(){
+		return new String(getWord());
+	}
 }

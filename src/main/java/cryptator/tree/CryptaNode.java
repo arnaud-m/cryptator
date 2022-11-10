@@ -69,4 +69,7 @@ public class CryptaNode implements ICryptaNode {
 		return operator.getToken();
 	}
 
+	public String write(){
+		return operator.getToken();
+	}
 }

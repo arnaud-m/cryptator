@@ -62,4 +62,9 @@ public class CryptaConstant extends CryptaLeaf {
 		}
 		return newInt.toArray(new Integer[0]);
 	}
+
+	@Override
+	public String write(){
+		return "'" + constant + "'";
+	}
 }
