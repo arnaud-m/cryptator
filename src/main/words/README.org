@@ -14,3 +14,5 @@
    - ~french-words.txt~.
  - [[https://www.kevmrc.com/most-popular-sports-in-the-world][The 30 Most Popular Sports in the World]] and [[https://7esl.com/sports-and-games-vocabulary/][Sports and Games Vocabulary]]
    - ~sports.txt~
+ - [[https://www.britannica.com/topic/list-of-countries-1993160][List of countries]]
+   - ~countries.txt~

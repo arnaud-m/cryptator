@@ -12,7 +12,7 @@ function solve() {
 echo "# Search cryptarithms with a UNIQUE solution"
 
 ######
-echo -e "\n## Generate from a word list\n"
+echo -e "\n## Generate from a words list\n"
 
 echo "- Planets"
 solve $DIR/planets.txt
