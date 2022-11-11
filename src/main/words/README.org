@@ -13,14 +13,16 @@
  - [[https://chrplr.github.io/openlexicon/datasets-info/Liste-de-mots-francais-Gutenberg/README-liste-francais-Gutenberg.html][Liste de mots français Gutenberg]]
    - ~french-words.txt~.
  - [[https://www.kevmrc.com/most-popular-sports-in-the-world][The 30 Most Popular Sports in the World]] and [[https://7esl.com/sports-and-games-vocabulary/][Sports and Games Vocabulary]]
-   - ~sports.txt~
+   - ~sports.txt~.
  - [[https://www.britannica.com/topic/list-of-countries-1993160][List of countries]]
-   - ~countries.txt~
+   - ~countries.txt~.
  - [[http://gmscrabble.fr/2019/08/01/listes-de-mots-avec-theme/][Liste des vins et cépages]]
    - ~vins.txt~
  - [[https://www.enchantedlearning.com/wordlist/][Vocabulary Word Lists by Theme]]
-   - ~happy.txt~, ~jobs.txt~, ~monsters.txt~, ~virtues.txt~
+   - ~happy.txt~, ~jobs.txt~, ~monsters.txt~, ~virtues.txt~.
  - [[https://en.wiktionary.org/wiki/Appendix:English_palindromes][English palindromes]]
-   - ~palindromes-en.txt~
+   - ~palindromes-en.txt~.
  - [[https://fr.wiktionary.org/wiki/Annexe:Liste_de_palindromes_fran%C3%A7ais][Liste de palindromes français]]
-   - ~palindromes-fr.txt~
+   - ~palindromes-fr.txt~.
+ - [[https://fr.wikipedia.org/wiki/Liste_des_divinit%C3%A9s_de_la_mythologie_grecque][Liste des divinités de la mythologie grecque]]
+   - ~mythologie-grecque.txt~ (toutes les divinités), ~cyclopes.txt~, ~demi-dieux.txt~, ~divinites-olympiennes.txt~, ~divinites-primordiales.txt~, ~geants.txt~, ~titans.txt~.
