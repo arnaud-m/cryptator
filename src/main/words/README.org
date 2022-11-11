@@ -16,3 +16,5 @@
    - ~sports.txt~
  - [[https://www.britannica.com/topic/list-of-countries-1993160][List of countries]]
    - ~countries.txt~
+ - [[http://gmscrabble.fr/2019/08/01/listes-de-mots-avec-theme/][Liste des vins et cépages]]
+   - ~vins.txt~
