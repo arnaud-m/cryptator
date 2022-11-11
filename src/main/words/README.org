@@ -1,6 +1,6 @@
 ** Credits
 
- The words lists have been created thanks to the following resources.
+ The word lists have been created thanks to the following resources.
 
  - [[https://tamura70.gitlab.io/web-puzzle/cryptarithm/][Cryptarithmetic Puzzle Solver]]
    - ~alpha.txt~, ~astro.txt~, ~computer.txt~, ~elements.txt~, ~europeans.txt~, ~instruments.txt~, ~rainbow.txt~, ~vegetables.txt~.
@@ -18,3 +18,9 @@
    - ~countries.txt~
  - [[http://gmscrabble.fr/2019/08/01/listes-de-mots-avec-theme/][Liste des vins et cépages]]
    - ~vins.txt~
+ - [[https://www.enchantedlearning.com/wordlist/][Vocabulary Word Lists by Theme]]
+   - ~happy.txt~, ~jobs.txt~, ~monsters.txt~, ~virtues.txt~
+ - [[https://en.wiktionary.org/wiki/Appendix:English_palindromes][English palindromes]]
+   - ~palindromes-en.txt~
+ - [[https://fr.wiktionary.org/wiki/Annexe:Liste_de_palindromes_fran%C3%A7ais][Liste de palindromes français]]
+   - ~palindromes-fr.txt~
