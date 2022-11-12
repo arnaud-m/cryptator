@@ -28,3 +28,5 @@
    - ~mythologie-grecque.txt~ (toutes les divinités), ~cyclopes.txt~, ~demi-dieux.txt~, ~divinites-olympiennes.txt~, ~divinites-primordiales.txt~, ~geants.txt~, ~titans.txt~.
    - [[https://www.leguidedufromage.com/liste-fromages-ordre-alphabetique-wo377.html][LISTE DES FROMAGES]]
      - ~fromages.txt~
+   - [[https://owdin.live/2018/05/08/la-liste-complete-des-personnages-dasterix-et-obelix/][La liste complète des personnages d’Astérix et Obélix]]
+     - ~asterix.txt~, ~autres.txt~, ~gaulois.txt~, ~romains.txt~.
