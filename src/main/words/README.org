@@ -30,3 +30,5 @@
      - ~fromages.txt~
    - [[https://owdin.live/2018/05/08/la-liste-complete-des-personnages-dasterix-et-obelix/][La liste complète des personnages d’Astérix et Obélix]]
      - ~asterix.txt~, ~autres.txt~, ~gaulois.txt~, ~romains.txt~.
+   - [[https://en.wikipedia.org/wiki/List_of_video_games_considered_the_best][List of video games considered the best]]
+     - ~games.txt~
