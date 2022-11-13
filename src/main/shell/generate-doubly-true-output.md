@@ -1,0 +1,123 @@
+# Doubly true cryptarithms between 1 and 100
+- en
+  - one + two + five + nine + eleven + twelve + fifty = ninety 
+  - one + five + ten + eleven + nineteen + fortyfive = ninetyone 
+  - one + nine + twenty + fifty = eighty 
+  - five + seven + eleven + twelve + fifteen + twenty = seventy 
+  - three + seven + ten + twenty + thirty = seventy 
+  - one + seven + nine + fifteen + sixteen + seventeen = sixtyfive 
+  - two + fourteen + fifteen + twenty = fiftyone 
+  - three + nine + ten + fourteen + fifteen = fiftyone 
+  - six + nine + eleven + sixteen + nineteen = sixtyone 
+  - six + seven + nine + twelve + sixteen + twenty = seventy 
+  - five + six + sixteen + nineteen + twenty = sixtysix 
+  - eight + ten + sixteen + seventeen + eighteen = sixtynine 
+- hi
+  - सात + सैंतीस + चालीस = चौरासी 
+  - तीन + सात + बीस + उनतीस + तीस = नवासी 
+  - सात + बीस + पच्चीस + बत्तीस = चौरासी 
+  - एक + बीस + उनतीस + तीस = अस्सी 
+  - चार + बीस + चौबीस + छत्तीस = चौरासी 
+  - चार + चौबीस + छब्बीस + तीस = चौरासी 
+  - चार + सात + चौबीस + उनचास = चौरासी 
+  - सात + बारह + बीस + तैंतीस = बहत्तर 
+  - सात + बारह + छब्बीस + बत्तीस = सतहत्तर 
+  - सात + बारह + सत्रह + छत्तीस = बहत्तर 
+  - तीन + छह + सात + उन्नीस + बीस + बत्तीस = सत्तासी 
+  - तीन + छह + सात + सत्रह + छत्तीस = उनहत्तर 
+  - छह + बीस + चौबीस + तीस = अस्सी 
+  - छह + तेरह + छब्बीस + बत्तीस = सतहत्तर 
+  - तीन + तेरह + बीस + छत्तीस = बहत्तर 
+  - छह + तेरह + बत्तीस + छत्तीस = सत्तासी 
+  - पाँच + सात + पच्चीस = सैंतीस 
+  - सात + आठ + सड़सठ = बयासी 
+  - चार + चालीस + बयालीस = छियासी 
+  - बीस + बाईस + बयालीस = चौरासी 
+  - तीन + चार + तेईस + पचपन = पचासी 
+  - छह + तेईस + छब्बीस + बत्तीस = सत्तासी 
+  - तीन + उन्नीस + उनतीस + बत्तीस = तिरासी 
+  - छह + सात + बारह + छब्बीस + बत्तीस = तिरासी 
+  - चार + सात + पैंतीस + सैंतीस = तिरासी 
+  - तीन + चार + सात + उनतीस + चालीस = तिरासी 
+  - चार + सत्रह + तीस + बत्तीस = तिरासी 
+  - चार + सात + बत्तीस + चालीस = तिरासी 
+  - सत्रह + तीस + छत्तीस = तिरासी 
+  - चार + सात + सत्रह + पच्चीस + तीस = तिरासी 
+  - तीन + नौ + तेरह + सत्रह + तीस = बहत्तर 
+  - नौ + सत्रह + बीस + छब्बीस = बहत्तर 
+  - तीन + नौ + तीस + चालीस = बयासी 
+  - तीन + इक्कीस + इकतीस + बत्तीस = सत्तासी 
+  - चार + बीस + तीस + इकतीस = पचासी 
+  - बीस + इक्कीस + बत्तीस = तिहत्तर 
+  - सात + दस + बीस + चौबीस + छब्बीस = सत्तासी 
+  - तीन + छह + दस + सत्रह + छत्तीस = बहत्तर 
+  - दस + छब्बीस + छत्तीस = बहत्तर 
+  - दस + इक्कीस + पच्चीस + इकतीस = सत्तासी 
+  - सात + नौ + बत्तीस + उनतालीस = सत्तासी 
+- es
+  - seis + catorce + setenta = noventa 
+  - tres + seis + siete + catorce + sesenta = noventa 
+  - tres + seis + siete + once + trece + veinte + treinta = noventa 
+  - dos + cinco + siete + doce + catorce + treinta = setenta 
+  - dos + once + trece + catorce + treinta = setenta 
+  - uno + dos + tres + cuatro + once + doce + trece + catorce = sesenta 
+  - uno + cuatro + cinco + seis + once + trece + treinta = setenta 
+  - cuatro + cinco + siete + catorce + treinta = sesenta 
+  - tres + cinco + seis + ocho + once + trece + catorce = sesenta 
+  - cero + seis + siete = trece 
+  - cero + uno + tres + cuatro + cinco + trece + catorce + treinta = setenta 
+  - cero + tres + seis + siete + once + trece + veinte = sesenta 
+  - cero + seis + siete + trece + catorce + veinte = sesenta 
+  - cero + seis + siete + trece + catorce + veinte + treinta = noventa 
+  - cero + uno + tres + veinticinco = veintinueve 
+- fr
+  - zero + un + trois + onze + quinze = trente 
+- ar
+- ru
+- pt
+  - cinco + seis + sete + oito + catorze + trinta = setenta 
+  - sete + oito + onze + catorze + trinta = setenta 
+  - seis + sete + oito + onze + dezoito + trinta = oitenta 
+  - cinco + oito + treze + catorze + vinte + trinta = noventa 
+  - onze + doze + treze + catorze + trinta = oitenta 
+  - zero + doze + dezoito + vinte + trinta = oitenta 
+  - nove + onze + doze + dezoito + trinta = oitenta 
+  - cinco + oito + dez + doze + treze + catorze + dezoito = oitenta 
+- id
+- de
+  - eins + zwei + sieben + sechzig = siebzig 
+- tr
+  - bes + on + oniki + elliuc = seksen 
+  - yedi + dokuz + onyedi + ondokuz = elliiki 
+  - iki + uc + oniki + otuz + otuzuc = seksen 
+  - sıfır + iki + bes + on + onbir + oniki + kırk = seksen 
+  - onbir + kırkbir = elliiki 
+  - oniki + ondokuz = otuzbir 
+  - sıfır + iki + oniki = ondort 
+  - iki + bes + sekiz + oniki + onsekiz = kırkbes 
+  - bir + iki + sekiz + oniki + onsekiz = kırkbir 
+  - dokuz + otuziki = kırkbir 
+  - sıfır + bir + iki + on + oniki + onbes + kırk = seksen 
+  - sıfır + iki + onbir + oniki + onbes + kırk = seksen 
+  - bes + sekiz + on + oniki + onbes + otuz = seksen 
+  - iki + on + onbes + elliuc = seksen 
+  - iki + bes + onbir + oniki + elli = seksen 
+  - bir + iki + oniki + onbes + elli = seksen 
+  - uc + oniki + onbes + elli = seksen 
+- it
+  - zero + sei + sette + otto + nove = trenta 
+  - due + sette + dieci + undici = trenta 
+  - tre + sei + dieci + undici = trenta 
+  - otto + nove + tredici + venti + trenta = ottanta 
+  - uno + due + tre + otto + undici + dodici + tredici + trenta = ottanta 
+- uk
+- pl
+- ro
+- el
+  - ενα + επτα + εννεα + εντεκα + δωδεκα = σαραντα 
+  - ενα + οκτω + εννεα + δωδεκα = τριαντα 
+  - μηδεν + ενα + εννεα + δεκα = εικοσι 
+  - ενα + τρια + πεντε + εντεκα + εικοσι = σαραντα 
+  - τρια + τεσσερα + δεκα + εντεκα + δωδεκα = σαραντα 
+  - τρια + τεσσερα + πεντε + επτα + εντεκα = τριαντα 
+  - ενα + τεσσερα + πεντε + εικοσι = τριαντα 
