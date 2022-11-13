@@ -8,7 +8,7 @@
 
 [[https://github.com/arnaud-m/cryptator/actions/workflows/CryptatorTest.yml][file:https://github.com/arnaud-m/cryptator/actions/workflows/CryptatorTest.yml/badge.svg]]
 
-Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2021, Université Côte d'Azur).
+Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2022, Université Côte d'Azur).
 
 Cryptator is a cryptarithm solver using [[https://en.wikipedia.org/wiki/Constraint_programming][Constraint Programming]].\\
 It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which is an open-source Java library for Constraint Programming.
