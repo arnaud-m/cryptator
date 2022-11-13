@@ -1,4 +1,13 @@
 #!/bin/sh
+#
+# This file is part of cryptator, https://github.com/arnaud-m/cryptator
+#
+# Copyright (c) 2022, Université Côte d'Azur. All rights reserved.
+#
+# Licensed under the BSD 3-clause license.
+# See LICENSE file in the project root for full license information.
+#
+
 ## sh demo-generate.sh > demo-generate-output.md
 JAR="../../../target/cryptator-*-with-dependencies.jar"
 DIR="../words"
@@ -12,7 +21,7 @@ function solve() {
 echo "# Search cryptarithms with a UNIQUE solution"
 
 ######
-echo -e "\n## Generate from a word list\n"
+echo -e "\n## Generate from a words list\n"
 
 echo "- Planets"
 solve $DIR/planets.txt

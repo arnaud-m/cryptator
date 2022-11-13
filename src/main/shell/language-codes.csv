@@ -1,0 +1,27 @@
+# Define country codes and languages for generating doubly-true cryptarithm
+# https://www.oracle.com/java/technologies/javase/jdk17-suported-locales.html
+# The region value is a two-letter ISO 3166 code.
+# https://www.iban.com/country-codes
+# The language value is a two-letter language code as defined in ISO639.
+# https://www.loc.gov/standards/iso639-2/php/code_list.php
+# 10 Most spoken languages in the world
+# https://www.berlitz.com/blog/most-spoken-languages-world
+GB,en
+# CN,zh #too many answers!
+IN,hi
+ES,es
+FR,fr
+EG,ar
+#BD,bn #not supported by java 17
+RU,ru
+PT,pt
+ID,id
+# 10 most spoken languages in Europe
+# https://www.tandem.net/blog/10-most-spoken-languages-europe
+DE,de
+TR,tr
+IT,it
+UA,uk
+PL,pl
+RO,ro
+GR,el

@@ -148,10 +148,15 @@
                         <prurl>${project.url}</prurl>
                     </properties>
                     <mapping>
+                        <R>SCRIPT_STYLE</R>
+                        <g4>DOUBLESLASH_STYLE</g4>
                         <template>JAVADOC_STYLE</template>
                     </mapping>
                     <includes>
                         <include>src/*/java/**/*.java</include>
+                        <include>src/*/antlr4/**/*.g4</include>
+                        <include>src/*/shell/**/*.sh</include>
+                        <include>src/*/R/**/*.R</include>
                         <include>**/pom.xml</include>
                     </includes>
                 </configuration>

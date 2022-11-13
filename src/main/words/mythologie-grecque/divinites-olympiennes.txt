@@ -1,0 +1,14 @@
+aphrodite
+apollon
+ares
+artemis
+athena
+demeter
+dionysos
+hades
+hephaistos
+hera
+hermes
+hestia
+poseidon
+zeus
