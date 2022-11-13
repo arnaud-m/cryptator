@@ -8,36 +8,38 @@
  */
 package cryptator.tree;
 
+import cryptator.CryptaOperator;
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalNodeConsumer;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import cryptator.CryptaOperator;
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalNodeConsumer;
-
 public class CryptaFeatures implements ITraversalNodeConsumer {
 
+	private int constantCount = 0;
 	private int wordCount;
-	
 	private int charCount;
-	
 	private int minWordLength = Integer.MAX_VALUE;
-	
 	private int maxWordLength;
-	
 	private Set<Character> symbols = new HashSet<>();
-	
+
+	private Set<Integer> constants = new HashSet<>();
+
 	private Set<CryptaOperator> operators = new HashSet<>();
-	
+
 	public CryptaFeatures() {
 		super();
 	}
-	
+
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
-		if(node.isLeaf()) {
+		if (node.isConstantLeaf()){
+			constantCount++;
+			constants.add(((CryptaConstant) node).getConstant());
+		} else if(node.isWordLeaf()) {
 			final char[] word = node.getWord();
 			final int n = word.length;
 			if(n > 0) {
@@ -62,6 +64,10 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 		return charCount;
 	}
 
+	public int getConstantCount() {
+		return constantCount;
+	}
+
 	public final int getMinWordLength() {
 		return minWordLength;
 	}
@@ -74,10 +80,14 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 		return Collections.unmodifiableSet(symbols);
 	}
 
+	public Set<Integer> getConstants() {
+		return constants;
+	}
+
 	public final Set<CryptaOperator> getOperators() {
 		return Collections.unmodifiableSet(operators);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
@@ -88,7 +98,7 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 		b.append("\nc MIN_WORD_LEN ").append(minWordLength);
 		b.append("\nc MAX_WORD_LEN ").append(maxWordLength);
 		b.append("\nc SYMBOLS ").append(symbols.stream().map(String::valueOf).collect(Collectors.joining()));
-		b.append("\nc OPERATORS ").append(operators.stream().map(String::valueOf).collect(Collectors.joining(" ", "", "")));	
+		b.append("\nc OPERATORS ").append(operators.stream().map(String::valueOf).collect(Collectors.joining(" ", "", "")));
 		return b.toString();
 	}
 

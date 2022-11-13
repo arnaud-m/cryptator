@@ -8,57 +8,57 @@
  */
 package cryptator.solver;
 
+import cryptator.specs.ICryptaSolution;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import cryptator.specs.ICryptaSolution;
-
 public class CryptaSolutionMap extends AbstractCryptaSolution<Integer> {
 
-			
-	public static final ICryptaSolution parseSolution(String solution) throws CryptaSolutionException {
-		final HashMap<Character, Integer> symbolToDigit = new HashMap<>();
-		final String[] split = solution.split("\\s*[\\s=]\\s*");
-		//System.out.println(Arrays.toString(split));
-		if( split.length % 2 != 0) throw new CryptaSolutionException("Invalid number of splits: " + split.length);
-		for (int i = 0; i < split.length; i+=2) {
-			if( split[i].length() != 1) throw new CryptaSolutionException("Invalid symbol: " + split[i]);
-			final char symbol = split[i].charAt(0);
-			try {
-				final int digit = Integer.parseInt(split[i+1]);
-				symbolToDigit.put(symbol, digit);
-			} catch (NumberFormatException e) {
-				throw new CryptaSolutionException("Invalid digit: " + split[i+1]);
-			}
-		}
-		return new CryptaSolutionMap(symbolToDigit);
-	}
-	
-	protected CryptaSolutionMap(Map<Character, Integer> symbolsToDigits) {
-		super(symbolsToDigits);
-	}
-	
-	@Override
-	public boolean hasDigit(char symbol) {
-		return symbolsToDigits.containsKey(symbol);
-	}
 
-	@Override
-	public int getDigit(char symbol) throws CryptaSolutionException {
-		final Integer v = symbolsToDigits.get(symbol);
-		if( v == null ) throw new CryptaSolutionException("cant find symbol: " + symbol);
-		else return v;
-	}
+    protected CryptaSolutionMap(Map<Character, Integer> symbolsToDigits) {
+        super(symbolsToDigits);
+    }
 
-	@Override
-	public int getDigit(char symbol, int defaultValue) {
-		return symbolsToDigits.getOrDefault(symbol, defaultValue);
-	}
-	
-	@Override
-	protected String getDomain(Integer v) {
-		return v.toString();
-	}
+    public static final ICryptaSolution parseSolution(String solution) throws CryptaSolutionException {
+        final HashMap<Character, Integer> symbolToDigit = new HashMap<>();
+        final String[] split = solution.split("\\s*[\\s=]\\s*");
+        //System.out.println(Arrays.toString(split));
+        if (split.length % 2 != 0) throw new CryptaSolutionException("Invalid number of splits: " + split.length);
+        for (int i = 0; i < split.length; i += 2) {
+            if (split[i].length() != 1) throw new CryptaSolutionException("Invalid symbol: " + split[i]);
+            final char symbol = split[i].charAt(0);
+            try {
+                final int digit = Integer.parseInt(split[i + 1]);
+                symbolToDigit.put(symbol, digit);
+            } catch (NumberFormatException e) {
+                throw new CryptaSolutionException("Invalid digit: " + split[i + 1]);
+            }
+        }
+        return new CryptaSolutionMap(symbolToDigit);
+    }
 
-	
+    @Override
+    public boolean hasDigit(char symbol) {
+        return symbolsToDigits.containsKey(symbol);
+    }
+
+    @Override
+    public int getDigit(char symbol) throws CryptaSolutionException {
+        final Integer v = symbolsToDigits.get(symbol);
+        if (v == null) throw new CryptaSolutionException("cant find symbol: " + symbol);
+        else return v;
+    }
+
+    @Override
+    public int getDigit(char symbol, int defaultValue) {
+        return symbolsToDigits.getOrDefault(symbol, defaultValue);
+    }
+
+    @Override
+    protected String getDomain(Integer v) {
+        return v.toString();
+    }
+
+
 }

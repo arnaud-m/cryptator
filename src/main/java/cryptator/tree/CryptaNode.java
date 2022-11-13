@@ -50,7 +50,12 @@ public class CryptaNode implements ICryptaNode {
 	}
 
 	@Override
-	public boolean isLeaf() {
+	public boolean isConstantLeaf() {
+		return false;
+	}
+
+	@Override
+	public boolean isWordLeaf() {
 		return false;
 	}
 
@@ -64,4 +69,7 @@ public class CryptaNode implements ICryptaNode {
 		return operator.getToken();
 	}
 
+	public String write(){
+		return operator.getToken();
+	}
 }

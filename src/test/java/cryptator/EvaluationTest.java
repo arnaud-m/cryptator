@@ -8,6 +8,12 @@
  */
 package cryptator;
 
+import static org.junit.Assert.*;
+
+import java.math.BigInteger;
+
+import org.junit.Test;
+
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaSolutionException;
@@ -19,11 +25,6 @@ import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
-import org.junit.Test;
-
-import java.math.BigInteger;
-
-import static org.junit.Assert.*;
 
 public class EvaluationTest {
 
@@ -275,4 +276,53 @@ public class EvaluationTest {
         assertTrueEval(cryptarithm, solution, 10);
     }
 
+    // Integer test evaluation
+    @Test
+    public void testEvaluationInteger1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("a='2'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=2");
+        assertTrueEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationInteger2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("a+'22'='31'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=9");
+        assertTrueEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationInteger3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("a+'22'='31'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=8");
+        assertFalseEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testEvaluationIntegerFail1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("a+'22'='31'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("a=8");
+        assertFalseEval(cryptarithm, solution, 10);
+    }
+
+    @Test
+    public void testSetBaseInteger1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("1AB52='109394'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("1=1 A=10 B=11 5=5 2=2");
+        assertTrueEval(cryptarithm, solution, 16);
+    }
+
+    @Test
+    public void testSetBaseInteger2() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("1AB52='109394'+'1'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("1=1 A=10 B=11 5=5 2=2");
+        assertFalseEval(cryptarithm, solution, 16);
+    }
+
+    @Test
+    public void testSetBaseInteger3() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+        final ICryptaNode cryptarithm = parser.parse("1AB52='109394'+'1'");
+        final ICryptaSolution solution = CryptaSolutionMap.parseSolution("1=1 A=10 B=11 5=5 2=3");
+        assertTrueEval(cryptarithm, solution, 16);
+    }
 }

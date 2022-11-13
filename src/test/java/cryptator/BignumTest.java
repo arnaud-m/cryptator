@@ -8,12 +8,13 @@
  */
 package cryptator;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import cryptator.parser.CryptaParserException;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class BignumTest {
 
@@ -149,6 +150,63 @@ public class BignumTest {
 				"A + A + A + A + A = E";
 		t.testSAT(str);
 		t.testUNIQUE(str);
+	}
+
+	// Tests with ints
+	@Test
+	public void testIntegers01() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		t.testUNSAT("s='1'; send+more=money");
+	}
+
+	@Test
+	public void testIntegers02() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		t.testUNIQUE("m='1'; send+more=money");
+	}
+
+	@Test
+	public void testIntegers03() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		t.testNotUNIQUE("a='1'; a+b=d");
+	}
+
+	@Test
+	public void testIntegers04() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		t.testUNIQUE("a='1'; b='2'+a; a+b=d");
+	}
+	@Test
+	public void testIntegers05() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		t.testUNIQUE("'11'+'33'='44'");
+	}
+
+	@Test
+	public void testIntegers06() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		var test = "r='4'; false=true+maybe;s='3'; y=f+s;u='6'; ";
+		t.testSAT(test);
+		t.testUNIQUE(test);
+	}
+
+	@Test
+	public void testIntegers07() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		t.testUNSAT("'11'+'33'='45'");
+	}
+
+	@Test
+	public void testIntegers08() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		var test = "r='4'; false=true+maybe;s='3'; y=f+s+'12';u='6'; ";
+		t.testUNSAT(test);
+	}
+
+	@Test
+	public void testSetBase1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		var test = "r='36' ";
+		t.config.setArithmeticBase(40);
+		t.testUNIQUE(test);
+	}
+
+	@Test
+	public void testSetBase2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+		var test = "1AB52='109394'";
+		t.config.setArithmeticBase(16);
+		t.testUNIQUE(test);
 	}
 
 	// Tests from SolverTest class

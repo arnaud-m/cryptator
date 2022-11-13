@@ -14,19 +14,19 @@ import cryptator.specs.ICryptaNode;
 public class CryptaLeaf implements ICryptaNode {
 
 	private final char[] word;
-	
+
 	public CryptaLeaf() {
 		this(new char[0]);
 	}
-	
+
 	public CryptaLeaf(String word) {
 		this(word.toCharArray());
 	}
-	
+
 	public CryptaLeaf(char[] word) {
 		this.word = word;
 	}
-	
+
 	@Override
 	public CryptaOperator getOperator() {
 		return CryptaOperator.ID;
@@ -48,7 +48,12 @@ public class CryptaLeaf implements ICryptaNode {
 	}
 
 	@Override
-	public boolean isLeaf() {
+	public boolean isConstantLeaf() {
+		return false;
+	}
+
+	@Override
+	public boolean isWordLeaf() {
 		return true;
 	}
 
@@ -56,9 +61,14 @@ public class CryptaLeaf implements ICryptaNode {
 	public boolean isInternalNode() {
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
 		return new String(word);
+	}
+
+	@Override
+	public String write(){
+		return new String(getWord());
 	}
 }

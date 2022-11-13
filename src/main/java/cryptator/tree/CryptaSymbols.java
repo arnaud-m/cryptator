@@ -8,39 +8,39 @@
  */
 package cryptator.tree;
 
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalNodeConsumer;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalNodeConsumer;
-
 public class CryptaSymbols implements ITraversalNodeConsumer {
 
-	private Set<Character> letters;
+    private final Set<Character> letters;
 
-	public CryptaSymbols() {
-		this.letters = new HashSet<>();	
-	}
-	
-	@Override
-	public void accept(ICryptaNode node, int numNode) {
-		if(node.isLeaf()) {
-			for (Character c : node.getWord()) {
-				letters.add(c);
-			}
-		}
-	}
-	
-	
-	public char[] getSymbols() {
-		char[] res = new char[letters.size()];
-		int i = 0;
-		for (Character character : letters) {
-			res[i++] = character;
-		}
-		Arrays.sort(res);
-		return res;
-	}
-	
+    public CryptaSymbols() {
+        this.letters = new HashSet<>();
+    }
+
+    @Override
+    public void accept(ICryptaNode node, int numNode) {
+        if (node.isWordLeaf()) {
+            for (Character c : node.getWord()) {
+                letters.add(c);
+            }
+        }
+    }
+
+
+    public char[] getSymbols() {
+        char[] res = new char[letters.size()];
+        int i = 0;
+        for (Character character : letters) {
+            res[i++] = character;
+        }
+        Arrays.sort(res);
+        return res;
+    }
+
 }

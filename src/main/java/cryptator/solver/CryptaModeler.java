@@ -11,6 +11,7 @@ package cryptator.solver;
 import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
+import cryptator.tree.CryptaConstant;
 import cryptator.tree.TreeTraversals;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
@@ -52,7 +53,9 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
     @Override
     public void accept(ICryptaNode node, int numNode) {
         super.accept(node, numNode);
-        if (node.isLeaf()) {
+        if (node.isConstantLeaf()) {
+            stack.push(model.intVar(((CryptaConstant) node).getConstant()));
+        } else if (node.isWordLeaf()) {
             stack.push(makeWordVar(node.getWord()));
         } else {
             final ArExpression b = stack.pop();
@@ -63,7 +66,6 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
     @Override
     public void postCryptarithmEquationConstraint() throws CryptaModelException {
-//		TODO : modify here !!
         if (stack.size() != 1) throw new CryptaModelException("Invalid stack size at the end of modeling.");
         if (stack.peek() instanceof ReExpression) {
             ((ReExpression) stack.peek()).decompose().post();
