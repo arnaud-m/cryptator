@@ -50,8 +50,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
         <!-- Java source/target to use for compilation. -->
-        <javac.target>17</javac.target>
-        <javac.source>17</javac.source>
+        <javac.target>11</javac.target>
+        <javac.source>11</javac.source>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/args4j/args4j -->
@@ -126,11 +126,11 @@
                     <!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't
                         configured the maven-toolchains-plugin -->
                     <jdkToolchain>
-                        <version>17</version>
+                        <version>11</version>
                     </jdkToolchain>
-                    <release>17</release>
-                    <source>16</source>
-                    <target>16</target>
+                    <release>11</release>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>
