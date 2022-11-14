@@ -109,13 +109,17 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
             final ArExpression[] b = stack.pop();
             final ArExpression[] a = stack.pop();
             switch (node.getOperator()) {
-                case ADD -> stack.push(applyADD(a, b));
-                case EQ -> {
+                case ADD: {
+                	stack.push(applyADD(a, b));
+                	break;
+                }
+                case EQ: {
                     applyEQ(a, b);
                     if (!stack.isEmpty())
                         throw new IllegalStateException("Stack is not empty after accepting a relational operator.");
+                    else break;
                 }
-                default ->
+                default :
                     //	Should never be in the default case, this exception is
                     //  a program break in order to recall to modify the switch if
                     //  a new operator in BigNum is added.

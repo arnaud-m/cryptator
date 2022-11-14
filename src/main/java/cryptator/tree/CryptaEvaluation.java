@@ -47,8 +47,8 @@ public class CryptaEvaluation implements ICryptaEvaluation {
             try {
                 BigInteger v = BigInteger.ZERO;
                 final BigInteger b = BigInteger.valueOf(base);
-                if (node instanceof CryptaConstant constant)
-                    return BigInteger.valueOf(constant.getConstant());
+                if (node instanceof CryptaConstant)
+                    return BigInteger.valueOf(((CryptaConstant) node).getConstant());
                 for (char c : node.getWord()) {
                     final int digit = solution.getDigit(c);
                     if (digit < 0 || digit >= base)
