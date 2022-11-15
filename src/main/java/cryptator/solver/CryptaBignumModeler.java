@@ -63,7 +63,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return vars;
     }
 
-    private ArExpression[] makeConstantVars(char[] word) {
+    private ArExpression[] makeConstVars(char[] word) {
     	List<ArExpression> vars = new ArrayList<>();
         BigInteger n = new BigInteger(new String(word));
         BigInteger b = BigInteger.valueOf(config.getArithmeticBase());	
@@ -104,33 +104,40 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         a1.carries[n - 1].eq(b1.carries[n - 1]).decompose().post();
     }
 
+    private void apply(CryptaOperator op, ArExpression[] a, ArExpression[] b) {
+    	  switch (op) {
+          case ADD: {
+          	stack.push(applyADD(a, b));
+          	break;
+          }
+          case EQ: {
+              applyEQ(a, b);
+              if (!stack.isEmpty()) // TODO Raise CryptaModelException instead !
+                  throw new IllegalStateException("Stack is not empty after accepting a relational operator.");
+              else break;
+          }
+          default :
+              //	Should never be in the default case, this exception is
+              //  a program break in order to recall to modify the switch if
+              //  a new operator in BigNum is added.
+              //  Example case : we remove the MUL operator in computeUnsupportedBignumOperator
+                  throw new IllegalStateException("Bignum operator is not yet implemented");
+      }
+    }
     @Override
     public void accept(ICryptaNode node, int numNode) {
         super.accept(node, numNode);
-        if (node.isConstantLeaf()){
-            stack.push(makeConstantVars(node.getWord()));
-        } else if (node.isWordLeaf()){
-            stack.push(makeWordVars(node.getWord()));
-        } else if (!node.getOperator().equals(CryptaOperator.AND)) {
-            final ArExpression[] b = stack.pop();
-            final ArExpression[] a = stack.pop();
-            switch (node.getOperator()) {
-                case ADD: {
-                	stack.push(applyADD(a, b));
-                	break;
-                }
-                case EQ: {
-                    applyEQ(a, b);
-                    if (!stack.isEmpty())
-                        throw new IllegalStateException("Stack is not empty after accepting a relational operator.");
-                    else break;
-                }
-                default :
-                    //	Should never be in the default case, this exception is
-                    //  a program break in order to recall to modify the switch if
-                    //  a new operator in BigNum is added.
-                    //  Example case : we remove the MUL operator in computeUnsupportedBignumOperator
-                        throw new IllegalStateException("Bignum operator is not yet implemented");
+        if(node.isInternalNode()) {
+        	if(! node.getOperator().equals(CryptaOperator.AND)) {
+        	  final ArExpression[] b = stack.pop();
+              final ArExpression[] a = stack.pop();
+              apply(node.getOperator(), a, b);
+        	} // else do nothing ; constraint are posted when the relational operator is popped.
+        } else {
+        	if (node.isConstant()){
+                stack.push(makeConstVars(node.getWord()));
+            } else {
+                stack.push(makeWordVars(node.getWord()));
             }
         }
     }
