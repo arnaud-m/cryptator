@@ -10,20 +10,13 @@ package cryptator.tree;
 
 public class CryptaConstant extends CryptaLeaf {
 	
-	private final int constant;
-	public CryptaConstant() {
-		super();
-		constant = Integer.parseInt(new String(getWord()));
-	}
 
 	public CryptaConstant(String word) {
 		super(word);
-		constant = Integer.parseInt(new String(getWord()));
 	}
 
 	public CryptaConstant(char[] word) {
 		super(word);
-		constant = Integer.parseInt(new String(getWord()));
 	}
 
 	@Override
@@ -38,6 +31,6 @@ public class CryptaConstant extends CryptaLeaf {
 
 	@Override
 	public String write(){
-		return "'" + constant + "'";
+		return "'" + new String(getWord()) + "'";
 	}
 }
