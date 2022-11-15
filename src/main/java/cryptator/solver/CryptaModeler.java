@@ -46,26 +46,28 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
         wordVarBuilder = config.getHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
     }
 
-    private IntVar makeWordVar(char[] word) {
-        return wordVarBuilder.apply(word);
+    private IntVar makeWordVar(ICryptaNode node) {
+    	return wordVarBuilder.apply(node.getWord());
     }
-    
-    private IntVar makeWordConst(char[] word) {
-    	return model.intVar(Integer.parseInt(new String(word)));
+
+    private IntVar makeWordConst(ICryptaNode node) {
+    	return model.intVar(Integer.parseInt(new String(node.getWord())));
     }
 
     @Override
     public void accept(ICryptaNode node, int numNode) {
-        super.accept(node, numNode);
-        if (node.isConstantLeaf()) {
-            stack.push(makeWordConst(node.getWord()));
-        } else if (node.isWordLeaf()) {
-            stack.push(makeWordVar(node.getWord()));
-        } else {
-            final ArExpression b = stack.pop();
-            final ArExpression a = stack.pop();
-            stack.push(node.getOperator().getExpression().apply(a, b));
-        }
+    	super.accept(node, numNode);
+    	if(node.isInternalNode()) {
+    		final ArExpression b = stack.pop();
+    		final ArExpression a = stack.pop();
+    		stack.push(node.getOperator().getExpression().apply(a, b));
+    	} else {
+    		if (node.isConstant()) {
+    			stack.push(makeWordConst(node));
+    		} else {
+    			stack.push(makeWordVar(node));
+    		}
+    	}
     }
 
     @Override
