@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CryptaSymbols implements ITraversalNodeConsumer {
+public final class CryptaSymbols implements ITraversalNodeConsumer {
 
     private final Set<Character> letters;
 
@@ -31,7 +31,6 @@ public class CryptaSymbols implements ITraversalNodeConsumer {
             }
         }
     }
-
 
     public char[] getSymbols() {
         char[] res = new char[letters.size()];

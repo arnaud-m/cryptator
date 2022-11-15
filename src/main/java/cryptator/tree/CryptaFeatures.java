@@ -19,15 +19,12 @@ import java.util.stream.Collectors;
 
 public class CryptaFeatures implements ITraversalNodeConsumer {
 
-	private int constantCount = 0;
+	private int constantCount;
 	private int wordCount;
 	private int charCount;
 	private int minWordLength = Integer.MAX_VALUE;
 	private int maxWordLength;
 	private Set<Character> symbols = new HashSet<>();
-
-	private Set<Integer> constants = new HashSet<>();
-
 	private Set<CryptaOperator> operators = new HashSet<>();
 
 	public CryptaFeatures() {
@@ -38,7 +35,6 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 	public void accept(ICryptaNode node, int numNode) {
 		if (node.isConstantLeaf()){
 			constantCount++;
-			constants.add(((CryptaConstant) node).getConstant());
 		} else if(node.isWordLeaf()) {
 			final char[] word = node.getWord();
 			final int n = word.length;
@@ -78,10 +74,6 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 
 	public final Set<Character> getSymbols() {
 		return Collections.unmodifiableSet(symbols);
-	}
-
-	public Set<Integer> getConstants() {
-		return constants;
 	}
 
 	public final Set<CryptaOperator> getOperators() {
