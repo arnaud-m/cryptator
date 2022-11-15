@@ -31,24 +31,26 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 		super();
 	}
 
+	private void accept(char[] word) {
+		final int n = word.length;
+		if(n > 0) {
+			wordCount++;
+			charCount += n;
+			if(n < minWordLength) minWordLength = n;
+			else if(n > maxWordLength) maxWordLength = n;
+			for (char c : word) {
+				symbols.add(c);
+			}
+		}
+	}
+		
 	@Override
 	public void accept(ICryptaNode node, int numNode) {
-		if (node.isConstantLeaf()){
-			constantCount++;
-		} else if(node.isWordLeaf()) {
-			final char[] word = node.getWord();
-			final int n = word.length;
-			if(n > 0) {
-				wordCount++;
-				charCount += n;
-				if(n < minWordLength) minWordLength = n;
-				else if(n > maxWordLength) maxWordLength = n;
-				for (char c : word) {
-					symbols.add(c);
-				}
-			}
-		} else {
+		if(node.isInternalNode()) {
 			operators.add(node.getOperator());
+		} else {
+			if(node.isConstant()) constantCount++;
+			else accept(node.getWord());
 		}
 	}
 
