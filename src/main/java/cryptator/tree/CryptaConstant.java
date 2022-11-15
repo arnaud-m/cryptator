@@ -10,7 +10,6 @@ package cryptator.tree;
 
 public class CryptaConstant extends CryptaLeaf {
 	
-
 	public CryptaConstant(String word) {
 		super(word);
 	}
@@ -20,13 +19,8 @@ public class CryptaConstant extends CryptaLeaf {
 	}
 
 	@Override
-	public boolean isConstantLeaf() {
+	public boolean isConstant() {
 		return true;
-	}
-
-	@Override
-	public boolean isWordLeaf() {
-		return false;
 	}
 
 	@Override

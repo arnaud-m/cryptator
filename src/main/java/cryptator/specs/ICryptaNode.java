@@ -54,21 +54,36 @@ public interface ICryptaNode {
      *
      * @return true, if it is a constant leaf
      */
-    boolean isConstantLeaf();
+    @Deprecated
+    default boolean isConstantLeaf() {
+    	return !isInternalNode() && isConstant();
+    }
 
     /**
      * Checks if the node is a word leaf of the tree.
      *
      * @return true, if it is a word leaf
      */
-    boolean isWordLeaf();
+    @Deprecated
+    default boolean isWordLeaf() {
+    	return !isInternalNode() && !isConstant();
+    }
 
     /**
      * Checks if the node is an internal node of the tree.
      *
-     * @return true, if it is internal node
+     * @return true, if it is internal node, otherwise it is a leaf
      */
     boolean isInternalNode();
+    
+    
+    /**
+     * Checks if the subtree is a constant of the tree.
+     *
+     * @return true, if it is constant, otherwise false.
+     */
+    boolean isConstant();
+    
 
     /**
      * Transform parsed node to string.
