@@ -43,23 +43,25 @@ public class CryptaEvaluation implements ICryptaEvaluation {
             this.base = base;
         }
 
-        private BigInteger getWordValue(ICryptaNode node) throws CryptaEvaluationException {
-            try {
-                BigInteger v = BigInteger.ZERO;
-                final BigInteger b = BigInteger.valueOf(base);
-                if (node instanceof CryptaConstant)
-                    return BigInteger.valueOf(((CryptaConstant) node).getConstant());
-                for (char c : node.getWord()) {
-                    final int digit = solution.getDigit(c);
-                    if (digit < 0 || digit >= base)
-                        throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
-                    v = v.multiply(b).add(BigInteger.valueOf(digit));
-                }
-                return v;
-            } catch (CryptaSolutionException e) {
-                throw new CryptaEvaluationException("Cannot use a partial solution for evaluation", e);
-            }
-        }
+		private BigInteger getWordValue(ICryptaNode node) throws CryptaEvaluationException {
+			if (node.isConstantLeaf()) {
+				return new BigInteger(new String(node.getWord()));
+			} else {
+				try {
+					BigInteger v = BigInteger.ZERO;
+					final BigInteger b = BigInteger.valueOf(base);
+					for (char c : node.getWord()) {
+						final int digit = solution.getDigit(c);
+						if (digit < 0 || digit >= base)
+							throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
+						v = v.multiply(b).add(BigInteger.valueOf(digit));
+					}
+					return v;
+				} catch (CryptaSolutionException e) {
+					throw new CryptaEvaluationException("Cannot use a partial solution for evaluation", e);
+				}
+			}
+		}
 
         @Override
         public void accept(ICryptaNode node, int numNode) {

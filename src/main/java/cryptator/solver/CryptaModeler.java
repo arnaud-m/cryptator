@@ -49,12 +49,16 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
     private IntVar makeWordVar(char[] word) {
         return wordVarBuilder.apply(word);
     }
+    
+    private IntVar makeWordConst(char[] word) {
+    	return model.intVar(Integer.parseInt(new String(word)));
+    }
 
     @Override
     public void accept(ICryptaNode node, int numNode) {
         super.accept(node, numNode);
         if (node.isConstantLeaf()) {
-            stack.push(model.intVar(((CryptaConstant) node).getConstant()));
+            stack.push(makeWordConst(node.getWord()));
         } else if (node.isWordLeaf()) {
             stack.push(makeWordVar(node.getWord()));
         } else {

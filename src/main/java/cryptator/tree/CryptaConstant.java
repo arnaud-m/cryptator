@@ -39,10 +39,6 @@ public class CryptaConstant extends CryptaLeaf {
 		return false;
 	}
 
-	public int getConstant() {
-		return constant;
-	}
-
 	/**
 	 * @param newBase : the new base to which convert the current constant (Note the current constant is by default in base 10)
 	 * @return an Integer[] of the little representation of the int in the newBase
