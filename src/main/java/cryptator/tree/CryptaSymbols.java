@@ -25,7 +25,7 @@ public final class CryptaSymbols implements ITraversalNodeConsumer {
 
     @Override
     public void accept(ICryptaNode node, int numNode) {
-        if (node.isWordLeaf()) {
+        if (!node.isInternalNode() && !node.isConstant()) {
             for (Character c : node.getWord()) {
                 letters.add(c);
             }

@@ -39,7 +39,6 @@ public interface ICryptaNode {
      * @return the left child
      */
     ICryptaNode getLeftChild();
-    // FIXME Use java.util.Optional ?
 
     /**
      * Gets the right child if any.
@@ -47,27 +46,6 @@ public interface ICryptaNode {
      * @return the right child
      */
     ICryptaNode getRightChild();
-    // FIXME Use java.util.Optional ?
-
-    /**
-     * Checks if the node is a constant leaf of the tree.
-     *
-     * @return true, if it is a constant leaf
-     */
-    @Deprecated
-    default boolean isConstantLeaf() {
-    	return !isInternalNode() && isConstant();
-    }
-
-    /**
-     * Checks if the node is a word leaf of the tree.
-     *
-     * @return true, if it is a word leaf
-     */
-    @Deprecated
-    default boolean isWordLeaf() {
-    	return !isInternalNode() && !isConstant();
-    }
 
     /**
      * Checks if the node is an internal node of the tree.
@@ -83,6 +61,15 @@ public interface ICryptaNode {
      * @return true, if it is constant, otherwise false.
      */
     boolean isConstant();
+
+    /**
+     * Checks if the node represents a word, i.e. it is a leaf and not constant. 
+     *
+     * @return true, if it is a word leaf, otherwise false.
+     */
+    default boolean isWord() {
+    	return !isInternalNode() && !isConstant();
+    }
     
 
     /**
@@ -92,4 +79,5 @@ public interface ICryptaNode {
      * @return the string representation of the node accepted by the parser
      */
     String write();
+    
 }
