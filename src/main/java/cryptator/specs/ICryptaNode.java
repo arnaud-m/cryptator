@@ -73,11 +73,10 @@ public interface ICryptaNode {
     
 
     /**
-     * Transform parsed node to string.
-     * For example parse(inOrderPrint(parse("a+'8'=b"))) is the same as parse("a+'8'=b")
+     * Transform parsed node to string recognized by the grammar.
      *
-     * @return the string representation of the node accepted by the parser
+     * @return the string representation of the node accepted by the grammar
      */
-    String write();
+    String toGrammarString();
     
 }

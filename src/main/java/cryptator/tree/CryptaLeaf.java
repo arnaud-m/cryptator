@@ -16,7 +16,6 @@ public class CryptaLeaf implements ICryptaNode {
 	private final char[] word;
 
 	public CryptaLeaf() {
-		// TODO Remove old representation of '0' ; replace by constant ; update feature computation too.; graphivz export.
 		this(new char[0]);
 	}
 
@@ -64,7 +63,7 @@ public class CryptaLeaf implements ICryptaNode {
 	}
 
 	@Override
-	public String write(){
+	public String toGrammarString(){
 		return new String(getWord());
 	}
 }

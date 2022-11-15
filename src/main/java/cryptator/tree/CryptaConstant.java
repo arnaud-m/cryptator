@@ -24,7 +24,7 @@ public class CryptaConstant extends CryptaLeaf {
 	}
 
 	@Override
-	public String write(){
+	public String toGrammarString(){
 		return "'" + new String(getWord()) + "'";
 	}
 }
