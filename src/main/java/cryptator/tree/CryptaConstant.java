@@ -8,11 +8,8 @@
  */
 package cryptator.tree;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CryptaConstant extends CryptaLeaf {
-	public static final int DEFAULT_BASE = 10;
+	
 	private final int constant;
 	public CryptaConstant() {
 		super();
@@ -37,26 +34,6 @@ public class CryptaConstant extends CryptaLeaf {
 	@Override
 	public boolean isWordLeaf() {
 		return false;
-	}
-
-	/**
-	 * @param newBase : the new base to which convert the current constant (Note the current constant is by default in base 10)
-	 * @return an Integer[] of the little representation of the int in the newBase
-	 *
-	 * For example, the constant 178829 will be res = [13, 8, 10, 11, 2] since
-	 * sum_{i from 0 to newBase - 1} res[i] * newBase^i = 178829
-	 */
-	public Integer[] changeBaseLittleEndian(int newBase){
-		var length = getWord().length;
-		List<Integer> newInt = new ArrayList<>();
-		var n = this.constant;
-		while (n > 0){
-			var reminder = n % newBase;
-			var divRes = n / newBase;
-			newInt.add(reminder);
-			n = divRes;
-		}
-		return newInt.toArray(new Integer[0]);
 	}
 
 	@Override

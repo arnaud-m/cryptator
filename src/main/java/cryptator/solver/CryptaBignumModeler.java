@@ -8,20 +8,23 @@
  */
 package cryptator.solver;
 
-import cryptator.CryptaOperator;
-import cryptator.config.CryptaConfig;
-import cryptator.specs.ICryptaModeler;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaConstant;
-import cryptator.tree.CryptaOperatorDetection;
-import cryptator.tree.TreeTraversals;
-import cryptator.tree.TreeUtils;
+import java.math.BigInteger;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.variables.IntVar;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import cryptator.CryptaOperator;
+import cryptator.config.CryptaConfig;
+import cryptator.specs.ICryptaModeler;
+import cryptator.specs.ICryptaNode;
+import cryptator.tree.CryptaOperatorDetection;
+import cryptator.tree.TreeTraversals;
+import cryptator.tree.TreeUtils;
 
 public class CryptaBignumModeler implements ICryptaModeler {
 
@@ -60,14 +63,17 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return vars;
     }
 
-    private ArExpression[] makeConstantVars(CryptaConstant constant) {
-        var ints =constant.changeBaseLittleEndian(config.getArithmeticBase());
-        final int n = ints.length;
-        ArExpression[] vars = new ArExpression[n];
-        for (int i = 0; i < n; i++) {
-            vars[i] = model.intVar(ints[i]);
-        }
-        return vars;
+    private ArExpression[] makeConstantVars(char[] word) {
+    	List<ArExpression> vars = new ArrayList<>();
+        BigInteger n = new BigInteger(new String(word));
+        BigInteger b = BigInteger.valueOf(config.getArithmeticBase());	
+        while (n.compareTo(BigInteger.ZERO) > 0) {
+        	BigInteger[] r = n.divideAndRemainder(b);
+        	n = r[0];
+        	vars.add(model.intVar(r[1].intValueExact()));
+        }	
+		ArExpression[] res = new ArExpression[vars.size()];
+		return vars.toArray(res);
     }
 
 
@@ -102,7 +108,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
     public void accept(ICryptaNode node, int numNode) {
         super.accept(node, numNode);
         if (node.isConstantLeaf()){
-            stack.push(makeConstantVars((CryptaConstant) node));
+            stack.push(makeConstantVars(node.getWord()));
         } else if (node.isWordLeaf()){
             stack.push(makeWordVars(node.getWord()));
         } else if (!node.getOperator().equals(CryptaOperator.AND)) {
