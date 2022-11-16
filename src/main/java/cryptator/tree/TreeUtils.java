@@ -25,7 +25,7 @@ public final class TreeUtils {
 
     private static void writeWord(ICryptaNode node, PrintWriter out) {
         char[] w = node.getWord();
-        if (w.length > 0) out.write(node.write());
+        if (w.length > 0) out.write(node.toGrammarString());
         else out.write(ZERO);
         out.write(" ");
     }

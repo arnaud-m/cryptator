@@ -39,7 +39,6 @@ public interface ICryptaNode {
      * @return the left child
      */
     ICryptaNode getLeftChild();
-    // FIXME Use java.util.Optional ?
 
     /**
      * Gets the right child if any.
@@ -47,34 +46,37 @@ public interface ICryptaNode {
      * @return the right child
      */
     ICryptaNode getRightChild();
-    // FIXME Use java.util.Optional ?
-
-    /**
-     * Checks if the node is a constant leaf of the tree.
-     *
-     * @return true, if it is a constant leaf
-     */
-    boolean isConstantLeaf();
-
-    /**
-     * Checks if the node is a word leaf of the tree.
-     *
-     * @return true, if it is a word leaf
-     */
-    boolean isWordLeaf();
 
     /**
      * Checks if the node is an internal node of the tree.
      *
-     * @return true, if it is internal node
+     * @return true, if it is internal node, otherwise it is a leaf
      */
     boolean isInternalNode();
+    
+    
+    /**
+     * Checks if the subtree is a constant of the tree.
+     *
+     * @return true, if it is constant, otherwise false.
+     */
+    boolean isConstant();
 
     /**
-     * Transform parsed node to string.
-     * For example parse(inOrderPrint(parse("a+'8'=b"))) is the same as parse("a+'8'=b")
+     * Checks if the node represents a word, i.e. it is a leaf and not constant. 
      *
-     * @return the string representation of the node accepted by the parser
+     * @return true, if it is a word leaf, otherwise false.
      */
-    String write();
+    default boolean isWord() {
+    	return !isInternalNode() && !isConstant();
+    }
+    
+
+    /**
+     * Transform parsed node to string recognized by the grammar.
+     *
+     * @return the string representation of the node accepted by the grammar
+     */
+    String toGrammarString();
+    
 }

@@ -8,19 +8,19 @@
  */
 package cryptator.solver;
 
-import cryptator.config.CryptaConfig;
-import cryptator.specs.ICryptaModeler;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaConstant;
-import cryptator.tree.TreeTraversals;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.function.Function;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.function.Function;
+import cryptator.config.CryptaConfig;
+import cryptator.specs.ICryptaModeler;
+import cryptator.specs.ICryptaNode;
+import cryptator.tree.TreeTraversals;
 
 public class CryptaModeler implements ICryptaModeler {
 
@@ -46,22 +46,28 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
         wordVarBuilder = config.getHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
     }
 
-    private IntVar makeWordVar(char[] word) {
-        return wordVarBuilder.apply(word);
+    private IntVar makeWordVar(ICryptaNode node) {
+    	return wordVarBuilder.apply(node.getWord());
+    }
+
+    private IntVar makeWordConst(ICryptaNode node) {
+    	return model.intVar(Integer.parseInt(new String(node.getWord())));
     }
 
     @Override
     public void accept(ICryptaNode node, int numNode) {
-        super.accept(node, numNode);
-        if (node.isConstantLeaf()) {
-            stack.push(model.intVar(((CryptaConstant) node).getConstant()));
-        } else if (node.isWordLeaf()) {
-            stack.push(makeWordVar(node.getWord()));
-        } else {
-            final ArExpression b = stack.pop();
-            final ArExpression a = stack.pop();
-            stack.push(node.getOperator().getExpression().apply(a, b));
-        }
+    	super.accept(node, numNode);
+    	if(node.isInternalNode()) {
+    		final ArExpression b = stack.pop();
+    		final ArExpression a = stack.pop();
+    		stack.push(node.getOperator().getExpression().apply(a, b));
+    	} else {
+    		if (node.isConstant()) {
+    			stack.push(makeWordConst(node));
+    		} else {
+    			stack.push(makeWordVar(node));
+    		}
+    	}
     }
 
     @Override

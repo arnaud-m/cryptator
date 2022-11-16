@@ -50,18 +50,13 @@ public class CryptaNode implements ICryptaNode {
 	}
 
 	@Override
-	public boolean isConstantLeaf() {
-		return false;
-	}
-
-	@Override
-	public boolean isWordLeaf() {
-		return false;
-	}
-
-	@Override
 	public boolean isInternalNode() {
 		return true;
+	}
+	
+	@Override
+	public boolean isConstant() {
+		return leftChild.isConstant() && rightChild.isConstant();
 	}
 
 	@Override
@@ -69,7 +64,7 @@ public class CryptaNode implements ICryptaNode {
 		return operator.getToken();
 	}
 
-	public String write(){
+	public String toGrammarString(){
 		return operator.getToken();
 	}
 }

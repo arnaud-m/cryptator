@@ -17,7 +17,7 @@ import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalNodeConsumer;
 
-public class CryptaOperatorDetection implements ITraversalNodeConsumer {
+public final class CryptaOperatorDetection implements ITraversalNodeConsumer {
 
 	private Set<CryptaOperator> supportedOperators;
 

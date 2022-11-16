@@ -44,40 +44,43 @@ public class CryptaEvaluation implements ICryptaEvaluation {
         }
 
         private BigInteger getWordValue(ICryptaNode node) throws CryptaEvaluationException {
-            try {
-                BigInteger v = BigInteger.ZERO;
-                final BigInteger b = BigInteger.valueOf(base);
-                if (node instanceof CryptaConstant constant)
-                    return BigInteger.valueOf(constant.getConstant());
-                for (char c : node.getWord()) {
-                    final int digit = solution.getDigit(c);
-                    if (digit < 0 || digit >= base)
-                        throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
-                    v = v.multiply(b).add(BigInteger.valueOf(digit));
-                }
-                return v;
-            } catch (CryptaSolutionException e) {
-                throw new CryptaEvaluationException("Cannot use a partial solution for evaluation", e);
-            }
+        	try {
+        		BigInteger v = BigInteger.ZERO;
+        		final BigInteger b = BigInteger.valueOf(base);
+        		for (char c : node.getWord()) {
+        			final int digit = solution.getDigit(c);
+        			if (digit < 0 || digit >= base)
+        				throw new CryptaEvaluationException("cannot evaluate because of an invalid digit for the evaluation base.");
+        			v = v.multiply(b).add(BigInteger.valueOf(digit));
+        		}
+        		return v;
+        	} catch (CryptaSolutionException e) {
+        		throw new CryptaEvaluationException("Cannot use a partial solution for evaluation", e);
+        	}
+        }
+
+        private BigInteger getConstValue(ICryptaNode node) {
+        	return new BigInteger(new String(node.getWord()));
         }
 
         @Override
         public void accept(ICryptaNode node, int numNode) {
-            // Check for the exception because it cannot be thrown here.
-            if (exception == null) {
-                if (node.isWordLeaf() || node.isConstantLeaf()) {
-                    try {
-                        stack.push(getWordValue(node));
-                    } catch (CryptaEvaluationException e) {
-                        exception = e;
-                    }
-                } else {
-                    final BigInteger b = stack.pop();
-                    final BigInteger a = stack.pop();
-                    // System.out.println(a+ " " + b);
-                    stack.push(node.getOperator().getFunction().apply(a, b));
-                }
-            }
+        	// Check for the exception because it cannot be thrown here.
+        	if (exception == null) {
+        		if(node.isInternalNode()) {
+        			final BigInteger b = stack.pop();
+        			final BigInteger a = stack.pop();
+        			// System.out.println(a+ " " + b);
+        			stack.push(node.getOperator().getFunction().apply(a, b));
+        		} else {
+        			try {
+        				if(node.isConstant()) stack.push(getConstValue(node));
+        				else stack.push(getWordValue(node));
+        			} catch (CryptaEvaluationException e) {
+        				exception = e;
+        			} 
+        		}
+        	}
         }
 
 

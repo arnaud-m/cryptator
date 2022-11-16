@@ -48,17 +48,12 @@ public class CryptaLeaf implements ICryptaNode {
 	}
 
 	@Override
-	public boolean isConstantLeaf() {
+	public boolean isInternalNode() {
 		return false;
 	}
-
+	
 	@Override
-	public boolean isWordLeaf() {
-		return true;
-	}
-
-	@Override
-	public boolean isInternalNode() {
+	public boolean isConstant() {
 		return false;
 	}
 
@@ -68,7 +63,7 @@ public class CryptaLeaf implements ICryptaNode {
 	}
 
 	@Override
-	public String write(){
+	public String toGrammarString(){
 		return new String(getWord());
 	}
 }

@@ -36,7 +36,6 @@ public class FeaturesTest {
 		assertEquals(5, feat.getMaxWordLength());
 		assertEquals(8, feat.getSymbols().size());
 		assertEquals(2, feat.getOperators().size());
-		assertTrue(feat.getConstants().contains(0));
 	}
 	
 	@Test
@@ -44,6 +43,7 @@ public class FeaturesTest {
 		final ICryptaNode node = parser.parse("iowa+nevada+indiana=georgia");
 		final CryptaFeatures feat = TreeUtils.computeFeatures(node);
 		assertEquals(4, feat.getWordCount());
+		assertEquals(0, feat.getConstantCount());
 		assertEquals(24, feat.getCharCount());
 		assertEquals(4, feat.getMinWordLength());
 		assertEquals(7, feat.getMaxWordLength());		

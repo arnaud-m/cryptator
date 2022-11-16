@@ -68,7 +68,7 @@ public class AdaptiveSolver implements ICryptaSolver {
 
         @Override
         public void accept(ICryptaNode node, int numNode) {
-            if (node.isWordLeaf()) {
+            if (node.isWord()) {
                 final int len = node.getWord().length;
                 if (len > maxLen) maxLen = len;
             }

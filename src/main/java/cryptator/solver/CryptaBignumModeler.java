@@ -8,20 +8,23 @@
  */
 package cryptator.solver;
 
-import cryptator.CryptaOperator;
-import cryptator.config.CryptaConfig;
-import cryptator.specs.ICryptaModeler;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaConstant;
-import cryptator.tree.CryptaOperatorDetection;
-import cryptator.tree.TreeTraversals;
-import cryptator.tree.TreeUtils;
+import java.math.BigInteger;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.variables.IntVar;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import cryptator.CryptaOperator;
+import cryptator.config.CryptaConfig;
+import cryptator.specs.ICryptaModeler;
+import cryptator.specs.ICryptaNode;
+import cryptator.tree.CryptaOperatorDetection;
+import cryptator.tree.TreeTraversals;
+import cryptator.tree.TreeUtils;
 
 public class CryptaBignumModeler implements ICryptaModeler {
 
@@ -60,14 +63,17 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return vars;
     }
 
-    private ArExpression[] makeConstantVars(CryptaConstant constant) {
-        var ints =constant.changeBaseLittleEndian(config.getArithmeticBase());
-        final int n = ints.length;
-        ArExpression[] vars = new ArExpression[n];
-        for (int i = 0; i < n; i++) {
-            vars[i] = model.intVar(ints[i]);
-        }
-        return vars;
+    private ArExpression[] makeConstVars(char[] word) {
+    	List<ArExpression> vars = new ArrayList<>();
+        BigInteger n = new BigInteger(new String(word));
+        BigInteger b = BigInteger.valueOf(config.getArithmeticBase());	
+        while (n.compareTo(BigInteger.ZERO) > 0) {
+        	BigInteger[] r = n.divideAndRemainder(b);
+        	n = r[0];
+        	vars.add(model.intVar(r[1].intValueExact()));
+        }	
+		ArExpression[] res = new ArExpression[vars.size()];
+		return vars.toArray(res);
     }
 
 
@@ -98,29 +104,40 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         a1.carries[n - 1].eq(b1.carries[n - 1]).decompose().post();
     }
 
+    private void apply(CryptaOperator op, ArExpression[] a, ArExpression[] b) {
+    	  switch (op) {
+          case ADD: {
+          	stack.push(applyADD(a, b));
+          	break;
+          }
+          case EQ: {
+              applyEQ(a, b);
+              if (!stack.isEmpty()) // TODO Raise CryptaModelException instead !
+                  throw new IllegalStateException("Stack is not empty after accepting a relational operator.");
+              else break;
+          }
+          default :
+              //	Should never be in the default case, this exception is
+              //  a program break in order to recall to modify the switch if
+              //  a new operator in BigNum is added.
+              //  Example case : we remove the MUL operator in computeUnsupportedBignumOperator
+                  throw new IllegalStateException("Bignum operator is not yet implemented");
+      }
+    }
     @Override
     public void accept(ICryptaNode node, int numNode) {
         super.accept(node, numNode);
-        if (node.isConstantLeaf()){
-            stack.push(makeConstantVars((CryptaConstant) node));
-        } else if (node.isWordLeaf()){
-            stack.push(makeWordVars(node.getWord()));
-        } else if (!node.getOperator().equals(CryptaOperator.AND)) {
-            final ArExpression[] b = stack.pop();
-            final ArExpression[] a = stack.pop();
-            switch (node.getOperator()) {
-                case ADD -> stack.push(applyADD(a, b));
-                case EQ -> {
-                    applyEQ(a, b);
-                    if (!stack.isEmpty())
-                        throw new IllegalStateException("Stack is not empty after accepting a relational operator.");
-                }
-                default ->
-                    //	Should never be in the default case, this exception is
-                    //  a program break in order to recall to modify the switch if
-                    //  a new operator in BigNum is added.
-                    //  Example case : we remove the MUL operator in computeUnsupportedBignumOperator
-                        throw new IllegalStateException("Bignum operator is not yet implemented");
+        if(node.isInternalNode()) {
+        	if(! node.getOperator().equals(CryptaOperator.AND)) {
+        	  final ArExpression[] b = stack.pop();
+              final ArExpression[] a = stack.pop();
+              apply(node.getOperator(), a, b);
+        	} // else do nothing ; constraint are posted when the relational operator is popped.
+        } else {
+        	if (node.isConstant()){
+                stack.push(makeConstVars(node.getWord()));
+            } else {
+                stack.push(makeWordVars(node.getWord()));
             }
         }
     }
