@@ -26,6 +26,7 @@ import guru.nidi.graphviz.attribute.ForNode;
 import guru.nidi.graphviz.attribute.Label;
 import guru.nidi.graphviz.attribute.Records;
 import guru.nidi.graphviz.attribute.Shape;
+import guru.nidi.graphviz.attribute.Style;
 import guru.nidi.graphviz.model.Graph;
 import guru.nidi.graphviz.model.Node;
 
@@ -62,20 +63,21 @@ public final class GraphvizExport {
 			return node(String.valueOf(numNode));
 		}
 
-		protected Node withZeroLabel(Node n) {
-			return n.with(Label.of("0"));  
-		}
 
-		protected Node withWordLabel(Node n, ICryptaNode node) {
+		protected final Node withPlainWord(Node n, ICryptaNode node) {
 			return n.with(Label.of(new String(node.getWord())));  
+		}
+		
+		protected final Node withBoxedWord(Node n, ICryptaNode node) {
+			return withPlainWord(n, node).with(Shape.BOX, Style.DASHED);  
 		}
 
 		protected Node makeWordNode(ICryptaNode node, int numNode) {
 			final Node n = makeNode(numNode);
-			if(node.getWord().length == 0)  {
-				return withZeroLabel(n);  
-			} else {
-				return withWordLabel(n, node); 
+			if(node.isInternalNode()) return withPlainWord(n, node); 
+			else {
+				if(node.isConstant()) return withBoxedWord(n, node);
+				else return withPlainWord(n, node); 
 			}
 		}
 
@@ -116,12 +118,17 @@ public final class GraphvizExport {
 			return Records.of(records);
 		}
 
+		protected final Node withRecord(Node n, ICryptaNode node) {
+			return n.with(makeRecords(node.getWord()));
+		}
 		@Override
 		protected Node makeWordNode(ICryptaNode node, int numNode) {
 			final Node n = makeNode(numNode);
-			if(node.getWord().length == 0)  return withZeroLabel(n);  
-			else if (node.isInternalNode()) return withWordLabel(n, node);
-			else return n.with(makeRecords(node.getWord()));
+			if(node.isInternalNode()) return withPlainWord(n, node); 
+			else {
+				if(node.isConstant()) return withBoxedWord(n, node);
+				else return withRecord(n, node); 
+			}
 		}
 
 	}
