@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 
 public final class TreeUtils {
 
-    public static final String ZERO = "_0";
+    public static final String ZERO = "'0'";
 
     private TreeUtils() {
     }
