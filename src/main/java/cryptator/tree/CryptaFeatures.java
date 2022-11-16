@@ -33,15 +33,13 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
 
 	private void accept(char[] word) {
 		final int n = word.length;
-		if(n > 0) {
-			wordCount++;
-			charCount += n;
-			if(n < minWordLength) minWordLength = n;
-			else if(n > maxWordLength) maxWordLength = n;
-			for (char c : word) {
-				symbols.add(c);
+		wordCount++;
+		charCount += n;
+		if(n < minWordLength) minWordLength = n;
+		else if(n > maxWordLength) maxWordLength = n;
+		for (char c : word) {
+			symbols.add(c);
 			}
-		}
 	}
 		
 	@Override
