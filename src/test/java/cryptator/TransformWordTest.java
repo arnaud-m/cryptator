@@ -10,6 +10,9 @@ package cryptator;
 
 import static cryptator.gen.TransformWord.*;
 import static org.junit.Assert.*;
+
+import java.util.Iterator;
+
 import org.junit.Test;
 public class TransformWordTest {
 
@@ -35,6 +38,24 @@ public class TransformWordTest {
 	}
 	
 	@Test
+	public void testNormalizeEN() {
+		String ctryCd = "EN";
+		String lang = "en";
+		assertEquals("onehundredtwentyone", translateAndNormalize(ctryCd, lang, 121));
+		assertEquals("twothousandonehundredtwentyone", translateAndNormalize(ctryCd, lang, 2121));
+		assertEquals("twomilliontwohundredonethousandfivehundredfortyfive", translateAndNormalize(ctryCd, lang, 2201545));
+	}
+	
+	@Test
+	public void testNormalizePL() {
+		String ctryCd = "PL";
+		String lang = "pl";
+		assertEquals("dwadziesciapiec", translateAndNormalize(ctryCd, lang, 25));
+		assertEquals("trzydziesciszesc", translateAndNormalize(ctryCd, lang, 36));
+		assertEquals("szescdziesiatdziewiec", translateAndNormalize(ctryCd, lang, 69));
+	}
+	
+	@Test
 	public void testStripAccents() {
 		assertEquals("aaaaeeeiiiooouuu", stripAccents("ãáàäéèëíìïóòöúùü"));
 		assertEquals("cnvt", stripAccents("ćñṽẗ"));
@@ -54,5 +75,10 @@ public class TransformWordTest {
 	public void testToLowercase() {
 		assertEquals("abcdef", toLowerCase("AbCdEf"));
 	}
-	
+
+	@Test
+	public void testToUpper() {
+		assertEquals("ABCDEF", toUpperCase("AbCdEf"));
+	}
+
 }

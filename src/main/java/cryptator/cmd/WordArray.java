@@ -8,7 +8,7 @@
  */
 package cryptator.cmd;
 
-import static cryptator.gen.TransformWord.removeDashes;
+import static cryptator.gen.TransformWord.*;
 import static cryptator.gen.TransformWord.removeWhitespaces;
 import static cryptator.gen.TransformWord.stripAccents;
 import static cryptator.gen.TransformWord.translate;
@@ -51,10 +51,7 @@ public class WordArray {
 		this.ub = ub;
 		this.words = new String[ub + 1];
 		for (int i = 0; i <= ub; i++) {
-			words[i]= translate(countryCode, lang, i);
-			words[i] = stripAccents(words[i]);
-			words[i] = removeWhitespaces(words[i]);
-			words[i] = removeDashes(words[i]);
+			words[i]= translateAndNormalize(countryCode, lang, i);
 		}
 		this.rightMember = null;
 	}

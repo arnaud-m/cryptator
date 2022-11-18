@@ -24,11 +24,8 @@ public class CryptaEqnMember {
 	public CryptaEqnMember(Model m, String[] words, String prefix) {
 		super();
 		this.strWords = words;
-		this.words = new BoolVar[words.length];
-		for (int i = 0; i < words.length; i++) {
-			this.words[i] = m.boolVar(prefix + words[i]);
-		}	
-
+		this.words = WordsListModel.buildWordVars(m, words, prefix);
+		
 		lengths = new IntVar[words.length];
 		int maxLen = 0;
 		for (int i = 0; i < words.length; i++) {
