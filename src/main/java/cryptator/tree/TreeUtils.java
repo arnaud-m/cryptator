@@ -18,15 +18,11 @@ import java.io.PrintWriter;
 
 public final class TreeUtils {
 
-    public static final String ZERO = "_0";
-
     private TreeUtils() {
     }
 
     private static void writeWord(ICryptaNode node, PrintWriter out) {
-        char[] w = node.getWord();
-        if (w.length > 0) out.write(node.toGrammarString());
-        else out.write(ZERO);
+        out.write(node.toGrammarString());
         out.write(" ");
     }
 

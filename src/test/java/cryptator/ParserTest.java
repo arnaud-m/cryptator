@@ -14,11 +14,11 @@ import cryptator.specs.ICryptaNode;
 import org.junit.Test;
 
 import static cryptator.TreeTest.*;
-import static cryptator.tree.TreeUtils.ZERO;
 
 public class ParserTest {
 
     public final CryptaParserWrapper parser = new CryptaParserWrapper();
+	public static final String ZERO = "'0'";
 
     public ParserTest() {
     }
@@ -42,17 +42,17 @@ public class ParserTest {
     @Test
     public void testParser3() throws CryptaParserException {
         final ICryptaNode node = parser.parse("-send/more=money");
-        testPreorder("= / - " + ZERO + " send more money ", node);
-        testPostorder("" + ZERO + " send - more / money = ", node);
-        testInorder("" + ZERO + " - send / more = money ", node);
+        testPreorder("= / - " + ParserTest.ZERO + " send more money ", node);
+        testPostorder("" + ParserTest.ZERO + " send - more / money = ", node);
+        testInorder("" + ParserTest.ZERO + " - send / more = money ", node);
     }
 
     @Test
     public void testParser4() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send/-more<money");
-        testPreorder("< / send - " + ZERO + " more money ", node);
-        testPostorder("send " + ZERO + " more - / money < ", node);
-        testInorder("send / " + ZERO + " - more < money ", node);
+        testPreorder("< / send - " + ParserTest.ZERO + " more money ", node);
+        testPostorder("send " + ParserTest.ZERO + " more - / money < ", node);
+        testInorder("send / " + ParserTest.ZERO + " - more < money ", node);
     }
 
     @Test
@@ -82,9 +82,9 @@ public class ParserTest {
     @Test
     public void testParser8() throws CryptaParserException {
         final ICryptaNode node = parser.parse("-send -more = -money");
-        testPreorder("= - - " + ZERO + " send more - " + ZERO + " money ", node);
-        testPostorder(ZERO + " send - more - " + ZERO + " money - = ", node);
-        testInorder(ZERO + " - send - more = " + ZERO + " - money ", node);
+        testPreorder("= - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ", node);
+        testPostorder(ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = ", node);
+        testInorder(ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ", node);
     }
 
     @Test(expected = CryptaParserException.class)
@@ -135,9 +135,9 @@ public class ParserTest {
     public void testParserAND2() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=	money; -send -more= \n -money");
 
-        testPreorder("; = + send more money = - - " + ZERO + " send more - " + ZERO + " money ", node);
-        testPostorder("send more + money = " + ZERO + " send - more - " + ZERO + " money - = ; ", node);
-        testInorder("send + more = money ; " + ZERO + " - send - more = " + ZERO + " - money ", node);
+        testPreorder("; = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ", node);
+        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = ; ", node);
+        testInorder("send + more = money ; " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ", node);
 
     }
 

@@ -48,4 +48,11 @@ public class ExportTest {
 		assertNotNull(GraphvizExport.exportToGraphviz(cryptarithm, solution));
 	}
 	
+	@Test
+	public void testExport4() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
+		final ICryptaNode cryptarithm = parser.parse("SEND+MORE=MONEY ; M='1'");
+		assertNotNull(GraphvizExport.exportToGraphviz(cryptarithm));
+	}
+
+	
 }
