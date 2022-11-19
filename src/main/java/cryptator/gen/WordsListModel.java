@@ -34,13 +34,13 @@ public class WordsListModel {
 	protected final BoolVar[] wordVariables;
 
 	/** The word count. */
-	private final IntVar wordCount;
+	protected final IntVar wordCount;
 
 	/** The map that associates a variable to each symbol of the words. */
-	private final Map<Character, BoolVar> symbolsToVariables;
+	protected final Map<Character, BoolVar> symbolsToVariables;
 
 	/** The symbol count. */
-	private final IntVar symbolCount;
+	protected final IntVar symbolCount;
 	
 
 	/**
@@ -77,6 +77,7 @@ public class WordsListModel {
 		return model;
 	}
 
+	
 
 	/**
 	 * Builds named boolean variables associated to the words. 
