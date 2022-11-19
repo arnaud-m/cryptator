@@ -602,6 +602,143 @@ public class SolverTest {
         t.testUNSAT(cryptarithm);
     }
     @Test
+    public void testAndUnique1symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("aa+b=cd&& a*a=a");
+    }
+
+    @Test
+    public void testAndUNSAT1symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNSAT("a*a=a&& a*a=a+a&& a+a!=a");
+    }
+
+    @Test
+    public void testAndNotUnique2symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("a*a=b&&b=a+a");
+    }
+
+    @Test
+    public void testCrossNumber1symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("ABC * DE = CFGH&& " +
+                "JDHJ + DGC = JGKK&& " +
+                "JEDK + EBAH = FAGH&& " +
+                "ABC + JDHJ = JEDK&& " +
+                "DE * DGC = EBAH&& " +
+                "CFGH-JGKK=FAGH");
+    }
+
+    @Test
+    public void testCrossNumber2symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNSAT("ABC * DE = CFGH&& " +
+                "JDHJ + DGC = JGKK&& " +
+                "JEDK + EBAH = FAGH&& " +
+                "ABC + JDHJ = JEDK&& " +
+                "DE * DGC = EBAH&& " +
+                "CFGH-JGKK=FAGA");
+    }
+
+
+    @Test
+    public void testSendMoreMoneyListsymbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNIQUE("send+more=money&& d+e>=y");
+    }
+
+    @Test
+    public void testSendMoreMoneyList1symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNIQUE("send+more=money&& -send -more= -money");
+    }
+
+    @Test
+    public void testSendMoreMoneyList2symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testNotUNIQUE("send+more=money&& a+b=c");
+    }
+
+    @Test
+    public void testSendMoreMoneyList3symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testSAT("send+more=money&& a+b=c");
+    }
+
+    @Test
+    public void testSendMoreMoneyList4symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNSAT("send+more=money&& s+e=n");
+    }
+
+    @Test
+    public void testSendMoreMoneyList5symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNSAT("send+more=money&&&&&& s+e=n");
+    }
+
+    @Test
+    public void testSendMoreMoneyList6symbol() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setHornerScheme(true);
+        t.testUNSAT("send+more=money&& s+e=n&&");
+    }
+
+    // Long multiplication with integer
+
+    @Test
+    public void testEvaluationLongMultiplication1symbol() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "SEE * SO = MIMEO&& MIMEO = EMOO + '10'*MESS&&SEE * O = EMOO&&SEE * S = MESS";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    @Test
+    public void testEvaluationLongMultiplication2symbol() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "CUT * T = BUST&& CUT * I = TNNT&& TNNT * '10' + BUST = TENET&& TENET = CUT * IT";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    @Test
+    public void testEvaluationLongMultiplication3symbol() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "RED * S = ARCS&& RED * A = RED&& RED * '10' + ARCS = CDTS&& CDTS = RED * AS";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    @Test
+    public void testEvaluationLongMultiplicationFail3symbol() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "RED * S = ARCS&& RED * A = RED&& RED * '10' + ARCS = CDTS&& CDTS = RED * AS + '1'";
+        t.testUNSAT(cryptarithm);
+    }
+
+    @Test
+    public void testEvaluationLongMultiplication4symbol() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "HOW * E = HAIL&& HOW * W = PAL&& HAIL + PAL * '10' = LHAL&& HOW * WE = LHAL";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    // LONG DIVISION
+
+    @Test
+    public void testEvaluationLongDivision1symbol() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "AKA * K = DYNA&& DADD - DYNA = ARM&& AKA * M = ARKA&& ARMY - ARKA = RA&& AKA * KM + RA = DADDY";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
+    @Test
+    public void testEvaluationLongDivisionFail1symbol() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "AKA * K = DYNA&& DADD + DYNA = ARM&& AKA * M = ARKA&& ARMY - ARKA = RA&& AKA * KM + RA = DADDY";
+        t.testUNSAT(cryptarithm);
+    }
+
+    // Test from issue 25
+    // 9END+M08E=10NEY is wrong because M is already assigned 1.
+    @Test
+    public void testEvaluationIssue_25_1symbol() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "9END+M08E=10NEY&&1='1'&&0='0'&&9='9'&&8='8'";
+        t.testUNSAT(cryptarithm);
+    }
+
+    @Test
     public void testEvaluationIssue_25_2() throws CryptaParserException, CryptaSolverException, CryptaModelException {
         // TODO : modify this line for issue 39 to accept W = 0
         var cryptarithm = "W='4'";

@@ -65,4 +65,4 @@ DIGIT : [0-9] {};
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
 
-AND : ';';
+AND : ';' | '&&';
