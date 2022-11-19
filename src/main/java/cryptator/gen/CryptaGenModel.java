@@ -9,6 +9,7 @@
 package cryptator.gen;
 
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.constraints.nary.cnf.LogOp;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
@@ -34,7 +35,7 @@ public class CryptaGenModel extends WordsListModel {
 
 	private void postLeftOrRightMemberConstraints() {
 		for (int i = 0; i < words.length; i++) {
-			left.words[i].add(right.words[i]).eq(wordVariables[i]).post();
+			left.words[i].add(right.words[i]).eq(words[i]).post();
 		}
 	}
 
@@ -101,7 +102,7 @@ public class CryptaGenModel extends WordsListModel {
 		ICryptaNode node = null;
 		for (int i = 0; i < vars.length; i++) {
 			if(vars[i].isInstantiatedTo(1)) {
-				final CryptaLeaf leaf = new CryptaLeaf(words[i]);
+				final CryptaLeaf leaf = new CryptaLeaf(strwords[i]);
 				node = node == null ? leaf : new CryptaNode(CryptaOperator.ADD, node, leaf);
 			}
 		}

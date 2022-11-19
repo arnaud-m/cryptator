@@ -22,19 +22,10 @@ import org.chocosolver.solver.variables.IntVar;
  * The Class WordsListModel defines a CP model for mapping words to symbols.
  * A symbol is present if and only if at least one word that contains the symbol is present.
  */
-public class WordsListModel {
-
-	/** The model. */
-	protected final Model model;
+public class WordsListModel extends CryptaGenVariables {
 
 	/** The words list. */
-	protected final String[] words;
-
-	/** The word variables that indicates if the word is present. */
-	protected final BoolVar[] wordVariables;
-
-	/** The word count. */
-	protected final IntVar wordCount;
+	protected final String[] strwords;
 
 	/** The map that associates a variable to each symbol of the words. */
 	protected final Map<Character, BoolVar> symbolsToVariables;
@@ -42,7 +33,6 @@ public class WordsListModel {
 	/** The symbol count. */
 	protected final IntVar symbolCount;
 	
-
 	/**
 	 * Instantiates a new words list model.
 	 *
@@ -50,31 +40,13 @@ public class WordsListModel {
 	 * @param words the words list
 	 */
 	public WordsListModel(Model model, String[] words) {
-		this.model = model;		
-		this.words = words;
-		wordVariables = buildWordVars(model, words, "");
-		wordCount = buildCountVariable(model, "wordCount", wordVariables);
+		super(model, words, "");
+		this.strwords = words;
 		symbolsToVariables = buildSymbolVars(model, words);
 		symbolCount = buildSymbolCountVariable(model, symbolsToVariables);
+		postWordCountBoolConstraint();
 		postChannelingConstraints();
-	}
-
-	/**
-	 * Gets the words list.
-	 *
-	 * @return the words
-	 */
-	public final String[] getWords() {
-		return words;
-	}
-
-	/**
-	 * Gets the CP model.
-	 *
-	 * @return the model
-	 */
-	public final Model getModel() {
-		return model;
+		maxLength.eq(0).post();
 	}
 
 	
@@ -87,6 +59,7 @@ public class WordsListModel {
 	 * @param prefix the prefix for the variable names
 	 * @return the array of boolean variables
 	 */
+	@Deprecated(forRemoval = true)
 	protected static BoolVar[] buildWordVars(Model model, String[] words, String prefix) {
 		final BoolVar[] vars = new BoolVar[words.length];
 		for (int i = 0; i < words.length; i++) {
@@ -133,6 +106,7 @@ public class WordsListModel {
 	 * @param vars the boolean variables to be counted
 	 * @return the variable giving the number of variables that are true.
 	 */
+	@Deprecated(forRemoval = true)
 	private static IntVar buildCountVariable(Model model, String name, BoolVar[] vars) {
 		final IntVar count = model.intVar(name, 0, vars.length);
 		model.sum(vars, "=", count).post();
@@ -146,10 +120,10 @@ public class WordsListModel {
 	 */
 	private Map<Character, List<BoolVar>> buildSymbolsToWords() {
 		final Map<Character, List<BoolVar>> map = new HashMap<>();
-		for (int i = 0; i < words.length; i++) {
-			for (char c : words[i].toCharArray()) {
+		for (int i = 0; i < strwords.length; i++) {
+			for (char c : strwords[i].toCharArray()) {
 				final Collection<BoolVar> list = map.computeIfAbsent(c, s -> new ArrayList<>());
-				list.add(wordVariables[i]);
+				list.add(words[i]);
 			}
 		}
 		return map;
