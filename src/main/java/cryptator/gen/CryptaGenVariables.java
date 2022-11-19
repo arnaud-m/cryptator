@@ -36,13 +36,13 @@ class CryptaGenVariables implements ICryptaGenVariables {
 	/** The maximum length of a present word. */
 	protected final IntVar maxLength;
 
-	public CryptaGenVariables(Model model, String[] words, String prefix) {
+	public CryptaGenVariables(Model model, String[] words, String prefix, boolean boundedDomain) {
 		super();
 		this.model = model;
 		this.words = buildWordVars(model, words, prefix);
 		this.wordCount = model.intVar(prefix+ "wordCount", 0, words.length);
 		final OptionalInt maxLen = Arrays.stream(words).mapToInt(String::length).max();
-		this.maxLength = model.intVar(prefix+ "maxLength", 0, maxLen.orElseGet(() -> 0));
+		this.maxLength = model.intVar(prefix+ "maxLength", 0, maxLen.orElseGet(() -> 0), boundedDomain);
 	}
 
 	@Override
@@ -84,6 +84,10 @@ class CryptaGenVariables implements ICryptaGenVariables {
 	protected void postWordCountBoolConstraint() {
 		model.sum(words, "=", wordCount).post();
 
+	}
+	
+	protected void postDisableMaxLength() {
+		maxLength.eq(0).decompose().post();
 	}
 	
 }

@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
@@ -40,33 +41,17 @@ public class WordsListModel extends CryptaGenVariables {
 	 * @param words the words list
 	 */
 	public WordsListModel(Model model, String[] words) {
-		super(model, words, "");
+		super(model, words, "", false);
 		this.strwords = words;
 		symbolsToVariables = buildSymbolVars(model, words);
 		symbolCount = buildSymbolCountVariable(model, symbolsToVariables);
 		postWordCountBoolConstraint();
 		postChannelingConstraints();
-		maxLength.eq(0).post();
+		postDisableMaxLength();
 	}
 
 	
 
-	/**
-	 * Builds named boolean variables associated to the words. 
-	 *
-	 * @param model the model
-	 * @param words the words list
-	 * @param prefix the prefix for the variable names
-	 * @return the array of boolean variables
-	 */
-	@Deprecated(forRemoval = true)
-	protected static BoolVar[] buildWordVars(Model model, String[] words, String prefix) {
-		final BoolVar[] vars = new BoolVar[words.length];
-		for (int i = 0; i < words.length; i++) {
-			vars[i] = model.boolVar(prefix + words[i]);
-		}
-		return vars;
-	}
 	
 	/**
 	 * Builds the mapping between symbols and boolean variables.

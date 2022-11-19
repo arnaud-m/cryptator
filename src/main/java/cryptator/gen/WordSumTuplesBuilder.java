@@ -166,7 +166,7 @@ public final class WordSumTuplesBuilder {
 	private void addTuples(Tuples tuples, int k, int x, int y, int z) {
 		final int min = getMinLen(k, x, y, z);
 		final int max = getMaxLen(k, x, y, z);
-		System.out.println(k+ " " +  x+ " " +  y+ " " + z + " " +  min+ "-" +  max);
+		//System.out.println(k+ " " +  x+ " " +  y+ " " + z + " " +  min+ "-" +  max);
 		for (int p = min; p <= max; p++) {
 			tuples.add(k, x, y, z, p);
 		}
