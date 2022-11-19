@@ -353,4 +353,53 @@ public class ParserTest {
         parser.parse("send + more >= money&& 1 + '12a45' = 3");
     }
 
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError3symbol() throws CryptaParserException {
+        parser.parse("send + more >= money&&1 + '' = 3");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError4symbol() throws CryptaParserException {
+        parser.parse("send + more >= money&&1 + \"\" = 3");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError5symbol() throws CryptaParserException {
+        parser.parse("send + more >= money&&1 + '\"\"' = 3");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError6symbol() throws CryptaParserException {
+        parser.parse("send + more >= money&&1 + \"''\" = 3");
+    }
+
+    @Test
+    public void testParserInteger1symboldoubleticks() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("send+more=\"1234\" && && d+e>=y");
+
+        testPreorder("&& = + send more '1234' >= + d e y ", node);
+        testPostorder("send more + '1234' = d e + y >= && ", node);
+        testInorder("send + more = '1234' && d + e >= y ", node);
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError1symboldoubleticks() throws CryptaParserException {
+        parser.parse("send + more >= money&&1 + \"aabc\" = 3");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError2symboldoubleticks() throws CryptaParserException {
+        parser.parse("send + more >= money&& 1 + \"12a45\" = 3");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError3symboldoubleticks() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("send+more=\"1234' && && d+e>=y");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError4symboldoubleticks() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("send+more='1234\" && && d+e>=y");
+    }
+
 }

@@ -135,6 +135,20 @@ public class SolverTest {
     }
 
     @Test
+    public void testSetBase1doubleticks() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        var test = "r=\"36\"";
+        t.config.setArithmeticBase(40);
+        t.testUNIQUE(test);
+    }
+
+    @Test
+    public void testSetBase2doubleticks() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        var test = "1AB52=\"109394\"";
+        t.config.setArithmeticBase(16);
+        t.testUNIQUE(test);
+    }
+
+    @Test
     public void testSendMoreMoney3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.config.setAllowLeadingZeros(true);
         t.solver.limitSolution(100);
@@ -515,6 +529,13 @@ public class SolverTest {
         t.testUNIQUE(cryptarithm);
     }
 
+    @Test
+    public void testEvaluationLongMultiplication1doubleticks() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "SEE * SO = MIMEO; MIMEO = EMOO + \"10\"*MESS;SEE * O = EMOO;SEE * S = MESS";
+        t.testSAT(cryptarithm);
+        t.testUNIQUE(cryptarithm);
+    }
+
     /*
              C U T
                I T
@@ -599,6 +620,12 @@ public class SolverTest {
     @Test
     public void testEvaluationIssue_25_1() throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "9END+M08E=10NEY;1='1';0='0';9='9';8='8'";
+        t.testUNSAT(cryptarithm);
+    }
+
+    @Test
+    public void testEvaluationIssue_25_1doubleticks() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "9END+M08E=10NEY;1=\"1\";0=\"0\";9=\"9\";8=\"8\"";
         t.testUNSAT(cryptarithm);
     }
     @Test

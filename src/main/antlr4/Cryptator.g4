@@ -36,6 +36,7 @@ equation returns [ICryptaNode node]  //create a node of the tree corresponding t
 expression returns [ICryptaNode node] //create recursively the tree of expressions with priority and return the root of the tree
             : word {$node=new CryptaLeaf($word.text);} //create a node of the tree corresponding to a leaf and return this node
             | '\'' number '\'' {$node=new CryptaConstant($number.text);}
+            | '"' number '"' {$node=new CryptaConstant($number.text);}
             | '(' expression ')' {$node=$expression.node;}
             | e1=expression modORpow e2=expression {$node=new CryptaNode($modORpow.text, $e1.node, $e2.node);} //create a node of the tree corresponding to an operation and return this node
             | sub expression {$node=new CryptaNode($sub.text, new CryptaConstant("0"), $expression.node);}
