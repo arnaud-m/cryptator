@@ -35,7 +35,10 @@ public class CryptaEqnMember2 extends CryptaGenVariables {
 
 	protected void postUseLengthConstraints() {
 		Map<Integer, BoolVar[]> map = buildWordsByLength();
-		for (int i = 0; i < useLength.length; i++) {
+		// Always use the empty word
+		useLength[0].eq(1).post();
+		// Process other lengths > 0
+		for (int i = 1; i < useLength.length; i++) {
 			if(map.containsKey(i)) {
 				model.max(useLength[i], map.get(i)).post();
 			} else {
@@ -47,7 +50,6 @@ public class CryptaEqnMember2 extends CryptaGenVariables {
 	@Override
 	protected void postMaxLengthConstraints() {
 		postUseLengthConstraints();
-		model.member(0, setLength);
 		model.setBoolsChanneling(useLength, setLength).post();
 		model.max(setLength, maxLength, false).post();		
 	}

@@ -8,7 +8,6 @@
  */
 package cryptator.gen;
 
-import java.util.List;
 import java.util.Map;
 
 import org.chocosolver.solver.Model;
@@ -33,6 +32,10 @@ public class CryptaEqnMember3 extends CryptaEqnMember2 {
 	@Override
 	public void postUseLengthConstraints() {
 		Map<Integer, BoolVar[]> map = buildWordsByLength();
+		// Always use the empty word, but do not count it.
+		useLength[0].eq(1).post();
+		cardLength[0].eq(0).post();
+		// Process other lengths > 0
 		for (int i = 1; i < useLength.length; i++) {
 			if(map.containsKey(i)) {				
 				model.sum(map.get(i), "=", cardLength[i]).post();

@@ -11,11 +11,6 @@ package cryptator.gen;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
-import cryptator.CryptaOperator;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaLeaf;
-import cryptator.tree.CryptaNode;
-
 public class CryptaEqnMember extends CryptaGenVariables {
 
 	public final IntVar[] lengths;
@@ -33,25 +28,9 @@ public class CryptaEqnMember extends CryptaGenVariables {
 		model.max(maxLength, lengths).post();
 	}
 
-	private ICryptaNode recordMember() {
-		ICryptaNode node = null;
-		for (int i = 0; i < vwords.length; i++) {
-			if(vwords[i].isInstantiatedTo(1)) {
-				final CryptaLeaf leaf = new CryptaLeaf(words[i]);
-				node = node == null ? leaf : new CryptaNode(CryptaOperator.ADD, node, leaf);
-			}
-		}
-		return node;
-	}
-	
 	@Override
 	public String toString() {
-		StringBuilder b = new StringBuilder();
-		for (int i = 0; i < vwords.length; i++) {
-			if(vwords[i].isInstantiatedTo(1)) b.append(words[i]).append(" + "); 
-		}
-		if(b.length() > 0) b.delete(b.length()-3, b.length());
-		return b.toString();
+		return toString(" + ");
 	}
 
 	

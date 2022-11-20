@@ -47,6 +47,12 @@ public class WordsListModel extends CryptaGenVariables {
 		symbolCount = model.intVar("symbCount", 0 , symbolsToVariables.size());
 	}
 	
+	
+	public final IntVar getSymbolCount() {
+		return symbolCount;
+	}
+
+
 	@Override
 	public void buildModel() {
 		super.buildModel();
@@ -112,7 +118,6 @@ public class WordsListModel extends CryptaGenVariables {
 	 *
 	 * @param max the maximum number of symbols
 	 */
-	@Deprecated(forRemoval = true)
 	public void postMaxSymbolCountConstraint(int max) {
 		symbolCount.le(max).post();		
 	}
@@ -122,7 +127,6 @@ public class WordsListModel extends CryptaGenVariables {
 	 *
 	 * @param max the maximum number of words
 	 */
-	@Deprecated(forRemoval = true)
 	public void postMaxWordCountConstraint(int max) {
 		wordCount.le(max).post();		
 	}
