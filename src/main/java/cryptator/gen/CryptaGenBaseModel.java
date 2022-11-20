@@ -15,12 +15,12 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
-import cryptator.specs.ICryptaGenVariables;
+import cryptator.specs.ICryptaGenModel;
 
 /**
  * Base class for generation model..
  */
-class CryptaGenVariables implements ICryptaGenVariables {
+class CryptaGenBaseModel implements ICryptaGenModel {
 
 
 	/** The model. */
@@ -38,7 +38,7 @@ class CryptaGenVariables implements ICryptaGenVariables {
 	/** The maximum length of a present word. */
 	protected final IntVar maxLength;
 
-	public CryptaGenVariables(Model model, String[] words, String prefix, boolean boundedDomain) {
+	public CryptaGenBaseModel(Model model, String[] words, String prefix, boolean boundedDomain) {
 		super();
 		this.model = model;
 		this.words = words;
@@ -125,6 +125,7 @@ class CryptaGenVariables implements ICryptaGenVariables {
 
 	@Override
 	public String toString() {
-		return toString(" ");
+		return toString(" + ");
 	}
+	
 }

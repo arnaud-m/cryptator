@@ -19,7 +19,7 @@ import org.chocosolver.solver.variables.IntVar;
  * @author nono
  *
  */
-public interface ICryptaGenVariables {
+public interface ICryptaGenModel {
 	
 	/**
 	 * Gets the model.

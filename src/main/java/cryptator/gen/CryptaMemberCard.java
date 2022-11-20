@@ -14,11 +14,11 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
-public class CryptaEqnMember3 extends CryptaEqnMember2 {
+public class CryptaMemberCard extends CryptaMemberUse {
 	
 	protected final IntVar[] cardLength;
 	
-	public CryptaEqnMember3(Model m, String[] words, String prefix) {
+	public CryptaMemberCard(Model m, String[] words, String prefix) {
 		super(m, words, prefix);
 		cardLength = m.intVarArray(prefix + "cardLen", useLength.length, 0, words.length);
 	}

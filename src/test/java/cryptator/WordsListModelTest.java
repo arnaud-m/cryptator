@@ -14,44 +14,44 @@ import org.chocosolver.solver.Model;
 import org.junit.Before;
 import org.junit.Test;
 
-import cryptator.gen.CryptaEqnMember;
-import cryptator.gen.CryptaEqnMember2;
-import cryptator.gen.CryptaEqnMember3;
-import cryptator.gen.CryptaOneMember;
+import cryptator.gen.CryptaMemberScalar;
+import cryptator.gen.CryptaMemberUse;
+import cryptator.gen.CryptaMemberCard;
+import cryptator.gen.CryptaMemberOne;
 import cryptator.gen.WordsListModel;
-import cryptator.specs.ICryptaGenVariables;
+import cryptator.specs.ICryptaGenModel;
 
 public class WordsListModelTest {
 
 	private final String[] words = new String[] {"a", "b", "ba", "bb", "baa", "bab", "bba", "bbb", "baaa"};
 
-	private ICryptaGenVariables[] models;
+	private ICryptaGenModel[] models;
 	
 	@Before
 	public void buildGenModels() {
-		models = new ICryptaGenVariables[] {
-			new CryptaEqnMember(new Model(), words, ""),
-			new CryptaEqnMember2(new Model(), words, ""),
-			new CryptaEqnMember3(new Model(), words, ""),
+		models = new ICryptaGenModel[] {
+			new CryptaMemberScalar(new Model(), words, ""),
+			new CryptaMemberUse(new Model(), words, ""),
+			new CryptaMemberCard(new Model(), words, ""),
 			new WordsListModel(new Model(), words)
 		};
-		for (ICryptaGenVariables m : models) {
+		for (ICryptaGenModel m : models) {
 			m.buildModel();
 		}
 	}
 	
-	private void postMaxWordCountConstraint(ICryptaGenVariables model, int maxWordCount) {
+	private void postMaxWordCountConstraint(ICryptaGenModel model, int maxWordCount) {
 		model.getWordCount().le(maxWordCount).post();		
 	}
 	
 	private void testGenModels(int expectedSolutionCount, int maxWordCount) {
-		for (ICryptaGenVariables m : models) {
+		for (ICryptaGenModel m : models) {
 			postMaxWordCountConstraint(m, maxWordCount);
 			testGenModel(m, expectedSolutionCount);
 		}
 	}
 	
-	private void testGenModel(ICryptaGenVariables model, int expectedSolutionCount) {
+	private void testGenModel(ICryptaGenModel model, int expectedSolutionCount) {
 		assertEquals(expectedSolutionCount, model.getModel().getSolver().streamSolutions().count());	
 	}
 	
@@ -81,7 +81,7 @@ public class WordsListModelTest {
 	
 	@Test
 	public void testOneModel() {
-		CryptaOneMember m = new CryptaOneMember(new Model(), words, "");
+		CryptaMemberOne m = new CryptaMemberOne(new Model(), words, "");
 		m.buildModel();
 		testGenModel(m, 9);
 	}

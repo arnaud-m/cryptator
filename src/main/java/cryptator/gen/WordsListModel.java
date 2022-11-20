@@ -26,7 +26,7 @@ import org.chocosolver.solver.variables.IntVar;
  * The Class WordsListModel defines a CP model for mapping words to symbols.
  * A symbol is present if and only if at least one word that contains the symbol is present.
  */
-public class WordsListModel extends CryptaGenVariables {
+public class WordsListModel extends CryptaGenBaseModel {
 
 	
 	/** The map that associates a variable to each symbol of the words. */

@@ -20,14 +20,14 @@ import cryptator.tree.CryptaNode;
 
 public class CryptaGenModel extends WordsListModel {
 
-	private final CryptaEqnMember left;
+	private final CryptaMemberScalar left;
 
-	private final CryptaEqnMember right;
+	private final CryptaMemberScalar right;
 
 	public CryptaGenModel(String[] words) {
 		super(new Model("Generate"), words);		
-		left = new CryptaEqnMember(model, words, "L_");
-		right = new CryptaEqnMember(model, words, "R_");
+		left = new CryptaMemberScalar(model, words, "L_");
+		right = new CryptaMemberScalar(model, words, "R_");
 		this.buildModel();
 	}
 
@@ -103,7 +103,7 @@ public class CryptaGenModel extends WordsListModel {
 		model.scalar(rvars, coeffs, "=", 0).post();
 	}
 
-	private ICryptaNode recordMember(CryptaEqnMember member) {
+	private ICryptaNode recordMember(CryptaMemberScalar member) {
 		BoolVar[] vars = member.getWordVars();
 		ICryptaNode node = null;
 		for (int i = 0; i < vars.length; i++) {
@@ -118,6 +118,7 @@ public class CryptaGenModel extends WordsListModel {
 	public final ICryptaNode recordCryptarithm() {
 		return new CryptaNode(CryptaOperator.EQ, recordMember(left), recordMember(right));
 	}
+	
 	
 
 }

@@ -19,13 +19,13 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.SetVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
-public class CryptaEqnMember2 extends CryptaGenVariables {
+public class CryptaMemberUse extends CryptaGenBaseModel {
 
 	protected final BoolVar[] useLength;
 
 	protected SetVar setLength;
 
-	public CryptaEqnMember2(Model m, String[] words, String prefix) {
+	public CryptaMemberUse(Model m, String[] words, String prefix) {
 		super(m, words, prefix, true);
 		final int maxLen = getMaxLength(words);
 		useLength = m.boolVarArray(prefix + "useLen", maxLen + 1);
