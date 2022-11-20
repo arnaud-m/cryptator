@@ -28,12 +28,4 @@ public class CryptaMemberScalar extends CryptaGenBaseModel {
 		model.max(maxLength, lengths).post();
 	}
 
-	@Override
-	public String toString() {
-		return toString(" + ");
-	}
-
-	
-
-
 }

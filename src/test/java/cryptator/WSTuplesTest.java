@@ -59,7 +59,7 @@ public class WSTuplesTest {
 	public void testTuples(int expected, int[] values, int base) {
 		builder.setBase(base);
 		final Tuples tuples = builder.buildTuples(values);
-		System.out.println(tuples);
+		//System.out.println(tuples);
 		assertEquals(expected, tuples.nbTuples());
 
 	}

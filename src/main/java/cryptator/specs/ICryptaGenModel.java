@@ -29,6 +29,15 @@ public interface ICryptaGenModel {
 	Model getModel();
 
 	/**
+	 * Gets the number of words or word variables.
+	 *
+	 * @return the number of words
+	 */
+	 default int getN() {
+		return getWords().length; 
+	 }
+
+	/**
 	 * Gets the words of the model.
 	 *
 	 * @return the word strings

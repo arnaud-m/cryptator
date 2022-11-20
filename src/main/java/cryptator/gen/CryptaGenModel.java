@@ -15,7 +15,6 @@ import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
 public class CryptaGenModel extends WordsListModel {
@@ -31,7 +30,6 @@ public class CryptaGenModel extends WordsListModel {
 		this.buildModel();
 	}
 
-	
 
 	@Override
 	public void buildModel() {
@@ -103,21 +101,18 @@ public class CryptaGenModel extends WordsListModel {
 		model.scalar(rvars, coeffs, "=", 0).post();
 	}
 
-	private ICryptaNode recordMember(CryptaMemberScalar member) {
-		BoolVar[] vars = member.getWordVars();
-		ICryptaNode node = null;
-		for (int i = 0; i < vars.length; i++) {
-			if(vars[i].isInstantiatedTo(1)) {
-				final CryptaLeaf leaf = new CryptaLeaf(words[i]);
-				node = node == null ? leaf : new CryptaNode(CryptaOperator.ADD, node, leaf);
-			}
-		}
-		return node;
+	public final ICryptaNode recordCryptarithm() {		
+		// TODO Check that members are non-null. 
+		return new CryptaNode(CryptaOperator.EQ, recordAddition(left), recordAddition(right));
+	}
+
+
+	@Override
+	public String toString() {
+		return left.toString() + " = " + right.toString();
 	}
 	
-	public final ICryptaNode recordCryptarithm() {
-		return new CryptaNode(CryptaOperator.EQ, recordMember(left), recordMember(right));
-	}
+	
 	
 	
 

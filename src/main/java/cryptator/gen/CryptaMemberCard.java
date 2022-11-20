@@ -23,6 +23,10 @@ public class CryptaMemberCard extends CryptaMemberUse {
 		cardLength = m.intVarArray(prefix + "cardLen", useLength.length, 0, words.length);
 	}
 
+	public final IntVar[] getCardLength() {
+		return cardLength;
+	}
+
 	@Override
 	public void postWordCountConstraint() {
 		super.postWordCountConstraint();
