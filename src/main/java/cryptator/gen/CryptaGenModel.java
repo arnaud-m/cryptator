@@ -14,14 +14,15 @@ import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
+import cryptator.specs.ICryptaGenModel;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaNode;
 
 public class CryptaGenModel extends WordsListModel {
 
-	private final CryptaMemberScalar left;
+	private final ICryptaGenModel left;
 
-	private final CryptaMemberScalar right;
+	private final ICryptaGenModel right;
 
 	public CryptaGenModel(String[] words) {
 		super(new Model("Generate"), words);		
@@ -39,38 +40,40 @@ public class CryptaGenModel extends WordsListModel {
 		postLeftOrRightMemberConstraints();
 		postMemberMaxLenConstraint();
 	}
-
-
+		
 
 	private void postLeftOrRightMemberConstraints() {
+		final BoolVar[] l = left.getWordVars();
+		final BoolVar[] r = right.getWordVars();
 		for (int i = 0; i < vwords.length; i++) {
-			left.vwords[i].add(right.vwords[i]).eq(vwords[i]).post();
+			l[i].add(r[i]).eq(vwords[i]).post();
 		}
 	}
 
 	
 	private void postMemberMaxLenConstraint() {
-		right.maxLength.ge(left.maxLength).post();
+		right.getMaxLength().ge(left.getMaxLength()).post();
 			
 	}
 
 	public void postMemberCardConstraints(int min, int max) {
-		if(min > 1) left.wordCount.ge(min).post();
-		else left.wordCount.ge(2).post();
-		if(max >= min) left.wordCount.le(max).post();
+		if(min > 1) left.getWordCount().ge(min).post();
+		else left.getWordCount().ge(2).post();
+		// FIXMW why ?
+		if(max >= min) left.getWordCount().le(max).post();
 		
 		// TODO Option to relax the constraint (allow subtractions in the bignum model)
 		// Would need to break reflexion symmetry
-		right.wordCount.eq(1).post();
+		right.getWordCount().eq(1).post();
 	}
 	
 	public void postLeftMinCardConstraints(int base) {
-		IntVar diff = right.maxLength.sub(left.maxLength).intVar();
-		final int n = vwords.length;
+		IntVar diff = right.getMaxLength().sub(left.getMaxLength()).intVar();
+		final int n = getN();
 		int prod = base;
 		int i = 2;
 		while(prod <= n) {
-			diff.ge(i).imp(left.wordCount.ge(prod)).post();
+			diff.ge(i).imp(left.getWordCount().ge(prod)).post();
 			prod *= base;
 			i++;
 		}
@@ -78,12 +81,12 @@ public class CryptaGenModel extends WordsListModel {
 	}
 	
 	public void postRightMemberConstraint() {
-		BoolVar[] vars = right.getWordVars();
+		final BoolVar[] vars = right.getWordVars();
 		vars[vars.length - 1].eq(1).post();
 	}
-	
+
 	public void postDoublyTrueConstraint(int lb) {
-		final int n = vwords.length;
+		final int n = getN();
 		final IntVar sum = model.intVar("SUM", lb, n - 1);
 		
 		final IntVar[] lvars = new IntVar[n+1];
