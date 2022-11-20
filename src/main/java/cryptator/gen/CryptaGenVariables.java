@@ -9,8 +9,7 @@
 package cryptator.gen;
 
 import java.util.Arrays;
-import java.util.OptionalInt;
-import java.util.function.IntSupplier;
+import java.util.Collection;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
@@ -19,7 +18,7 @@ import org.chocosolver.solver.variables.IntVar;
 import cryptator.specs.ICryptaGenVariables;
 
 /**
- * Class that create unconstrained variables.
+ * Base class for generation model..
  */
 class CryptaGenVariables implements ICryptaGenVariables {
 
@@ -27,8 +26,11 @@ class CryptaGenVariables implements ICryptaGenVariables {
 	/** The model. */
 	protected final Model model;
 
+	/** The word array . */
+	protected final String[] words;
+
 	/** The word variables that indicates if the word is present. */
-	protected final BoolVar[] words;
+	protected final BoolVar[] vwords;
 
 	/** The word count. */
 	protected final IntVar wordCount;
@@ -39,10 +41,10 @@ class CryptaGenVariables implements ICryptaGenVariables {
 	public CryptaGenVariables(Model model, String[] words, String prefix, boolean boundedDomain) {
 		super();
 		this.model = model;
-		this.words = buildWordVars(model, words, prefix);
+		this.words = words;
+		this.vwords = buildWordVars(model, words, prefix);
 		this.wordCount = model.intVar(prefix+ "wordCount", 0, words.length);
-		final OptionalInt maxLen = Arrays.stream(words).mapToInt(String::length).max();
-		this.maxLength = model.intVar(prefix+ "maxLength", 0, maxLen.orElseGet(() -> 0), boundedDomain);
+		this.maxLength = model.intVar(prefix+ "maxLength", 0, getMaxLength(words), boundedDomain);
 	}
 
 	@Override
@@ -51,8 +53,13 @@ class CryptaGenVariables implements ICryptaGenVariables {
 	}
 
 	@Override
-	public final BoolVar[] getWords() {
+	public final String[] getWords() {
 		return words;
+	}
+
+	@Override
+	public final BoolVar[] getWordVars() {
+		return vwords;
 	}
 
 	@Override
@@ -81,13 +88,43 @@ class CryptaGenVariables implements ICryptaGenVariables {
 		return vars;
 	}
 	
-	protected void postWordCountBoolConstraint() {
-		model.sum(words, "=", wordCount).post();
-
+	protected void postWordCountConstraint() {
+		model.sum(vwords, "=", wordCount).post();
 	}
 	
-	protected void postDisableMaxLength() {
+	protected void postMaxLengthConstraints() {
 		maxLength.eq(0).decompose().post();
 	}
 	
+	@Override
+	public void buildModel() {
+		postWordCountConstraint();
+		postMaxLengthConstraints();
+	}
+
+	public static int getMaxLength(String[] words) {
+		return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
+	}
+	
+	public static BoolVar[] toArray(Collection<BoolVar> vars) {
+		return vars.toArray(new BoolVar[vars.size()]);
+	}
+
+	public String toString(String separator) {
+		final StringBuilder b = new StringBuilder();
+		// Add words
+		for (int i = 0; i < vwords.length; i++) {
+			if(vwords[i].isInstantiatedTo(1)) b.append(words[i]).append(separator); 
+		}
+		// Trim the buffer
+		final int n = b.length();
+		final int s = separator.length();
+		if(n >= s ) b.delete(n - s, n);
+		return b.toString();
+	}
+
+	@Override
+	public String toString() {
+		return toString(" ");
+	}
 }

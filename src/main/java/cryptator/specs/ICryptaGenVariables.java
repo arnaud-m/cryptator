@@ -15,6 +15,10 @@ import org.chocosolver.solver.variables.IntVar;
 /**
  * The Interface ICryptaGenVariables to access variables used for generating cryptarithms.
  */
+/**
+ * @author nono
+ *
+ */
 public interface ICryptaGenVariables {
 	
 	/**
@@ -23,13 +27,20 @@ public interface ICryptaGenVariables {
 	 * @return the model
 	 */
 	Model getModel();
-	
+
+	/**
+	 * Gets the words of the model.
+	 *
+	 * @return the word strings
+	 */
+	String[] getWords();
+
 	/**
 	 * Gets the word variables that indicates if the word is present.
 	 *
 	 * @return the boolean variables
 	 */
-	BoolVar[] getWords();
+	BoolVar[] getWordVars();
 
 	/**
 	 * Gets variable that represents the maximum length of a present word.
@@ -44,5 +55,11 @@ public interface ICryptaGenVariables {
 	 * @return the word count integer variable
 	 */
 	IntVar getWordCount();
+	
+	
+	/**
+	 * Post the constraints of the model
+	 */
+	void buildModel();
 	
 }

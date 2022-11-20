@@ -9,47 +9,52 @@
 package cryptator.gen;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
+
+import cryptator.CryptaOperator;
+import cryptator.specs.ICryptaNode;
+import cryptator.tree.CryptaLeaf;
+import cryptator.tree.CryptaNode;
 
 public class CryptaEqnMember extends CryptaGenVariables {
 
-	@Deprecated(forRemoval = true)
-	public final String[] strWords;
-	
 	public final IntVar[] lengths;
 
 	public CryptaEqnMember(Model m, String[] words, String prefix) {
 		super(m, words, prefix, true);
-		this.strWords = words;
-		
-		lengths = new IntVar[words.length];
-		int maxLen = 0;
-		for (int i = 0; i < words.length; i++) {
-			if(maxLen < words[i].length()) maxLen = words[i].length();
-			lengths[i] = this.words[i].mul(words[i].length()).intVar();
-		}
-		m.max(maxLength, lengths).post();
-		
-		postWordCountBoolConstraint();
-
+		lengths = m.intVarArray(prefix + "len", words.length, 0, getMaxLength(words));
 	}
 
+	@Override
+	protected void postMaxLengthConstraints() {
+		for (int i = 0; i < words.length; i++) {	
+			lengths[i].eq(this.vwords[i].mul(words[i].length())).post();
+		}
+		model.max(maxLength, lengths).post();
+	}
 
-	public final IntVar[] getLengths() {
-		return lengths;
+	private ICryptaNode recordMember() {
+		ICryptaNode node = null;
+		for (int i = 0; i < vwords.length; i++) {
+			if(vwords[i].isInstantiatedTo(1)) {
+				final CryptaLeaf leaf = new CryptaLeaf(words[i]);
+				node = node == null ? leaf : new CryptaNode(CryptaOperator.ADD, node, leaf);
+			}
+		}
+		return node;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
-		for (int i = 0; i < words.length; i++) {
-			if(words[i].isInstantiatedTo(1)) b.append(strWords[i]).append(" + "); 
+		for (int i = 0; i < vwords.length; i++) {
+			if(vwords[i].isInstantiatedTo(1)) b.append(words[i]).append(" + "); 
 		}
 		if(b.length() > 0) b.delete(b.length()-3, b.length());
 		return b.toString();
 	}
 
+	
 
 
 }
