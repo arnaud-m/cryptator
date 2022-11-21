@@ -15,11 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cryptator.gen.CryptaMemberCard;
-import cryptator.gen.CryptaMemberCard2;
-import cryptator.gen.CryptaMemberOne;
-import cryptator.gen.CryptaMemberReif;
+import cryptator.gen.CryptaMemberElt;
+import cryptator.gen.CryptaMemberLen;
 import cryptator.gen.CryptaMemberScalar;
-import cryptator.gen.CryptaMemberUse;
 import cryptator.gen.WordsListModel;
 import cryptator.specs.ICryptaGenModel;
 
@@ -33,10 +31,8 @@ public class GenModelTest {
 	public void buildGenModels() {
 		models = new ICryptaGenModel[] {
 			new CryptaMemberScalar(new Model(), words, ""),
-			new CryptaMemberUse(new Model(), words, ""),
-			new CryptaMemberReif(new Model(), words, ""),
+			new CryptaMemberLen(new Model(), words, ""),
 			new CryptaMemberCard(new Model(), words, ""),
-			new CryptaMemberCard2(new Model(), words, ""),
 			new WordsListModel(new Model(), words)
 		};
 		for (ICryptaGenModel m : models) {
@@ -85,7 +81,7 @@ public class GenModelTest {
 	
 	@Test
 	public void testOneModel() {
-		CryptaMemberOne m = new CryptaMemberOne(new Model(), words, "");
+		CryptaMemberElt m = new CryptaMemberElt(new Model(), words, "");
 		m.buildModel();
 		testGenModel(m, 9);
 	}

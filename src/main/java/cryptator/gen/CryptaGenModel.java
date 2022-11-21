@@ -31,8 +31,8 @@ public class CryptaGenModel extends WordsListModel {
 		//right = new CryptaMemberScalar(model, words, "R_");
 		right = new CryptaMemberScalar(model, words, "R_");
 		this.buildModel();
-		// model.getSolver().showDecisions();
-		// model.getSolver().limitNode(20);
+//		model.getSolver().showDecisions();
+//		model.getSolver().limitNode(20);
 
 	}
 

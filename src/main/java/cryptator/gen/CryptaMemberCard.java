@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
-public class CryptaMemberCard extends CryptaMemberReif {
+public class CryptaMemberCard extends CryptaMemberLen {
 	
 	protected final IntVar[] cardLengths;
 	

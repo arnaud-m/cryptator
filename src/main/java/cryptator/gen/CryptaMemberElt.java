@@ -13,11 +13,11 @@ import java.util.Arrays;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
-public class CryptaMemberOne extends CryptaGenBaseModel {
+public class CryptaMemberElt extends CryptaGenBaseModel {
 
 	protected final IntVar index;
 	
-	public CryptaMemberOne(Model m, String[] words, String prefix) {
+	public CryptaMemberElt(Model m, String[] words, String prefix) {
 		super(m, words, prefix, true);
 		index = m.intVar(prefix+"idx", 0, words.length - 1);
 	}

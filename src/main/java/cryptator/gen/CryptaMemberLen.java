@@ -11,11 +11,11 @@ package cryptator.gen;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
-public class CryptaMemberReif extends CryptaGenBaseModel {
+public class CryptaMemberLen extends CryptaGenBaseModel {
 
 	public final IntVar[] lengths;
 
-	public CryptaMemberReif(Model m, String[] words, String prefix) {
+	public CryptaMemberLen(Model m, String[] words, String prefix) {
 		super(m, words, prefix, true);
 		lengths = buildLengths(m, words, prefix);
 	}
