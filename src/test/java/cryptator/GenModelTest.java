@@ -14,14 +14,16 @@ import org.chocosolver.solver.Model;
 import org.junit.Before;
 import org.junit.Test;
 
+import cryptator.gen.CryptaMemberCard;
+import cryptator.gen.CryptaMemberCard2;
+import cryptator.gen.CryptaMemberOne;
+import cryptator.gen.CryptaMemberReif;
 import cryptator.gen.CryptaMemberScalar;
 import cryptator.gen.CryptaMemberUse;
-import cryptator.gen.CryptaMemberCard;
-import cryptator.gen.CryptaMemberOne;
 import cryptator.gen.WordsListModel;
 import cryptator.specs.ICryptaGenModel;
 
-public class WordsListModelTest {
+public class GenModelTest {
 
 	private final String[] words = new String[] {"a", "b", "ba", "bb", "baa", "bab", "bba", "bbb", "baaa"};
 
@@ -32,7 +34,9 @@ public class WordsListModelTest {
 		models = new ICryptaGenModel[] {
 			new CryptaMemberScalar(new Model(), words, ""),
 			new CryptaMemberUse(new Model(), words, ""),
+			new CryptaMemberReif(new Model(), words, ""),
 			new CryptaMemberCard(new Model(), words, ""),
+			new CryptaMemberCard2(new Model(), words, ""),
 			new WordsListModel(new Model(), words)
 		};
 		for (ICryptaGenModel m : models) {
@@ -71,7 +75,7 @@ public class WordsListModelTest {
 	}
 	
 	@Test
-	public void testWLModel1() {
+	public void testWLModel() {
 		WordsListModel m = new WordsListModel(new Model(), words);
 		m.buildModel();
 		m.postMaxSymbolCountConstraint(1);

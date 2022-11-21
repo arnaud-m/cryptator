@@ -8,48 +8,46 @@
  */
 package cryptator.gen;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
-public class CryptaMemberCard extends CryptaMemberUse {
+public class CryptaMemberCard extends CryptaMemberReif {
 	
-	protected final IntVar[] cardLength;
+	protected final IntVar[] cardLengths;
 	
 	public CryptaMemberCard(Model m, String[] words, String prefix) {
 		super(m, words, prefix);
-		cardLength = m.intVarArray(prefix + "cardLen", useLength.length, 0, words.length);
+		cardLengths = m.intVarArray(prefix + "cardLen", getMaxLength(words) + 1, 0, words.length);
 	}
 
 	public final IntVar[] getCardLength() {
-		return cardLength;
+		return cardLengths;
+	}
+	
+	
+	@Override
+	protected void postWordCountConstraint() {
+		super.postWordCountConstraint();
+		// Remove card of empty/unused words
+		IntVar[] vars = Arrays.copyOfRange(cardLengths, 1, cardLengths.length);
+		model.sum(vars, "=", wordCount).post();
+	}
+	
+	private void postGlobalCardLengthConstraint() {
+		int[] values = IntStream.range(0, cardLengths.length).toArray();
+		model.globalCardinality(lengths, values, cardLengths, true).post();
 	}
 
 	@Override
-	public void postWordCountConstraint() {
-		super.postWordCountConstraint();
-		model.sum(cardLength, "=", wordCount).post();
+	public void buildModel() {
+		super.buildModel();
+		postGlobalCardLengthConstraint();
 	}
 	
-	@Override
-	public void postUseLengthConstraints() {
-		Map<Integer, BoolVar[]> map = buildWordsByLength();
-		// Always use the empty word, but do not count it.
-		useLength[0].eq(1).post();
-		cardLength[0].eq(0).post();
-		// Process other lengths > 0
-		for (int i = 1; i < useLength.length; i++) {
-			if(map.containsKey(i)) {				
-				model.sum(map.get(i), "=", cardLength[i]).post();
-				model.reifyXneC(cardLength[i], 0, useLength[i]);
-			} else {
-				useLength[i].eq(0).post();
-				cardLength[i].eq(0).post();
-			}
-			
-		}	
-	}
+
+	
 	
 }

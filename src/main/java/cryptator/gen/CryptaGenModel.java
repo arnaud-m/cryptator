@@ -26,9 +26,14 @@ public class CryptaGenModel extends WordsListModel {
 
 	public CryptaGenModel(String[] words) {
 		super(new Model("Generate"), words);		
+		//left = new CryptaMemberScalar(model, words, "L_");
 		left = new CryptaMemberScalar(model, words, "L_");
+		//right = new CryptaMemberScalar(model, words, "R_");
 		right = new CryptaMemberScalar(model, words, "R_");
 		this.buildModel();
+		// model.getSolver().showDecisions();
+		// model.getSolver().limitNode(20);
+
 	}
 
 
