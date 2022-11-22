@@ -69,18 +69,6 @@ public class CryptaGenModel extends WordsListModel {
 
 	}
 
-	public static void postMinLeftCountConstraints(int maxWordCount, IntVar leftCount, IntVar leftMaxLen,IntVar rightMaxLen, int base) {
-		IntVar diff = rightMaxLen.sub(leftMaxLen).intVar();
-		int prod = base;
-		int i = 2;
-		while(prod <= maxWordCount) {
-			diff.ge(i).imp(leftCount.ge(prod + 1)).post();
-			prod *= base;
-			i++;
-		}
-		diff.lt(i).post();
-	}
-
 	public void postMinLeftCountConstraints(int base) {
 		left.postLentghSumConstraints(right.getMaxLength(), base);
 	}

@@ -221,17 +221,4 @@ public final class WordSumTuplesBuilder {
 		return tuples;
 	}
 
-	/**
-	 * The main method.
-	 *
-	 * @param args the arguments
-	 */
-	public static void main(String[] args) {
-		int[] v = {0, 9, 3, 5, 1, 4, 2};
-
-		WordSumTuplesBuilder builder = new WordSumTuplesBuilder(2);
-		Tuples tuples = builder.buildTuples(v);
-		System.out.println(tuples);
-	}
-
 }

@@ -110,10 +110,6 @@ class CryptaGenBaseModel implements ICryptaGenModel {
 		postMaxLengthConstraints();
 	}
 
-	public static int[] getLengths(String[] words) {
-		return Arrays.stream(words).mapToInt(String::length).toArray();
-	}
-
 	public static int getMaxLength(String[] words) {
 		return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
 	}
