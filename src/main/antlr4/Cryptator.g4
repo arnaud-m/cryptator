@@ -26,7 +26,7 @@ program : equations EOF{}; //additional token to simplify the passage in paramet
 
 equations returns [ICryptaNode node]  //create a node of conjuncts
         : equation (AND*) {$node=$equation.node;}
-        |  e1=equation (AND+) e2=equations (AND*) {$node=new CryptaNode(";", $e1.node, $e2.node);};
+        |  e1=equation (AND+) e2=equations (AND*) {$node=new CryptaNode("&&", $e1.node, $e2.node);};
 
 equation returns [ICryptaNode node]  //create a node of the tree corresponding to an equation and return this node
         : '(' equation ')' {$node=$equation.node;}

@@ -126,18 +126,18 @@ public class ParserTest {
     public void testParserAND() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=money; d+e>=y");
 
-        testPreorder("; = + send more money >= + d e y ", node);
-        testPostorder("send more + money = d e + y >= ; ", node);
-        testInorder("send + more = money ; d + e >= y ", node);
+        testPreorder("&& = + send more money >= + d e y ", node);
+        testPostorder("send more + money = d e + y >= && ", node);
+        testInorder("send + more = money && d + e >= y ", node);
     }
 
     @Test
     public void testParserAND2() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=	money; -send -more= \n -money");
 
-        testPreorder("; = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ", node);
-        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = ; ", node);
-        testInorder("send + more = money ; " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ", node);
+        testPreorder("&& = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ", node);
+        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = && ", node);
+        testInorder("send + more = money && " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ", node);
 
     }
 
@@ -146,35 +146,35 @@ public class ParserTest {
         var str = "send + more ^ more = money ";
         final ICryptaNode node = parser.parse(str + ";" + str);
         var preord = "= + send ^ more more money ";
-        testPreorder("; " + preord + preord, node);
+        testPreorder("&& " + preord + preord, node);
         var postord = "send more more ^ + money =";
-        testPostorder(postord + " " + postord + " ; ", node);
-        testInorder(str + "; " + str, node);
+        testPostorder(postord + " " + postord + " && ", node);
+        testInorder(str + "&& " + str, node);
     }
 
     @Test
     public void testParserAND4() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=money;; d+e>=y");
 
-        testPreorder("; = + send more money >= + d e y ", node);
-        testPostorder("send more + money = d e + y >= ; ", node);
-        testInorder("send + more = money ; d + e >= y ", node);
+        testPreorder("&& = + send more money >= + d e y ", node);
+        testPostorder("send more + money = d e + y >= && ", node);
+        testInorder("send + more = money && d + e >= y ", node);
     }
 
     @Test
     public void testParserAND5() throws CryptaParserException {
         final ICryptaNode node = parser.parse("A = B;; A = B");
-        testPreorder("; = A B = A B ", node);
-        testPostorder("A B = A B = ; ", node);
-        testInorder("A = B ; A = B ", node);
+        testPreorder("&& = A B = A B ", node);
+        testPostorder("A B = A B = && ", node);
+        testInorder("A = B && A = B ", node);
     }
 
     @Test
     public void testParserAND6() throws CryptaParserException {
         final ICryptaNode node = parser.parse("A = B;; A = B;;;;;");
-        testPreorder("; = A B = A B ", node);
-        testPostorder("A B = A B = ; ", node);
-        testInorder("A = B ; A = B ", node);
+        testPreorder("&& = A B = A B ", node);
+        testPostorder("A B = A B = && ", node);
+        testInorder("A = B && A = B ", node);
     }
 
     @Test
@@ -225,9 +225,9 @@ public class ParserTest {
     public void testParserInteger1() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more='1234';; d+e>=y");
 
-        testPreorder("; = + send more '1234' >= + d e y ", node);
-        testPostorder("send more + '1234' = d e + y >= ; ", node);
-        testInorder("send + more = '1234' ; d + e >= y ", node);
+        testPreorder("&& = + send more '1234' >= + d e y ", node);
+        testPostorder("send more + '1234' = d e + y >= && ", node);
+        testInorder("send + more = '1234' && d + e >= y ", node);
     }
 
     @Test(expected = CryptaParserException.class)
@@ -244,18 +244,18 @@ public class ParserTest {
     public void testParserANDsymbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=money && d+e>=y");
 
-        testPreorder("; = + send more money >= + d e y ", node);
-        testPostorder("send more + money = d e + y >= ; ", node);
-        testInorder("send + more = money ; d + e >= y ", node);
+        testPreorder("&& = + send more money >= + d e y ", node);
+        testPostorder("send more + money = d e + y >= && ", node);
+        testInorder("send + more = money && d + e >= y ", node);
     }
 
     @Test
     public void testParserAND2symbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=	money&& -send -more= \n -money");
 
-        testPreorder("; = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ", node);
-        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = ; ", node);
-        testInorder("send + more = money ; " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ", node);
+        testPreorder("&& = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ", node);
+        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = && ", node);
+        testInorder("send + more = money && " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ", node);
 
     }
 
@@ -264,35 +264,35 @@ public class ParserTest {
         var str = "send + more ^ more = money ";
         final ICryptaNode node = parser.parse(str + "&&" + str);
         var preord = "= + send ^ more more money ";
-        testPreorder("; " + preord + preord, node);
+        testPreorder("&& " + preord + preord, node);
         var postord = "send more more ^ + money =";
-        testPostorder(postord + " " + postord + " ; ", node);
-        testInorder(str + "; " + str, node);
+        testPostorder(postord + " " + postord + " && ", node);
+        testInorder(str + "&& " + str, node);
     }
 
     @Test
     public void testParserAND4symbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=money&&&& d+e>=y");
 
-        testPreorder("; = + send more money >= + d e y ", node);
-        testPostorder("send more + money = d e + y >= ; ", node);
-        testInorder("send + more = money ; d + e >= y ", node);
+        testPreorder("&& = + send more money >= + d e y ", node);
+        testPostorder("send more + money = d e + y >= && ", node);
+        testInorder("send + more = money && d + e >= y ", node);
     }
 
     @Test
     public void testParserAND5symbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("A = B&&&& A = B");
-        testPreorder("; = A B = A B ", node);
-        testPostorder("A B = A B = ; ", node);
-        testInorder("A = B ; A = B ", node);
+        testPreorder("&& = A B = A B ", node);
+        testPostorder("A B = A B = && ", node);
+        testInorder("A = B && A = B ", node);
     }
 
     @Test
     public void testParserAND6symbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("A = B&&&& A = B&&&&&&&&&&");
-        testPreorder("; = A B = A B ", node);
-        testPostorder("A B = A B = ; ", node);
-        testInorder("A = B ; A = B ", node);
+        testPreorder("&& = A B = A B ", node);
+        testPostorder("A B = A B = && ", node);
+        testInorder("A = B && A = B ", node);
     }
 
     @Test
@@ -306,9 +306,9 @@ public class ParserTest {
     @Test
     public void testParserAND8symbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("a=b&& b=c ; c=d");
-        testPreorder("; = a b ; = b c = c d ", node);
-        testPostorder("a b = b c = c d = ; ; ", node);
-        testInorder("a = b ; b = c ; c = d ", node);
+        testPreorder("&& = a b && = b c = c d ", node);
+        testPostorder("a b = b c = c d = && && ", node);
+        testInorder("a = b && b = c && c = d ", node);
     }
 
     @Test(expected = CryptaParserException.class)
@@ -356,9 +356,9 @@ public class ParserTest {
     public void testParserInteger1symbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more='1234' && && d+e>=y");
 
-        testPreorder("; = + send more '1234' >= + d e y ", node);
-        testPostorder("send more + '1234' = d e + y >= ; ", node);
-        testInorder("send + more = '1234' ; d + e >= y ", node);
+        testPreorder("&& = + send more '1234' >= + d e y ", node);
+        testPostorder("send more + '1234' = d e + y >= && ", node);
+        testInorder("send + more = '1234' && d + e >= y ", node);
     }
 
     @Test(expected = CryptaParserException.class)
@@ -395,9 +395,9 @@ public class ParserTest {
     public void testParserInteger1symboldoubleticks() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=\"1234\" && && d+e>=y");
 
-        testPreorder("; = + send more '1234' >= + d e y ", node);
-        testPostorder("send more + '1234' = d e + y >= ; ", node);
-        testInorder("send + more = '1234' ; d + e >= y ", node);
+        testPreorder("&& = + send more '1234' >= + d e y ", node);
+        testPostorder("send more + '1234' = d e + y >= && ", node);
+        testInorder("send + more = '1234' && d + e >= y ", node);
     }
 
     @Test(expected = CryptaParserException.class)
