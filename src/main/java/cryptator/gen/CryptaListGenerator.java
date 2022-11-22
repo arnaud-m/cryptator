@@ -57,11 +57,11 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	}
 
 	private CryptaGenModel buildModel() {
-		final CryptaGenModel gen = new CryptaGenModel(words.getWords());
-		gen.postMemberCardConstraints(config.getMinLeftOperands(), config.getMaxLeftOperands());
+		final CryptaGenModel gen = new CryptaGenModel(words.getWords(), config.isLightModel());
+		gen.postLeftCountConstraints(config.getMinLeftOperands(), config.getMaxLeftOperands());
 		gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
-		gen.postLeftMinCardConstraints(config.getArithmeticBase());
-		if(words.hasRightMember()) gen.postRightMemberConstraint();
+		if(!config.isLightPropagation()) gen.postMinLeftCountConstraints(config.getArithmeticBase());
+		if(words.hasRightMember()) gen.postFixedRightMemberConstraint();
 		if(words.isDoublyTrue()) gen.postDoublyTrueConstraint(words.getLB());
 		return gen;
 	}
