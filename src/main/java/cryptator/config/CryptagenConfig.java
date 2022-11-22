@@ -32,7 +32,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
 	private int maxLeftOperands= -1;
 	
 	@Option(name="-lightM", handler=ExplicitBooleanOptionHandler.class, usage="use less auxiliary variables")
-	private boolean lightModel;
+	private boolean lightModel = true;
 	
 	@Option(name="-lightP", handler=ExplicitBooleanOptionHandler.class, usage="use weak consistency")
 	private boolean lightPropagation;
