@@ -27,9 +27,11 @@ public class GenerateTest {
 	public static void configureTestLoggers() {
 		JULogUtil.configureTestLoggers();
 	}
-	
-	public long testGenerate(WordArray wordArray) throws CryptaModelException {
+
+	public long testGenerate(WordArray wordArray, boolean lightModel, boolean lightPropagation) throws CryptaModelException {
 		final CryptagenConfig config = new CryptagenConfig();
+		config.setLightModel(lightModel);
+		config.setLightPropagation(lightPropagation);
 		final CryptaListGenerator gen = new CryptaListGenerator(wordArray, config, Cryptagen.LOGGER);
 		CryptaBiConsumer cons = new CryptaBiConsumer(Cryptagen.LOGGER);
 		cons.withSolutionCheck(config.getArithmeticBase());
@@ -37,39 +39,47 @@ public class GenerateTest {
 		assertEquals(0, cons.getErrorCount());
 		return cons.getSolutionCount();
 	}
+
 	
-	public long testGenerate(String rightMember, String... words) throws CryptaModelException {
-		return testGenerate(new WordArray(Arrays.asList(words), rightMember));
+	public void testGenerate(int expectedSolCount, WordArray wordArray) throws CryptaModelException {
+		assertEquals( expectedSolCount,testGenerate(wordArray, false, false));
+		assertEquals( expectedSolCount,testGenerate(wordArray, false, true));
+		assertEquals( expectedSolCount,testGenerate(wordArray, true, false));
+		assertEquals( expectedSolCount,testGenerate(wordArray, true, true));
+	}
+	
+	public void testGenerate(int expectedSolCount, String rightMember, String... words) throws CryptaModelException {
+		testGenerate(expectedSolCount, new WordArray(Arrays.asList(words), rightMember));
 	}
 	
 	@Test
 	public void testSendMoreMoney() throws CryptaModelException {
-	assertEquals(1, testGenerate(null, "send", "more", "money"));
+	testGenerate(1, null, "send", "more", "money");
 	}
 	
 	@Test
 	public void testPlanets1() throws CryptaModelException {
-		assertEquals(2, testGenerate(null, "venus", "earth", "uranus", "saturn"));
+		testGenerate(2, null, "venus", "earth", "uranus", "saturn");
 	}
 	
 	@Test
 	public void testPlanets2() throws CryptaModelException {
-		assertEquals(1, testGenerate("planets", "venus", "earth", "uranus", "saturn"));
+		testGenerate(1, "planets", "venus", "earth", "uranus", "saturn");
 	}
 	
 	@Test
 	public void testDoublyTrue1() throws CryptaModelException {
-		assertEquals(0, testGenerate(new WordArray("FR", "fr", 0, 10)));
+		testGenerate(0, new WordArray("FR", "fr", 0, 10));
 	}
 	
 	@Test
 	public void testDoublyTrue2() throws CryptaModelException {
-		assertEquals(1, testGenerate(new WordArray("FR", "fr", 30, 30)));
+		testGenerate(1, new WordArray("FR", "fr", 30, 30));
 	}
 	
 	@Test
 	public void testDoublyTrue3() throws CryptaModelException {
-		assertEquals(3, testGenerate(new WordArray("IT", "it", 20, 30)));
+		testGenerate(3, new WordArray("IT", "it", 20, 30));
 	}
 	
 	
