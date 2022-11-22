@@ -8,10 +8,7 @@
  */
 package cryptator.cmd;
 
-import static cryptator.gen.TransformWord.*;
-import static cryptator.gen.TransformWord.removeWhitespaces;
-import static cryptator.gen.TransformWord.stripAccents;
-import static cryptator.gen.TransformWord.translate;
+import static cryptator.gen.TransformWord.translateAndNormalize;
 
 import java.util.Arrays;
 import java.util.List;

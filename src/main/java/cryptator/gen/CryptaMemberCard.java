@@ -42,6 +42,7 @@ public class CryptaMemberCard extends CryptaMemberLen {
 		model.globalCardinality(lengths, values, cardLengths, true).post();
 	}
 
+	@Override
 	public void postLentghSumConstraints(IntVar sumLength, int base) {
 
 		int[] maxCardLengths = getLengthCounts(words);

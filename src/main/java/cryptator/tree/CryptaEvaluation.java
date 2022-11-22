@@ -70,7 +70,6 @@ public class CryptaEvaluation implements ICryptaEvaluation {
         		if(node.isInternalNode()) {
         			final BigInteger b = stack.pop();
         			final BigInteger a = stack.pop();
-        			// System.out.println(a+ " " + b);
         			stack.push(node.getOperator().getFunction().apply(a, b));
         		} else {
         			try {

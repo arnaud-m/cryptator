@@ -31,7 +31,7 @@ import org.chocosolver.solver.constraints.extension.Tuples;
 public final class WordSumTuplesBuilder {
 
 	/** The base. */
-	public BigInteger base = BigInteger.TEN;
+	private BigInteger base;
 
 	/**
 	 * Instantiates a new word sum tuples builder in base 10.
@@ -39,6 +39,7 @@ public final class WordSumTuplesBuilder {
 	 */
 	public WordSumTuplesBuilder() {
 		super();
+		this.base = BigInteger.TEN;
 	}
 	
 	/**

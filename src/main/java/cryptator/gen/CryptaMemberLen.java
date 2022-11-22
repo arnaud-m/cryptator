@@ -46,7 +46,6 @@ public class CryptaMemberLen extends CryptaGenBaseModel {
 		int prod = base;
 		int i = 2;
 		while(prod <= n) {
-			//System.err.println(i + " " + (prod + 1));
 			diff.ge(i).imp(wordCount.ge(prod + 1)).post();
 			prod *= base;
 			i++;

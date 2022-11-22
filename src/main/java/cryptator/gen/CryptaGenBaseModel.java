@@ -22,10 +22,8 @@ import org.chocosolver.solver.variables.IntVar;
 import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaGenModel;
 import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaConstant;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
-import cryptator.tree.TreeUtils;
 
 /**
  * Base class for generation model..

@@ -20,8 +20,6 @@ import cryptator.tree.CryptaNode;
 
 public class CryptaGenModel extends WordsListModel {
 
-	//private final ICryptaGenModel left;
-	 //private final CryptaMemberScalar left;
 	private final CryptaMemberLen left;
 
 	private final ICryptaGenModel right;

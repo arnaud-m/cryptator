@@ -23,7 +23,6 @@ public class CryptaSolutionMap extends AbstractCryptaSolution<Integer> {
     public static final ICryptaSolution parseSolution(String solution) throws CryptaSolutionException {
         final HashMap<Character, Integer> symbolToDigit = new HashMap<>();
         final String[] split = solution.split("\\s*[\\s=]\\s*");
-        //System.out.println(Arrays.toString(split));
         if (split.length % 2 != 0) throw new CryptaSolutionException("Invalid number of splits: " + split.length);
         for (int i = 0; i < split.length; i += 2) {
             if (split[i].length() != 1) throw new CryptaSolutionException("Invalid symbol: " + split[i]);
