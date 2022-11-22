@@ -35,7 +35,7 @@ public class CryptaBignumModeler implements ICryptaModeler {
     public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
         final CryptaOperatorDetection detect = TreeUtils.computeUnsupportedBignumOperator(cryptarithm);
         if (detect.hasUnsupportedOperator())
-            throw new CryptaModelException("Unsupported bignum operator(s): " + detect.getUnsupportedOperator());
+            throw new CryptaModelException("Unsupported bignum operator(s): " + detect.getUnsupportedOperators());
 
         final Model model = new Model("Cryptarithm-bignum");
         final AbstractModelerNodeConsumer modelerNodeConsumer = new ModelerBignumConsumer(model, config);

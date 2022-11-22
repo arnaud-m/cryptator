@@ -8,7 +8,11 @@
  */
 package cryptator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigInteger;
 
@@ -34,26 +38,37 @@ public class EvaluationTest {
 
     public EvaluationTest() {
     }
-
+    
+    private void testInSolution(ICryptaSolution s, char symbol, int digit) throws CryptaSolutionException {
+        assertTrue(s.hasDigit(symbol));
+        assertTrue(s.hasDomain(symbol));
+        assertEquals(digit, s.getDigit(symbol));
+        assertNotNull(s.getDomain(symbol));    
+    }
+    
+    private void testNotInSolution(ICryptaSolution s, char symbol) throws CryptaSolutionException {
+        assertFalse(s.hasDigit(symbol));
+        assertFalse(s.hasDomain(symbol));
+        assertNotNull(s.getDomain(symbol));    
+    }
+    
     @Test
     public void testSolutionParser1() throws CryptaSolutionException {
         final String solution = "A=  1 B    2 C   =3 D=4 E  =  5";
         final ICryptaSolution s = CryptaSolutionMap.parseSolution(solution);
         assertEquals(5, s.size());
-        assertTrue(s.hasDigit('A'));
-        assertEquals(1, s.getDigit('A'));
-        assertTrue(s.hasDigit('B'));
-        assertEquals(2, s.getDigit('B'));
-        assertTrue(s.hasDigit('C'));
-        assertEquals(3, s.getDigit('C'));
-        assertTrue(s.hasDigit('D'));
-        assertEquals(4, s.getDigit('D'));
-        assertTrue(s.hasDigit('E'));
-        assertEquals(5, s.getDigit('E'));
-
-        assertFalse(s.hasDigit('F'));
-        assertFalse(s.hasDigit('G'));
+        testInSolution(s, 'A', 1);
+        testInSolution(s, 'B', 2);
+        testInSolution(s, 'C', 3);
+        testInSolution(s, 'D', 4);
+        testInSolution(s, 'E', 5);
+        
+        testNotInSolution(s, 'F');
+        testNotInSolution(s, 'G');
+        
+        assertNotNull(s.toString());    
     }
+    
 
     @Test(expected = CryptaSolutionException.class)
     public void testSolutionException() throws CryptaSolutionException {

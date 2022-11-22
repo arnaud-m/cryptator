@@ -39,7 +39,7 @@ public final class CryptaOperatorDetection implements ITraversalNodeConsumer {
 		return ! unsupportedOperators.isEmpty();
 	}
 	
-	public Set<CryptaOperator> getUnsupportedOperator() {
+	public Set<CryptaOperator> getUnsupportedOperators() {
 		return Collections.unmodifiableSet(unsupportedOperators);
 	}
 	

@@ -16,6 +16,7 @@ import cryptator.tree.TreeUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class FeaturesTest {
@@ -36,6 +37,7 @@ public class FeaturesTest {
 		assertEquals(5, feat.getMaxWordLength());
 		assertEquals(8, feat.getSymbols().size());
 		assertEquals(2, feat.getOperators().size());
+		assertNotNull(feat.toString());
 	}
 	
 	@Test
@@ -48,7 +50,8 @@ public class FeaturesTest {
 		assertEquals(4, feat.getMinWordLength());
 		assertEquals(7, feat.getMaxWordLength());		
 		assertEquals(10, feat.getSymbols().size());
-		assertEquals(2, feat.getOperators().size());	
+		assertEquals(2, feat.getOperators().size());
+		assertNotNull(feat.toString());
 	}
 	
 }
