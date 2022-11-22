@@ -34,22 +34,27 @@ public class Cryptator {
 
 
 	public static void main(String[] args) {
+	    final int exitCode = doMain(args);
+	    System.exit(exitCode);
+	}
+	
+	public static int doMain(String[] args) {
 		JULogUtil.configureLoggers();
 
 		CryptatorOptionsParser optparser = new CryptatorOptionsParser();
-		if ( !optparser.parseOptions(args)) return;
+		if ( !optparser.parseOptions(args)) return -1;
 		final CryptatorConfig config = optparser.getConfig();
 
 		final ICryptaSolver solver = buildSolver(config);
 
 		final CryptaParserWrapper parser = new CryptaParserWrapper();
 		
-		int exitStatus = 0;
+		int exitCode = 0;
 		for (String cryptarithm : config.getArguments()) {
-			exitStatus += solve(cryptarithm, parser, solver, config);
+			exitCode += solve(cryptarithm, parser, solver, config);
 		}
 		JULogUtil.flushLogs();
-		System.exit(exitStatus);
+		return exitCode;
 	}
 
 	private static class CryptatorOptionsParser extends AbstractOptionsParser<CryptatorConfig> {

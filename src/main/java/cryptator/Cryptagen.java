@@ -26,108 +26,122 @@ import cryptator.solver.CryptaSolver;
 
 public class Cryptagen {
 
-	public static final Logger LOGGER = Logger.getLogger(Cryptagen.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(Cryptagen.class.getName());
 
-	private Cryptagen() {}
+    private Cryptagen() {}
 
+    public static void main(String[] args) {
+        final int exitCode = doMain(args);
+        System.exit(exitCode);
+    }
 
-	public static void main(String[] args) throws CryptaModelException {
-		JULogUtil.configureLoggers();
+    public static int doMain(String[] args) {
+        JULogUtil.configureLoggers();
+        int exitCode = -1;
 
-		CryptagenOptionsParser optparser = new CryptagenOptionsParser();
-		if ( !optparser.parseOptions(args)) return;
-		final CryptagenConfig config = optparser.getConfig();
-
-		final WordArray words = buildWords(config.getArguments(), config);
-		if(words == null) System.exit(-1);
-
-		final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
-		CryptaBiConsumer cons = buildBiConsumer(config);
-		gen.generate(cons);
-
-		int exitStatus = gen.getErrorCount() + cons.getErrorCount();
-		System.exit(exitStatus);
-	}
-
-	private static List<String> readWords(String filename) {
-		final List<String> words = new ArrayList<>();
-		try (final Scanner s = new Scanner(new File(filename))) {
-			while (s.hasNext()) {
-				words.add(s.next());
-			}
-		} catch (FileNotFoundException e) {
-			LOGGER.log(Level.SEVERE, "cant read words in file", e);
-		}
-		return words;			
-	}
+        CryptagenOptionsParser optparser = new CryptagenOptionsParser();
+        if (optparser.parseOptions(args)) {
+            final CryptagenConfig config = optparser.getConfig();
+            final WordArray words = buildWords(config.getArguments(), config);
+            if(words != null) {
+                exitCode = generate(words, config);
+            }
+        }
+        JULogUtil.flushLogs();
+        return exitCode;
+    }
 
 
-	private static WordArray buildNumbers(List<String> arguments, CryptagenConfig config) {
-		final int lb = Integer.parseInt(arguments.get(0));
-		try {
-			final int ub = Integer.parseInt(arguments.get(1));
-			return new WordArray(config.getCountryCode(), config.getLangCode(), lb, ub);
-		} catch (NumberFormatException e) {
-			LOGGER.log(Level.SEVERE, "fail reading the second integer argument.", e);
-			return null;
-		}
-	}
-
-	private static WordArray buildWords(List<String> arguments, CryptagenConfig config) {
-		switch(arguments.size()) {
-		case 1: {
-			final List<String> words = readWords(arguments.get(0));
-			return words.isEmpty() ? null : new WordArray(words, null);
-		}
-		case 2: {
-			try {
-				return buildNumbers(arguments, config);
-			} catch (NumberFormatException e) {
-				// Cannot build a number list.
-				// So, the first argument must be the pathname of a words list
-				final List<String> words = readWords(arguments.get(0));
-				return words.isEmpty() ? null : new WordArray(words, arguments.get(1));
-			}
-		} default : {
-			return new WordArray(arguments, null);
-		}
-
-		}
-	}
+    private static List<String> readWords(String filename) {
+        final List<String> words = new ArrayList<>();
+        try (final Scanner s = new Scanner(new File(filename))) {
+            while (s.hasNext()) {
+                words.add(s.next());
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.log(Level.SEVERE, "cant read words in file", e);
+        }
+        return words;			
+    }
 
 
-	private static class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
+    private static WordArray buildNumbers(List<String> arguments, CryptagenConfig config) {
+        final int lb = Integer.parseInt(arguments.get(0));
+        try {
+            final int ub = Integer.parseInt(arguments.get(1));
+            return new WordArray(config.getCountryCode(), config.getLangCode(), lb, ub);
+        } catch (NumberFormatException e) {
+            LOGGER.log(Level.SEVERE, "fail reading the second integer argument.", e);
+            return null;
+        }
+    }
 
-		public CryptagenOptionsParser() {
-			super(Cryptagen.class, new CryptagenConfig());
-		}
+    private static WordArray buildWords(List<String> arguments, CryptagenConfig config) {
+        switch(arguments.size()) {
+        case 1: {
+            final List<String> words = readWords(arguments.get(0));
+            return words.isEmpty() ? null : new WordArray(words, null);
+        }
+        case 2: {
+            try {
+                return buildNumbers(arguments, config);
+            } catch (NumberFormatException e) {
+                // Cannot build a number list.
+                // So, the first argument must be the pathname of a words list
+                final List<String> words = readWords(arguments.get(0));
+                return words.isEmpty() ? null : new WordArray(words, arguments.get(1));
+            }
+        } default : {
+            return new WordArray(arguments, null);
+        }
 
-		@Override
-		protected void configureLoggers() {
-			if(config.isDryRun()) {
-				getLogger().setLevel(config.isVerbose() ? Level.FINE : Level.CONFIG);	
-			} else {
-				if(config.isVerbose()) {
-					JULogUtil.setLevel(Level.CONFIG, getLogger());		
-				} else {
-					JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
-				}
-			}
-		}
+        }
+    }
 
-		@Override
-		public String getArgumentName() {
-			return "WORDS...";
-		}	
-	}
 
-	private static CryptaBiConsumer buildBiConsumer(final CryptagenConfig config) {
-		CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
-		consumer.withCryptarithmLog();
-		if(config.isCheckSolution()) consumer.withSolutionCheck(config.getArithmeticBase());
-		if(config.isExportGraphiz()) consumer.withGraphvizExport();
-		return consumer;
-	}
+    private static class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
 
+        public CryptagenOptionsParser() {
+            super(Cryptagen.class, new CryptagenConfig());
+        }
+
+        @Override
+        protected void configureLoggers() {
+            if(config.isDryRun()) {
+                getLogger().setLevel(config.isVerbose() ? Level.FINE : Level.CONFIG);	
+            } else {
+                if(config.isVerbose()) {
+                    JULogUtil.setLevel(Level.CONFIG, getLogger());		
+                } else {
+                    JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
+                }
+            }
+        }
+
+        @Override
+        public String getArgumentName() {
+            return "WORDS...";
+        }	
+    }
+
+    private static CryptaBiConsumer buildBiConsumer(final CryptagenConfig config) {
+        CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
+        consumer.withCryptarithmLog();
+        if(config.isCheckSolution()) consumer.withSolutionCheck(config.getArithmeticBase());
+        if(config.isExportGraphiz()) consumer.withGraphvizExport();
+        return consumer;
+    }
+
+    private static int generate(WordArray words, CryptagenConfig config) {
+        final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
+        final CryptaBiConsumer cons = buildBiConsumer(config);
+        try {
+            gen.generate(cons);
+        } catch (CryptaModelException e) {
+            LOGGER.log(Level.SEVERE, "fail to build the model.", e);    
+            return -1;  
+        }
+        return gen.getErrorCount() + cons.getErrorCount();
+    }
 
 }
