@@ -64,7 +64,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
  <dependency>
     <groupId>fr.univ-cotedazur</groupId>
     <artifactId>cryptator</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1-SNAPSHOT</version>
  </dependency>
  #+END_EXAMPLE
 
