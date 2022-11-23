@@ -65,7 +65,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return lightModel;
     }
 
-    public final void setLightModel(boolean lightModel) {
+    public final void setLightModel(final boolean lightModel) {
         this.lightModel = lightModel;
     }
 
@@ -73,7 +73,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return lightPropagation;
     }
 
-    public final void setLightPropagation(boolean lightPropagation) {
+    public final void setLightPropagation(final boolean lightPropagation) {
         this.lightPropagation = lightPropagation;
     }
 

@@ -60,10 +60,10 @@ public class JsonTest {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
-    public InputStream solve(String Cryptarithm)
+    public InputStream solve(String cryptarithm)
             throws StreamReadException, DatabindException, IOException, CryptaModelException, CryptaSolverException {
         // Create config
-        SolveInput input = new SolveInput(Cryptarithm, config);
+        SolveInput input = new SolveInput(cryptarithm, config);
         // Export to json
         final InputStream inputStream = buildJsonInput(input);
         // Read json config

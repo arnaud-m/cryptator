@@ -23,7 +23,7 @@ public class WordArray {
 
     private final int ub;
 
-    public WordArray(List<String> words, String rightMember) {
+    public WordArray(final List<String> words, final String rightMember) {
         super();
         final int n = words.size();
         this.rightMember = rightMember;
@@ -39,7 +39,7 @@ public class WordArray {
         ub = -1;
     }
 
-    public WordArray(String countryCode, String lang, int lb, int ub) {
+    public WordArray(final String countryCode, final String lang, final int lb, final int ub) {
         super();
         this.lb = lb;
         this.ub = ub;

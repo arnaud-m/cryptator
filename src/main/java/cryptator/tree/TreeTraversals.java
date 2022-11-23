@@ -24,13 +24,13 @@ public final class TreeTraversals {
 
     private static class TraversalEdge {
 
-        public final ICryptaNode node;
+        private final ICryptaNode node;
 
-        public final ICryptaNode father;
+        private final ICryptaNode father;
 
-        public final int numFather;
+        private final int numFather;
 
-        public TraversalEdge(ICryptaNode node, ICryptaNode father, int numFather) {
+        TraversalEdge(final ICryptaNode node, final ICryptaNode father, final int numFather) {
             super();
             this.node = node;
             this.father = father;
@@ -51,7 +51,7 @@ public final class TreeTraversals {
 
     }
 
-    public static void preorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalConsumer) {
+    public static void preorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalConsumer) {
         final Deque<ICryptaNode> stack = new ArrayDeque<>();
         int num = 1;
         stack.push(root);
@@ -66,14 +66,14 @@ public final class TreeTraversals {
         }
     }
 
-    private static void pushChildren(Deque<TraversalEdge> stack, ICryptaNode n, int num) {
+    private static void pushChildren(final Deque<TraversalEdge> stack, final ICryptaNode n, final int num) {
         if (n.isInternalNode()) {
             stack.push(new TraversalEdge(n.getRightChild(), n, num));
             stack.push(new TraversalEdge(n.getLeftChild(), n, num));
         }
     }
 
-    public static void preorderTraversal(ICryptaNode root, ITraversalEdgeConsumer traversalConsumer) {
+    public static void preorderTraversal(final ICryptaNode root, final ITraversalEdgeConsumer traversalConsumer) {
         final Deque<TraversalEdge> stack = new ArrayDeque<>();
         int num = 1;
         pushChildren(stack, root, num);
@@ -86,7 +86,7 @@ public final class TreeTraversals {
         }
     }
 
-    public static void postorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
+    public static void postorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         final Deque<ICryptaNode> stack = new ArrayDeque<>();
         final ArrayList<ICryptaNode> order = new ArrayList<>();
         stack.push(root);
@@ -105,7 +105,7 @@ public final class TreeTraversals {
         }
     }
 
-    public static void inorderTraversal(ICryptaNode root, ITraversalNodeConsumer traversalNodeConsumer) {
+    public static void inorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
         int num = 1;
         Deque<ICryptaNode> s = new ArrayDeque<>();

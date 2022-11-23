@@ -10,11 +10,11 @@ package cryptator.tree;
 
 public class CryptaConstant extends CryptaLeaf {
 
-    public CryptaConstant(String word) {
+    public CryptaConstant(final String word) {
         super(word);
     }
 
-    public CryptaConstant(char[] word) {
+    public CryptaConstant(final char[] word) {
         super(word);
     }
 

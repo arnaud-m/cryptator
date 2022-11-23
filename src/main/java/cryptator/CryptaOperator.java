@@ -34,19 +34,20 @@ public enum CryptaOperator {
     AND("&&", (a, b) -> toBigInt(!a.equals(BigInteger.ZERO) && !b.equals(BigInteger.ZERO)),
             (a, b) -> ((ReExpression) a).and((ReExpression) b));
 
-    public final String token;
+    private final String token;
 
-    public final BinaryOperator<BigInteger> function;
+    private final BinaryOperator<BigInteger> function;
 
-    public final BinaryOperator<ArExpression> expression;
+    private final BinaryOperator<ArExpression> expression;
 
-    CryptaOperator(String token, BinaryOperator<BigInteger> function, BinaryOperator<ArExpression> expression) {
+    CryptaOperator(final String token, final BinaryOperator<BigInteger> function,
+            final BinaryOperator<ArExpression> expression) {
         this.token = token;
         this.function = function;
         this.expression = expression;
     }
 
-    public static CryptaOperator valueOfToken(String token) {
+    public static CryptaOperator valueOfToken(final String token) {
         if (token == null) {
             return null;
         }
@@ -58,11 +59,11 @@ public enum CryptaOperator {
         throw new IllegalArgumentException("Unknown token: " + token);
     }
 
-    private static final BigInteger toBigInt(boolean b) {
+    private static BigInteger toBigInt(final boolean b) {
         return b ? BigInteger.ONE : BigInteger.ZERO;
     }
 
-    private static final BigInteger fdiv(BigInteger a, BigInteger b) {
+    private static BigInteger fdiv(final BigInteger a, final BigInteger b) {
         final BigInteger[] r = a.divideAndRemainder(b);
         if (r[1].equals(BigInteger.ZERO)) {
             return r[0];
@@ -71,7 +72,7 @@ public enum CryptaOperator {
         }
     }
 
-    private static final ArExpression fdiv(ArExpression a, ArExpression b) {
+    private static ArExpression fdiv(final ArExpression a, final ArExpression b) {
         final IntVar va = a.intVar();
         final IntVar vb = b.intVar();
         final int[] bounds = VariableUtils.boundsForDivision(va, vb);
@@ -81,15 +82,15 @@ public enum CryptaOperator {
         return q;
     }
 
-    public final String getToken() {
+    public String getToken() {
         return token;
     }
 
-    public final BinaryOperator<BigInteger> getFunction() {
+    public BinaryOperator<BigInteger> getFunction() {
         return function;
     }
 
-    public final BinaryOperator<ArExpression> getExpression() {
+    public BinaryOperator<ArExpression> getExpression() {
         return expression;
     }
 }

@@ -17,7 +17,7 @@ public class CryptaMemberElt extends CryptaGenBaseModel {
 
     protected final IntVar index;
 
-    public CryptaMemberElt(Model m, String[] words, String prefix) {
+    public CryptaMemberElt(final Model m, final String[] words, final String prefix) {
         super(m, words, prefix, true);
         index = m.intVar(prefix + "idx", 0, words.length - 1);
     }

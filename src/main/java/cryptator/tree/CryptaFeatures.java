@@ -31,7 +31,7 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
         super();
     }
 
-    private void accept(char[] word) {
+    private void accept(final char[] word) {
         final int n = word.length;
         wordCount++;
         charCount += n;
@@ -46,7 +46,7 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
     }
 
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         if (node.isInternalNode()) {
             operators.add(node.getOperator());
         } else {

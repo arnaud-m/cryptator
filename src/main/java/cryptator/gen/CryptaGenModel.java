@@ -24,7 +24,7 @@ public class CryptaGenModel extends WordsListModel {
 
     private final ICryptaGenModel right;
 
-    public CryptaGenModel(String[] words, boolean lenOrCardModel) {
+    public CryptaGenModel(final String[] words, final boolean lenOrCardModel) {
         super(new Model("Generate"), words);
         left = lenOrCardModel ? new CryptaMemberLen(model, words, "L_") : new CryptaMemberCard(model, words, "L_");
         right = new CryptaMemberElt(model, words, "R_");
@@ -58,16 +58,16 @@ public class CryptaGenModel extends WordsListModel {
 
     }
 
-    public void postLeftCountConstraints(int min, int max) {
-        min = Math.max(min, 2);
-        left.getWordCount().ge(min).post();
-        if (max >= min) {
+    public void postLeftCountConstraints(final int min, final int max) {
+        final int min2 = Math.max(min, 2);
+        left.getWordCount().ge(min2).post();
+        if (max >= min2) {
             left.getWordCount().le(max).post();
         }
 
     }
 
-    public void postMinLeftCountConstraints(int base) {
+    public void postMinLeftCountConstraints(final int base) {
         left.postLentghSumConstraints(right.getMaxLength(), base);
     }
 
@@ -76,7 +76,7 @@ public class CryptaGenModel extends WordsListModel {
         vars[vars.length - 1].eq(1).post();
     }
 
-    public void postDoublyTrueConstraint(int lb) {
+    public void postDoublyTrueConstraint(final int lb) {
         final int n = getN();
         final IntVar sum = model.intVar("SUM", lb, n - 1);
 

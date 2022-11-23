@@ -23,12 +23,12 @@ public final class CryptaOperatorDetection implements ITraversalNodeConsumer {
 
     private final Set<CryptaOperator> unsupportedOperators = new HashSet<>();
 
-    public CryptaOperatorDetection(CryptaOperator... supportedOperators) {
+    public CryptaOperatorDetection(final CryptaOperator... supportedOperators) {
         this.supportedOperators = new HashSet<>(Arrays.asList(supportedOperators));
     }
 
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         final CryptaOperator op = node.getOperator();
         if (!supportedOperators.contains(op)) {
             unsupportedOperators.add(op);

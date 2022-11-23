@@ -24,19 +24,19 @@ import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 
-public class Cryptagen {
+public final class Cryptagen {
 
     public static final Logger LOGGER = Logger.getLogger(Cryptagen.class.getName());
 
     private Cryptagen() {
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         final int exitCode = doMain(args);
         System.exit(exitCode);
     }
 
-    public static int doMain(String[] args) {
+    public static int doMain(final String[] args) {
         JULogUtil.configureLoggers();
         int exitCode = -1;
 
@@ -52,9 +52,9 @@ public class Cryptagen {
         return exitCode;
     }
 
-    private static List<String> readWords(String filename) {
+    private static List<String> readWords(final String filename) {
         final List<String> words = new ArrayList<>();
-        try (final Scanner s = new Scanner(new File(filename))) {
+        try (Scanner s = new Scanner(new File(filename))) {
             while (s.hasNext()) {
                 words.add(s.next());
             }
@@ -64,7 +64,7 @@ public class Cryptagen {
         return words;
     }
 
-    private static WordArray buildNumbers(List<String> arguments, CryptagenConfig config) {
+    private static WordArray buildNumbers(final List<String> arguments, final CryptagenConfig config) {
         final int lb = Integer.parseInt(arguments.get(0));
         try {
             final int ub = Integer.parseInt(arguments.get(1));
@@ -75,7 +75,7 @@ public class Cryptagen {
         }
     }
 
-    private static WordArray buildWords(List<String> arguments, CryptagenConfig config) {
+    private static WordArray buildWords(final List<String> arguments, final CryptagenConfig config) {
         switch (arguments.size()) {
         case 1: {
             final List<String> words = readWords(arguments.get(0));
@@ -98,9 +98,9 @@ public class Cryptagen {
         }
     }
 
-    private static class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
+    private static final class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
 
-        public CryptagenOptionsParser() {
+        protected CryptagenOptionsParser() {
             super(Cryptagen.class, new CryptagenConfig());
         }
 
@@ -135,7 +135,7 @@ public class Cryptagen {
         return consumer;
     }
 
-    private static int generate(WordArray words, CryptagenConfig config) {
+    private static int generate(final WordArray words, final CryptagenConfig config) {
         final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
         final CryptaBiConsumer cons = buildBiConsumer(config);
         try {

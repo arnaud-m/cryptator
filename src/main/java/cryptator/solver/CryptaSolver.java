@@ -23,6 +23,8 @@ import cryptator.specs.ICryptaSolver;
 
 public final class CryptaSolver implements ICryptaSolver {
 
+    private static final int MS = 1000;
+
     public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
 
     private ICryptaModeler modeler;
@@ -35,7 +37,7 @@ public final class CryptaSolver implements ICryptaSolver {
         this(false);
     }
 
-    public CryptaSolver(boolean useBignum) {
+    public CryptaSolver(final boolean useBignum) {
         super();
         modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
     }
@@ -45,7 +47,7 @@ public final class CryptaSolver implements ICryptaSolver {
     }
 
     @Override
-    public void limitTime(long limit) {
+    public void limitTime(final long limit) {
         this.timeLimit = limit;
     }
 
@@ -54,7 +56,7 @@ public final class CryptaSolver implements ICryptaSolver {
     }
 
     @Override
-    public void limitSolution(long limit) {
+    public void limitSolution(final long limit) {
         this.solutionLimit = limit;
     }
 
@@ -66,7 +68,7 @@ public final class CryptaSolver implements ICryptaSolver {
         modeler = new CryptaModeler();
     }
 
-    private void logOnSolution(CryptaModel m) {
+    private void logOnSolution(final CryptaModel m) {
         if (LOGGER.isLoggable(Level.CONFIG)) {
             final Solution sol = new Solution(m.getModel());
             sol.record();
@@ -75,13 +77,13 @@ public final class CryptaSolver implements ICryptaSolver {
     }
 
     @Override
-    public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer)
-            throws CryptaModelException {
+    public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
+            final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
         final CryptaModel m = modeler.model(cryptarithm, config);
         LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel());
         final Solver s = m.getModel().getSolver();
         if (timeLimit > 0) {
-            s.limitTime(timeLimit * 1000); // in ms
+            s.limitTime(timeLimit * MS); // in ms
         }
         int solutionCount = 0;
         if (solutionLimit > 0) {

@@ -20,7 +20,7 @@ public final class SolveInput {
         super();
     }
 
-    public SolveInput(String cryptarithm, CryptatorConfig config) {
+    public SolveInput(final String cryptarithm, final CryptatorConfig config) {
         super();
         this.cryptarithm = cryptarithm;
         this.config = config;
@@ -30,7 +30,7 @@ public final class SolveInput {
         return cryptarithm;
     }
 
-    public void setCryptarithm(String cryptarithm) {
+    public void setCryptarithm(final String cryptarithm) {
         this.cryptarithm = cryptarithm;
     }
 
@@ -38,7 +38,7 @@ public final class SolveInput {
         return config;
     }
 
-    public void setConfig(CryptatorConfig config) {
+    public void setConfig(final CryptatorConfig config) {
         this.config = config;
     }
 }

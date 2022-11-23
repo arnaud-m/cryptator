@@ -26,19 +26,19 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.TreeUtils;
 
-public class Cryptator {
+public final class Cryptator {
 
     public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
 
     private Cryptator() {
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         final int exitCode = doMain(args);
         System.exit(exitCode);
     }
 
-    public static int doMain(String[] args) {
+    public static int doMain(final String[] args) {
         JULogUtil.configureLoggers();
 
         CryptatorOptionsParser optparser = new CryptatorOptionsParser();
@@ -61,7 +61,7 @@ public class Cryptator {
 
     private static class CryptatorOptionsParser extends AbstractOptionsParser<CryptatorConfig> {
 
-        public CryptatorOptionsParser() {
+        CryptatorOptionsParser() {
             super(Cryptator.class, new CryptatorConfig());
         }
 
@@ -78,15 +78,15 @@ public class Cryptator {
         }
     }
 
-    private static final ICryptaSolver buildSolver(CryptatorConfig config) {
+    private static ICryptaSolver buildSolver(final CryptatorConfig config) {
         final CryptaSolver solver = new CryptaSolver(config.useBignum());
         solver.limitSolution(config.getSolutionLimit());
         solver.limitTime(config.getTimeLimit());
         return solver;
     }
 
-    public static ICryptaNode parseCryptarithm(String cryptarithm, CryptaParserWrapper parser, Logger logger)
-            throws CryptaParserException {
+    public static ICryptaNode parseCryptarithm(final String cryptarithm, final CryptaParserWrapper parser,
+            final Logger logger) throws CryptaParserException {
         final ICryptaNode node = parser.parse(cryptarithm);
         logger.log(Level.INFO, "Parse cryptarithm {0} [OK]", cryptarithm);
         if (logger.isLoggable(Level.CONFIG)) {
@@ -98,8 +98,8 @@ public class Cryptator {
 
     }
 
-    private static long solve(String cryptarithm, CryptaParserWrapper parser, ICryptaSolver solver,
-            CryptatorConfig config) {
+    private static long solve(final String cryptarithm, final CryptaParserWrapper parser, final ICryptaSolver solver,
+            final CryptatorConfig config) {
         try {
             final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
 

@@ -43,7 +43,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
     private AtomicInteger errorCount;
 
-    public CryptaListGenerator(WordArray words, CryptagenConfig config, Logger logger) {
+    public CryptaListGenerator(final WordArray words, final CryptagenConfig config, final Logger logger) {
         super();
         this.words = words;
         this.config = config;
@@ -71,12 +71,13 @@ public class CryptaListGenerator implements ICryptaGenerator {
         return gen;
     }
 
-    private Consumer<ICryptaNode> buildConsumer(CryptaGenModel gen, BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
+    private Consumer<ICryptaNode> buildConsumer(final CryptaGenModel gen,
+            final BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
         final Consumer<ICryptaNode> cons = new LogConsumer(gen);
         return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(new AdaptiveSolver(), consumer));
     }
 
-    private void sequentialSolve(CryptaGenModel gen, Consumer<ICryptaNode> cons) {
+    private void sequentialSolve(final CryptaGenModel gen, final Consumer<ICryptaNode> cons) {
         final Solver s = gen.getModel().getSolver();
         int cpt = 1;
         while (s.solve()) {
@@ -106,7 +107,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     }
 
     @Override
-    public void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
+    public void generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
         final CryptaGenModel gen = buildModel();
         logger.log(Level.FINE, "Display model{0}", gen.getModel());
 
@@ -129,13 +130,13 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
         private final Solution solution;
 
-        public LogConsumer(CryptaGenModel gen) {
+        LogConsumer(final CryptaGenModel gen) {
             super();
             solution = new Solution(gen.getModel());
         }
 
         @Override
-        public void accept(ICryptaNode t) {
+        public void accept(final ICryptaNode t) {
             if (logger.isLoggable(Level.CONFIG)) {
                 logger.log(Level.CONFIG, "candidate: {0}", TreeUtils.writeInorder(t));
                 if (logger.isLoggable(Level.FINE)) {
@@ -154,7 +155,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         private ICryptaSolution solution;
 
         @Override
-        public void accept(ICryptaSolution u) {
+        public void accept(final ICryptaSolution u) {
             solutionCount++;
             this.solution = u;
         }
@@ -174,7 +175,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
         private final BiConsumer<ICryptaNode, ICryptaSolution> internal;
 
-        public GenerateConsumer(ICryptaSolver solver, BiConsumer<ICryptaNode, ICryptaSolution> internal) {
+        GenerateConsumer(final ICryptaSolver solver, final BiConsumer<ICryptaNode, ICryptaSolution> internal) {
             super();
             this.solver = solver;
             this.internal = internal;
@@ -182,7 +183,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         }
 
         @Override
-        public void accept(ICryptaNode t) {
+        public void accept(final ICryptaNode t) {
             try {
                 final SolutionCollect collect = new SolutionCollect();
                 solver.solve(t, config, collect);

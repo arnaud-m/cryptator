@@ -25,12 +25,12 @@ import cryptator.specs.ITraversalNodeConsumer;
 
 public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsumer {
 
-    public final Model model;
-    public final CryptaConfig config;
-    public final Map<Character, IntVar> symbolsToVariables;
+    protected final Model model;
+    protected final CryptaConfig config;
+    protected final Map<Character, IntVar> symbolsToVariables;
     protected final Set<Character> firstSymbols;
 
-    protected AbstractModelerNodeConsumer(Model model, CryptaConfig config) {
+    protected AbstractModelerNodeConsumer(final Model model, final CryptaConfig config) {
         super();
         this.model = model;
         this.config = config;
@@ -38,11 +38,11 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         firstSymbols = new HashSet<>();
     }
 
-    private IntVar createSymbolVar(char symbol) {
+    private IntVar createSymbolVar(final char symbol) {
         return model.intVar(String.valueOf(symbol), 0, config.getArithmeticBase() - 1, false);
     }
 
-    protected IntVar getSymbolVar(char symbol) {
+    protected IntVar getSymbolVar(final char symbol) {
         return symbolsToVariables.computeIfAbsent(symbol, this::createSymbolVar);
     }
 
@@ -51,12 +51,12 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         return vars.toArray(new IntVar[vars.size()]);
     }
 
-    private IntVar[] getGCCOccs(int lb, int ub) {
+    private IntVar[] getGCCOccs(final int lb, final int ub) {
         return model.intVarArray("O", config.getArithmeticBase(), lb, ub, false);
     }
 
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         if (node.isWord()) {
             final char[] w = node.getWord();
             if (w.length > 0) {

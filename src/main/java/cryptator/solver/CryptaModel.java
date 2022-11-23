@@ -21,10 +21,10 @@ import cryptator.specs.ICryptaSolution;
 public final class CryptaModel {
 
     /** The model. */
-    public final Model model;
+    private final Model model;
 
     /** The solution. */
-    public final CryptaSolutionVars solution;
+    private final CryptaSolutionVars solution;
 
     /**
      * Instantiates a new model.
@@ -33,7 +33,7 @@ public final class CryptaModel {
      * @param symbolsToVariables the symbols to variables used to instantiate the
      *                           solution
      */
-    public CryptaModel(Model model, Map<Character, IntVar> symbolsToVariables) {
+    public CryptaModel(final Model model, final Map<Character, IntVar> symbolsToVariables) {
         super();
         this.model = model;
         this.solution = new CryptaSolutionVars(symbolsToVariables);

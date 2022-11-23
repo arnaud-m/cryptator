@@ -47,7 +47,7 @@ public final class WordSumTuplesBuilder {
      *
      * @param base the base
      */
-    public WordSumTuplesBuilder(int base) {
+    public WordSumTuplesBuilder(final int base) {
         super();
         setBase(base);
     }
@@ -56,7 +56,7 @@ public final class WordSumTuplesBuilder {
         return base.intValue();
     }
 
-    public void setBase(int base) {
+    public void setBase(final int base) {
         if (base > 1) {
             this.base = BigInteger.valueOf(base);
         } else {
@@ -71,7 +71,7 @@ public final class WordSumTuplesBuilder {
      * @param b the base for the logarithm
      * @return the floor of the logarithm in base b.
      */
-    public static int logFloor(int x, int b) {
+    public static int logFloor(final int x, final int b) {
         return logFloor(BigInteger.valueOf(x), BigInteger.valueOf(b));
     }
 
@@ -82,7 +82,7 @@ public final class WordSumTuplesBuilder {
      * @param b the base for the logarithm
      * @return the floor of the logarithm in base b.
      */
-    public static int logFloor(BigInteger x, int b) {
+    public static int logFloor(final BigInteger x, final int b) {
         return logFloor(x, BigInteger.valueOf(b));
     }
 
@@ -93,7 +93,7 @@ public final class WordSumTuplesBuilder {
      * @param b the base for the logarithm
      * @return the floor of the logarithm in base b.
      */
-    public static int logFloor(BigInteger x, BigInteger b) {
+    public static int logFloor(final BigInteger x, final BigInteger b) {
         BigInteger m = b;
         int v = 0;
         while (x.compareTo(m) >= 0) {
@@ -111,7 +111,7 @@ public final class WordSumTuplesBuilder {
      * @param k the positive exponent
      * @return the exponentiation of x.
      */
-    public static BigInteger exp(BigInteger x, BigInteger b, int k) {
+    public static BigInteger exp(final BigInteger x, final BigInteger b, final int k) {
         return b.pow(k).multiply(x);
     }
 
@@ -123,7 +123,7 @@ public final class WordSumTuplesBuilder {
      * @param k the exponent
      * @return the exponentiation of x.
      */
-    private BigInteger exp(int x, int k) {
+    private BigInteger exp(final int x, final int k) {
         return x == 0 ? BigInteger.ZERO : exp(BigInteger.valueOf(x), base, k);
     }
 
@@ -136,7 +136,7 @@ public final class WordSumTuplesBuilder {
      * @param z the cardinality of numbers with strictly less than k - 1
      * @return the minimal number of digits of the sum
      */
-    public int getMinLen(int k, int x, int y, int z) {
+    public int getMinLen(final int k, final int x, final int y, final int z) {
         final BigInteger v = exp(x, k - 1).add(exp(y, k - 2)).add(BigInteger.valueOf(z));
         // System.out.println(v + " " + Integer.toBinaryString(v.intValue()));
         return logFloor(v, base) + 1;
@@ -151,7 +151,7 @@ public final class WordSumTuplesBuilder {
      * @param z the cardinality of numbers with strictly less than k - 1
      * @return the minimal number of digits of the sum
      */
-    public int getMaxLen(int k, int x, int y, int z) {
+    public int getMaxLen(final int k, final int x, final int y, final int z) {
         final BigInteger xyz = BigInteger.valueOf(x + y + z);
         final BigInteger v = exp(x, k).add(exp(y, k - 1)).add(exp(z, k - 2)).subtract(xyz);
         // System.out.println(v + " " + Integer.toBinaryString(v.intValue()));
@@ -167,7 +167,7 @@ public final class WordSumTuplesBuilder {
      * @param y      the cardinality of numbers with k-1 digits
      * @param z      the cardinality of numbers with strictly less than k - 1
      */
-    private void addTuples(Tuples tuples, int k, int x, int y, int z) {
+    private void addTuples(final Tuples tuples, final int k, final int x, final int y, final int z) {
         final int min = getMinLen(k, x, y, z);
         final int max = getMaxLen(k, x, y, z);
         // System.out.println(k+ " " + x+ " " + y+ " " + z + " " + min+ "-" + max);
@@ -185,7 +185,7 @@ public final class WordSumTuplesBuilder {
      * @param k      the number of digits of the largest number
      * @return the maximum cardinality
      */
-    public static int getMaxZ(int[] values, int k) {
+    public static int getMaxZ(final int[] values, final int k) {
         int maxz = 0;
         for (int i = 0; i < (k - 1); i++) {
             maxz += values[i];
@@ -202,7 +202,7 @@ public final class WordSumTuplesBuilder {
      *               cardinality of numbers with i digits.
      * @param k      the number of digits of the largest number
      */
-    private void addTuples(Tuples tuples, int[] values, int k) {
+    private void addTuples(final Tuples tuples, final int[] values, final int k) {
         final int maxz = getMaxZ(values, k);
         for (int x = 1; x <= values[k]; x++) {
             for (int y = 0; y <= values[k - 1]; y++) {
@@ -220,7 +220,7 @@ public final class WordSumTuplesBuilder {
      *               cardinality of numbers with i digits.
      * @return the tuples <k, x, y, z, l>
      */
-    public Tuples buildTuples(int[] values) {
+    public Tuples buildTuples(final int[] values) {
         final Tuples tuples = new Tuples();
         for (int k = 1; k < values.length; k++) {
             addTuples(tuples, values, k);

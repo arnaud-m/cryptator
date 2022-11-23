@@ -20,7 +20,8 @@ public class CryptaParserException extends CancellationException {
     private final int charPositionInLine;
     private final String msg;
 
-    public CryptaParserException(Object offendingSymbol, int line, int charPositionInLine, String msg) {
+    public CryptaParserException(final Object offendingSymbol, final int line, final int charPositionInLine,
+            final String msg) {
         super(String.format("Line %d:%d %s", line, charPositionInLine, msg));
         this.offendingSymbol = offendingSymbol;
         this.line = line;
@@ -32,7 +33,7 @@ public class CryptaParserException extends CancellationException {
         return cryptarithm;
     }
 
-    public final void setCryptarithm(String cryptarithm) {
+    public final void setCryptarithm(final String cryptarithm) {
         this.cryptarithm = cryptarithm;
     }
 

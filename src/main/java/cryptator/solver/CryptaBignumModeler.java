@@ -33,7 +33,7 @@ public class CryptaBignumModeler implements ICryptaModeler {
      * a variable number of digits.
      */
     @Override
-    public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
+    public CryptaModel model(final ICryptaNode cryptarithm, final CryptaConfig config) throws CryptaModelException {
         final CryptaOperatorDetection detect = TreeUtils.computeUnsupportedBignumOperator(cryptarithm);
         if (detect.hasUnsupportedOperator()) {
             throw new CryptaModelException("Unsupported bignum operator(s): " + detect.getUnsupportedOperators());
@@ -51,11 +51,11 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 
     private final Deque<ArExpression[]> stack = new ArrayDeque<>();
 
-    public ModelerBignumConsumer(Model model, CryptaConfig config) {
+    ModelerBignumConsumer(final Model model, final CryptaConfig config) {
         super(model, config);
     }
 
-    private ArExpression[] makeWordVars(char[] word) {
+    private ArExpression[] makeWordVars(final char[] word) {
         final int n = word.length;
         // little endian
         ArExpression[] vars = new ArExpression[n];
@@ -65,7 +65,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return vars;
     }
 
-    private ArExpression[] makeConstVars(char[] word) {
+    private ArExpression[] makeConstVars(final char[] word) {
         List<ArExpression> vars = new ArrayList<>();
         BigInteger n = new BigInteger(new String(word));
         BigInteger b = BigInteger.valueOf(config.getArithmeticBase());
@@ -78,7 +78,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return vars.toArray(res);
     }
 
-    private ArExpression[] applyADD(ArExpression[] a, ArExpression[] b) {
+    private ArExpression[] applyADD(final ArExpression[] a, final ArExpression[] b) {
         final int m = Math.min(a.length, b.length);
         final int n = Math.max(a.length, b.length);
         final ArExpression[] c = new ArExpression[n];
@@ -95,7 +95,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return c;
     }
 
-    private void applyEQ(ArExpression[] a, ArExpression[] b) {
+    private void applyEQ(final ArExpression[] a, final ArExpression[] b) {
         int n = Math.max(a.length, b.length);
         BignumArExpression a1 = new BignumArExpression(a, n, "l");
         BignumArExpression b1 = new BignumArExpression(b, n, "r");
@@ -105,7 +105,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         a1.carries[n - 1].eq(b1.carries[n - 1]).decompose().post();
     }
 
-    private void apply(CryptaOperator op, ArExpression[] a, ArExpression[] b) {
+    private void apply(final CryptaOperator op, final ArExpression[] a, final ArExpression[] b) {
         switch (op) {
         case ADD: {
             stack.push(applyADD(a, b));
@@ -129,7 +129,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
     }
 
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         super.accept(node, numNode);
         if (node.isInternalNode()) {
             if (!node.getOperator().equals(CryptaOperator.AND)) {
@@ -154,13 +154,13 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         }
     }
 
-    class BignumArExpression {
+    private class BignumArExpression {
 
-        public final IntVar[] digits;
+        private final IntVar[] digits;
 
-        public final IntVar[] carries;
+        private final IntVar[] carries;
 
-        public BignumArExpression(ArExpression[] a, int n, String suffix) {
+        BignumArExpression(final ArExpression[] a, final int n, final String suffix) {
             super();
             digits = model.intVarArray("D" + suffix, n, 0, config.getArithmeticBase() - 1);
             // TODO improve the bound ?
@@ -178,7 +178,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
             }
         }
 
-        private void postScalar(IntVar[] vars, int[] coeffs) {
+        private void postScalar(final IntVar[] vars, final int[] coeffs) {
             model.scalar(vars, coeffs, "=", 0).post();
         }
 

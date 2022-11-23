@@ -573,14 +573,13 @@ public class SolverTest {
     // Test from issue 25
     // 9END+M08E=10NEY is wrong because M is already assigned 1.
     @Test
-    public void testEvaluationIssue_25_1() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+    public void testEvaluation1Issue25() throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "9END+M08E=10NEY;1='1';0='0';9='9';8='8'";
         t.testUNSAT(cryptarithm);
     }
 
     @Test
-    public void testEvaluationIssue_25_1doubleticks()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
+    public void testEvaluation2Issue25() throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "9END+M08E=10NEY;1=\"1\";0=\"0\";9=\"9\";8=\"8\"";
         t.testUNSAT(cryptarithm);
     }
@@ -722,14 +721,14 @@ public class SolverTest {
     // Test from issue 25
     // 9END+M08E=10NEY is wrong because M is already assigned 1.
     @Test
-    public void testEvaluationIssue_25_1symbol()
+    public void testEvaluation3Issue25()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "9END+M08E=10NEY&&1='1'&&0='0'&&9='9'&&8='8'";
         t.testUNSAT(cryptarithm);
     }
 
     @Test
-    public void testEvaluationIssue_25_2() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+    public void testEvaluation4Issue25() throws CryptaParserException, CryptaSolverException, CryptaModelException {
         // TODO : modify this line for issue 39 to accept W = 0
         var cryptarithm = "W='4'";
         t.testUNIQUE(cryptarithm);

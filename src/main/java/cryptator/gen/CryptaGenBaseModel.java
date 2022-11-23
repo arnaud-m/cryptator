@@ -28,7 +28,7 @@ import cryptator.tree.CryptaNode;
 /**
  * Base class for generation model..
  */
-class CryptaGenBaseModel implements ICryptaGenModel {
+public class CryptaGenBaseModel implements ICryptaGenModel {
 
     /** The model. */
     protected final Model model;
@@ -45,7 +45,8 @@ class CryptaGenBaseModel implements ICryptaGenModel {
     /** The maximum length of a present word. */
     protected final IntVar maxLength;
 
-    public CryptaGenBaseModel(Model model, String[] words, String prefix, boolean boundedDomain) {
+    public CryptaGenBaseModel(final Model model, final String[] words, final String prefix,
+            final boolean boundedDomain) {
         super();
         this.model = model;
         this.words = words;
@@ -87,7 +88,7 @@ class CryptaGenBaseModel implements ICryptaGenModel {
      * @param prefix the prefix for the variable names
      * @return the array of boolean variables
      */
-    private static BoolVar[] buildWordVars(Model model, String[] words, String prefix) {
+    private static BoolVar[] buildWordVars(final Model model, final String[] words, final String prefix) {
         final BoolVar[] vars = new BoolVar[words.length];
         for (int i = 0; i < words.length; i++) {
             vars[i] = model.boolVar(prefix + words[i]);
@@ -109,11 +110,11 @@ class CryptaGenBaseModel implements ICryptaGenModel {
         postMaxLengthConstraints();
     }
 
-    public static int getMaxLength(String[] words) {
+    public static int getMaxLength(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
     }
 
-    public static int[] getLengthCounts(String[] words) {
+    public static int[] getLengthCounts(final String[] words) {
         final int n = getMaxLength(words);
         int[] v = new int[n + 1];
         for (String w : words) {
@@ -122,21 +123,21 @@ class CryptaGenBaseModel implements ICryptaGenModel {
         return v;
     }
 
-    public static BoolVar[] toArray(Collection<BoolVar> vars) {
+    public static BoolVar[] toArray(final Collection<BoolVar> vars) {
         return vars.toArray(new BoolVar[vars.size()]);
     }
 
-    public static Stream<String> wordStream(ICryptaGenModel model) {
+    public static Stream<String> wordStream(final ICryptaGenModel model) {
         final BoolVar[] v = model.getWordVars();
         final String[] w = model.getWords();
         return IntStream.range(0, model.getN()).filter(i -> v[i].isInstantiatedTo(1)).mapToObj(i -> w[i]);
     }
 
-    public static String recordString(ICryptaGenModel model, String separator) {
+    public static String recordString(final ICryptaGenModel model, final String separator) {
         return wordStream(model).collect(Collectors.joining(separator));
     }
 
-    public static ICryptaNode recordAddition(ICryptaGenModel model) {
+    public static ICryptaNode recordAddition(final ICryptaGenModel model) {
         BinaryOperator<ICryptaNode> add = (a, b) -> {
             return a == null ? b : new CryptaNode(CryptaOperator.ADD, a, b);
         };

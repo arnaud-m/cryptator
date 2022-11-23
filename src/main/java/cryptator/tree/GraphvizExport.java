@@ -35,16 +35,16 @@ public final class GraphvizExport {
     private GraphvizExport() {
     }
 
-    private static Graph exportToGraphviz(ICryptaNode node, GraphvizNodeConsumer consumer) {
+    private static Graph exportToGraphviz(final ICryptaNode node, final GraphvizNodeConsumer consumer) {
         TreeTraversals.postorderTraversal(node, consumer);
         return consumer.getGraph();
     }
 
-    public static Graph exportToGraphviz(ICryptaNode node) {
+    public static Graph exportToGraphviz(final ICryptaNode node) {
         return exportToGraphviz(node, new GraphvizNodeConsumer());
     }
 
-    public static Graph exportToGraphviz(ICryptaNode node, ICryptaSolution solution) {
+    public static Graph exportToGraphviz(final ICryptaNode node, final ICryptaSolution solution) {
         return exportToGraphviz(node, new GraphvizSolutionNodeConsumer(solution));
     }
 
@@ -58,19 +58,19 @@ public final class GraphvizExport {
             return graph;
         }
 
-        protected final Node makeNode(int numNode) {
+        protected final Node makeNode(final int numNode) {
             return node(String.valueOf(numNode));
         }
 
-        protected final Node withPlainWord(Node n, ICryptaNode node) {
+        protected final Node withPlainWord(final Node n, final ICryptaNode node) {
             return n.with(Label.of(new String(node.getWord())));
         }
 
-        protected final Node withBoxedWord(Node n, ICryptaNode node) {
+        protected final Node withBoxedWord(final Node n, final ICryptaNode node) {
             return withPlainWord(n, node).with(Shape.BOX, Style.DASHED);
         }
 
-        protected Node makeWordNode(ICryptaNode node, int numNode) {
+        protected Node makeWordNode(final ICryptaNode node, final int numNode) {
             final Node n = makeNode(numNode);
             if (node.isInternalNode()) {
                 return withPlainWord(n, node);
@@ -84,7 +84,7 @@ public final class GraphvizExport {
         }
 
         @Override
-        public final void accept(ICryptaNode node, int numNode) {
+        public final void accept(final ICryptaNode node, final int numNode) {
             Node n = makeWordNode(node, numNode);
             if (node.isInternalNode()) {
                 final Node b = stack.pop();
@@ -99,11 +99,11 @@ public final class GraphvizExport {
 
         private final ICryptaSolution solution;
 
-        public GraphvizSolutionNodeConsumer(ICryptaSolution solution) {
+        GraphvizSolutionNodeConsumer(final ICryptaSolution solution) {
             this.solution = solution;
         }
 
-        private final Attributes<ForNode> makeRecords(char[] word) {
+        private Attributes<ForNode> makeRecords(final char[] word) {
             final String[] records = new String[word.length];
             for (int i = 0; i < word.length; i++) {
                 String digit = "?";
@@ -118,12 +118,12 @@ public final class GraphvizExport {
             return Records.of(records);
         }
 
-        protected final Node withRecord(Node n, ICryptaNode node) {
+        protected final Node withRecord(final Node n, final ICryptaNode node) {
             return n.with(makeRecords(node.getWord()));
         }
 
         @Override
-        protected Node makeWordNode(ICryptaNode node, int numNode) {
+        protected Node makeWordNode(final ICryptaNode node, final int numNode) {
             final Node n = makeNode(numNode);
             if (node.isInternalNode()) {
                 return withPlainWord(n, node);

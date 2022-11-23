@@ -21,13 +21,13 @@ import cryptator.CryptaOperator;
 public final class CryptaGameDecision {
 
     /** The symbol. */
-    public final char symbol;
+    private final char symbol;
 
     /** The operator. */
-    public final CryptaOperator operator;
+    private final CryptaOperator operator;
 
     /** The value. */
-    public final int value;
+    private final int value;
 
     /**
      * Instantiates a new game decision.
@@ -36,7 +36,7 @@ public final class CryptaGameDecision {
      * @param operator the operator
      * @param value    the value
      */
-    public CryptaGameDecision(char symbol, CryptaOperator operator, int value) {
+    public CryptaGameDecision(final char symbol, final CryptaOperator operator, final int value) {
         super();
         this.symbol = symbol;
         this.operator = operator;
@@ -86,7 +86,7 @@ public final class CryptaGameDecision {
      * @param decision the decision
      * @return the crypta game decision
      */
-    public static CryptaGameDecision parseDecision(String decision) {
+    public static CryptaGameDecision parseDecision(final String decision) {
         return parseDecision(new Scanner(decision));
     }
 
@@ -96,7 +96,7 @@ public final class CryptaGameDecision {
      * @param s the scanner to be parsed
      * @return the parsed game decision
      */
-    public static CryptaGameDecision parseDecision(Scanner s) {
+    public static CryptaGameDecision parseDecision(final Scanner s) {
         if (s.hasNext()) {
             final String symbol = s.next();
             if ((symbol.length() == 1) && s.hasNext()) {

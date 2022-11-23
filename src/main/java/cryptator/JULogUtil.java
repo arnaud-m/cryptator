@@ -26,7 +26,7 @@ public final class JULogUtil {
     private JULogUtil() {
     }
 
-    public static void readResourceConfigurationLoggers(String resourcePath) {
+    public static void readResourceConfigurationLoggers(final String resourcePath) {
         final InputStream stream = Cryptator.class.getClassLoader().getResourceAsStream(resourcePath);
         try {
             LogManager.getLogManager().readConfiguration(stream);
@@ -52,13 +52,13 @@ public final class JULogUtil {
                 CryptaGameEngine.LOGGER);
     }
 
-    public static final void setLevel(Level level, Logger... loggers) {
+    public static void setLevel(final Level level, final Logger... loggers) {
         for (Logger logger : loggers) {
             logger.setLevel(level);
         }
     }
 
-    public static void flushLogs(Logger logger) {
+    public static void flushLogs(final Logger logger) {
         logger.log(Level.FINE, "Flush logger {0}", logger.getName());
         for (Handler handler : logger.getHandlers()) {
             handler.flush();

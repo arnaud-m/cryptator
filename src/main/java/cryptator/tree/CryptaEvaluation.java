@@ -21,7 +21,7 @@ import cryptator.specs.ITraversalNodeConsumer;
 public class CryptaEvaluation implements ICryptaEvaluation {
 
     @Override
-    public BigInteger evaluate(ICryptaNode cryptarithm, ICryptaSolution solution, int base)
+    public BigInteger evaluate(final ICryptaNode cryptarithm, final ICryptaSolution solution, final int base)
             throws CryptaEvaluationException {
         final EvaluationConsumer evaluationNodeConsumer = new EvaluationConsumer(solution, base);
         TreeTraversals.postorderTraversal(cryptarithm, evaluationNodeConsumer);
@@ -38,13 +38,13 @@ public class CryptaEvaluation implements ICryptaEvaluation {
 
         private CryptaEvaluationException exception;
 
-        public EvaluationConsumer(ICryptaSolution solution, int base) {
+        EvaluationConsumer(final ICryptaSolution solution, final int base) {
             super();
             this.solution = solution;
             this.base = base;
         }
 
-        private BigInteger getWordValue(ICryptaNode node) throws CryptaEvaluationException {
+        private BigInteger getWordValue(final ICryptaNode node) throws CryptaEvaluationException {
             try {
                 BigInteger v = BigInteger.ZERO;
                 final BigInteger b = BigInteger.valueOf(base);
@@ -62,12 +62,12 @@ public class CryptaEvaluation implements ICryptaEvaluation {
             }
         }
 
-        private BigInteger getConstValue(ICryptaNode node) {
+        private BigInteger getConstValue(final ICryptaNode node) {
             return new BigInteger(new String(node.getWord()));
         }
 
         @Override
-        public void accept(ICryptaNode node, int numNode) {
+        public void accept(final ICryptaNode node, final int numNode) {
             // Check for the exception because it cannot be thrown here.
             if (exception == null) {
                 if (node.isInternalNode()) {

@@ -15,8 +15,7 @@ import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 
 /**
- * The Class TransformWord provides helper static functions that wrap calls to
- * the icu and java.string libraries
+ * TransformWord gives access to the icu and java.string libraries.
  */
 public final class TransformWord {
 
@@ -35,7 +34,7 @@ public final class TransformWord {
      * @param value  the integer value
      * @return the integer converted to words
      */
-    public static String translate(String ctryCd, String lang, int value) {
+    public static String translate(final String ctryCd, final String lang, final int value) {
         final Locale locale = new Locale(lang, ctryCd);
         final RuleBasedNumberFormat rule = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.SPELLOUT);
         return rule.format(value);
@@ -50,7 +49,7 @@ public final class TransformWord {
      * @param value  the integer value
      * @return the integer converted to normalized words
      */
-    public static String translateAndNormalize(String ctryCd, String lang, int value) {
+    public static String translateAndNormalize(final String ctryCd, final String lang, final int value) {
         final String translated = translate(ctryCd, lang, value);
         return toLowerCase(removeWhitespaces(removeDashes(stripAccents(translated))));
     }
@@ -61,7 +60,7 @@ public final class TransformWord {
      * @param input the input
      * @return the input without accent
      */
-    public static String stripAccents(String input) {
+    public static String stripAccents(final String input) {
         final String normalized = Normalizer2.getNFDInstance().normalize(input);
         return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
@@ -72,7 +71,7 @@ public final class TransformWord {
      * @param input the input
      * @return the string without whitespaces
      */
-    public static String removeWhitespaces(String input) {
+    public static String removeWhitespaces(final String input) {
         return input.replaceAll("\\s+", "");
     }
 
@@ -82,7 +81,7 @@ public final class TransformWord {
      * @param input the input
      * @return the input without dashes
      */
-    public static String removeDashes(String input) {
+    public static String removeDashes(final String input) {
         return input.replace("-", "");
     }
 
@@ -92,7 +91,7 @@ public final class TransformWord {
      * @param input the input
      * @return the input converted to lower case
      */
-    public static String toLowerCase(String input) {
+    public static String toLowerCase(final String input) {
         return UCharacter.toLowerCase(input);
     }
 
@@ -102,7 +101,7 @@ public final class TransformWord {
      * @param input the input
      * @return the input converted to upper case
      */
-    public static String toUpperCase(String input) {
+    public static String toUpperCase(final String input) {
         return UCharacter.toUpperCase(input);
     }
 }

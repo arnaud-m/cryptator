@@ -19,11 +19,11 @@ import cryptator.config.CryptaConfig;
 
 public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
-    protected final Class<?> mainClass;
+    private final Class<?> mainClass;
 
     protected final E config;
 
-    protected AbstractOptionsParser(Class<?> mainClass, E config) {
+    protected AbstractOptionsParser(final Class<?> mainClass, final E config) {
         super();
         this.mainClass = mainClass;
         this.config = config;
@@ -60,7 +60,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         return config;
     }
 
-    public final boolean parseOptions(String[] args) {
+    public final boolean parseOptions(final String[] args) {
         final CmdLineParser parser = new CmdLineParser(config);
         try {
             // parse the arguments.

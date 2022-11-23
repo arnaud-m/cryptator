@@ -19,13 +19,13 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.TreeUtils;
 
-public class CryptaJson {
+public final class CryptaJson {
 
     private CryptaJson() {
         super();
     }
 
-    public static SolveOutput solve(SolveInput input) throws CryptaModelException, CryptaSolverException {
+    public static SolveOutput solve(final SolveInput input) throws CryptaModelException, CryptaSolverException {
         final CryptaParserWrapper parser = new CryptaParserWrapper();
         final ICryptaNode node = parser.parse(input.getCryptarithm());
         final CryptatorConfig config = input.getConfig();

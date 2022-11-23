@@ -12,11 +12,11 @@ public class CryptaEvaluationException extends Exception {
 
     private static final long serialVersionUID = 3504706627293932594L;
 
-    public CryptaEvaluationException(String message, Throwable cause) {
+    public CryptaEvaluationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public CryptaEvaluationException(String message) {
+    public CryptaEvaluationException(final String message) {
         super(message);
     }
 

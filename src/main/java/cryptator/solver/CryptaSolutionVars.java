@@ -17,18 +17,18 @@ import cryptator.specs.ICryptaSolution;
 
 public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
 
-    public CryptaSolutionVars(Map<Character, IntVar> symbolsToDigits) {
+    public CryptaSolutionVars(final Map<Character, IntVar> symbolsToDigits) {
         super(symbolsToDigits);
     }
 
     @Override
-    public boolean hasDigit(char symbol) {
+    public boolean hasDigit(final char symbol) {
         final IntVar v = symbolsToDigits.get(symbol);
         return (v != null) && v.isInstantiated();
     }
 
     @Override
-    public int getDigit(char symbol) throws CryptaSolutionException {
+    public int getDigit(final char symbol) throws CryptaSolutionException {
         final IntVar v = symbolsToDigits.get(symbol);
         if ((v != null) && v.isInstantiated()) {
             return v.getValue();
@@ -38,7 +38,7 @@ public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
     }
 
     @Override
-    public int getDigit(char symbol, int defaultValue) {
+    public int getDigit(final char symbol, final int defaultValue) {
         final IntVar v = symbolsToDigits.get(symbol);
         if ((v != null) && v.isInstantiated()) {
             return v.getValue();
@@ -48,7 +48,7 @@ public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
     }
 
     @Override
-    protected final String getDomain(IntVar v) {
+    protected final String getDomain(final IntVar v) {
         return v.toString().replaceFirst(".*=\\s*", "");
     }
 

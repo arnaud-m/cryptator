@@ -36,11 +36,11 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
         super();
     }
 
-    public SolveOutput(SolveInput input) {
+    public SolveOutput(final SolveInput input) {
         this(input.getCryptarithm(), input.getConfig().getArithmeticBase());
     }
 
-    public SolveOutput(String cryptarithm, int base) {
+    public SolveOutput(final String cryptarithm, final int base) {
         super();
         this.cryptarithm = cryptarithm;
         this.base = base;
@@ -50,7 +50,7 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
         return cryptarithm;
     }
 
-    public void setCryptarithm(String cryptarithm) {
+    public void setCryptarithm(final String cryptarithm) {
         this.cryptarithm = cryptarithm;
     }
 
@@ -58,7 +58,7 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
         return base;
     }
 
-    public void setBase(int base) {
+    public void setBase(final int base) {
         this.base = base;
     }
 
@@ -66,7 +66,7 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
         return symbols;
     }
 
-    public void setSymbols(char[] symbols) {
+    public void setSymbols(final char[] symbols) {
         this.symbols = symbols;
     }
 
@@ -74,7 +74,7 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
         return solutions;
     }
 
-    public void setSolutions(List<int[]> solutions) {
+    public void setSolutions(final List<int[]> solutions) {
         this.solutions = solutions;
     }
 
@@ -82,12 +82,12 @@ public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolutio
         return invalidSolution;
     }
 
-    public void setInvalidSolution(int invalidSolution) {
+    public void setInvalidSolution(final int invalidSolution) {
         this.invalidSolution = invalidSolution;
     }
 
     @Override
-    public void accept(ICryptaNode n, ICryptaSolution s) {
+    public void accept(final ICryptaNode n, final ICryptaSolution s) {
         final ICryptaEvaluation eval = new CryptaEvaluation();
         try {
             if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) == 0) {

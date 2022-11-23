@@ -19,7 +19,7 @@ public class CryptaMemberCard extends CryptaMemberLen {
 
     protected final IntVar[] cardLengths;
 
-    public CryptaMemberCard(Model m, String[] words, String prefix) {
+    public CryptaMemberCard(final Model m, final String[] words, final String prefix) {
         super(m, words, prefix);
         cardLengths = m.intVarArray(prefix + "cardLen", getMaxLength(words) + 1, 0, words.length);
     }
@@ -42,7 +42,7 @@ public class CryptaMemberCard extends CryptaMemberLen {
     }
 
     @Override
-    public void postLentghSumConstraints(IntVar sumLength, int base) {
+    public void postLentghSumConstraints(final IntVar sumLength, final int base) {
 
         int[] maxCardLengths = getLengthCounts(words);
         final int maxCard = IntStream.of(maxCardLengths).max().orElse(0);

@@ -25,7 +25,7 @@ import cryptator.tree.TreeTraversals;
 public class CryptaModeler implements ICryptaModeler {
 
     @Override
-    public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
+    public CryptaModel model(final ICryptaNode cryptarithm, final CryptaConfig config) throws CryptaModelException {
         final Model model = new Model("Cryptarithm");
         final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
         TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
@@ -41,21 +41,21 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
     private final Function<char[], IntVar> wordVarBuilder;
 
-    public ModelerConsumer(Model model, CryptaConfig config) {
+    ModelerConsumer(final Model model, final CryptaConfig config) {
         super(model, config);
         wordVarBuilder = config.getHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
     }
 
-    private IntVar makeWordVar(ICryptaNode node) {
+    private IntVar makeWordVar(final ICryptaNode node) {
         return wordVarBuilder.apply(node.getWord());
     }
 
-    private IntVar makeWordConst(ICryptaNode node) {
+    private IntVar makeWordConst(final ICryptaNode node) {
         return model.intVar(Integer.parseInt(new String(node.getWord())));
     }
 
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         super.accept(node, numNode);
         if (node.isInternalNode()) {
             final ArExpression b = stack.pop();
@@ -85,7 +85,7 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
     private final class ExponentiationVarBuilder implements Function<char[], IntVar> {
 
         @Override
-        public IntVar apply(char[] word) {
+        public IntVar apply(final char[] word) {
             if (word.length == 0) {
                 return model.intVar(0);
             }
@@ -105,7 +105,7 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
             return wvar;
         }
 
-        private IntVar createWordVar(char[] word) {
+        private IntVar createWordVar(final char[] word) {
             return model.intVar(new String(word), 0, (int) Math.pow(config.getArithmeticBase(), word.length) - 1);
         }
 
@@ -114,7 +114,7 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
     private final class HornerVarBuilder implements Function<char[], IntVar> {
 
         @Override
-        public IntVar apply(char[] word) {
+        public IntVar apply(final char[] word) {
             if (word.length == 0) {
                 return model.intVar(0);
             }

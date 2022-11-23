@@ -34,15 +34,15 @@ public class CryptatorConfig extends CryptaCmdConfig {
         return useBigNum;
     }
 
-    public final void setSolutionLimit(int solutionLimit) {
+    public final void setSolutionLimit(final int solutionLimit) {
         this.solutionLimit = solutionLimit;
     }
 
-    public final void setTimeLimit(int timeLimit) {
+    public final void setTimeLimit(final int timeLimit) {
         this.timeLimit = timeLimit;
     }
 
-    public final void setUseBigNum(boolean useBigNum) {
+    public final void setUseBigNum(final boolean useBigNum) {
         this.useBigNum = useBigNum;
     }
 

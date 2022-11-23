@@ -37,7 +37,7 @@ public class WordsListModel extends CryptaGenBaseModel {
      * @param model the model to use
      * @param words the words list
      */
-    public WordsListModel(Model model, String[] words) {
+    public WordsListModel(final Model model, final String[] words) {
         super(model, words, "", false);
         symbolsToVariables = buildSymbolVars(model, words);
         symbolCount = model.intVar("symbCount", 0, symbolsToVariables.size());
@@ -66,7 +66,7 @@ public class WordsListModel extends CryptaGenBaseModel {
      * @param words the words list
      * @return the map that associates variables to symbols.
      */
-    private static Map<Character, BoolVar> buildSymbolVars(Model model, String[] words) {
+    private static Map<Character, BoolVar> buildSymbolVars(final Model model, final String[] words) {
         final Map<Character, BoolVar> symbolsToVariables = new HashMap<>();
         for (String word : words) {
             for (char c : word.toCharArray()) {
@@ -111,7 +111,7 @@ public class WordsListModel extends CryptaGenBaseModel {
      *
      * @param max the maximum number of symbols
      */
-    public void postMaxSymbolCountConstraint(int max) {
+    public void postMaxSymbolCountConstraint(final int max) {
         symbolCount.le(max).post();
     }
 
@@ -120,7 +120,7 @@ public class WordsListModel extends CryptaGenBaseModel {
      *
      * @param max the maximum number of words
      */
-    public void postMaxWordCountConstraint(int max) {
+    public void postMaxWordCountConstraint(final int max) {
         wordCount.le(max).post();
     }
 

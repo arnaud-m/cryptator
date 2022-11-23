@@ -25,13 +25,13 @@ import cryptator.solver.CryptaModeler;
 import cryptator.specs.ICryptaGameEngine;
 import cryptator.specs.ICryptaNode;
 
-public class Cryptamancer {
+public final class Cryptamancer {
 
     public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
 
-    static class CryptamancerOptionsParser extends AbstractOptionsParser<CryptamancerConfig> {
+    private static class CryptamancerOptionsParser extends AbstractOptionsParser<CryptamancerConfig> {
 
-        public CryptamancerOptionsParser() {
+        protected CryptamancerOptionsParser() {
             super(Cryptamancer.class, new CryptamancerConfig());
         }
 
@@ -53,7 +53,11 @@ public class Cryptamancer {
         }
     }
 
-    public static ICryptaNode parseCryptarithm(CryptamancerConfig config) {
+    private Cryptamancer() {
+        super();
+    }
+
+    public static ICryptaNode parseCryptarithm(final CryptamancerConfig config) {
         final String cryptarithm = config.getArguments().get(0);
         try {
             return Cryptator.parseCryptarithm(cryptarithm, new CryptaParserWrapper(), LOGGER);
@@ -63,7 +67,7 @@ public class Cryptamancer {
         }
     }
 
-    public static ICryptaGameEngine buildEngine(ICryptaNode node, CryptaConfig config) {
+    public static ICryptaGameEngine buildEngine(final ICryptaNode node, final CryptaConfig config) {
         final CryptaModeler modeler = new CryptaModeler();
         try {
             final CryptaGameEngine engine = new CryptaGameEngine();
@@ -75,7 +79,7 @@ public class Cryptamancer {
         }
     }
 
-    private static void play(ICryptaGameEngine engine) {
+    private static void play(final ICryptaGameEngine engine) {
         final Scanner scanner = new Scanner(System.in);
         int n = 1;
         while ((!engine.isSolved())) {
@@ -100,7 +104,7 @@ public class Cryptamancer {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         JULogUtil.configureLoggers();
 
         CryptamancerOptionsParser optparser = new CryptamancerOptionsParser();

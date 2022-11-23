@@ -113,7 +113,7 @@ To configure eclipse, open the preferences and follow the instructions.
   - Unecessary code : check 'Avoid double negation' and 'Remove redundant modifiers'
 - Java -> Editor -> Save Action: check 'Perform the selected actions on save' and 'Format source code'
 - Checkstyle: new style Sun Checks [modified]'
-  - SizeViolations -> LineLength : set max to 100
+  - SizeViolations -> LineLength : set max to 120
   - Workaround for potential error message: 'Checkstyle execution failed due to an internal error. Please check error log for details'
      - Remove BOTH modules "SuppressionXpathFilter" and "SuppressionFilter" from the configuration
 

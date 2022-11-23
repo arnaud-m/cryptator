@@ -12,11 +12,11 @@ public class CryptaGameException extends Exception {
 
     private static final long serialVersionUID = -2484196043007677114L;
 
-    public CryptaGameException(String message) {
+    public CryptaGameException(final String message) {
         super(message);
     }
 
-    public CryptaGameException(String message, Throwable cause) {
+    public CryptaGameException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

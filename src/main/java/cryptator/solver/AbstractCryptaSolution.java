@@ -19,7 +19,7 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 
     protected final Map<Character, E> symbolsToDigits;
 
-    protected AbstractCryptaSolution(Map<Character, E> symbolsToDigits) {
+    protected AbstractCryptaSolution(final Map<Character, E> symbolsToDigits) {
         super();
         // TODO Copy the map so that it is immutable ?
         this.symbolsToDigits = symbolsToDigits;
@@ -30,24 +30,24 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
         return symbolsToDigits.size();
     }
 
-    public E getVar(char symbol) {
+    public E getVar(final char symbol) {
         return symbolsToDigits.get(symbol);
     }
 
     protected abstract String getDomain(E variable);
 
     @Override
-    public final boolean hasDomain(char symbol) {
+    public final boolean hasDomain(final char symbol) {
         return symbolsToDigits.containsKey(symbol);
     }
 
     @Override
-    public final String getDomain(char symbol) {
+    public final String getDomain(final char symbol) {
         final E v = symbolsToDigits.get(symbol);
         return v == null ? "?" : getDomain(v);
     }
 
-    public void forEach(BiConsumer<? super Character, ? super E> action) {
+    public void forEach(final BiConsumer<? super Character, ? super E> action) {
         symbolsToDigits.forEach(action);
     }
 

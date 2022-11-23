@@ -12,7 +12,7 @@ public class CryptaSolutionException extends Exception {
 
     private static final long serialVersionUID = -2484196043007677114L;
 
-    public CryptaSolutionException(String message) {
+    public CryptaSolutionException(final String message) {
         super(message);
     }
 

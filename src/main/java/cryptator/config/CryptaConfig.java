@@ -8,6 +8,7 @@
  */
 package cryptator.config;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,7 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 public class CryptaConfig {
 
     @Option(name = "-b", usage = "Base (or radix) of the positional numeral system used for the cryptarithm (> 1)")
-    private int arithmeticBase = 10;
+    private int arithmeticBase = BigInteger.TEN.intValue();
 
     @Option(name = "-z", handler = ExplicitBooleanOptionHandler.class, usage = "allow leading zeros in the cryptarithm solution")
     private boolean allowLeadingZeros;
@@ -38,7 +39,7 @@ public class CryptaConfig {
     private int relaxMaxDigitOccurence = 0;
 
     /**
-     * Receives other command line parameters than options
+     * Receives other command line parameters than options.
      */
     @Argument
     private List<String> arguments = new ArrayList<>();
@@ -47,7 +48,7 @@ public class CryptaConfig {
         return allowLeadingZeros;
     }
 
-    public final void setAllowLeadingZeros(boolean allowLeadingZeros) {
+    public final void setAllowLeadingZeros(final boolean allowLeadingZeros) {
         this.allowLeadingZeros = allowLeadingZeros;
     }
 
@@ -55,7 +56,7 @@ public class CryptaConfig {
         return arithmeticBase;
     }
 
-    public final void setArithmeticBase(int arithmeticBase) {
+    public final void setArithmeticBase(final int arithmeticBase) {
         this.arithmeticBase = arithmeticBase;
     }
 
@@ -63,7 +64,7 @@ public class CryptaConfig {
         return hornerScheme;
     }
 
-    public final void setHornerScheme(boolean useHornerScheme) {
+    public final void setHornerScheme(final boolean useHornerScheme) {
         this.hornerScheme = useHornerScheme;
     }
 
@@ -71,7 +72,7 @@ public class CryptaConfig {
         return relaxMinDigitOccurence;
     }
 
-    public final void setRelaxMinDigitOccurence(int relaxMinDigitOccurence) {
+    public final void setRelaxMinDigitOccurence(final int relaxMinDigitOccurence) {
         this.relaxMinDigitOccurence = relaxMinDigitOccurence;
     }
 
@@ -79,11 +80,11 @@ public class CryptaConfig {
         return relaxMaxDigitOccurence;
     }
 
-    public final void setRelaxMaxDigitOccurence(int relaxMaxDigitOccurence) {
+    public final void setRelaxMaxDigitOccurence(final int relaxMaxDigitOccurence) {
         this.relaxMaxDigitOccurence = relaxMaxDigitOccurence;
     }
 
-    public final int getMinDigitOccurence(int n) {
+    public final int getMinDigitOccurence(final int n) {
         int minOcc = n / getArithmeticBase();
         final int deltaMin = getRelaxMinDigitOccurence();
         if (deltaMin > 0) {
@@ -92,7 +93,7 @@ public class CryptaConfig {
         return minOcc;
     }
 
-    public final int getMaxDigitOccurence(int n) {
+    public final int getMaxDigitOccurence(final int n) {
         int maxOcc = ((n + getArithmeticBase()) - 1) / getArithmeticBase();
         final int deltaMax = getRelaxMaxDigitOccurence();
         if (deltaMax > 0) {
