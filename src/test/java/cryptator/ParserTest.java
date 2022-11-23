@@ -8,17 +8,20 @@
  */
 package cryptator;
 
+import static cryptator.TreeTest.testInorder;
+import static cryptator.TreeTest.testPostorder;
+import static cryptator.TreeTest.testPreorder;
+
+import org.junit.Test;
+
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
-import org.junit.Test;
-
-import static cryptator.TreeTest.*;
 
 public class ParserTest {
 
     public final CryptaParserWrapper parser = new CryptaParserWrapper();
-	public static final String ZERO = "'0'";
+    public static final String ZERO = "'0'";
 
     public ParserTest() {
     }
@@ -135,9 +138,12 @@ public class ParserTest {
     public void testParserAND2() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=	money; -send -more= \n -money");
 
-        testPreorder("&& = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ", node);
-        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = && ", node);
-        testInorder("send + more = money && " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ", node);
+        testPreorder("&& = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ",
+                node);
+        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = && ",
+                node);
+        testInorder("send + more = money && " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ",
+                node);
 
     }
 
@@ -253,9 +259,12 @@ public class ParserTest {
     public void testParserAND2symbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=	money&& -send -more= \n -money");
 
-        testPreorder("&& = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ", node);
-        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = && ", node);
-        testInorder("send + more = money && " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ", node);
+        testPreorder("&& = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ",
+                node);
+        testPostorder("send more + money = " + ParserTest.ZERO + " send - more - " + ParserTest.ZERO + " money - = && ",
+                node);
+        testInorder("send + more = money && " + ParserTest.ZERO + " - send - more = " + ParserTest.ZERO + " - money ",
+                node);
 
     }
 

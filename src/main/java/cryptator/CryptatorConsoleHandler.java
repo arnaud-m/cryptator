@@ -15,20 +15,20 @@ import java.util.logging.StreamHandler;
 
 public class CryptatorConsoleHandler extends StreamHandler {
 
-	    public CryptatorConsoleHandler() {
-	        setOutputStream(System.out);
-	        setLevel(Level.ALL); // Handlers should not filter, loggers should
-	        setFormatter(new SimpleFormatter());
-	    }
+    public CryptatorConsoleHandler() {
+        setOutputStream(System.out);
+        setLevel(Level.ALL); // Handlers should not filter, loggers should
+        setFormatter(new SimpleFormatter());
+    }
 
-	    @Override
-	    public synchronized void publish(LogRecord logRecord) {
-	        super.publish(logRecord);
-	        flush();
-	    }
+    @Override
+    public synchronized void publish(LogRecord logRecord) {
+        super.publish(logRecord);
+        flush();
+    }
 
-	    @Override
-	    public synchronized void close() {
-	        flush();
-	    }
-	}
+    @Override
+    public synchronized void close() {
+        flush();
+    }
+}

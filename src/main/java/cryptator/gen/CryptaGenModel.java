@@ -20,93 +20,90 @@ import cryptator.tree.CryptaNode;
 
 public class CryptaGenModel extends WordsListModel {
 
-	private final CryptaMemberLen left;
+    private final CryptaMemberLen left;
 
-	private final ICryptaGenModel right;
+    private final ICryptaGenModel right;
 
-	public CryptaGenModel(String[] words, boolean lenOrCardModel) {
-		super(new Model("Generate"), words);		
-		left = lenOrCardModel ? new CryptaMemberLen(model, words, "L_") : new CryptaMemberCard(model, words, "L_");
-		right = new CryptaMemberElt(model, words, "R_");
-		this.buildModel();
-	}
+    public CryptaGenModel(String[] words, boolean lenOrCardModel) {
+        super(new Model("Generate"), words);
+        left = lenOrCardModel ? new CryptaMemberLen(model, words, "L_") : new CryptaMemberCard(model, words, "L_");
+        right = new CryptaMemberElt(model, words, "R_");
+        this.buildModel();
+    }
 
+    @Override
+    public void buildModel() {
+        super.buildModel();
+        left.buildModel();
+        right.buildModel();
+        postLeftOrRightConstraints();
+        postSymBreakLengthLenConstraint();
+    }
 
-	@Override
-	public void buildModel() {
-		super.buildModel();
-		left.buildModel();
-		right.buildModel();
-		postLeftOrRightConstraints();
-		postSymBreakLengthLenConstraint();
-	}
+    @Override
+    protected void postMaxLengthConstraints() {
+        model.max(maxLength, left.getMaxLength(), right.getMaxLength()).post();
+    }
 
-	
-	@Override
-	protected void postMaxLengthConstraints() {
-		model.max(maxLength, left.getMaxLength(), right.getMaxLength()).post();
-	}
+    private void postLeftOrRightConstraints() {
+        final BoolVar[] l = left.getWordVars();
+        final BoolVar[] r = right.getWordVars();
+        for (int i = 0; i < vwords.length; i++) {
+            l[i].add(r[i]).eq(vwords[i]).post();
+        }
+    }
 
+    private void postSymBreakLengthLenConstraint() {
+        left.getMaxLength().le(right.getMaxLength());
 
-	private void postLeftOrRightConstraints() {
-		final BoolVar[] l = left.getWordVars();
-		final BoolVar[] r = right.getWordVars();
-		for (int i = 0; i < vwords.length; i++) {
-			l[i].add(r[i]).eq(vwords[i]).post();
-		}
-	}
+    }
 
+    public void postLeftCountConstraints(int min, int max) {
+        min = Math.max(min, 2);
+        left.getWordCount().ge(min).post();
+        if (max >= min) {
+            left.getWordCount().le(max).post();
+        }
 
-	private void postSymBreakLengthLenConstraint() {
-		left.getMaxLength().le(right.getMaxLength());
+    }
 
-	}
+    public void postMinLeftCountConstraints(int base) {
+        left.postLentghSumConstraints(right.getMaxLength(), base);
+    }
 
-	public void postLeftCountConstraints(int min, int max) {
-		min = Math.max(min, 2);
-		left.getWordCount().ge(min).post();
-		if(max >= min) left.getWordCount().le(max).post();
+    public void postFixedRightMemberConstraint() {
+        final BoolVar[] vars = right.getWordVars();
+        vars[vars.length - 1].eq(1).post();
+    }
 
-	}
+    public void postDoublyTrueConstraint(int lb) {
+        final int n = getN();
+        final IntVar sum = model.intVar("SUM", lb, n - 1);
 
-	public void postMinLeftCountConstraints(int base) {
-		left.postLentghSumConstraints(right.getMaxLength(), base);
-	}
+        final IntVar[] lvars = new IntVar[n + 1];
+        System.arraycopy(left.getWordVars(), 0, lvars, 0, n);
+        lvars[n] = sum;
 
-	public void postFixedRightMemberConstraint() {
-		final BoolVar[] vars = right.getWordVars();
-		vars[vars.length - 1].eq(1).post();
-	}
+        final IntVar[] rvars = new IntVar[n + 1];
+        System.arraycopy(right.getWordVars(), 0, rvars, 0, n);
+        rvars[n] = sum;
 
-	public void postDoublyTrueConstraint(int lb) {
-		final int n = getN();
-		final IntVar sum = model.intVar("SUM", lb, n - 1);
+        final int[] coeffs = ArrayUtils.array(0, n);
+        coeffs[n] = -1;
 
-		final IntVar[] lvars = new IntVar[n+1];
-		System.arraycopy(left.getWordVars(), 0, lvars, 0, n);
-		lvars[n] = sum; 
+        model.scalar(lvars, coeffs, "=", 0).post();
+        model.scalar(rvars, coeffs, "=", 0).post();
+    }
 
-		final IntVar[] rvars = new IntVar[n+1];
-		System.arraycopy(right.getWordVars(), 0, rvars, 0, n);
-		rvars[n] = sum; 
+    public final ICryptaNode recordCryptarithm() {
+        final ICryptaNode l = recordAddition(left);
+        final ICryptaNode r = recordAddition(right);
+        return (r == null) || (l == null) ? null : new CryptaNode(CryptaOperator.EQ, l, r);
+    }
 
-		final int[] coeffs = ArrayUtils.array(0, n);
-		coeffs[n] = -1;
-
-		model.scalar(lvars, coeffs, "=", 0).post();
-		model.scalar(rvars, coeffs, "=", 0).post();
-	}
-
-	public final ICryptaNode recordCryptarithm() {	
-		final ICryptaNode l = recordAddition(left);
-		final ICryptaNode r = recordAddition(right);
-		return r == null || l == null ? null : new CryptaNode(CryptaOperator.EQ, l, r);
-	}
-
-
-	@Override
-	public String toString() {
-		return left.toString() + " = " + right.toString();
-	}
+    @Override
+    public String toString() {
+        return left.toString() + " = " + right.toString();
+    }
 
 }

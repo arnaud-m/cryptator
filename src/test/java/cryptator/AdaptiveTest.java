@@ -20,61 +20,58 @@ import cryptator.solver.CryptaSolverException;
 
 public class AdaptiveTest {
 
-	public final CryptaSolvingTester t = new CryptaSolvingTester(new AdaptiveSolver());
-	
-	public AdaptiveTest() {}
+    public final CryptaSolvingTester t = new CryptaSolvingTester(new AdaptiveSolver());
 
-	@BeforeClass
-	public static void configureTestLoggers() {
-		JULogUtil.configureTestLoggers();
-	}
-	
+    public AdaptiveTest() {
+    }
 
-	@Test
-	public void testThreshold() {
-		assertEquals(25, AdaptiveSolver.computeThreshold(2));
-		assertEquals(9, AdaptiveSolver.computeThreshold(8));
-		assertEquals(8, AdaptiveSolver.computeThreshold(10));
-		assertEquals(7, AdaptiveSolver.computeThreshold(16));
-		
-	}
-	
-	
-	
-	@Test
-	public void testAdaptive1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.testUNIQUE("ARISTOCRATIC + PRESCRIPTION + PROSOPOPOEIA + PROTECTORATE = TRANSOCEANIC");
-	}
-	
-	@Test
-	public void testAdaptive2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.testUNIQUE("NARRAGANSETT + NONOGENARIAN + OSTEOPOROSIS + PROPORTIONATE + TRANSPOSITION = RETROGRESSION");
-	}
+    @BeforeClass
+    public static void configureTestLoggers() {
+        JULogUtil.configureTestLoggers();
+    }
 
-	@Test
-	public void testAdaptive3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.testUNIQUE("PERSPIRATION + POSTPROCESSOR + PRACTITIONER + PROSCRIPTION + PROSOPOPOEIA" + 
-				" + RECONNAISSANCE + TRANSOCEANIC + TRANSPOSITION = CONCESSIONAIRE");
-	}
-	
-	@Test
-	public void testAdaptive4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.testUNIQUE("SEND+MORE=MONEY");
-	}
-	
-	@Test
-	public void testAdaptive5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.config.setArithmeticBase(2);
-		t.testUNIQUE("aaaaa + ab = abbbba");
-		t.config.setArithmeticBase(10);
-	}
-	
-	@Test
-	public void testAdaptive6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		t.config.setArithmeticBase(2);
-		t.testUNIQUE("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa + a = abbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-		t.config.setArithmeticBase(10);
-	}
-	
-	
+    @Test
+    public void testThreshold() {
+        assertEquals(25, AdaptiveSolver.computeThreshold(2));
+        assertEquals(9, AdaptiveSolver.computeThreshold(8));
+        assertEquals(8, AdaptiveSolver.computeThreshold(10));
+        assertEquals(7, AdaptiveSolver.computeThreshold(16));
+
+    }
+
+    @Test
+    public void testAdaptive1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("ARISTOCRATIC + PRESCRIPTION + PROSOPOPOEIA + PROTECTORATE = TRANSOCEANIC");
+    }
+
+    @Test
+    public void testAdaptive2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("NARRAGANSETT + NONOGENARIAN + OSTEOPOROSIS + PROPORTIONATE + TRANSPOSITION = RETROGRESSION");
+    }
+
+    @Test
+    public void testAdaptive3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("PERSPIRATION + POSTPROCESSOR + PRACTITIONER + PROSCRIPTION + PROSOPOPOEIA"
+                + " + RECONNAISSANCE + TRANSOCEANIC + TRANSPOSITION = CONCESSIONAIRE");
+    }
+
+    @Test
+    public void testAdaptive4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("SEND+MORE=MONEY");
+    }
+
+    @Test
+    public void testAdaptive5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(2);
+        t.testUNIQUE("aaaaa + ab = abbbba");
+        t.config.setArithmeticBase(10);
+    }
+
+    @Test
+    public void testAdaptive6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(2);
+        t.testUNIQUE("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa + a = abbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        t.config.setArithmeticBase(10);
+    }
+
 }

@@ -21,30 +21,31 @@ import cryptator.solver.CryptaSolverException;
 
 public class ExtensiveTesting {
 
-	public final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
-	
-	public ExtensiveTesting() {}
+    public final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
 
-	@BeforeClass
-	public static void configureTestLoggers() {
-		JULogUtil.configureTestLoggers();
-	}
+    public ExtensiveTesting() {
+    }
 
-	@Test
-	public void testAll() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-		final InputStream in = getClass().getClassLoader().getResourceAsStream("cryptarithms-barker.txt");
-		final Scanner s = new Scanner(in);
-		try {
-			// s.skip("\\s*#.*"); // not working
-			while(s.hasNextLine()) {
-				final String line = s.nextLine();
-				if(! line.matches("\\s*#.*")) {
-					t.testUNIQUE(line);
-				}
-			}
-		} finally {
-			s.close();
-		}
-	}
-	
+    @BeforeClass
+    public static void configureTestLoggers() {
+        JULogUtil.configureTestLoggers();
+    }
+
+    @Test
+    public void testAll() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        final InputStream in = getClass().getClassLoader().getResourceAsStream("cryptarithms-barker.txt");
+        final Scanner s = new Scanner(in);
+        try {
+            // s.skip("\\s*#.*"); // not working
+            while (s.hasNextLine()) {
+                final String line = s.nextLine();
+                if (!line.matches("\\s*#.*")) {
+                    t.testUNIQUE(line);
+                }
+            }
+        } finally {
+            s.close();
+        }
+    }
+
 }

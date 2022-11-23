@@ -8,13 +8,12 @@
  */
 package cryptator.tree;
 
-import cryptator.CryptaOperator;
-import cryptator.specs.ICryptaNode;
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import cryptator.CryptaOperator;
+import cryptator.specs.ICryptaNode;
 
 public final class TreeUtils {
 
@@ -31,7 +30,6 @@ public final class TreeUtils {
         TreeTraversals.preorderTraversal(root, (node, num) -> writeWord(node, out));
         out.flush();
     }
-
 
     public static void printPostorder(ICryptaNode root) {
         writePostorder(root, System.out);
@@ -68,7 +66,8 @@ public final class TreeUtils {
     }
 
     public static CryptaOperatorDetection computeUnsupportedBignumOperator(ICryptaNode cryptarithm) {
-        final CryptaOperatorDetection detect = new CryptaOperatorDetection(CryptaOperator.ID, CryptaOperator.ADD, CryptaOperator.EQ, CryptaOperator.AND);
+        final CryptaOperatorDetection detect = new CryptaOperatorDetection(CryptaOperator.ID, CryptaOperator.ADD,
+                CryptaOperator.EQ, CryptaOperator.AND);
         TreeTraversals.preorderTraversal(cryptarithm, detect);
         return detect;
     }

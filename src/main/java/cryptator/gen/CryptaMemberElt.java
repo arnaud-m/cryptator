@@ -15,28 +15,25 @@ import org.chocosolver.solver.variables.IntVar;
 
 public class CryptaMemberElt extends CryptaGenBaseModel {
 
-	protected final IntVar index;
-	
-	public CryptaMemberElt(Model m, String[] words, String prefix) {
-		super(m, words, prefix, true);
-		index = m.intVar(prefix+"idx", 0, words.length - 1);
-	}
+    protected final IntVar index;
 
-	@Override
-	protected void postWordCountConstraint() {
-		super.postWordCountConstraint();
-		model.boolsIntChanneling(getWordVars(), index, 0).post();
-		wordCount.eq(1).decompose().post();
-		
-	}
+    public CryptaMemberElt(Model m, String[] words, String prefix) {
+        super(m, words, prefix, true);
+        index = m.intVar(prefix + "idx", 0, words.length - 1);
+    }
 
-	@Override
-	protected void postMaxLengthConstraints() {
-		int[] lengths = Arrays.stream(words).mapToInt(String::length).toArray();
-		model.element(maxLength, lengths, index).post();
-	}
+    @Override
+    protected void postWordCountConstraint() {
+        super.postWordCountConstraint();
+        model.boolsIntChanneling(getWordVars(), index, 0).post();
+        wordCount.eq(1).decompose().post();
 
-		
+    }
 
+    @Override
+    protected void postMaxLengthConstraints() {
+        int[] lengths = Arrays.stream(words).mapToInt(String::length).toArray();
+        model.element(maxLength, lengths, index).post();
+    }
 
 }

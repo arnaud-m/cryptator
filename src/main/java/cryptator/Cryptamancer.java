@@ -27,97 +27,101 @@ import cryptator.specs.ICryptaNode;
 
 public class Cryptamancer {
 
-	public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
 
+    static class CryptamancerOptionsParser extends AbstractOptionsParser<CryptamancerConfig> {
 
-	static class CryptamancerOptionsParser extends AbstractOptionsParser<CryptamancerConfig> {
+        public CryptamancerOptionsParser() {
+            super(Cryptamancer.class, new CryptamancerConfig());
+        }
 
-		public CryptamancerOptionsParser() {
-			super(Cryptamancer.class, new CryptamancerConfig());
-		}
+        @Override
+        protected void configureLoggers() {
+            if (config.isVerbose()) {
+                JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaGameEngine.LOGGER);
+            }
+        }
 
-		@Override
-		protected void configureLoggers() {
-			if(config.isVerbose()) {
-				JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaGameEngine.LOGGER);
-			}
-		}
+        @Override
+        public String getArgumentName() {
+            return "CRYPTARITHM";
+        }
 
-		@Override
-		public String getArgumentName() {
-			return "CRYPTARITHM";
-		}
+        @Override
+        protected boolean checkArguments() {
+            return config.getArguments().size() == 1;
+        }
+    }
 
-		@Override
-		protected boolean checkArguments() {
-			return config.getArguments().size() == 1;
-		}
-	}
+    public static ICryptaNode parseCryptarithm(CryptamancerConfig config) {
+        final String cryptarithm = config.getArguments().get(0);
+        try {
+            return Cryptator.parseCryptarithm(cryptarithm, new CryptaParserWrapper(), LOGGER);
+        } catch (CryptaParserException e) {
+            LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
+            return null;
+        }
+    }
 
-	public static ICryptaNode parseCryptarithm(CryptamancerConfig config) {
-		final String cryptarithm = config.getArguments().get(0);
-		try {
-			return Cryptator.parseCryptarithm(
-					cryptarithm,
-					new CryptaParserWrapper(),
-					LOGGER);
-		} catch (CryptaParserException e) {
-			LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
-			return null;
-		}
-	}
+    public static ICryptaGameEngine buildEngine(ICryptaNode node, CryptaConfig config) {
+        final CryptaModeler modeler = new CryptaModeler();
+        try {
+            final CryptaGameEngine engine = new CryptaGameEngine();
+            engine.setUp(modeler.model(node, config));
+            return engine;
+        } catch (CryptaGameException | CryptaModelException e) {
+            LOGGER.log(Level.SEVERE, "failed to build the game engine", e);
+            return null;
+        }
+    }
 
-	public static ICryptaGameEngine buildEngine(ICryptaNode node, CryptaConfig config) {
-		final CryptaModeler modeler= new CryptaModeler();
-		try {
-			final CryptaGameEngine engine = new CryptaGameEngine();
-			engine.setUp(modeler.model(node, config));
-			return engine;
-		} catch (CryptaGameException|CryptaModelException e) {
-			LOGGER.log(Level.SEVERE, "failed to build the game engine", e);
-			return null;
-		}
-	}
+    private static void play(ICryptaGameEngine engine) {
+        final Scanner scanner = new Scanner(System.in);
+        int n = 1;
+        while ((!engine.isSolved())) {
+            LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision (symbol operator value):", n);
+            try {
+                final CryptaGameDecision decision = CryptaGameDecision.parseDecision(scanner);
+                if (decision == null) {
+                    LOGGER.warning("Cannot parse the decision.");
+                } else {
+                    final boolean answer = engine.takeDecision(decision);
+                    if (answer) {
+                        LOGGER.info("decision accepted.");
+                    } else {
+                        LOGGER.info("decision rejected.");
+                    }
+                    LOGGER.log(Level.INFO, "display the current partial solution.\n{0}", engine);
+                }
+            } catch (CryptaGameException e) {
+                LOGGER.log(Level.WARNING, "failure while taking the decision.", e);
+            }
+            n++;
+        }
+    }
 
+    public static void main(String[] args) throws Exception {
+        JULogUtil.configureLoggers();
 
-	private static void play(ICryptaGameEngine engine) {
-		final Scanner scanner = new Scanner(System.in);
-		int n = 1;
-		while( (!engine.isSolved())) {
-			LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision (symbol operator value):", n);
-			try {
-				final CryptaGameDecision decision = CryptaGameDecision.parseDecision(scanner);
-				if(decision == null) LOGGER.warning("Cannot parse the decision.");
-				else {
-					final boolean answer = engine.takeDecision(decision);
-					if (answer) LOGGER.info("decision accepted.");
-					else LOGGER.info("decision rejected.");
-					LOGGER.log(Level.INFO, "display the current partial solution.\n{0}", engine);
-				}
-			} catch (CryptaGameException e) {
-				LOGGER.log(Level.WARNING, "failure while taking the decision.", e);
-			}
-			n++;
-		}
-	}
+        CryptamancerOptionsParser optparser = new CryptamancerOptionsParser();
+        if (!optparser.parseOptions(args)) {
+            return;
+        }
+        final CryptamancerConfig config = optparser.getConfig();
 
-	public static void main(String[] args) throws Exception {
-		JULogUtil.configureLoggers();
+        final ICryptaNode node = parseCryptarithm(config);
+        if (node == null) {
+            return;
+        }
 
-		CryptamancerOptionsParser optparser = new CryptamancerOptionsParser();
-		if( ! optparser.parseOptions(args)) return;
-		final CryptamancerConfig config = optparser.getConfig();
+        final ICryptaGameEngine engine = buildEngine(node, config);
+        if (engine == null) {
+            return;
+        }
 
-		final ICryptaNode node = parseCryptarithm(config);
-		if(node == null) return;
+        play(engine);
 
-
-		final ICryptaGameEngine engine = buildEngine(node, config);
-		if(engine == null) return;
-
-		play(engine);
-
-		engine.tearDown();
-	}
+        engine.tearDown();
+    }
 
 }

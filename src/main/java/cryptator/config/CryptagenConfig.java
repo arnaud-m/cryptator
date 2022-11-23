@@ -12,77 +12,75 @@ import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptagenConfig extends CryptaCmdConfig {
-	
-	@Option(name="-d",handler=ExplicitBooleanOptionHandler.class, usage="dry run (generate but do not solve candidate cryptarithms)")
-	private boolean dryRun;
 
-	@Option(name="-ctry",usage="country code for doubly true cryptarithms)")
-	private String countryCode = "EN";
-	
-	@Option(name="-lang",usage="language code for doubly true cryptarithms)")
-	private String langCode = "en";
-	
-	@Option(name="-t", usage="number of threads (experimental)")
-	private int nthreads = 1;
-	
-	@Option(name="-minop", usage="minimum number of left operands")
-	private int minLeftOperands= 2;
-	
-	@Option(name="-maxop", usage="maximum number of left operands")
-	private int maxLeftOperands= -1;
-	
-	@Option(name="-lightM", handler=ExplicitBooleanOptionHandler.class, usage="use less auxiliary variables")
-	private boolean lightModel = true;
-	
-	@Option(name="-lightP", handler=ExplicitBooleanOptionHandler.class, usage="use weak consistency")
-	private boolean lightPropagation;
-	
-	public final boolean isDryRun() {
-		return dryRun;
-	}
+    @Option(name = "-d", handler = ExplicitBooleanOptionHandler.class, usage = "dry run (generate but do not solve candidate cryptarithms)")
+    private boolean dryRun;
 
-	public final String getCountryCode() {
-		return countryCode;
-	}
+    @Option(name = "-ctry", usage = "country code for doubly true cryptarithms)")
+    private String countryCode = "EN";
 
-	public final String getLangCode() {
-		return langCode;
-	}
+    @Option(name = "-lang", usage = "language code for doubly true cryptarithms)")
+    private String langCode = "en";
 
-	public final int getNthreads() {
-		return nthreads;
-	}
+    @Option(name = "-t", usage = "number of threads (experimental)")
+    private int nthreads = 1;
 
-	public final int getMinLeftOperands() {
-		return minLeftOperands;
-	}
+    @Option(name = "-minop", usage = "minimum number of left operands")
+    private int minLeftOperands = 2;
 
-	public final int getMaxLeftOperands() {
-		return maxLeftOperands;
-	}
+    @Option(name = "-maxop", usage = "maximum number of left operands")
+    private int maxLeftOperands = -1;
 
-	
-	public final boolean isLightModel() {
-		return lightModel;
-	}
+    @Option(name = "-lightM", handler = ExplicitBooleanOptionHandler.class, usage = "use less auxiliary variables")
+    private boolean lightModel = true;
 
-	public final void setLightModel(boolean lightModel) {
-		this.lightModel = lightModel;
-	}
+    @Option(name = "-lightP", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
+    private boolean lightPropagation;
 
-	public final boolean isLightPropagation() {
-		return lightPropagation;
-	}
+    public final boolean isDryRun() {
+        return dryRun;
+    }
 
-	public final void setLightPropagation(boolean lightPropagation) {
-		this.lightPropagation = lightPropagation;
-	}
+    public final String getCountryCode() {
+        return countryCode;
+    }
 
-	@Override
-	public String toString() {
-		return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads+"\nc LIGHT_MOD " + lightModel+"\nc LIGHT_PROPAG " + lightPropagation;
-	}
-	
-	
-	
+    public final String getLangCode() {
+        return langCode;
+    }
+
+    public final int getNthreads() {
+        return nthreads;
+    }
+
+    public final int getMinLeftOperands() {
+        return minLeftOperands;
+    }
+
+    public final int getMaxLeftOperands() {
+        return maxLeftOperands;
+    }
+
+    public final boolean isLightModel() {
+        return lightModel;
+    }
+
+    public final void setLightModel(boolean lightModel) {
+        this.lightModel = lightModel;
+    }
+
+    public final boolean isLightPropagation() {
+        return lightPropagation;
+    }
+
+    public final void setLightPropagation(boolean lightPropagation) {
+        this.lightPropagation = lightPropagation;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_MOD " + lightModel
+                + "\nc LIGHT_PROPAG " + lightPropagation;
+    }
+
 }

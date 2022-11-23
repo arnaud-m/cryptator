@@ -14,14 +14,13 @@ import cryptator.config.CryptaConfig;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolverException;
 
-
 public interface ICryptaSolver {
 
-	void limitTime(long limit);
-	
-	void limitSolution(long limit);
-	
-	boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException, CryptaSolverException;
-	
+    void limitTime(long limit);
+
+    void limitSolution(long limit);
+
+    boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer)
+            throws CryptaModelException, CryptaSolverException;
 
 }

@@ -47,44 +47,51 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
     }
 
     private IntVar makeWordVar(ICryptaNode node) {
-    	return wordVarBuilder.apply(node.getWord());
+        return wordVarBuilder.apply(node.getWord());
     }
 
     private IntVar makeWordConst(ICryptaNode node) {
-    	return model.intVar(Integer.parseInt(new String(node.getWord())));
+        return model.intVar(Integer.parseInt(new String(node.getWord())));
     }
 
     @Override
     public void accept(ICryptaNode node, int numNode) {
-    	super.accept(node, numNode);
-    	if(node.isInternalNode()) {
-    		final ArExpression b = stack.pop();
-    		final ArExpression a = stack.pop();
-    		stack.push(node.getOperator().getExpression().apply(a, b));
-    	} else {
-    		if (node.isConstant()) {
-    			stack.push(makeWordConst(node));
-    		} else {
-    			stack.push(makeWordVar(node));
-    		}
-    	}
+        super.accept(node, numNode);
+        if (node.isInternalNode()) {
+            final ArExpression b = stack.pop();
+            final ArExpression a = stack.pop();
+            stack.push(node.getOperator().getExpression().apply(a, b));
+        } else {
+            if (node.isConstant()) {
+                stack.push(makeWordConst(node));
+            } else {
+                stack.push(makeWordVar(node));
+            }
+        }
     }
 
     @Override
     public void postCryptarithmEquationConstraint() throws CryptaModelException {
-        if (stack.size() != 1) throw new CryptaModelException("Invalid stack size at the end of modeling.");
+        if (stack.size() != 1) {
+            throw new CryptaModelException("Invalid stack size at the end of modeling.");
+        }
         if (stack.peek() instanceof ReExpression) {
             ((ReExpression) stack.peek()).decompose().post();
-        } else
+        } else {
             throw new CryptaModelException("Modeling error for the cryptarithm equation constraint.");
+        }
     }
 
     private final class ExponentiationVarBuilder implements Function<char[], IntVar> {
 
         @Override
         public IntVar apply(char[] word) {
-            if (word.length == 0) return model.intVar(0);
-            if (word.length == 1) return getSymbolVar(word[0]);
+            if (word.length == 0) {
+                return model.intVar(0);
+            }
+            if (word.length == 1) {
+                return getSymbolVar(word[0]);
+            }
 
             final int n = word.length;
             final IntVar[] vars = new IntVar[n];
@@ -108,12 +115,15 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
         @Override
         public IntVar apply(char[] word) {
-            if (word.length == 0) return model.intVar(0);
-            if (word.length == 1) return getSymbolVar(word[0]);
+            if (word.length == 0) {
+                return model.intVar(0);
+            }
+            if (word.length == 1) {
+                return getSymbolVar(word[0]);
+            }
             ArExpression tmp = getSymbolVar(word[0]);
             for (int i = 1; i < word.length; i++) {
-                tmp = tmp.mul(config.getArithmeticBase())
-                        .add(getSymbolVar(word[i]));
+                tmp = tmp.mul(config.getArithmeticBase()).add(getSymbolVar(word[i]));
             }
             return tmp.intVar();
         }

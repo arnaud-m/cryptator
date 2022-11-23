@@ -17,50 +17,58 @@ import cryptator.specs.ICryptaSolution;
 
 public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
 
+    public CryptaSolutionVars(Map<Character, IntVar> symbolsToDigits) {
+        super(symbolsToDigits);
+    }
 
-	public CryptaSolutionVars(Map<Character, IntVar> symbolsToDigits) {
-		super(symbolsToDigits);
-	}
-	
-	@Override
-	public boolean hasDigit(char symbol) {
-		final IntVar v = symbolsToDigits.get(symbol);
-		return v != null && v.isInstantiated();
-	}
+    @Override
+    public boolean hasDigit(char symbol) {
+        final IntVar v = symbolsToDigits.get(symbol);
+        return (v != null) && v.isInstantiated();
+    }
 
-	@Override
-	public int getDigit(char symbol) throws CryptaSolutionException {
-		final IntVar v = symbolsToDigits.get(symbol);
-		if(v != null && v.isInstantiated()) return v.getValue();
-		else throw new CryptaSolutionException("cant find symbol: " + symbol);
-	}
+    @Override
+    public int getDigit(char symbol) throws CryptaSolutionException {
+        final IntVar v = symbolsToDigits.get(symbol);
+        if ((v != null) && v.isInstantiated()) {
+            return v.getValue();
+        } else {
+            throw new CryptaSolutionException("cant find symbol: " + symbol);
+        }
+    }
 
-	
-	@Override
-	public int getDigit(char symbol, int defaultValue) {
-		final IntVar v = symbolsToDigits.get(symbol);
-		if(v != null && v.isInstantiated()) return v.getValue();
-		else return defaultValue;
-	}
+    @Override
+    public int getDigit(char symbol, int defaultValue) {
+        final IntVar v = symbolsToDigits.get(symbol);
+        if ((v != null) && v.isInstantiated()) {
+            return v.getValue();
+        } else {
+            return defaultValue;
+        }
+    }
 
-	@Override
-	protected final String getDomain(IntVar v) {
-		return v.toString().replaceFirst(".*=\\s*", "");
-	}
-	
-	public ICryptaSolution recordSolution() {
-		final Map<Character, Integer> symbolsToDigits = new HashMap<>();
-		this.symbolsToDigits.forEach((symbol, variable) -> {
-			if(variable.isInstantiated()) symbolsToDigits.put(symbol, variable.getValue());
-		});
-		return new CryptaSolutionMap(symbolsToDigits);
-	}
-	
-	public boolean isTotalSolution() {
-		for (IntVar variable : symbolsToDigits.values()) {
-			if(! variable.isInstantiated()) return false;
-		}
-		return true;
-	}
+    @Override
+    protected final String getDomain(IntVar v) {
+        return v.toString().replaceFirst(".*=\\s*", "");
+    }
+
+    public ICryptaSolution recordSolution() {
+        final Map<Character, Integer> symbolsToDigits = new HashMap<>();
+        this.symbolsToDigits.forEach((symbol, variable) -> {
+            if (variable.isInstantiated()) {
+                symbolsToDigits.put(symbol, variable.getValue());
+            }
+        });
+        return new CryptaSolutionMap(symbolsToDigits);
+    }
+
+    public boolean isTotalSolution() {
+        for (IntVar variable : symbolsToDigits.values()) {
+            if (!variable.isInstantiated()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

@@ -9,22 +9,22 @@
 package cryptator.tree;
 
 public class CryptaConstant extends CryptaLeaf {
-	
-	public CryptaConstant(String word) {
-		super(word);
-	}
 
-	public CryptaConstant(char[] word) {
-		super(word);
-	}
+    public CryptaConstant(String word) {
+        super(word);
+    }
 
-	@Override
-	public boolean isConstant() {
-		return true;
-	}
+    public CryptaConstant(char[] word) {
+        super(word);
+    }
 
-	@Override
-	public String toGrammarString(){
-		return "'" + new String(getWord()) + "'";
-	}
+    @Override
+    public boolean isConstant() {
+        return true;
+    }
+
+    @Override
+    public String toGrammarString() {
+        return "'" + new String(getWord()) + "'";
+    }
 }

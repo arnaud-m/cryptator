@@ -16,8 +16,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.AbstractOptionsParser;
+import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.gen.CryptaListGenerator;
@@ -28,7 +28,8 @@ public class Cryptagen {
 
     public static final Logger LOGGER = Logger.getLogger(Cryptagen.class.getName());
 
-    private Cryptagen() {}
+    private Cryptagen() {
+    }
 
     public static void main(String[] args) {
         final int exitCode = doMain(args);
@@ -43,14 +44,13 @@ public class Cryptagen {
         if (optparser.parseOptions(args)) {
             final CryptagenConfig config = optparser.getConfig();
             final WordArray words = buildWords(config.getArguments(), config);
-            if(words != null) {
+            if (words != null) {
                 exitCode = generate(words, config);
             }
         }
         JULogUtil.flushLogs();
         return exitCode;
     }
-
 
     private static List<String> readWords(String filename) {
         final List<String> words = new ArrayList<>();
@@ -61,9 +61,8 @@ public class Cryptagen {
         } catch (FileNotFoundException e) {
             LOGGER.log(Level.SEVERE, "cant read words in file", e);
         }
-        return words;			
+        return words;
     }
-
 
     private static WordArray buildNumbers(List<String> arguments, CryptagenConfig config) {
         final int lb = Integer.parseInt(arguments.get(0));
@@ -77,7 +76,7 @@ public class Cryptagen {
     }
 
     private static WordArray buildWords(List<String> arguments, CryptagenConfig config) {
-        switch(arguments.size()) {
+        switch (arguments.size()) {
         case 1: {
             final List<String> words = readWords(arguments.get(0));
             return words.isEmpty() ? null : new WordArray(words, null);
@@ -91,13 +90,13 @@ public class Cryptagen {
                 final List<String> words = readWords(arguments.get(0));
                 return words.isEmpty() ? null : new WordArray(words, arguments.get(1));
             }
-        } default : {
+        }
+        default: {
             return new WordArray(arguments, null);
         }
 
         }
     }
-
 
     private static class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
 
@@ -107,11 +106,11 @@ public class Cryptagen {
 
         @Override
         protected void configureLoggers() {
-            if(config.isDryRun()) {
-                getLogger().setLevel(config.isVerbose() ? Level.FINE : Level.CONFIG);	
+            if (config.isDryRun()) {
+                getLogger().setLevel(config.isVerbose() ? Level.FINE : Level.CONFIG);
             } else {
-                if(config.isVerbose()) {
-                    JULogUtil.setLevel(Level.CONFIG, getLogger());		
+                if (config.isVerbose()) {
+                    JULogUtil.setLevel(Level.CONFIG, getLogger());
                 } else {
                     JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
                 }
@@ -121,14 +120,18 @@ public class Cryptagen {
         @Override
         public String getArgumentName() {
             return "WORDS...";
-        }	
+        }
     }
 
     private static CryptaBiConsumer buildBiConsumer(final CryptagenConfig config) {
         CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
         consumer.withCryptarithmLog();
-        if(config.isCheckSolution()) consumer.withSolutionCheck(config.getArithmeticBase());
-        if(config.isExportGraphiz()) consumer.withGraphvizExport();
+        if (config.isCheckSolution()) {
+            consumer.withSolutionCheck(config.getArithmeticBase());
+        }
+        if (config.isExportGraphiz()) {
+            consumer.withGraphvizExport();
+        }
         return consumer;
     }
 
@@ -138,8 +141,8 @@ public class Cryptagen {
         try {
             gen.generate(cons);
         } catch (CryptaModelException e) {
-            LOGGER.log(Level.SEVERE, "fail to build the model.", e);    
-            return -1;  
+            LOGGER.log(Level.SEVERE, "fail to build the model.", e);
+            return -1;
         }
         return gen.getErrorCount() + cons.getErrorCount();
     }

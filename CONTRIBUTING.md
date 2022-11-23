@@ -95,6 +95,35 @@ In new components, prefer the patterns described in the
 ### Code formatting
 
 
+The code follows eclipse convention with the exception of spaces for tab.
+
+#### Eclipse configuration
+
+To configure eclipse, open the preferences and follow the instructions.
+
+- General -> Editors -> Text Editors: check 'insert spaces for tab'
+- Java -> Formater; new style 'Eclipse [modified]'
+  - Indentation -> Tab policy: select 'Spaces only'
+  - Whitespace -> Arrays -> Array Initializer: uncheck 'After opening brace' and 'Before closing brace'
+  - Whitespace -> Declarations -> Constructors -> unchceck 'Before opening parenthesis'.
+  - New Lines: check 'At end of file'
+- Java -> Code Style -> Clean Up: new style 'Eclipse [modified]'
+  - Check always 'use block in if/while/do statements'
+  - Check always 'use parentheses in expressions'
+  - Unecessary code : check 'Avoid double negation' and 'Remove redundant modifiers'
+- Java -> Editor -> Save Action: check 'Perform the selected actions on save' and 'Format source code'
+- Checkstyle: new style Sun Checks [modified]'
+  - SizeViolations -> LineLength : set max to 100
+  - Workaround for potential error message: 'Checkstyle execution failed due to an internal error. Please check error log for details'
+     - Remove BOTH modules "SuppressionXpathFilter" and "SuppressionFilter" from the configuration
+
+<!--
+- Right-click on your project in the Package view and select Checkstyle -> Create Formatter-Profile. The following files will be created in you project:
+  - my-project-cs-cleanup.xml
+  - my-project-cs-formatter.xml
+- Add the generated my-project-cs-formatter.xml as a formatter: Windows -> Preferences -> Java -> Code Style -> Formatter -> Import
+-->
+
 ### Testing
 
 Your change should include tests to verify new functionality wherever possible.

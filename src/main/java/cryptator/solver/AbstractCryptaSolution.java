@@ -17,56 +17,57 @@ import cryptator.specs.ICryptaSolution;
 
 public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 
-	protected final Map<Character, E> symbolsToDigits;
+    protected final Map<Character, E> symbolsToDigits;
 
-	protected AbstractCryptaSolution(Map<Character, E> symbolsToDigits) {
-		super();
-		// TODO Copy the map so that it is immutable ?
-		this.symbolsToDigits = symbolsToDigits;
-	}
+    protected AbstractCryptaSolution(Map<Character, E> symbolsToDigits) {
+        super();
+        // TODO Copy the map so that it is immutable ?
+        this.symbolsToDigits = symbolsToDigits;
+    }
 
-	@Override
-	public final int size() {
-		return symbolsToDigits.size();
-	}
-	
-	public E getVar(char symbol) {
-		return symbolsToDigits.get(symbol);
-	}
+    @Override
+    public final int size() {
+        return symbolsToDigits.size();
+    }
 
-	protected abstract String getDomain(E variable);
+    public E getVar(char symbol) {
+        return symbolsToDigits.get(symbol);
+    }
 
-	@Override
-	public final boolean hasDomain(char symbol) {
-		return symbolsToDigits.containsKey(symbol);
-	}
+    protected abstract String getDomain(E variable);
 
-	@Override
-	public final String getDomain(char symbol) {
-		final E v = symbolsToDigits.get(symbol);
-		return v == null ? "?" : getDomain(v);
-	}
+    @Override
+    public final boolean hasDomain(char symbol) {
+        return symbolsToDigits.containsKey(symbol);
+    }
 
-	public void forEach(BiConsumer<? super Character, ? super E> action) {
-		symbolsToDigits.forEach(action);
-	}
-	
-	@Override
-	public String toString() {
-		final StringBuilder b1 = new StringBuilder();
-		final StringBuilder b2 = new StringBuilder();
-		ArrayList<Character> sortedKeys = new ArrayList<>(symbolsToDigits.keySet());
-		// TODO The keys are sorted each time.
-		// An abstract method should return the sorted keys allowing to sort keys only once if possible.
-		Collections.sort(sortedKeys);		
-		for (Character symbol : sortedKeys) {
-			final String domain = getDomain(symbolsToDigits.get(symbol));
-			final int length = Math.max(1, domain.length());
-			final String format = " %" + length + "s|";
-			b1.append(String.format(format, symbol));
-			b2.append(String.format(format, domain));
-		}		
-		return b1.toString() + "\n" + b2.toString();
-	}
+    @Override
+    public final String getDomain(char symbol) {
+        final E v = symbolsToDigits.get(symbol);
+        return v == null ? "?" : getDomain(v);
+    }
+
+    public void forEach(BiConsumer<? super Character, ? super E> action) {
+        symbolsToDigits.forEach(action);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder b1 = new StringBuilder();
+        final StringBuilder b2 = new StringBuilder();
+        ArrayList<Character> sortedKeys = new ArrayList<>(symbolsToDigits.keySet());
+        // TODO The keys are sorted each time.
+        // An abstract method should return the sorted keys allowing to sort keys only
+        // once if possible.
+        Collections.sort(sortedKeys);
+        for (Character symbol : sortedKeys) {
+            final String domain = getDomain(symbolsToDigits.get(symbol));
+            final int length = Math.max(1, domain.length());
+            final String format = " %" + length + "s|";
+            b1.append(String.format(format, symbol));
+            b2.append(String.format(format, domain));
+        }
+        return b1.toString() + "\n" + b2.toString();
+    }
 
 }

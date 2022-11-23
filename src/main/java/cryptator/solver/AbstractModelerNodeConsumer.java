@@ -8,15 +8,20 @@
  */
 package cryptator.solver;
 
-import cryptator.config.CryptaConfig;
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalNodeConsumer;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
-import java.util.*;
+import cryptator.config.CryptaConfig;
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalNodeConsumer;
 
 public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsumer {
 
@@ -24,7 +29,6 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
     public final CryptaConfig config;
     public final Map<Character, IntVar> symbolsToVariables;
     protected final Set<Character> firstSymbols;
-
 
     protected AbstractModelerNodeConsumer(Model model, CryptaConfig config) {
         super();
@@ -55,7 +59,9 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
     public void accept(ICryptaNode node, int numNode) {
         if (node.isWord()) {
             final char[] w = node.getWord();
-            if (w.length > 0) firstSymbols.add(node.getWord()[0]);
+            if (w.length > 0) {
+                firstSymbols.add(node.getWord()[0]);
+            }
         }
     }
 
@@ -70,7 +76,9 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
     private Constraint globalCardinalityConstraint() {
         final IntVar[] vars = getGCCVars();
         final int n = vars.length;
-        if (n == 0) return model.trueConstraint();
+        if (n == 0) {
+            return model.trueConstraint();
+        }
 
         final int maxOcc = config.getMaxDigitOccurence(n);
         if (maxOcc == 1) {
@@ -78,10 +86,7 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         } else {
             final int minOcc = config.getMinDigitOccurence(n);
             final int[] values = ArrayUtils.array(0, config.getArithmeticBase() - 1);
-            return model.globalCardinality(
-                    vars, values,
-                    getGCCOccs(minOcc, maxOcc),
-                    true);
+            return model.globalCardinality(vars, values, getGCCOccs(minOcc, maxOcc), true);
 
         }
     }
@@ -92,7 +97,6 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         postFirstSymbolConstraints();
         globalCardinalityConstraint().post();
         postCryptarithmEquationConstraint();
-
 
     }
 

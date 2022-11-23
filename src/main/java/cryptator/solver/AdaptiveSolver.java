@@ -8,15 +8,16 @@
  */
 package cryptator.solver;
 
+import java.util.function.Consumer;
+
+import org.chocosolver.solver.variables.IntVar;
+
 import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 import cryptator.specs.ITraversalNodeConsumer;
 import cryptator.tree.TreeTraversals;
-import org.chocosolver.solver.variables.IntVar;
-
-import java.util.function.Consumer;
 
 public class AdaptiveSolver implements ICryptaSolver {
 
@@ -53,8 +54,11 @@ public class AdaptiveSolver implements ICryptaSolver {
         MaxLenConsumer cons = new MaxLenConsumer();
         TreeTraversals.preorderTraversal(cryptarithm, cons);
         final int threshold = computeThreshold(config.getArithmeticBase());
-        if (cons.getMaxLength() > threshold) solver.setBignum();
-        else solver.unsetBignum();
+        if (cons.getMaxLength() > threshold) {
+            solver.setBignum();
+        } else {
+            solver.unsetBignum();
+        }
         return solver.solve(cryptarithm, config, solutionConsumer);
     }
 
@@ -70,7 +74,9 @@ public class AdaptiveSolver implements ICryptaSolver {
         public void accept(ICryptaNode node, int numNode) {
             if (node.isWord()) {
                 final int len = node.getWord().length;
-                if (len > maxLen) maxLen = len;
+                if (len > maxLen) {
+                    maxLen = len;
+                }
             }
         }
     }

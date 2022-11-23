@@ -22,86 +22,86 @@ import cryptator.tree.CryptaEvaluationException;
 
 public final class SolveOutput implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-	private String cryptarithm;
+    private String cryptarithm;
 
-	private int base;
+    private int base;
 
-	private char[] symbols;
-	
-	private List<int[]> solutions = new ArrayList<>();
+    private char[] symbols;
 
-	private int invalidSolution;
+    private List<int[]> solutions = new ArrayList<>();
 
-	public SolveOutput() {
-		super();
-	}
+    private int invalidSolution;
 
-	public SolveOutput(SolveInput input) {
-		this(input.getCryptarithm(), input.getConfig().getArithmeticBase());
-	}
-	
-	public SolveOutput(String cryptarithm, int base) {
-		super();
-		this.cryptarithm = cryptarithm;
-		this.base = base;
-	}
-	
-	
-	public String getCryptarithm() {
-		return cryptarithm;
-	}
+    public SolveOutput() {
+        super();
+    }
 
-	public void setCryptarithm(String cryptarithm) {
-		this.cryptarithm = cryptarithm;
-	}
+    public SolveOutput(SolveInput input) {
+        this(input.getCryptarithm(), input.getConfig().getArithmeticBase());
+    }
 
-	public int getBase() {
-		return base;
-	}
+    public SolveOutput(String cryptarithm, int base) {
+        super();
+        this.cryptarithm = cryptarithm;
+        this.base = base;
+    }
 
-	public void setBase(int base) {
-		this.base = base;
-	}
-	
-	public char[] getSymbols() {
-		return symbols;
-	}
+    public String getCryptarithm() {
+        return cryptarithm;
+    }
 
-	public void setSymbols(char[] symbols) {
-		this.symbols = symbols;
-	}
+    public void setCryptarithm(String cryptarithm) {
+        this.cryptarithm = cryptarithm;
+    }
 
-	public List<int[]> getSolutions() {
-		return solutions;
-	}
+    public int getBase() {
+        return base;
+    }
 
-	public void setSolutions(List<int[]> solutions) {
-		this.solutions = solutions;
-	}
+    public void setBase(int base) {
+        this.base = base;
+    }
 
-	public int getInvalidSolution() {
-		return invalidSolution;
-	}
+    public char[] getSymbols() {
+        return symbols;
+    }
 
-	public void setInvalidSolution(int invalidSolution) {
-		this.invalidSolution = invalidSolution;
-	}
+    public void setSymbols(char[] symbols) {
+        this.symbols = symbols;
+    }
 
-	@Override
-	public void accept(ICryptaNode n, ICryptaSolution s) {
-		final ICryptaEvaluation eval = new CryptaEvaluation();
-		try {
-			if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) == 0) invalidSolution++;
-			else {
-				int[] solution = new int[symbols.length];
-				for (int i = 0; i < solution.length; i++) {
-					solution[i] = s.getDigit(symbols[i]);
-				}
-				solutions.add(solution);
-			}
-		} catch (CryptaEvaluationException|CryptaSolutionException e) {
-			invalidSolution++;
-		}
-	}
+    public List<int[]> getSolutions() {
+        return solutions;
+    }
+
+    public void setSolutions(List<int[]> solutions) {
+        this.solutions = solutions;
+    }
+
+    public int getInvalidSolution() {
+        return invalidSolution;
+    }
+
+    public void setInvalidSolution(int invalidSolution) {
+        this.invalidSolution = invalidSolution;
+    }
+
+    @Override
+    public void accept(ICryptaNode n, ICryptaSolution s) {
+        final ICryptaEvaluation eval = new CryptaEvaluation();
+        try {
+            if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) == 0) {
+                invalidSolution++;
+            } else {
+                int[] solution = new int[symbols.length];
+                for (int i = 0; i < solution.length; i++) {
+                    solution[i] = s.getDigit(symbols[i]);
+                }
+                solutions.add(solution);
+            }
+        } catch (CryptaEvaluationException | CryptaSolutionException e) {
+            invalidSolution++;
+        }
+    }
 
 }
