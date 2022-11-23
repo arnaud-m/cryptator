@@ -20,7 +20,7 @@ import cryptator.solver.CryptaSolverException;
 
 public class AdaptiveTest {
 
-    public final CryptaSolvingTester t = new CryptaSolvingTester(new AdaptiveSolver());
+    private final CryptaSolvingTester t = new CryptaSolvingTester(new AdaptiveSolver());
 
     public AdaptiveTest() {
     }

@@ -24,7 +24,7 @@ import cryptator.solver.CryptaSolverException;
 
 public class Failing {
 
-    public final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
+    private final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
 
     public Failing() {
     }

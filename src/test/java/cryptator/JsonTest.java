@@ -49,7 +49,8 @@ public class JsonTest {
         config.setSolutionLimit(10);
     }
 
-    private InputStream buildJsonInput(Object object) throws StreamWriteException, DatabindException, IOException {
+    private InputStream buildJsonInput(final Object object)
+            throws StreamWriteException, DatabindException, IOException {
         // Export json
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         mapper.writeValue(out, object);
@@ -60,7 +61,7 @@ public class JsonTest {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
-    public InputStream solve(String cryptarithm)
+    public InputStream solve(final String cryptarithm)
             throws StreamReadException, DatabindException, IOException, CryptaModelException, CryptaSolverException {
         // Create config
         SolveInput input = new SolveInput(cryptarithm, config);

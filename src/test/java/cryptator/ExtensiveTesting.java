@@ -21,7 +21,7 @@ import cryptator.solver.CryptaSolverException;
 
 public class ExtensiveTesting {
 
-    public final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
+    private final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
 
     public ExtensiveTesting() {
     }

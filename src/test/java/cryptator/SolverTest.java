@@ -34,12 +34,12 @@ import cryptator.tree.CryptaEvaluationException;
 
 final class CryptaSolvingTester {
 
-    public final CryptaParserWrapper parser = new CryptaParserWrapper();
-    public final ICryptaSolver solver;
-    public final ICryptaEvaluation eval = new CryptaEvaluation();
-    public CryptaConfig config = new CryptaConfig();
+    protected final CryptaParserWrapper parser = new CryptaParserWrapper();
+    protected final ICryptaSolver solver;
+    protected final ICryptaEvaluation eval = new CryptaEvaluation();
+    protected CryptaConfig config = new CryptaConfig();
 
-    public CryptaSolvingTester(ICryptaSolver solver) {
+    CryptaSolvingTester(final ICryptaSolver solver) {
         super();
         this.solver = solver;
     }
@@ -50,7 +50,8 @@ final class CryptaSolvingTester {
         solver.limitTime(0);
     }
 
-    public int testSolve(String cryptarithm, boolean hasSolution) throws CryptaModelException, CryptaSolverException {
+    public int testSolve(final String cryptarithm, final boolean hasSolution)
+            throws CryptaModelException, CryptaSolverException {
         final AtomicInteger solutionCount = new AtomicInteger();
         final ICryptaNode node = parser.parse(cryptarithm);
         assertEquals(cryptarithm, hasSolution, solver.solve(node, config, (s) -> {
@@ -66,30 +67,31 @@ final class CryptaSolvingTester {
         return solutionCount.get();
     }
 
-    public int testSAT(String cryptarithm) throws CryptaModelException, CryptaSolverException {
+    public int testSAT(final String cryptarithm) throws CryptaModelException, CryptaSolverException {
         return testSolve(cryptarithm, true);
     }
 
-    public void testSAT(String cryptarithm, int solutionCount) throws CryptaModelException, CryptaSolverException {
+    public void testSAT(final String cryptarithm, final int solutionCount)
+            throws CryptaModelException, CryptaSolverException {
         assertEquals("solution count " + cryptarithm, solutionCount, testSolve(cryptarithm, true));
     }
 
-    public void testUNSAT(String cryptarithm) throws CryptaModelException, CryptaSolverException {
+    public void testUNSAT(final String cryptarithm) throws CryptaModelException, CryptaSolverException {
         assertEquals("solution count " + cryptarithm, 0, testSolve(cryptarithm, false));
     }
 
-    public void testUNIQUE(String cryptarithm) throws CryptaModelException, CryptaSolverException {
+    public void testUNIQUE(final String cryptarithm) throws CryptaModelException, CryptaSolverException {
         testSAT(cryptarithm, 1);
     }
 
-    public void testNotUNIQUE(String cryptarithm) throws CryptaModelException, CryptaSolverException {
+    public void testNotUNIQUE(final String cryptarithm) throws CryptaModelException, CryptaSolverException {
         assertTrue("solution count " + cryptarithm, testSolve(cryptarithm, true) > 1);
     }
 }
 
 public class SolverTest {
 
-    public CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
+    private CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
 
     public SolverTest() {
     }
@@ -721,8 +723,7 @@ public class SolverTest {
     // Test from issue 25
     // 9END+M08E=10NEY is wrong because M is already assigned 1.
     @Test
-    public void testEvaluation3Issue25()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
+    public void testEvaluation3Issue25() throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "9END+M08E=10NEY&&1='1'&&0='0'&&9='9'&&8='8'";
         t.testUNSAT(cryptarithm);
     }

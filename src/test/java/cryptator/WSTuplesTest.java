@@ -21,7 +21,7 @@ public class WSTuplesTest {
 
     private final WordSumTuplesBuilder builder = new WordSumTuplesBuilder();
 
-    public static int logFloor(double x, double b) {
+    public static int logFloor(final double x, final double b) {
         return (int) Math.floor(Math.log(x) / Math.log(b));
     }
 
@@ -39,7 +39,7 @@ public class WSTuplesTest {
         }
     }
 
-    public void testMaxZ(int expected, int[] values, int k) {
+    public void testMaxZ(final int expected, final int[] values, final int k) {
         assertEquals(expected, WordSumTuplesBuilder.getMaxZ(values, k));
     }
 
@@ -56,7 +56,7 @@ public class WSTuplesTest {
         testMaxZ(6, v2, 4);
     }
 
-    public void testTuples(int expected, int[] values, int base) {
+    public void testTuples(final int expected, final int[] values, final int base) {
         builder.setBase(base);
         final Tuples tuples = builder.buildTuples(values);
         // System.out.println(tuples);

@@ -21,7 +21,7 @@ import cryptator.tree.TreeUtils;
 
 public class FeaturesTest {
 
-    public final CryptaParserWrapper parser = new CryptaParserWrapper();
+    private final CryptaParserWrapper parser = new CryptaParserWrapper();
 
     public FeaturesTest() {
     }

@@ -31,21 +31,22 @@ import cryptator.tree.CryptaNode;
 
 public class EvaluationTest {
 
-    public final CryptaParserWrapper parser = new CryptaParserWrapper();
+    private final CryptaParserWrapper parser = new CryptaParserWrapper();
 
-    public final ICryptaEvaluation eval = new CryptaEvaluation();
+    private final ICryptaEvaluation eval = new CryptaEvaluation();
 
     public EvaluationTest() {
     }
 
-    private void testInSolution(ICryptaSolution s, char symbol, int digit) throws CryptaSolutionException {
+    private void testInSolution(final ICryptaSolution s, final char symbol, final int digit)
+            throws CryptaSolutionException {
         assertTrue(s.hasDigit(symbol));
         assertTrue(s.hasDomain(symbol));
         assertEquals(digit, s.getDigit(symbol));
         assertNotNull(s.getDomain(symbol));
     }
 
-    private void testNotInSolution(ICryptaSolution s, char symbol) throws CryptaSolutionException {
+    private void testNotInSolution(final ICryptaSolution s, final char symbol) throws CryptaSolutionException {
         assertFalse(s.hasDigit(symbol));
         assertFalse(s.hasDomain(symbol));
         assertNotNull(s.getDomain(symbol));
@@ -90,12 +91,12 @@ public class EvaluationTest {
         CryptaSolutionMap.parseSolution("A 1 B");
     }
 
-    private void assertTrueEval(ICryptaNode cryptarithm, ICryptaSolution solution, int base)
+    private void assertTrueEval(final ICryptaNode cryptarithm, final ICryptaSolution solution, final int base)
             throws CryptaEvaluationException {
         assertEquals(BigInteger.ONE, eval.evaluate(cryptarithm, solution, base));
     }
 
-    private void assertFalseEval(ICryptaNode cryptarithm, ICryptaSolution solution, int base)
+    private void assertFalseEval(final ICryptaNode cryptarithm, final ICryptaSolution solution, final int base)
             throws CryptaEvaluationException {
         assertEquals(BigInteger.ZERO, eval.evaluate(cryptarithm, solution, base));
     }
@@ -188,7 +189,7 @@ public class EvaluationTest {
         assertTrueEval(cryptarithm, solution, 4);
     }
 
-    public void testPartialSolution(String cryptarithm, String partialSolution)
+    public void testPartialSolution(final String cryptarithm, final String partialSolution)
             throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {
         final ICryptaNode node = parser.parse(cryptarithm);
         final ICryptaSolution solution = CryptaSolutionMap.parseSolution(partialSolution);

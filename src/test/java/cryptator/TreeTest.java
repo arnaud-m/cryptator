@@ -36,7 +36,7 @@ public class TreeTest {
             new CryptaNode(CryptaOperator.ADD, new CryptaLeaf("send"), new CryptaLeaf("more")),
             new CryptaLeaf("money"));
 
-    ICryptaNode sendMuchMoreMoney = new CryptaNode(CryptaOperator.EQ,
+    private ICryptaNode sendMuchMoreMoney = new CryptaNode(CryptaOperator.EQ,
             new CryptaNode(CryptaOperator.ADD, new CryptaLeaf("send"),
                     new CryptaNode(CryptaOperator.ADD, new CryptaLeaf("much"), new CryptaLeaf("more"))),
             new CryptaLeaf("money"));
@@ -77,19 +77,19 @@ public class TreeTest {
 
     }
 
-    public static void testInorder(String expected, ICryptaNode node) {
+    public static void testInorder(final String expected, final ICryptaNode node) {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         writeInorder(node, os);
         assertEquals(expected, os.toString());
     }
 
-    public static void testPostorder(String expected, ICryptaNode node) {
+    public static void testPostorder(final String expected, final ICryptaNode node) {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         writePostorder(node, os);
         assertEquals(expected, os.toString());
     }
 
-    public static void testPreorder(String expected, ICryptaNode node) {
+    public static void testPreorder(final String expected, final ICryptaNode node) {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         writePreorder(node, os);
         assertEquals(expected, os.toString());
@@ -114,7 +114,7 @@ public class TreeTest {
         private int count;
 
         @Override
-        public void accept(ICryptaNode node, int numNode, ICryptaNode father, int numFather) {
+        public void accept(final ICryptaNode node, final int numNode, final ICryptaNode father, final int numFather) {
             count++;
         }
 

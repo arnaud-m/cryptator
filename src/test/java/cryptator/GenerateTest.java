@@ -28,7 +28,7 @@ public class GenerateTest {
         JULogUtil.configureTestLoggers();
     }
 
-    public long testGenerate(WordArray wordArray, boolean lightModel, boolean lightPropagation)
+    public long testGenerate(final WordArray wordArray, final boolean lightModel, final boolean lightPropagation)
             throws CryptaModelException {
         final CryptagenConfig config = new CryptagenConfig();
         config.setLightModel(lightModel);
@@ -41,14 +41,15 @@ public class GenerateTest {
         return cons.getSolutionCount();
     }
 
-    public void testGenerate(int expectedSolCount, WordArray wordArray) throws CryptaModelException {
+    public void testGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
         assertEquals(expectedSolCount, testGenerate(wordArray, false, false));
         assertEquals(expectedSolCount, testGenerate(wordArray, false, true));
         assertEquals(expectedSolCount, testGenerate(wordArray, true, false));
         assertEquals(expectedSolCount, testGenerate(wordArray, true, true));
     }
 
-    public void testGenerate(int expectedSolCount, String rightMember, String... words) throws CryptaModelException {
+    public void testGenerate(final int expectedSolCount, final String rightMember, final String... words)
+            throws CryptaModelException {
         testGenerate(expectedSolCount, new WordArray(Arrays.asList(words), rightMember));
     }
 

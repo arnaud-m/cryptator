@@ -35,18 +35,18 @@ public class GenModelTest {
         }
     }
 
-    private void postMaxWordCountConstraint(ICryptaGenModel model, int maxWordCount) {
+    private void postMaxWordCountConstraint(final ICryptaGenModel model, final int maxWordCount) {
         model.getWordCount().le(maxWordCount).post();
     }
 
-    private void testGenModels(int expectedSolutionCount, int maxWordCount) {
+    private void testGenModels(final int expectedSolutionCount, final int maxWordCount) {
         for (ICryptaGenModel m : models) {
             postMaxWordCountConstraint(m, maxWordCount);
             testGenModel(m, expectedSolutionCount);
         }
     }
 
-    private void testGenModel(ICryptaGenModel model, int expectedSolutionCount) {
+    private void testGenModel(final ICryptaGenModel model, final int expectedSolutionCount) {
         assertEquals(expectedSolutionCount, model.getModel().getSolver().streamSolutions().count());
     }
 

@@ -20,8 +20,8 @@ import cryptator.specs.ICryptaNode;
 
 public class ParserTest {
 
-    public final CryptaParserWrapper parser = new CryptaParserWrapper();
-    public static final String ZERO = "'0'";
+    private final CryptaParserWrapper parser = new CryptaParserWrapper();
+    private static final String ZERO = "'0'";
 
     public ParserTest() {
     }

@@ -30,13 +30,13 @@ import cryptator.specs.ICryptaNode;
 
 public class EngineTest {
 
-    public CryptaConfig config = new CryptaConfig();
+    private CryptaConfig config = new CryptaConfig();
 
-    public final CryptaParserWrapper parser = new CryptaParserWrapper();
+    private final CryptaParserWrapper parser = new CryptaParserWrapper();
 
-    public final CryptaModeler modeler = new CryptaModeler();
+    private final CryptaModeler modeler = new CryptaModeler();
 
-    public final CryptaGameEngine engine = new CryptaGameEngine();
+    private final CryptaGameEngine engine = new CryptaGameEngine();
 
     public EngineTest() {
     }
@@ -77,23 +77,25 @@ public class EngineTest {
         assertNull(CryptaGameDecision.parseDecision("x = x"));
     }
 
-    private void setUpEngine(String cryptarithm) throws CryptaModelException, CryptaGameException {
+    private void setUpEngine(final String cryptarithm) throws CryptaModelException, CryptaGameException {
         final ICryptaNode node = parser.parse(cryptarithm);
         final CryptaModel model = modeler.model(node, config);
         engine.setUp(model);
     }
 
-    private final void testGoodDecision(char symbol, CryptaOperator reOperator, int value) throws CryptaGameException {
+    private void testGoodDecision(final char symbol, final CryptaOperator reOperator, final int value)
+            throws CryptaGameException {
         assertTrue(engine.takeDecision(new CryptaGameDecision(symbol, reOperator, value)));
         assertFalse(engine.isSolved());
     }
 
-    private final void testBadDecision(char symbol, CryptaOperator reOperator, int value) throws CryptaGameException {
+    private void testBadDecision(final char symbol, final CryptaOperator reOperator, final int value)
+            throws CryptaGameException {
         assertFalse(engine.takeDecision(new CryptaGameDecision(symbol, reOperator, value)));
         assertFalse(engine.isSolved());
     }
 
-    private final void testGoodLastDecision(char symbol, CryptaOperator reOperator, int value)
+    private void testGoodLastDecision(final char symbol, final CryptaOperator reOperator, final int value)
             throws CryptaGameException {
         assertTrue(engine.takeDecision(new CryptaGameDecision(symbol, reOperator, value)));
         assertTrue(engine.isSolved());

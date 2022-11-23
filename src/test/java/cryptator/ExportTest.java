@@ -23,10 +23,10 @@ import cryptator.tree.GraphvizExport;
 
 public class ExportTest {
 
+    private final CryptaParserWrapper parser = new CryptaParserWrapper();
+
     public ExportTest() {
     }
-
-    public final CryptaParserWrapper parser = new CryptaParserWrapper();
 
     @Test
     public void testExport1() throws CryptaParserException, CryptaSolutionException, CryptaEvaluationException {

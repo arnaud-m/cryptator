@@ -44,7 +44,7 @@ public class CommandTest {
 
     @Test
     public void testCryptagenDoublyTrue() throws FileNotFoundException {
-        String[] args = {"-c", "FALSE", "-g", "FALSE", "-v", "FALSE", "3", "4",};
+        String[] args = {"-c", "FALSE", "-g", "FALSE", "-v", "FALSE", "3", "4"};
         assertEquals(0, Cryptagen.doMain(args));
     }
 

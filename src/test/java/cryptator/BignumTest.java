@@ -18,7 +18,7 @@ import cryptator.solver.CryptaSolverException;
 
 public class BignumTest {
 
-    public final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(true));
+    private final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(true));
 
     public BignumTest() {
     }
