@@ -8,12 +8,12 @@
  */
 package cryptator.tree;
 
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalNodeConsumer;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalNodeConsumer;
 
 public final class CryptaSymbols implements ITraversalNodeConsumer {
 
@@ -24,7 +24,7 @@ public final class CryptaSymbols implements ITraversalNodeConsumer {
     }
 
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         if (node.isWord()) {
             for (Character c : node.getWord()) {
                 letters.add(c);

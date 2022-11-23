@@ -23,80 +23,84 @@ import cryptator.specs.ICryptaSolver;
 
 public final class CryptaSolver implements ICryptaSolver {
 
-	public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
+    private static final int MS = 1000;
 
-	private ICryptaModeler modeler;
+    public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
 
-	private long timeLimit = 0;
+    private ICryptaModeler modeler;
 
-	private long solutionLimit = 0;
+    private long timeLimit = 0;
 
-	public CryptaSolver() {
-		this(false);		
-	}
+    private long solutionLimit = 0;
 
-	public CryptaSolver(boolean useBignum) {		
-		super();
-		modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
-	}
-	
-	public final long getTimeLimit() {
-		return timeLimit;
-	}
+    public CryptaSolver() {
+        this(false);
+    }
 
-	@Override
-	public final void limitTime(long limit) {
-		this.timeLimit = limit;
-	}
+    public CryptaSolver(final boolean useBignum) {
+        super();
+        modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
+    }
 
-	public final long getSolutionLimit() {
-		return solutionLimit;
-	}
+    public long getTimeLimit() {
+        return timeLimit;
+    }
 
+    @Override
+    public void limitTime(final long limit) {
+        this.timeLimit = limit;
+    }
 
-	public final void limitSolution(long limit) {
-		this.solutionLimit = limit;
-	}
+    public long getSolutionLimit() {
+        return solutionLimit;
+    }
 
-	public void setBignum() {
-		modeler = new CryptaBignumModeler();
-	}
-	
-	public void unsetBignum() {
-		modeler = new CryptaModeler();
-	}
-	
-	private final void logOnSolution(CryptaModel m) {
-		if(LOGGER.isLoggable(Level.CONFIG)) {
-			final Solution sol = new Solution(m.getModel());
-			sol.record();
-			LOGGER.log(Level.CONFIG, "Display internal solver solution.\n{0}", sol);
-		}
-	}
+    @Override
+    public void limitSolution(final long limit) {
+        this.solutionLimit = limit;
+    }
 
+    public void setBignum() {
+        modeler = new CryptaBignumModeler();
+    }
 
-	@Override
-	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
-		final CryptaModel m = modeler.model(cryptarithm, config);
-		LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel());
-		final Solver s = m.getModel().getSolver();
-		if(timeLimit > 0) s.limitTime(timeLimit * 1000); // in ms
-		int solutionCount = 0;
-		if(solutionLimit > 0) {
-			while(solutionCount < solutionLimit && s.solve()) {
-				logOnSolution(m);
-				solutionConsumer.accept(m.recordSolution());
-				solutionCount++;
-			}
-		} else {
-			while(s.solve()) {
-				logOnSolution(m);
-				solutionConsumer.accept(m.recordSolution());
-				solutionCount++;
-			}
-		}
-		LOGGER.log(Level.INFO, "{0}", s.getMeasures());
-		return solutionCount > 0;
-	}
+    public void unsetBignum() {
+        modeler = new CryptaModeler();
+    }
+
+    private void logOnSolution(final CryptaModel m) {
+        if (LOGGER.isLoggable(Level.CONFIG)) {
+            final Solution sol = new Solution(m.getModel());
+            sol.record();
+            LOGGER.log(Level.CONFIG, "Display internal solver solution.\n{0}", sol);
+        }
+    }
+
+    @Override
+    public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
+            final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
+        final CryptaModel m = modeler.model(cryptarithm, config);
+        LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel());
+        final Solver s = m.getModel().getSolver();
+        if (timeLimit > 0) {
+            s.limitTime(timeLimit * MS); // in ms
+        }
+        int solutionCount = 0;
+        if (solutionLimit > 0) {
+            while ((solutionCount < solutionLimit) && s.solve()) {
+                logOnSolution(m);
+                solutionConsumer.accept(m.recordSolution());
+                solutionCount++;
+            }
+        } else {
+            while (s.solve()) {
+                logOnSolution(m);
+                solutionConsumer.accept(m.recordSolution());
+                solutionCount++;
+            }
+        }
+        LOGGER.log(Level.INFO, "{0}", s.getMeasures());
+        return solutionCount > 0;
+    }
 
 }

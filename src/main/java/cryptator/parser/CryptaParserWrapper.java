@@ -8,12 +8,12 @@
  */
 package cryptator.parser;
 
-
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ICryptaParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ICryptaParser;
 
 public class CryptaParserWrapper implements ICryptaParser {
 

@@ -23,64 +23,64 @@ import cryptator.solver.CryptaModelException;
 
 public class GenerateTest {
 
-	@BeforeClass
-	public static void configureTestLoggers() {
-		JULogUtil.configureTestLoggers();
-	}
+    @BeforeClass
+    public static void configureTestLoggers() {
+        JULogUtil.configureTestLoggers();
+    }
 
-	public long testGenerate(WordArray wordArray, boolean lightModel, boolean lightPropagation) throws CryptaModelException {
-		final CryptagenConfig config = new CryptagenConfig();
-		config.setLightModel(lightModel);
-		config.setLightPropagation(lightPropagation);
-		final CryptaListGenerator gen = new CryptaListGenerator(wordArray, config, Cryptagen.LOGGER);
-		CryptaBiConsumer cons = new CryptaBiConsumer(Cryptagen.LOGGER);
-		cons.withSolutionCheck(config.getArithmeticBase());
-		gen.generate(cons);
-		assertEquals(0, cons.getErrorCount());
-		return cons.getSolutionCount();
-	}
+    public long testGenerate(final WordArray wordArray, final boolean lightModel, final boolean lightPropagation)
+            throws CryptaModelException {
+        final CryptagenConfig config = new CryptagenConfig();
+        config.setLightModel(lightModel);
+        config.setLightPropagation(lightPropagation);
+        final CryptaListGenerator gen = new CryptaListGenerator(wordArray, config, Cryptagen.LOGGER);
+        CryptaBiConsumer cons = new CryptaBiConsumer(Cryptagen.LOGGER);
+        cons.withSolutionCheck(config.getArithmeticBase());
+        gen.generate(cons);
+        assertEquals(0, cons.getErrorCount());
+        return cons.getSolutionCount();
+    }
 
-	
-	public void testGenerate(int expectedSolCount, WordArray wordArray) throws CryptaModelException {
-		assertEquals( expectedSolCount,testGenerate(wordArray, false, false));
-		assertEquals( expectedSolCount,testGenerate(wordArray, false, true));
-		assertEquals( expectedSolCount,testGenerate(wordArray, true, false));
-		assertEquals( expectedSolCount,testGenerate(wordArray, true, true));
-	}
-	
-	public void testGenerate(int expectedSolCount, String rightMember, String... words) throws CryptaModelException {
-		testGenerate(expectedSolCount, new WordArray(Arrays.asList(words), rightMember));
-	}
-	
-	@Test
-	public void testSendMoreMoney() throws CryptaModelException {
-	testGenerate(1, null, "send", "more", "money");
-	}
-	
-	@Test
-	public void testPlanets1() throws CryptaModelException {
-		testGenerate(2, null, "venus", "earth", "uranus", "saturn");
-	}
-	
-	@Test
-	public void testPlanets2() throws CryptaModelException {
-		testGenerate(1, "planets", "venus", "earth", "uranus", "saturn");
-	}
-	
-	@Test
-	public void testDoublyTrue1() throws CryptaModelException {
-		testGenerate(0, new WordArray("FR", "fr", 0, 10));
-	}
-	
-	@Test
-	public void testDoublyTrue2() throws CryptaModelException {
-		testGenerate(1, new WordArray("FR", "fr", 30, 30));
-	}
-	
-	@Test
-	public void testDoublyTrue3() throws CryptaModelException {
-		testGenerate(3, new WordArray("IT", "it", 20, 30));
-	}
-	
-	
+    public void testGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
+        assertEquals(expectedSolCount, testGenerate(wordArray, false, false));
+        assertEquals(expectedSolCount, testGenerate(wordArray, false, true));
+        assertEquals(expectedSolCount, testGenerate(wordArray, true, false));
+        assertEquals(expectedSolCount, testGenerate(wordArray, true, true));
+    }
+
+    public void testGenerate(final int expectedSolCount, final String rightMember, final String... words)
+            throws CryptaModelException {
+        testGenerate(expectedSolCount, new WordArray(Arrays.asList(words), rightMember));
+    }
+
+    @Test
+    public void testSendMoreMoney() throws CryptaModelException {
+        testGenerate(1, null, "send", "more", "money");
+    }
+
+    @Test
+    public void testPlanets1() throws CryptaModelException {
+        testGenerate(2, null, "venus", "earth", "uranus", "saturn");
+    }
+
+    @Test
+    public void testPlanets2() throws CryptaModelException {
+        testGenerate(1, "planets", "venus", "earth", "uranus", "saturn");
+    }
+
+    @Test
+    public void testDoublyTrue1() throws CryptaModelException {
+        testGenerate(0, new WordArray("FR", "fr", 0, 10));
+    }
+
+    @Test
+    public void testDoublyTrue2() throws CryptaModelException {
+        testGenerate(1, new WordArray("FR", "fr", 30, 30));
+    }
+
+    @Test
+    public void testDoublyTrue3() throws CryptaModelException {
+        testGenerate(3, new WordArray("IT", "it", 20, 30));
+    }
+
 }

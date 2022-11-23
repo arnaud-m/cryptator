@@ -15,10 +15,10 @@ import org.antlr.v4.runtime.Recognizer;
 public class ThrowingErrorListener extends BaseErrorListener {
 
     public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
- 
-	@Override
-    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
-    throws CryptaParserException{
+
+    @Override
+    public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line,
+            final int charPositionInLine, final String msg, final RecognitionException e) throws CryptaParserException {
         throw new CryptaParserException(offendingSymbol, line, charPositionInLine, msg);
     }
 }

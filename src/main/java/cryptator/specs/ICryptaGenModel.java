@@ -13,62 +13,59 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
 /**
- * The Interface ICryptaGenVariables to access variables used for generating cryptarithms.
- */
-/**
- * @author nono
- *
+ * The Interface ICryptaGenVariables to access variables used for generating
+ * cryptarithms.
  */
 public interface ICryptaGenModel {
-	
-	/**
-	 * Gets the model.
-	 *
-	 * @return the model
-	 */
-	Model getModel();
 
-	/**
-	 * Gets the number of words or word variables.
-	 *
-	 * @return the number of words
-	 */
-	 default int getN() {
-		return getWords().length; 
-	 }
+    /**
+     * Gets the model.
+     *
+     * @return the model
+     */
+    Model getModel();
 
-	/**
-	 * Gets the words of the model.
-	 *
-	 * @return the word strings
-	 */
-	String[] getWords();
+    /**
+     * Gets the number of words or word variables.
+     *
+     * @return the number of words
+     */
+    default int getN() {
+        return getWords().length;
+    }
 
-	/**
-	 * Gets the word variables that indicates if the word is present.
-	 *
-	 * @return the boolean variables
-	 */
-	BoolVar[] getWordVars();
+    /**
+     * Gets the words of the model.
+     *
+     * @return the word strings
+     */
+    String[] getWords();
 
-	/**
-	 * Gets variable that represents the maximum length of a present word.
-	 *
-	 * @return the max. length integer variable 
-	 */
-	IntVar getMaxLength();
+    /**
+     * Gets the word variables that indicates if the word is present.
+     *
+     * @return the boolean variables
+     */
+    BoolVar[] getWordVars();
 
-	/**
-	 * Gets the the variable that represents the word count, i.e. the number of present word.
-	 *
-	 * @return the word count integer variable
-	 */
-	IntVar getWordCount();
-	
-	
-	/**
-	 * Post the constraints of the model
-	 */
-	void buildModel();
-	
+    /**
+     * Gets variable that represents the maximum length of a present word.
+     *
+     * @return the max. length integer variable
+     */
+    IntVar getMaxLength();
+
+    /**
+     * Gets the the variable that represents the word count, i.e. the number of
+     * present word.
+     *
+     * @return the word count integer variable
+     */
+    IntVar getWordCount();
+
+    /**
+     * Post the constraints of the model.
+     */
+    void buildModel();
+
 }

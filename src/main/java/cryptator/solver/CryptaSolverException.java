@@ -10,14 +10,14 @@ package cryptator.solver;
 
 public class CryptaSolverException extends Exception {
 
-	private static final long serialVersionUID = -5737530448191051676L;
+    private static final long serialVersionUID = -5737530448191051676L;
 
-	public CryptaSolverException(String message) {
-		super(message);
-	}
+    public CryptaSolverException(final String message) {
+        super(message);
+    }
 
-	public CryptaSolverException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public CryptaSolverException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
 }
