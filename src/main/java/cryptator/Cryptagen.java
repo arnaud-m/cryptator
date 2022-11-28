@@ -108,7 +108,7 @@ public final class Cryptagen {
                 getLogger().setLevel(config.isVerbose() ? Level.FINE : Level.CONFIG);
             } else {
                 if (config.isVerbose()) {
-                    JULogUtil.setLevel(Level.CONFIG, getLogger());
+                    JULogUtil.configureLoggers(Level.ALL);
                 } else {
                     JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
                 }
