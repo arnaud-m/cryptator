@@ -141,7 +141,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         @Override
         public void accept(final ICryptaNode t) {
             if (logger.isLoggable(Level.CONFIG)) {
-                logger.log(Level.CONFIG, "candidate: {0}", TreeUtils.writeInorder(t));
+                logger.log(Level.CONFIG, "Candidate cryptarithm:\n{0}", TreeUtils.writeInorder(t));
                 clog.logOnSolution(solution);
             }
         }
@@ -161,10 +161,18 @@ public class CryptaListGenerator implements ICryptaGenerator {
             this.solver.limitSolution(2);
         }
 
+        private CryptaBiConsumer buildBiConsumer() {
+            CryptaBiConsumer consumer = new CryptaBiConsumer(logger);
+            if (config.isCheckSolution()) {
+                consumer.withSolutionCheck(config.getArithmeticBase());
+            }
+            return consumer;
+        }
+
         @Override
         public void accept(final ICryptaNode t) {
             try {
-                final CryptaBiConsumer collect = new CryptaBiConsumer(logger);
+                final CryptaBiConsumer collect = buildBiConsumer();
                 solver.solve(t, config, collect);
                 Optional<ICryptaSolution> solution = collect.getUniqueSolution();
                 if (solution.isPresent()) {
@@ -172,7 +180,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
                 }
             } catch (CryptaModelException | CryptaSolverException e) {
                 errorCount.incrementAndGet();
-                logger.log(Level.WARNING, "failed to solve the cryptarithm", e);
+                logger.log(Level.WARNING, "Fail to solve the cryptarithm", e);
             }
         }
     }

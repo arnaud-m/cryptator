@@ -105,7 +105,7 @@ public final class Cryptagen {
         @Override
         protected void configureLoggers() {
             if (config.isDryRun()) {
-                getLogger().setLevel(config.isVerbose() ? Level.FINE : Level.CONFIG);
+                getLogger().setLevel(config.isVerbose() ? Level.ALL : Level.CONFIG);
             } else {
                 if (config.isVerbose()) {
                     JULogUtil.configureLoggers(Level.ALL);
@@ -124,9 +124,6 @@ public final class Cryptagen {
     private static CryptaBiConsumer buildBiConsumer(final CryptagenConfig config) {
         CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
         consumer.withCryptarithmLog();
-        if (config.isCheckSolution()) {
-            consumer.withSolutionCheck(config.getArithmeticBase());
-        }
         if (config.isExportGraphiz()) {
             consumer.withGraphvizExport();
         }
