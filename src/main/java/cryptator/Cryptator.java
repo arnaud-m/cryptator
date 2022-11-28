@@ -34,13 +34,12 @@ public final class Cryptator {
     }
 
     public static void main(final String[] args) {
+        JULogUtil.configureLoggers();
         final int exitCode = doMain(args);
         System.exit(exitCode);
     }
 
     public static int doMain(final String[] args) {
-        JULogUtil.configureLoggers();
-
         CryptatorOptionsParser optparser = new CryptatorOptionsParser();
         if (!optparser.parseOptions(args)) {
             return -1;

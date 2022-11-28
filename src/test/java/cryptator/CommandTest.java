@@ -13,9 +13,15 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.FileNotFoundException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class CommandTest {
+
+    @Before
+    public void configureLoggers() {
+        JULogUtil.configureSilentLoggers();
+    }
 
     @Test
     public void testCryptatorException() throws FileNotFoundException {

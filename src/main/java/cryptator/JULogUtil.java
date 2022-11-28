@@ -42,7 +42,16 @@ public final class JULogUtil {
 
     public static void configureTestLoggers() {
         readResourceConfigurationLoggers(PROPERTIES);
-        setLevel(Level.WARNING, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, CryptaSolver.LOGGER,
+        configureLoggers(Level.WARNING);
+    }
+
+    public static void configureSilentLoggers() {
+        readResourceConfigurationLoggers(PROPERTIES);
+        configureLoggers(Level.OFF);
+    }
+
+    public static void configureLoggers(final Level level) {
+        setLevel(level, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, CryptaSolver.LOGGER,
                 CryptaGameEngine.LOGGER);
     }
 

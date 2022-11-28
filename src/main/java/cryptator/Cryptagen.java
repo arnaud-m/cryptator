@@ -32,24 +32,22 @@ public final class Cryptagen {
     }
 
     public static void main(final String[] args) {
+        JULogUtil.configureLoggers();
         final int exitCode = doMain(args);
         System.exit(exitCode);
     }
 
     public static int doMain(final String[] args) {
-        JULogUtil.configureLoggers();
-        int exitCode = -1;
-
         CryptagenOptionsParser optparser = new CryptagenOptionsParser();
         if (optparser.parseOptions(args)) {
             final CryptagenConfig config = optparser.getConfig();
             final WordArray words = buildWords(config.getArguments(), config);
             if (words != null) {
-                exitCode = generate(words, config);
+                return generate(words, config);
             }
         }
         JULogUtil.flushLogs();
-        return exitCode;
+        return -1;
     }
 
     private static List<String> readWords(final String filename) {
