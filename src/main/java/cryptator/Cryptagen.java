@@ -104,14 +104,10 @@ public final class Cryptagen {
 
         @Override
         protected void configureLoggers() {
-            if (config.isDryRun()) {
-                getLogger().setLevel(config.isVerbose() ? Level.ALL : Level.CONFIG);
+            if (config.isVerbose()) {
+                JULogUtil.configureLoggers(Level.ALL);
             } else {
-                if (config.isVerbose()) {
-                    JULogUtil.configureLoggers(Level.ALL);
-                } else {
-                    JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
-                }
+                JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
             }
         }
 
@@ -135,8 +131,10 @@ public final class Cryptagen {
         final CryptaBiConsumer cons = buildBiConsumer(config);
         try {
             gen.generate(cons);
+            LOGGER.log(Level.INFO, "Found {0} cryptarithm(s).", cons.getSolutionCount());
+
         } catch (CryptaModelException e) {
-            LOGGER.log(Level.SEVERE, "fail to build the model.", e);
+            LOGGER.log(Level.SEVERE, "Fail to build the model.", e);
             return -1;
         }
         return gen.getErrorCount() + cons.getErrorCount();
