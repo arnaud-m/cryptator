@@ -115,7 +115,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     @Override
     public void generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
         final CryptaGenModel gen = buildModel();
-        clog.logOnModel(gen.getModel());
+        clog.logOnModel(gen);
 
         final Consumer<ICryptaNode> cons = buildConsumer(gen, consumer);
 
@@ -125,7 +125,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         } else {
             parallelSolve(gen, cons, nthreads);
         }
-        clog.logOnSolver(gen.getModel());
+        clog.logOnSolver(gen);
     }
 
     // FIXME are consumers thread-safe ? they are used in parallel !

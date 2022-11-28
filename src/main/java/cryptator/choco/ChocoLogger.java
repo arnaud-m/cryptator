@@ -17,6 +17,8 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
+import cryptator.specs.IChocoModel;
+
 public final class ChocoLogger {
 
     private final Logger logger;
@@ -24,6 +26,10 @@ public final class ChocoLogger {
     public ChocoLogger(Logger logger) {
         super();
         this.logger = logger;
+    }
+
+    public void logOnModel(final IChocoModel m) {
+        logOnModel(m.getModel());
     }
 
     public void logOnModel(final Model model) {
@@ -40,8 +46,16 @@ public final class ChocoLogger {
         }
     }
 
+    public void logOnSolution(final IChocoModel m) {
+        logOnSolution(m.getModel());
+    }
+
     public void logOnSolution(final Model model) {
         logOnSolution(new Solution(model));
+    }
+
+    public void logOnSolver(final IChocoModel m) {
+        logOnSolver(m.getModel());
     }
 
     public void logOnSolver(Model model) {

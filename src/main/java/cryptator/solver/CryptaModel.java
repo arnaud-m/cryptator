@@ -13,12 +13,13 @@ import java.util.Map;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
+import cryptator.specs.IChocoModel;
 import cryptator.specs.ICryptaSolution;
 
 /**
  * The Class CryptaModel encapsulates the choco model and solution.
  */
-public final class CryptaModel {
+public final class CryptaModel implements IChocoModel {
 
     /** The model. */
     private final Model model;
@@ -39,11 +40,7 @@ public final class CryptaModel {
         this.solution = new CryptaSolutionVars(symbolsToVariables);
     }
 
-    /**
-     * Gets the model.
-     *
-     * @return the model
-     */
+    @Override
     public Model getModel() {
         return model;
     }

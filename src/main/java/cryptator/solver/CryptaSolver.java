@@ -91,7 +91,7 @@ public final class CryptaSolver implements ICryptaSolver {
         final CryptaModel m = modeler.model(cryptarithm, config);
         logOnCryptarithm(cryptarithm);
         logOnConfiguration(config);
-        CLOG.logOnModel(m.getModel());
+        CLOG.logOnModel(m);
 
         final Solver s = m.getModel().getSolver();
         if (timeLimit > 0) {
@@ -111,7 +111,7 @@ public final class CryptaSolver implements ICryptaSolver {
                 solutionCount++;
             }
         }
-        CLOG.logOnSolver(m.getModel());
+        CLOG.logOnSolver(m);
         return solutionCount > 0;
     }
 

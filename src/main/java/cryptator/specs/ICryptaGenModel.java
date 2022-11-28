@@ -8,7 +8,6 @@
  */
 package cryptator.specs;
 
-import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
@@ -16,14 +15,7 @@ import org.chocosolver.solver.variables.IntVar;
  * The Interface ICryptaGenVariables to access variables used for generating
  * cryptarithms.
  */
-public interface ICryptaGenModel {
-
-    /**
-     * Gets the model.
-     *
-     * @return the model
-     */
-    Model getModel();
+public interface ICryptaGenModel extends IChocoModel {
 
     /**
      * Gets the number of words or word variables.
