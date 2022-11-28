@@ -8,6 +8,7 @@
  */
 package cryptator.cmd;
 
+import java.io.ByteArrayOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,22 +74,34 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
                 } else {
                     getLogger().log(Level.SEVERE, "Parse arguments [FAIL]\n{0}", config.getArguments());
                 }
+            } else {
+                getLogger().log(Level.SEVERE, "Check options [FAIL]");
             }
+
         } catch (CmdLineException e) {
-            getLogger().log(Level.SEVERE, "Parse arguments [FAIL]", e);
+            getLogger().log(Level.SEVERE, "Parse options [FAIL]", e);
         }
 
-        // if there's a problem in the command line,
-        // you'll get this exception. this will report
-        // an error message.
-        System.err.println("java " + getCommandName() + " [options...] " + getArgumentName());
-        // print the list of available options
-        parser.printUsage(System.err);
-        // print option sample. This is useful some time
-        System.err.println("\n  Example: java " + getCommandName() + " " + parser.printExample(OptionHandlerFilter.ALL)
-                + " " + getArgumentName());
-        getLogger().severe("Parse options [FAIL]");
+        if (getLogger().isLoggable(Level.INFO)) {
+            getLogger().info(buildHelpMessage(parser));
+        }
         return false;
 
+    }
+
+    private String buildHelpMessage(CmdLineParser parser) {
+        StringBuilder b = new StringBuilder();
+        b.append(" Help:\n");
+        b.append("java ").append(getCommandName()).append(" [options...] ").append(getArgumentName()).append("\n");
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        parser.printUsage(os);
+        b.append(os.toString());
+        b.append("\nExamples:");
+        b.append("\njava ").append(getCommandName()).append(" ")
+                .append(parser.printExample(OptionHandlerFilter.REQUIRED)).append(" ").append(getArgumentName());
+
+        b.append("\njava ").append(getCommandName()).append(" ").append(parser.printExample(OptionHandlerFilter.ALL))
+                .append(" ").append(getArgumentName());
+        return b.toString();
     }
 }
