@@ -8,6 +8,7 @@
  */
 package cryptator.gen;
 
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
+import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.solver.AdaptiveSolver;
@@ -148,27 +150,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
     }
 
-    private static class SolutionCollect implements Consumer<ICryptaSolution> {
-
-        private int solutionCount;
-
-        private ICryptaSolution solution;
-
-        @Override
-        public void accept(final ICryptaSolution u) {
-            solutionCount++;
-            this.solution = u;
-        }
-
-        public final boolean hasUniqueSolution() {
-            return solutionCount == 1;
-        }
-
-        public final ICryptaSolution getSolution() {
-            return solution;
-        }
-    }
-
     private class GenerateConsumer implements Consumer<ICryptaNode> {
 
         private final ICryptaSolver solver;
@@ -185,10 +166,11 @@ public class CryptaListGenerator implements ICryptaGenerator {
         @Override
         public void accept(final ICryptaNode t) {
             try {
-                final SolutionCollect collect = new SolutionCollect();
+                final CryptaBiConsumer collect = new CryptaBiConsumer(logger);
                 solver.solve(t, config, collect);
-                if (collect.hasUniqueSolution()) {
-                    internal.accept(t, collect.getSolution());
+                Optional<ICryptaSolution> solution = collect.getUniqueSolution();
+                if (solution.isPresent()) {
+                    internal.accept(t, solution.get());
                 }
             } catch (CryptaModelException | CryptaSolverException e) {
                 errorCount.incrementAndGet();
