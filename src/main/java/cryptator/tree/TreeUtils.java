@@ -31,6 +31,12 @@ public final class TreeUtils {
         out.flush();
     }
 
+    public static String writePreorder(final ICryptaNode root) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        TreeUtils.writePreorder(root, out);
+        return out.toString();
+    }
+
     public static void printPostorder(final ICryptaNode root) {
         writePostorder(root, System.out);
         System.out.println();
@@ -42,9 +48,10 @@ public final class TreeUtils {
         out.flush();
     }
 
-    public static void printInorder(final ICryptaNode root) {
-        writeInorder(root, System.out);
-        System.out.println();
+    public static String writePostorder(final ICryptaNode root) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        TreeUtils.writePostorder(root, out);
+        return out.toString();
     }
 
     public static void writeInorder(final ICryptaNode root, final OutputStream outstream) {
@@ -57,6 +64,11 @@ public final class TreeUtils {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         TreeUtils.writeInorder(root, out);
         return out.toString();
+    }
+
+    public static void printInorder(final ICryptaNode root) {
+        writeInorder(root, System.out);
+        System.out.println();
     }
 
     public static CryptaFeatures computeFeatures(final ICryptaNode cryptarithm) {
