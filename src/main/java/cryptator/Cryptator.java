@@ -108,7 +108,7 @@ public final class Cryptator {
             }
 
             final CryptaBiConsumer consumer = buildBiConsumer(config);
-            final boolean solved = solver.solve(node, config, s -> consumer.accept(node, s));
+            final boolean solved = solver.solve(node, config, consumer);
             String status = "ERROR";
             if (consumer.getErrorCount() == 0) {
                 status = solved ? "OK" : "KO";
