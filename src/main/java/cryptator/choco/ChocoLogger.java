@@ -29,14 +29,14 @@ public final class ChocoLogger {
     public void logOnModel(final Model model) {
         if (logger.isLoggable(Level.CONFIG)) {
             logger.log(Level.CONFIG, "Model diagnostics:\n{0}", toDimacs(model));
-            logger.log(Level.FINE, "Printed model:{0}", model);
+            logger.log(Level.FINE, "Pretty model:{0}", model);
         }
     }
 
     public void logOnSolution(final Solution solution) {
         if (logger.isLoggable(Level.FINER)) {
             solution.record();
-            logger.log(Level.FINER, "Display solver solution:\n{0}", solution);
+            logger.log(Level.FINER, "Solver solution:\n{0}", solution);
         }
     }
 

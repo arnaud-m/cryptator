@@ -24,8 +24,8 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
     private int charCount;
     private int minWordLength = Integer.MAX_VALUE;
     private int maxWordLength;
-    private Set<Character> symbols = new TreeSet<>();
-    private Set<CryptaOperator> operators = new TreeSet<>();
+    private final Set<Character> symbols = new TreeSet<>();
+    private final Set<CryptaOperator> operators = new TreeSet<>();
 
     public CryptaFeatures() {
         super();
