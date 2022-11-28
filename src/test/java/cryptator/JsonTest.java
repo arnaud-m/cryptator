@@ -14,7 +14,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -35,13 +34,11 @@ public class JsonTest {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private final PrintStream jsonOutput = System.out;
-
     private final CryptatorConfig config = new CryptatorConfig();
 
     @BeforeClass
     public static void configureTestLoggers() {
-        JULogUtil.configureJsonLoggers();
+        JULogUtil.configureTestLoggers();
     }
 
     @Before
@@ -55,8 +52,9 @@ public class JsonTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         mapper.writeValue(out, object);
         // Print json
-        jsonOutput.write(out.toByteArray());
-        jsonOutput.print('\n');
+//        final PrintStream jsonOutput = System.out;
+//        jsonOutput.write(out.toByteArray());
+//        jsonOutput.print('\n');
         // Return json input stream
         return new ByteArrayInputStream(out.toByteArray());
     }
@@ -91,7 +89,6 @@ public class JsonTest {
     public void testBigCatLionFrontEnd() throws CryptaModelException, CryptaSolverException, IOException {
         final String jsonInput = "{\"cryptarithm\":\"big+cat=lion\",\"config\":{\"arithmeticBase\":10,"
                 + "\"allowLeadingZeros\":false," + " \"solutionLimit\":5," + "\"timeLimit\":0}}";
-        jsonOutput.println(jsonInput);
         // Read json config
         final SolveInput input = mapper.readValue(jsonInput, SolveInput.class);
         // Solve the cryptarithm

@@ -12,20 +12,24 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
+import cryptator.choco.ChocoLogger;
 import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
+import cryptator.tree.CryptaFeatures;
+import cryptator.tree.TreeUtils;
 
 public final class CryptaSolver implements ICryptaSolver {
 
     private static final int MS = 1000;
 
     public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
+
+    private static final ChocoLogger CLOG = new ChocoLogger(LOGGER);
 
     private ICryptaModeler modeler;
 
@@ -68,19 +72,27 @@ public final class CryptaSolver implements ICryptaSolver {
         modeler = new CryptaModeler();
     }
 
-    private void logOnSolution(final CryptaModel m) {
+    private static void logOnCryptarithm(final ICryptaNode cryptarithm) {
         if (LOGGER.isLoggable(Level.CONFIG)) {
-            final Solution sol = new Solution(m.getModel());
-            sol.record();
-            LOGGER.log(Level.CONFIG, "Display internal solver solution.\n{0}", sol);
+            final CryptaFeatures feat = TreeUtils.computeFeatures(cryptarithm);
+            LOGGER.log(Level.CONFIG, "Declare instance:\ni {0}\nc POST_ORDER {1}",
+                    new Object[] {feat.buildInstanceName(), TreeUtils.writePostorder(cryptarithm)});
+            LOGGER.log(Level.CONFIG, "Cryptarithm features:\n{0}", feat);
         }
+    }
+
+    private static void logOnConfiguration(final CryptaConfig config) {
+        LOGGER.log(Level.CONFIG, "Configuration:\n{0}", config);
     }
 
     @Override
     public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
             final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
         final CryptaModel m = modeler.model(cryptarithm, config);
-        LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel());
+        logOnCryptarithm(cryptarithm);
+        logOnConfiguration(config);
+        CLOG.logOnModel(m.getModel());
+
         final Solver s = m.getModel().getSolver();
         if (timeLimit > 0) {
             s.limitTime(timeLimit * MS); // in ms
@@ -88,18 +100,18 @@ public final class CryptaSolver implements ICryptaSolver {
         int solutionCount = 0;
         if (solutionLimit > 0) {
             while ((solutionCount < solutionLimit) && s.solve()) {
-                logOnSolution(m);
+                CLOG.logOnSolution(m.getModel());
                 solutionConsumer.accept(m.recordSolution());
                 solutionCount++;
             }
         } else {
             while (s.solve()) {
-                logOnSolution(m);
+                CLOG.logOnSolution(m.getModel());
                 solutionConsumer.accept(m.recordSolution());
                 solutionCount++;
             }
         }
-        LOGGER.log(Level.INFO, "{0}", s.getMeasures());
+        CLOG.logOnSolver(m.getModel());
         return solutionCount > 0;
     }
 

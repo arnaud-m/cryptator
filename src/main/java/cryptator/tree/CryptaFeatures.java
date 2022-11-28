@@ -9,8 +9,8 @@
 package cryptator.tree;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import cryptator.CryptaOperator;
@@ -24,8 +24,8 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
     private int charCount;
     private int minWordLength = Integer.MAX_VALUE;
     private int maxWordLength;
-    private Set<Character> symbols = new HashSet<>();
-    private Set<CryptaOperator> operators = new HashSet<>();
+    private final Set<Character> symbols = new TreeSet<>();
+    private final Set<CryptaOperator> operators = new TreeSet<>();
 
     public CryptaFeatures() {
         super();
@@ -86,6 +86,23 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
         return Collections.unmodifiableSet(operators);
     }
 
+    public final String generateFilename() {
+        return String.format("N02%dL%02d-%s", wordCount, maxWordLength, buildSymbols());
+    }
+
+    private final String buildSymbols() {
+        return symbols.stream().map(String::valueOf).collect(Collectors.joining());
+    }
+
+    private final String buildOperators() {
+        return operators.stream().map(String::valueOf).collect(Collectors.joining(" ", "", ""));
+    }
+
+    public final String buildInstanceName() {
+        return String.format("N%02dC%03d-L%02d-%02d-%s", wordCount, charCount, minWordLength, maxWordLength,
+                buildSymbols());
+    }
+
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
@@ -95,9 +112,8 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
         b.append("\nc OPERATOR_COUNT ").append(operators.size());
         b.append("\nc MIN_WORD_LEN ").append(minWordLength);
         b.append("\nc MAX_WORD_LEN ").append(maxWordLength);
-        b.append("\nc SYMBOLS ").append(symbols.stream().map(String::valueOf).collect(Collectors.joining()));
-        b.append("\nc OPERATORS ")
-                .append(operators.stream().map(String::valueOf).collect(Collectors.joining(" ", "", "")));
+        b.append("\nc SYMBOLS ").append(buildSymbols());
+        b.append("\nc OPERATORS ").append(buildOperators());
         return b.toString();
     }
 

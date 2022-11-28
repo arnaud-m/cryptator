@@ -9,8 +9,8 @@
 package cryptator.tree;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalNodeConsumer;
@@ -20,7 +20,7 @@ public final class CryptaSymbols implements ITraversalNodeConsumer {
     private final Set<Character> letters;
 
     public CryptaSymbols() {
-        this.letters = new HashSet<>();
+        this.letters = new TreeSet<>();
     }
 
     @Override

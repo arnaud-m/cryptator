@@ -8,9 +8,8 @@
  */
 package cryptator.solver;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 
 import cryptator.specs.ICryptaSolution;
@@ -21,8 +20,7 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
 
     protected AbstractCryptaSolution(final Map<Character, E> symbolsToDigits) {
         super();
-        // TODO Copy the map so that it is immutable ?
-        this.symbolsToDigits = symbolsToDigits;
+        this.symbolsToDigits = new TreeMap<>(symbolsToDigits);
     }
 
     @Override
@@ -55,12 +53,7 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
     public String toString() {
         final StringBuilder b1 = new StringBuilder();
         final StringBuilder b2 = new StringBuilder();
-        ArrayList<Character> sortedKeys = new ArrayList<>(symbolsToDigits.keySet());
-        // TODO The keys are sorted each time.
-        // An abstract method should return the sorted keys allowing to sort keys only
-        // once if possible.
-        Collections.sort(sortedKeys);
-        for (Character symbol : sortedKeys) {
+        for (Character symbol : symbolsToDigits.keySet()) {
             final String domain = getDomain(symbolsToDigits.get(symbol));
             final int length = Math.max(1, domain.length());
             final String format = " %" + length + "s|";

@@ -105,7 +105,7 @@ public final class Cryptamancer {
     }
 
     public static void main(final String[] args) throws Exception {
-        JULogUtil.configureLoggers();
+        JULogUtil.configureDefaultLoggers();
 
         CryptamancerOptionsParser optparser = new CryptamancerOptionsParser();
         if (!optparser.parseOptions(args)) {

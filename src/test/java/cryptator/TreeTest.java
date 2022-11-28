@@ -17,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Set;
 
 import org.junit.Test;
@@ -78,21 +77,15 @@ public class TreeTest {
     }
 
     public static void testInorder(final String expected, final ICryptaNode node) {
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        writeInorder(node, os);
-        assertEquals(expected, os.toString());
+        assertEquals(expected, writeInorder(node));
     }
 
     public static void testPostorder(final String expected, final ICryptaNode node) {
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        writePostorder(node, os);
-        assertEquals(expected, os.toString());
+        assertEquals(expected, writePostorder(node));
     }
 
     public static void testPreorder(final String expected, final ICryptaNode node) {
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        writePreorder(node, os);
-        assertEquals(expected, os.toString());
+        assertEquals(expected, writePreorder(node));
     }
 
     @Test

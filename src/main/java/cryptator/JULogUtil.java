@@ -36,19 +36,22 @@ public final class JULogUtil {
         }
     }
 
-    public static void configureLoggers() {
+    public static void configureDefaultLoggers() {
         readResourceConfigurationLoggers(PROPERTIES);
     }
 
     public static void configureTestLoggers() {
         readResourceConfigurationLoggers(PROPERTIES);
-        setLevel(Level.WARNING, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, CryptaSolver.LOGGER,
-                CryptaGameEngine.LOGGER);
+        configureLoggers(Level.WARNING);
     }
 
-    public static void configureJsonLoggers() {
+    public static void configureSilentLoggers() {
         readResourceConfigurationLoggers(PROPERTIES);
-        setLevel(Level.INFO, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, CryptaSolver.LOGGER,
+        configureLoggers(Level.OFF);
+    }
+
+    public static void configureLoggers(final Level level) {
+        setLevel(level, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, CryptaSolver.LOGGER,
                 CryptaGameEngine.LOGGER);
     }
 
