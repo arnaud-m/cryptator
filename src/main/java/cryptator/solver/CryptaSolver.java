@@ -9,6 +9,7 @@
 package cryptator.solver;
 
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.chocosolver.solver.Solver;
@@ -19,6 +20,8 @@ import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
+import cryptator.tree.CryptaFeatures;
+import cryptator.tree.TreeUtils;
 
 public final class CryptaSolver implements ICryptaSolver {
 
@@ -69,11 +72,25 @@ public final class CryptaSolver implements ICryptaSolver {
         modeler = new CryptaModeler();
     }
 
+    private static void logOnCryptarithm(final ICryptaNode cryptarithm) {
+        if (LOGGER.isLoggable(Level.CONFIG)) {
+            final CryptaFeatures feat = TreeUtils.computeFeatures(cryptarithm);
+            LOGGER.log(Level.CONFIG, "Declare instance:\ni {0}\nc POST_ORDER {1}",
+                    new Object[] {feat.buildInstanceName(), TreeUtils.writePostorder(cryptarithm)});
+            LOGGER.log(Level.CONFIG, "Cryptarithm features:\n{0}", feat);
+        }
+    }
+
+    private static void logOnConfiguration(final CryptaConfig config) {
+        LOGGER.log(Level.CONFIG, "Configuration:\n{0}", config);
+    }
+
     @Override
     public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
             final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
         final CryptaModel m = modeler.model(cryptarithm, config);
-
+        logOnCryptarithm(cryptarithm);
+        logOnConfiguration(config);
         CLOG.logOnModel(m.getModel());
 
         final Solver s = m.getModel().getSolver();

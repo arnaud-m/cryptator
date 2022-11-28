@@ -32,7 +32,7 @@ public final class Cryptagen {
     }
 
     public static void main(final String[] args) {
-        JULogUtil.configureLoggers();
+        JULogUtil.configureDefaultLoggers();
         final int exitCode = doMain(args);
         System.exit(exitCode);
     }

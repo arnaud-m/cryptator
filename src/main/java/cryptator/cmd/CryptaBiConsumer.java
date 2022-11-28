@@ -11,6 +11,7 @@ package cryptator.cmd;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +33,8 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
     private long solutionCount;
 
+    private Optional<ICryptaSolution> lastSolution;
+
     private int errorCount;
 
     private BiConsumer<ICryptaNode, ICryptaSolution> internal;
@@ -39,11 +42,20 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
     public CryptaBiConsumer(final Logger logger) {
         super();
         this.logger = logger;
+        lastSolution = Optional.empty();
         internal = new SolutionCounter();
     }
 
     public final long getSolutionCount() {
         return solutionCount;
+    }
+
+    public final Optional<ICryptaSolution> getLastSolution() {
+        return lastSolution;
+    }
+
+    public final Optional<ICryptaSolution> getUniqueSolution() {
+        return solutionCount <= 1 ? lastSolution : Optional.empty();
     }
 
     public final int getErrorCount() {
@@ -71,10 +83,18 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
         internal.accept(t, u);
     }
 
+    public void logOnLastSolution() {
+        if (lastSolution.isPresent()) {
+            logger.log(Level.INFO, "Last cryptarithm solution #{0}:\n{1}",
+                    new Object[] {solutionCount, lastSolution.get()});
+        }
+    }
+
     private class SolutionCounter implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
         @Override
         public void accept(final ICryptaNode t, final ICryptaSolution u) {
+            lastSolution = Optional.of(u);
             solutionCount++;
         }
     }
@@ -113,7 +133,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
         public void accept(final ICryptaNode n, final ICryptaSolution s) {
             try {
                 if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
-                    logger.log(Level.INFO, "Eval cryptarithm solution #{0} [OK]", solutionCount);
+                    logger.log(Level.CONFIG, "Eval cryptarithm solution #{0} [OK]", solutionCount);
                 } else {
                     errorCount++;
                     logger.log(Level.SEVERE, "Eval cryptarithm solution #{0} [KO]", solutionCount);

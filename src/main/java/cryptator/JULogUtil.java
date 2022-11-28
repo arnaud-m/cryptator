@@ -36,7 +36,7 @@ public final class JULogUtil {
         }
     }
 
-    public static void configureLoggers() {
+    public static void configureDefaultLoggers() {
         readResourceConfigurationLoggers(PROPERTIES);
     }
 

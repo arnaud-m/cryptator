@@ -98,6 +98,11 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
         return operators.stream().map(String::valueOf).collect(Collectors.joining(" ", "", ""));
     }
 
+    public final String buildInstanceName() {
+        return String.format("N%02dC%03d-L%02d-%02d-%s", wordCount, charCount, minWordLength, maxWordLength,
+                buildSymbols());
+    }
+
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();

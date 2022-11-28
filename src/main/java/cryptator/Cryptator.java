@@ -8,9 +8,6 @@
  */
 package cryptator;
 
-import static cryptator.tree.TreeUtils.writePostorder;
-
-import java.io.ByteArrayOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +21,6 @@ import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
-import cryptator.tree.TreeUtils;
 
 public final class Cryptator {
 
@@ -34,7 +30,7 @@ public final class Cryptator {
     }
 
     public static void main(final String[] args) {
-        JULogUtil.configureLoggers();
+        JULogUtil.configureDefaultLoggers();
         final int exitCode = doMain(args);
         System.exit(exitCode);
     }
@@ -72,7 +68,7 @@ public final class Cryptator {
         @Override
         protected void configureLoggers() {
             if (config.isVerbose()) {
-                JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaSolver.LOGGER);
+                JULogUtil.configureLoggers(Level.ALL);
             }
         }
     }
@@ -87,12 +83,7 @@ public final class Cryptator {
     public static ICryptaNode parseCryptarithm(final String cryptarithm, final CryptaParserWrapper parser,
             final Logger logger) throws CryptaParserException {
         final ICryptaNode node = parser.parse(cryptarithm);
-        logger.log(Level.INFO, "Parse cryptarithm {0} [OK]", cryptarithm);
-        if (logger.isLoggable(Level.CONFIG)) {
-            final ByteArrayOutputStream os = new ByteArrayOutputStream();
-            writePostorder(node, os);
-            logger.log(Level.CONFIG, "Display postorder internal cryptarithm:\n{0}", os);
-        }
+        logger.log(Level.INFO, "Parse cryptarithm [OK]\n{0}", cryptarithm);
         return node;
 
     }
@@ -102,16 +93,13 @@ public final class Cryptator {
         try {
             final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
 
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO, "Cryptarithm features:\n{0}", TreeUtils.computeFeatures(node));
-            }
-
             final CryptaBiConsumer consumer = buildBiConsumer(config);
             final boolean solved = solver.solve(node, config, consumer);
             String status = "ERROR";
             if (consumer.getErrorCount() == 0) {
                 status = solved ? "OK" : "KO";
             }
+            consumer.logOnLastSolution();
             LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
             return consumer.getErrorCount();
         } catch (CryptaParserException e) {
