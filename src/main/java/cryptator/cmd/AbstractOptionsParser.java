@@ -26,7 +26,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
     private final String argumentName;
 
-    public AbstractOptionsParser(final Class<?> mainClass, final E config, final String argumentName) {
+    protected AbstractOptionsParser(final Class<?> mainClass, final E config, final String argumentName) {
         super();
         this.mainClass = mainClass;
         this.config = config;

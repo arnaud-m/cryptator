@@ -11,7 +11,7 @@ package cryptator.config;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
-public class CryptaCmdConfig extends CryptaConfig {
+public class CryptaCmdConfig extends CryptaLogConfig {
 
     @Option(name = "-c", handler = ExplicitBooleanOptionHandler.class, usage = "check solutions by evaluation")
     private boolean checkSolution;
@@ -19,19 +19,12 @@ public class CryptaCmdConfig extends CryptaConfig {
     @Option(name = "-g", handler = ExplicitBooleanOptionHandler.class, usage = "export solutions to graphviz format")
     private boolean exportGraphiz;
 
-    @Option(name = "-v", handler = ExplicitBooleanOptionHandler.class, usage = "increase the verbosity of the program")
-    private boolean verbose;
-
     public final boolean isExportGraphiz() {
         return exportGraphiz;
     }
 
     public final boolean isCheckSolution() {
         return checkSolution;
-    }
-
-    public final boolean isVerbose() {
-        return verbose;
     }
 
 }

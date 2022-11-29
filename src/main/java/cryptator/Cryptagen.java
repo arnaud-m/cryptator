@@ -16,9 +16,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cryptator.cmd.AbstractOptionsParser;
 import cryptator.cmd.CryptaBiConsumer;
-import cryptator.cmd.Verbosity;
+import cryptator.cmd.OptionsParserWithLog;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.gen.CryptaListGenerator;
@@ -96,18 +95,12 @@ public final class Cryptagen {
         }
     }
 
-    private static final class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
+    private static final class CryptagenOptionsParser extends OptionsParserWithLog<CryptagenConfig> {
 
         private static final String ARG_NAME = "WORDS...";
 
         protected CryptagenOptionsParser() {
-            super(Cryptagen.class, new CryptagenConfig(), ARG_NAME);
-        }
-
-        @Override
-        protected void configureLoggers() {
-            final Verbosity lvl = config.isVerbose() ? Verbosity.VERY_VERBOSE : Verbosity.NORMAL;
-            lvl.applyTo(JULogUtil.getDefaultLogManager());
+            super(Cryptagen.class, new CryptagenConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
         }
 
     }

@@ -11,9 +11,8 @@ package cryptator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cryptator.cmd.AbstractOptionsParser;
 import cryptator.cmd.CryptaBiConsumer;
-import cryptator.cmd.Verbosity;
+import cryptator.cmd.OptionsParserWithLog;
 import cryptator.config.CryptatorConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
@@ -55,18 +54,12 @@ public final class Cryptator {
         return exitCode;
     }
 
-    private static class CryptatorOptionsParser extends AbstractOptionsParser<CryptatorConfig> {
+    private static class CryptatorOptionsParser extends OptionsParserWithLog<CryptatorConfig> {
 
         private static final String ARG_NAME = "CRYPTARITHMS...";
 
         CryptatorOptionsParser() {
-            super(Cryptator.class, new CryptatorConfig(), ARG_NAME);
-        }
-
-        @Override
-        protected void configureLoggers() {
-            final Verbosity lvl = config.isVerbose() ? Verbosity.VERY_VERBOSE : Verbosity.NORMAL;
-            lvl.applyTo(JULogUtil.getDefaultLogManager());
+            super(Cryptator.class, new CryptatorConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
         }
     }
 
