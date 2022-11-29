@@ -36,8 +36,6 @@ import cryptator.tree.TreeUtils;
 
 public class CryptaListGenerator implements ICryptaGenerator {
 
-    private static final int TICK = 1000;
-
     private final WordArray words;
 
     private final CryptagenConfig config;
@@ -85,13 +83,8 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
     private void sequentialSolve(final CryptaGenModel gen, final Consumer<ICryptaNode> cons) {
         final Solver s = gen.getModel().getSolver();
-        int cpt = 1;
         while (s.solve()) {
-            if ((cpt % TICK) == 0) {
-                logger.log(Level.INFO, "{0}K tentatives", cpt / TICK);
-            }
             cons.accept(gen.recordCryptarithm());
-            cpt++;
         }
     }
 
