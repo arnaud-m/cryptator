@@ -16,11 +16,11 @@ import org.chocosolver.solver.Solver;
 
 import cryptator.choco.ChocoLogger;
 import cryptator.config.CryptaConfig;
+import cryptator.gen.TransformWord;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
-import cryptator.tree.CryptaFeatures;
 import cryptator.tree.TreeUtils;
 
 public final class CryptaSolver implements ICryptaSolver {
@@ -73,15 +73,16 @@ public final class CryptaSolver implements ICryptaSolver {
     }
 
     private static void logOnCryptarithm(final ICryptaNode cryptarithm) {
-        if (LOGGER.isLoggable(Level.CONFIG)) {
-            final CryptaFeatures feat = TreeUtils.computeFeatures(cryptarithm);
-            LOGGER.log(Level.CONFIG, "Declare instance:\ni {0}\nc POST_ORDER {1}",
-                    new Object[] {feat.buildInstanceName(), TreeUtils.writePostorder(cryptarithm)});
-            LOGGER.log(Level.CONFIG, "Cryptarithm features:\n{0}", feat);
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO, "Declare instance:\ni {0}",
+                    TransformWord.removeWhitespaces(TreeUtils.writeInorder(cryptarithm)));
+            if (LOGGER.isLoggable(Level.CONFIG)) {
+                LOGGER.log(Level.CONFIG, "Cryptarithm features:\n{0}", TreeUtils.computeFeatures(cryptarithm));
+            }
         }
     }
 
-    private static void logOnConfiguration(final CryptaConfig config) {
+    public static void logOnConfiguration(final CryptaConfig config) {
         LOGGER.log(Level.CONFIG, "Configuration:\n{0}", config);
     }
 

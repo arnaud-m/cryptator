@@ -133,9 +133,9 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
         @Override
         public void accept(final ICryptaNode t) {
-            if (logger.isLoggable(Level.CONFIG)) {
-                logger.log(Level.CONFIG, "Candidate cryptarithm:\n{0}", TreeUtils.writeInorder(t));
-                clog.logOnSolution(solution);
+            clog.logOnSolution(solution);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "Candidate cryptarithm:\n{0}", TreeUtils.writeInorder(t));
             }
         }
 

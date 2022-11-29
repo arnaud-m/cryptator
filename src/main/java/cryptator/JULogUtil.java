@@ -101,6 +101,12 @@ public final class JULogUtil {
             JULogUtil.setLevel(Level.CONFIG, Cryptagen.LOGGER);
         }
 
+        @Override
+        public void setVerbose() {
+            ICryptaLogManager.super.setVerbose();
+            JULogUtil.setLevel(Level.FINE, Cryptagen.LOGGER);
+        }
+
     }
 
 }

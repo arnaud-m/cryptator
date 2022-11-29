@@ -133,7 +133,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
         public void accept(final ICryptaNode n, final ICryptaSolution s) {
             try {
                 if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
-                    logger.log(Level.CONFIG, "Eval cryptarithm solution #{0} [OK]", solutionCount);
+                    logger.log(Level.FINE, "Eval cryptarithm solution #{0} [OK]", solutionCount);
                 } else {
                     errorCount++;
                     logger.log(Level.SEVERE, "Eval cryptarithm solution #{0} [KO]", solutionCount);
