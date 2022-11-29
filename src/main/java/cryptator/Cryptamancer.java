@@ -32,19 +32,16 @@ public final class Cryptamancer {
 
     private static class CryptamancerOptionsParser extends AbstractOptionsParser<CryptamancerConfig> {
 
+        private static final String ARG_NAME = "CRYPTARITHM";
+
         protected CryptamancerOptionsParser() {
-            super(Cryptamancer.class, new CryptamancerConfig());
+            super(Cryptamancer.class, new CryptamancerConfig(), ARG_NAME);
         }
 
         @Override
         protected void configureLoggers() {
             final Verbosity lvl = config.isVerbose() ? Verbosity.VERY_VERBOSE : Verbosity.NORMAL;
             lvl.applyTo(JULogUtil.getDefaultLogManager());
-        }
-
-        @Override
-        public String getArgumentName() {
-            return "CRYPTARITHM";
         }
 
         @Override

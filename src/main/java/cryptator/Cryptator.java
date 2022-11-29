@@ -57,13 +57,10 @@ public final class Cryptator {
 
     private static class CryptatorOptionsParser extends AbstractOptionsParser<CryptatorConfig> {
 
-        CryptatorOptionsParser() {
-            super(Cryptator.class, new CryptatorConfig());
-        }
+        private static final String ARG_NAME = "CRYPTARITHMS...";
 
-        @Override
-        public String getArgumentName() {
-            return "CRYPTARITHMS...";
+        CryptatorOptionsParser() {
+            super(Cryptator.class, new CryptatorConfig(), ARG_NAME);
         }
 
         @Override

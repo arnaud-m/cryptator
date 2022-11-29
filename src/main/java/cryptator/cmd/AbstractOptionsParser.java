@@ -24,21 +24,26 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
     protected final E config;
 
-    protected AbstractOptionsParser(final Class<?> mainClass, final E config) {
+    private final String argumentName;
+
+    public AbstractOptionsParser(final Class<?> mainClass, final E config, final String argumentName) {
         super();
         this.mainClass = mainClass;
         this.config = config;
+        this.argumentName = argumentName;
     }
 
     public final Logger getLogger() {
         return Logger.getLogger(mainClass.getName());
     }
 
-    protected final String getCommandName() {
+    private final String getCommandName() {
         return mainClass.getName();
     }
 
-    protected abstract String getArgumentName();
+    private final String getArgumentName() {
+        return argumentName;
+    }
 
     protected abstract void configureLoggers();
 

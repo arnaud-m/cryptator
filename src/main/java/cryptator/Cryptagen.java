@@ -98,8 +98,10 @@ public final class Cryptagen {
 
     private static final class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
 
+        private static final String ARG_NAME = "WORDS...";
+
         protected CryptagenOptionsParser() {
-            super(Cryptagen.class, new CryptagenConfig());
+            super(Cryptagen.class, new CryptagenConfig(), ARG_NAME);
         }
 
         @Override
@@ -108,10 +110,6 @@ public final class Cryptagen {
             lvl.applyTo(JULogUtil.getDefaultLogManager());
         }
 
-        @Override
-        public String getArgumentName() {
-            return "WORDS...";
-        }
     }
 
     private static CryptaBiConsumer buildBiConsumer(final CryptagenConfig config) {
