@@ -22,8 +22,7 @@ public class OptionsParserWithLog<E extends CryptaLogConfig> extends AbstractOpt
 
     @Override
     protected void configureLoggers() {
-        final Verbosity lvl = config.isVerbose() ? Verbosity.VERY_VERBOSE : Verbosity.NORMAL;
-        lvl.applyTo(logManager);
+        config.getVerbosity().applyTo(logManager);
     }
 
 }

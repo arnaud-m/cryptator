@@ -97,7 +97,7 @@ public final class JULogUtil {
 
         @Override
         public void setNormal() {
-            ICryptaLogManager.super.setQuiet();
+            ICryptaLogManager.super.setNormal();
             JULogUtil.setLevel(Level.CONFIG, Cryptagen.LOGGER);
         }
 

@@ -74,7 +74,8 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
             configureLoggers();
             if (checkConfiguration()) {
                 if (checkArguments()) {
-                    getLogger().log(Level.CONFIG, "Parse options [OK]\n{0}", config);
+                    getLogger().log(Level.CONFIG, "Parse options [OK]");
+                    getLogger().log(Level.FINE, "Configuration:\n{0}", config);
                     return true;
                 } else {
                     getLogger().log(Level.SEVERE, "Parse arguments [FAIL]\n{0}", config.getArguments());
