@@ -13,7 +13,11 @@ import cryptator.specs.ICryptaLogManager;
 public enum Verbosity {
     SILENT, QUIET, NORMAL, VERBOSE, VERY_VERBOSE, DEBUG;
 
-    public static void setVerbosity(Verbosity verbosity, ICryptaLogManager manager) {
+    public void applyTo(ICryptaLogManager manager) {
+        setVerbosity(manager, this);
+    }
+
+    public static void setVerbosity(ICryptaLogManager manager, Verbosity verbosity) {
         if (verbosity != null && manager != null) {
             if (verbosity.equals(SILENT)) {
                 manager.setSilent();

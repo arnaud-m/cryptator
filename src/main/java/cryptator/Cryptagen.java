@@ -18,11 +18,11 @@ import java.util.logging.Logger;
 
 import cryptator.cmd.AbstractOptionsParser;
 import cryptator.cmd.CryptaBiConsumer;
+import cryptator.cmd.Verbosity;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
-import cryptator.solver.CryptaSolver;
 
 public final class Cryptagen {
 
@@ -104,11 +104,8 @@ public final class Cryptagen {
 
         @Override
         protected void configureLoggers() {
-            if (config.isVerbose()) {
-                JULogUtil.configureLoggers(Level.ALL);
-            } else {
-                JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
-            }
+            final Verbosity lvl = config.isVerbose() ? Verbosity.VERY_VERBOSE : Verbosity.NORMAL;
+            lvl.applyTo(JULogUtil.getDefaultLogManager());
         }
 
         @Override

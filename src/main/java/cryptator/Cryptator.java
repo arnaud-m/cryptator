@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import cryptator.cmd.AbstractOptionsParser;
 import cryptator.cmd.CryptaBiConsumer;
+import cryptator.cmd.Verbosity;
 import cryptator.config.CryptatorConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
@@ -67,9 +68,8 @@ public final class Cryptator {
 
         @Override
         protected void configureLoggers() {
-            if (config.isVerbose()) {
-                JULogUtil.configureLoggers(Level.ALL);
-            }
+            final Verbosity lvl = config.isVerbose() ? Verbosity.VERY_VERBOSE : Verbosity.NORMAL;
+            lvl.applyTo(JULogUtil.getDefaultLogManager());
         }
     }
 

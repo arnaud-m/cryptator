@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import cryptator.game.CryptaGameEngine;
 import cryptator.solver.CryptaSolver;
+import cryptator.specs.ICryptaLogManager;
 
 public final class JULogUtil {
 
@@ -62,7 +63,7 @@ public final class JULogUtil {
     }
 
     public static void flushLogs(final Logger logger) {
-        logger.log(Level.FINE, "Flush logger {0}", logger.getName());
+        logger.log(Level.FINEST, "Flush logger {0}", logger.getName());
         for (Handler handler : logger.getHandlers()) {
             handler.flush();
         }
@@ -77,6 +78,27 @@ public final class JULogUtil {
             if (name.startsWith(pkg)) {
                 flushLogs(manager.getLogger(name));
             }
+        }
+    }
+
+    public static final ICryptaLogManager DEFAULT_LOG_MANAGER = new DefaultLogManager();
+
+    public static ICryptaLogManager getDefaultLogManager() {
+        return DEFAULT_LOG_MANAGER;
+    }
+
+    private static class DefaultLogManager implements ICryptaLogManager {
+
+        @Override
+        public void setQuiet() {
+            ICryptaLogManager.super.setQuiet();
+            JULogUtil.setLevel(Level.INFO, Cryptagen.LOGGER, Cryptator.LOGGER);
+        }
+
+        @Override
+        public void setNormal() {
+            ICryptaLogManager.super.setQuiet();
+            JULogUtil.setLevel(Level.CONFIG, Cryptagen.LOGGER);
         }
 
     }

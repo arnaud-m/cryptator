@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import cryptator.cmd.AbstractOptionsParser;
+import cryptator.cmd.Verbosity;
 import cryptator.config.CryptaConfig;
 import cryptator.config.CryptamancerConfig;
 import cryptator.game.CryptaGameDecision;
@@ -37,9 +38,8 @@ public final class Cryptamancer {
 
         @Override
         protected void configureLoggers() {
-            if (config.isVerbose()) {
-                JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaGameEngine.LOGGER);
-            }
+            final Verbosity lvl = config.isVerbose() ? Verbosity.VERY_VERBOSE : Verbosity.NORMAL;
+            lvl.applyTo(JULogUtil.getDefaultLogManager());
         }
 
         @Override
