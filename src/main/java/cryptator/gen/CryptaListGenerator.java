@@ -8,6 +8,7 @@
  */
 package cryptator.gen;
 
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +21,8 @@ import java.util.logging.Logger;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
+import cryptator.choco.ChocoLogger;
+import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.solver.AdaptiveSolver;
@@ -35,19 +38,22 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
     private static final int TICK = 1000;
 
-    private WordArray words;
+    private final WordArray words;
 
-    private CryptagenConfig config;
+    private final CryptagenConfig config;
 
-    private Logger logger;
+    private final Logger logger;
 
-    private AtomicInteger errorCount;
+    private final ChocoLogger clog;
+
+    private final AtomicInteger errorCount;
 
     public CryptaListGenerator(final WordArray words, final CryptagenConfig config, final Logger logger) {
         super();
         this.words = words;
         this.config = config;
         this.logger = logger;
+        this.clog = new ChocoLogger(logger);
         this.errorCount = new AtomicInteger();
     }
 
@@ -109,7 +115,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     @Override
     public void generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
         final CryptaGenModel gen = buildModel();
-        logger.log(Level.FINE, "Display model{0}", gen.getModel());
+        clog.logOnModel(gen);
 
         final Consumer<ICryptaNode> cons = buildConsumer(gen, consumer);
 
@@ -119,10 +125,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         } else {
             parallelSolve(gen, cons, nthreads);
         }
-
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "{0}", gen.getModel().getSolver().getMeasures());
-        }
+        clog.logOnSolver(gen);
     }
 
     // FIXME are consumers thread-safe ? they are used in parallel !
@@ -138,35 +141,11 @@ public class CryptaListGenerator implements ICryptaGenerator {
         @Override
         public void accept(final ICryptaNode t) {
             if (logger.isLoggable(Level.CONFIG)) {
-                logger.log(Level.CONFIG, "candidate: {0}", TreeUtils.writeInorder(t));
-                if (logger.isLoggable(Level.FINE)) {
-                    solution.record();
-                    logger.log(Level.FINE, "candidate from solver:\n{0}", solution);
-                }
+                logger.log(Level.CONFIG, "Candidate cryptarithm:\n{0}", TreeUtils.writeInorder(t));
+                clog.logOnSolution(solution);
             }
         }
 
-    }
-
-    private static class SolutionCollect implements Consumer<ICryptaSolution> {
-
-        private int solutionCount;
-
-        private ICryptaSolution solution;
-
-        @Override
-        public void accept(final ICryptaSolution u) {
-            solutionCount++;
-            this.solution = u;
-        }
-
-        public final boolean hasUniqueSolution() {
-            return solutionCount == 1;
-        }
-
-        public final ICryptaSolution getSolution() {
-            return solution;
-        }
     }
 
     private class GenerateConsumer implements Consumer<ICryptaNode> {
@@ -182,17 +161,26 @@ public class CryptaListGenerator implements ICryptaGenerator {
             this.solver.limitSolution(2);
         }
 
+        private CryptaBiConsumer buildBiConsumer() {
+            CryptaBiConsumer consumer = new CryptaBiConsumer(logger);
+            if (config.isCheckSolution()) {
+                consumer.withSolutionCheck(config.getArithmeticBase());
+            }
+            return consumer;
+        }
+
         @Override
         public void accept(final ICryptaNode t) {
             try {
-                final SolutionCollect collect = new SolutionCollect();
+                final CryptaBiConsumer collect = buildBiConsumer();
                 solver.solve(t, config, collect);
-                if (collect.hasUniqueSolution()) {
-                    internal.accept(t, collect.getSolution());
+                Optional<ICryptaSolution> solution = collect.getUniqueSolution();
+                if (solution.isPresent()) {
+                    internal.accept(t, solution.get());
                 }
             } catch (CryptaModelException | CryptaSolverException e) {
                 errorCount.incrementAndGet();
-                logger.log(Level.WARNING, "failed to solve the cryptarithm", e);
+                logger.log(Level.WARNING, "Fail to solve the cryptarithm", e);
             }
         }
     }
