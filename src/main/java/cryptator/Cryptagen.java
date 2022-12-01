@@ -43,6 +43,8 @@ public final class Cryptagen {
             final WordArray words = buildWords(config.getArguments(), config);
             if (words != null) {
                 return generate(words, config);
+            } else {
+                LOGGER.log(Level.WARNING, "Empty word list.");
             }
         }
         JULogUtil.flushLogs();
@@ -115,6 +117,7 @@ public final class Cryptagen {
     }
 
     private static int generate(final WordArray words, final CryptagenConfig config) {
+        LOGGER.log(Level.CONFIG, () -> "Word List Features:\n" + words.toDimacs());
         final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
         final CryptaBiConsumer cons = buildBiConsumer(config);
         try {
