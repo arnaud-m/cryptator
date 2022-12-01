@@ -70,6 +70,11 @@ public class WordArray {
         return ub;
     }
 
+    public String toDimacs() {
+        return "c WORDS " + words.length + "\nc RIGHT_MEMBER " + (hasRightMember() ? "FIXED" : "FREE")
+                + "\nc DOUBLY_TRUE " + (isDoublyTrue() ? lb + "-" + ub : "NO");
+    }
+
     @Override
     public String toString() {
         return "WordArray [words=" + Arrays.toString(words) + ", rightMember=" + rightMember + ", lb=" + lb + ", ub="

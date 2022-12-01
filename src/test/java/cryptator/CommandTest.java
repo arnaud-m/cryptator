@@ -32,7 +32,7 @@ public class CommandTest {
     @Test
     public void testCryptator() throws FileNotFoundException {
         String[] args = {"-b", "10", "-c", "TRUE", "-g", "FALSE", "-h", "TRUE", "-l", "FALSE", "-max", "0", "-min", "0",
-                "-s", "1", "-t", "5", "-v", "FALSE", "-z", "FALSE", "www+imac=crash "};
+                "-s", "1", "-t", "5", "-v", "SILENT", "-z", "FALSE", "www+imac=crash "};
         assertEquals(0, Cryptator.doMain(args));
     }
 
@@ -44,13 +44,13 @@ public class CommandTest {
 
     @Test
     public void testCryptagen() throws FileNotFoundException {
-        String[] args = {"-c", "FALSE", "-g", "FALSE", "-v", "FALSE", "www", "imac", "crash"};
+        String[] args = {"-c", "FALSE", "-g", "FALSE", "-v", "SILENT", "www", "imac", "crash"};
         assertEquals(0, Cryptagen.doMain(args));
     }
 
     @Test
     public void testCryptagenDoublyTrue() throws FileNotFoundException {
-        String[] args = {"-c", "FALSE", "-g", "FALSE", "-v", "FALSE", "3", "4"};
+        String[] args = {"-c", "FALSE", "-g", "FALSE", "-v", "SILENT", "3", "4"};
         assertEquals(0, Cryptagen.doMain(args));
     }
 

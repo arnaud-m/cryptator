@@ -16,13 +16,12 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cryptator.cmd.AbstractOptionsParser;
 import cryptator.cmd.CryptaBiConsumer;
+import cryptator.cmd.OptionsParserWithLog;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
-import cryptator.solver.CryptaSolver;
 
 public final class Cryptagen {
 
@@ -44,6 +43,8 @@ public final class Cryptagen {
             final WordArray words = buildWords(config.getArguments(), config);
             if (words != null) {
                 return generate(words, config);
+            } else {
+                LOGGER.log(Level.WARNING, "Empty word list.");
             }
         }
         JULogUtil.flushLogs();
@@ -96,25 +97,14 @@ public final class Cryptagen {
         }
     }
 
-    private static final class CryptagenOptionsParser extends AbstractOptionsParser<CryptagenConfig> {
+    private static final class CryptagenOptionsParser extends OptionsParserWithLog<CryptagenConfig> {
+
+        private static final String ARG_NAME = "WORDS...";
 
         protected CryptagenOptionsParser() {
-            super(Cryptagen.class, new CryptagenConfig());
+            super(Cryptagen.class, new CryptagenConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
         }
 
-        @Override
-        protected void configureLoggers() {
-            if (config.isVerbose()) {
-                JULogUtil.configureLoggers(Level.ALL);
-            } else {
-                JULogUtil.setLevel(Level.WARNING, CryptaSolver.LOGGER);
-            }
-        }
-
-        @Override
-        public String getArgumentName() {
-            return "WORDS...";
-        }
     }
 
     private static CryptaBiConsumer buildBiConsumer(final CryptagenConfig config) {
@@ -127,6 +117,7 @@ public final class Cryptagen {
     }
 
     private static int generate(final WordArray words, final CryptagenConfig config) {
+        LOGGER.log(Level.CONFIG, () -> "Word List Features:\n" + words.toDimacs());
         final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
         final CryptaBiConsumer cons = buildBiConsumer(config);
         try {

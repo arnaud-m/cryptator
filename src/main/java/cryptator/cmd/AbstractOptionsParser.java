@@ -9,6 +9,7 @@
 package cryptator.cmd;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,21 +25,26 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
     protected final E config;
 
-    protected AbstractOptionsParser(final Class<?> mainClass, final E config) {
+    private final String argumentName;
+
+    protected AbstractOptionsParser(final Class<?> mainClass, final E config, final String argumentName) {
         super();
         this.mainClass = mainClass;
         this.config = config;
+        this.argumentName = argumentName;
     }
 
     public final Logger getLogger() {
         return Logger.getLogger(mainClass.getName());
     }
 
-    protected final String getCommandName() {
+    private final String getCommandName() {
         return mainClass.getName();
     }
 
-    protected abstract String getArgumentName();
+    private final String getArgumentName() {
+        return argumentName;
+    }
 
     protected abstract void configureLoggers();
 
@@ -69,7 +75,8 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
             configureLoggers();
             if (checkConfiguration()) {
                 if (checkArguments()) {
-                    getLogger().log(Level.CONFIG, "Parse options [OK]\n{0}", config);
+                    getLogger().log(Level.CONFIG, "Parse options [OK]");
+                    getLogger().log(Level.FINE, "Configuration:\n{0}", config);
                     return true;
                 } else {
                     getLogger().log(Level.SEVERE, "Parse arguments [FAIL]\n{0}", config.getArguments());
@@ -83,25 +90,35 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         }
 
         if (getLogger().isLoggable(Level.INFO)) {
-            getLogger().info(buildHelpMessage(parser));
+            getLogger().info(buildHelpMessage(parser, OptionHandlerFilter.PUBLIC));
         }
         return false;
 
     }
 
-    private String buildHelpMessage(CmdLineParser parser) {
-        StringBuilder b = new StringBuilder();
-        b.append(" Help:\n");
-        b.append("java ").append(getCommandName()).append(" [options...] ").append(getArgumentName()).append("\n");
+    private String printUsage(CmdLineParser parser, OptionHandlerFilter filter) {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        parser.printUsage(os);
-        b.append(os.toString());
-        b.append("\nExamples:");
-        b.append("\njava ").append(getCommandName()).append(" ")
-                .append(parser.printExample(OptionHandlerFilter.REQUIRED)).append(" ").append(getArgumentName());
+        parser.printUsage(new OutputStreamWriter(os), null, filter);
+        return os.toString();
+    }
 
-        b.append("\njava ").append(getCommandName()).append(" ").append(parser.printExample(OptionHandlerFilter.ALL))
-                .append(" ").append(getArgumentName());
+    private String printExample(String options) {
+        return "java " + getCommandName() + " " + options + " " + getArgumentName();
+    }
+
+    private String printExample(CmdLineParser parser, OptionHandlerFilter filter) {
+        return printExample(parser.printExample(filter));
+    }
+
+    private String buildHelpMessage(CmdLineParser parser, OptionHandlerFilter filter) {
+        StringBuilder b = new StringBuilder();
+        b.append(" Help message:\n");
+        b.append(printExample("[options...]")).append("\n");
+        b.append(printUsage(parser, filter));
+        b.append("\nExamples:");
+        b.append("\n").append(printExample(parser, OptionHandlerFilter.REQUIRED));
+        b.append("\n").append(printExample(parser, filter));
         return b.toString();
     }
+
 }

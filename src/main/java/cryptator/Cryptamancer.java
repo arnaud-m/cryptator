@@ -12,9 +12,9 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cryptator.cmd.AbstractOptionsParser;
+import cryptator.cmd.OptionsParserWithLog;
 import cryptator.config.CryptaConfig;
-import cryptator.config.CryptamancerConfig;
+import cryptator.config.CryptaLogConfig;
 import cryptator.game.CryptaGameDecision;
 import cryptator.game.CryptaGameEngine;
 import cryptator.game.CryptaGameException;
@@ -29,22 +29,12 @@ public final class Cryptamancer {
 
     public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
 
-    private static class CryptamancerOptionsParser extends AbstractOptionsParser<CryptamancerConfig> {
+    private static class CryptamancerOptionsParser extends OptionsParserWithLog<CryptaLogConfig> {
+
+        private static final String ARG_NAME = "CRYPTARITHM";
 
         protected CryptamancerOptionsParser() {
-            super(Cryptamancer.class, new CryptamancerConfig());
-        }
-
-        @Override
-        protected void configureLoggers() {
-            if (config.isVerbose()) {
-                JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaGameEngine.LOGGER);
-            }
-        }
-
-        @Override
-        public String getArgumentName() {
-            return "CRYPTARITHM";
+            super(Cryptamancer.class, new CryptaLogConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
         }
 
         @Override
@@ -57,7 +47,7 @@ public final class Cryptamancer {
         super();
     }
 
-    public static ICryptaNode parseCryptarithm(final CryptamancerConfig config) {
+    public static ICryptaNode parseCryptarithm(final CryptaLogConfig config) {
         final String cryptarithm = config.getArguments().get(0);
         try {
             return Cryptator.parseCryptarithm(cryptarithm, new CryptaParserWrapper(), LOGGER);
@@ -111,7 +101,7 @@ public final class Cryptamancer {
         if (!optparser.parseOptions(args)) {
             return;
         }
-        final CryptamancerConfig config = optparser.getConfig();
+        final CryptaLogConfig config = optparser.getConfig();
 
         final ICryptaNode node = parseCryptarithm(config);
         if (node == null) {
