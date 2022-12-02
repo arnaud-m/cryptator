@@ -11,6 +11,7 @@ package cryptator;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.OptionalInt;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,44 +29,59 @@ public class GenerateTest {
         JULogUtil.configureTestLoggers();
     }
 
-    public long testGenerate(final WordArray wordArray, final boolean lightModel, final boolean lightPropagation)
+    private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
+            final WordArray wordArray, final boolean lightModel, final boolean lightPropagation)
             throws CryptaModelException {
         final CryptagenConfig config = new CryptagenConfig();
         config.setLightModel(lightModel);
         config.setLightPropagation(lightPropagation);
         final CryptaListGenerator gen = new CryptaListGenerator(wordArray, config, Cryptagen.LOGGER);
         CryptaBiConsumer cons = new CryptaBiConsumer(Cryptagen.LOGGER);
+        cons.withSolutionLog();
         cons.withSolutionCheck(config.getArithmeticBase());
-        gen.generate(cons);
         assertEquals(0, cons.getErrorCount());
-        return cons.getSolutionCount();
+        long actualCandCount = gen.generate(cons);
+        if (expectedCandCount.isPresent()) {
+            assertEquals(expectedCandCount.getAsInt(), actualCandCount);
+        }
+        assertEquals(expectedSolCount, cons.getSolutionCount());
     }
 
-    public void testGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
-        assertEquals(expectedSolCount, testGenerate(wordArray, false, false));
-        assertEquals(expectedSolCount, testGenerate(wordArray, false, true));
-        assertEquals(expectedSolCount, testGenerate(wordArray, true, false));
-        assertEquals(expectedSolCount, testGenerate(wordArray, true, true));
+    private void testGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
+        testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
     }
 
-    public void testGenerate(final int expectedSolCount, final String rightMember, final String... words)
-            throws CryptaModelException {
-        testGenerate(expectedSolCount, new WordArray(Arrays.asList(words), rightMember));
+    private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
+            final WordArray wordArray) throws CryptaModelException {
+        testGenerate(expectedSolCount, expectedCandCount, wordArray, false, false);
+        testGenerate(expectedSolCount, expectedCandCount, wordArray, false, true);
+        testGenerate(expectedSolCount, expectedCandCount, wordArray, true, false);
+        testGenerate(expectedSolCount, expectedCandCount, wordArray, true, true);
     }
 
     @Test
     public void testSendMoreMoney() throws CryptaModelException {
-        testGenerate(1, null, "send", "more", "money");
+        final WordArray words = new WordArray(Arrays.asList("send", "more", "money"), null);
+        testGenerate(1, OptionalInt.of(1), words);
+    }
+
+    @Test
+    public void testSendMuchMoreMoney() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("send", "much", "more", "money"), null);
+        testGenerate(1, OptionalInt.of(6), words, false, true);
+
     }
 
     @Test
     public void testPlanets1() throws CryptaModelException {
-        testGenerate(2, null, "venus", "earth", "uranus", "saturn");
+        WordArray words = new WordArray(Arrays.asList("venus", "earth", "uranus", "saturn"), null);
+        testGenerate(2, words);
     }
 
     @Test
     public void testPlanets2() throws CryptaModelException {
-        testGenerate(1, "planets", "venus", "earth", "uranus", "saturn");
+        WordArray words = new WordArray(Arrays.asList("venus", "earth", "uranus", "saturn"), "planets");
+        testGenerate(1, words);
     }
 
     @Test

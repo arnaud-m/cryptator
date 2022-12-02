@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
+import cryptator.specs.ICryptaSolutionStore;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.GraphvizExport;
@@ -27,11 +28,11 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.Graph;
 
-public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
+public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution>, ICryptaSolutionStore {
 
     private final Logger logger;
 
-    private long solutionCount;
+    private int solutionCount;
 
     private Optional<ICryptaSolution> lastSolution;
 
@@ -46,16 +47,13 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
         internal = new SolutionCounter();
     }
 
-    public final long getSolutionCount() {
+    @Override
+    public final int getSolutionCount() {
         return solutionCount;
     }
 
     public final Optional<ICryptaSolution> getLastSolution() {
         return lastSolution;
-    }
-
-    public final Optional<ICryptaSolution> getUniqueSolution() {
-        return solutionCount <= 1 ? lastSolution : Optional.empty();
     }
 
     public final int getErrorCount() {
@@ -94,8 +92,8 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
         @Override
         public void accept(final ICryptaNode t, final ICryptaSolution u) {
-            lastSolution = Optional.of(u);
             solutionCount++;
+            lastSolution = Optional.of(u);
         }
     }
 

@@ -106,7 +106,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     }
 
     @Override
-    public void generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
+    public long generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
         final CryptaGenModel gen = buildModel();
         clog.logOnModel(gen);
 
@@ -119,6 +119,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
             parallelSolve(gen, cons, nthreads);
         }
         clog.logOnSolver(gen);
+        return gen.getModel().getSolver().getSolutionCount();
     }
 
     // FIXME are consumers thread-safe ? they are used in parallel !
@@ -167,13 +168,17 @@ public class CryptaListGenerator implements ICryptaGenerator {
             try {
                 final CryptaBiConsumer collect = buildBiConsumer();
                 solver.solve(t, config, collect);
-                Optional<ICryptaSolution> solution = collect.getUniqueSolution();
-                if (solution.isPresent()) {
-                    internal.accept(t, solution.get());
+                if (collect.getErrorCount() == 0) {
+                    final Optional<ICryptaSolution> solution = collect.getUniqueSolution();
+                    if (solution.isPresent()) {
+                        internal.accept(t, solution.get());
+                    }
+                } else {
+                    logger.log(Level.WARNING, "Solve the candidate cryptarithm [ERROR]");
                 }
             } catch (CryptaModelException | CryptaSolverException e) {
                 errorCount.incrementAndGet();
-                logger.log(Level.WARNING, "Fail to solve the cryptarithm", e);
+                logger.log(Level.WARNING, "Solve the candidate cryptarithm [FAIL]", e);
             }
         }
     }
