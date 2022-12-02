@@ -54,7 +54,7 @@ public class CryptaGenModel extends WordsListModel {
     }
 
     private void postSymBreakLengthLenConstraint() {
-        left.getMaxLength().le(right.getMaxLength());
+        left.getMaxLength().le(right.getMaxLength()).post();
 
     }
 
