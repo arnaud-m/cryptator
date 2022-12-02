@@ -27,6 +27,7 @@ import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
 import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
+import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaGenerator;
 import cryptator.specs.ICryptaNode;
@@ -78,7 +79,8 @@ public class CryptaListGenerator implements ICryptaGenerator {
     private Consumer<ICryptaNode> buildConsumer(final CryptaGenModel gen,
             final BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
         final Consumer<ICryptaNode> cons = new LogConsumer(gen);
-        return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(new AdaptiveSolver(), consumer));
+        final ICryptaSolver solver = config.useBignum() ? new CryptaSolver(true) : new AdaptiveSolver();
+        return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(solver, consumer));
     }
 
     private void sequentialSolve(final CryptaGenModel gen, final Consumer<ICryptaNode> cons) {
