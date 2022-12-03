@@ -1,0 +1,171 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/base.org
+#+TITLE: Notes about the experimental protocol
+#+DESCRIPTION:
+#+KEYWORDS:
+#+TEXT:
+#+OPTIONS: H:2 num:nil toc:2
+#+LANGUAGE: en
+#+PROPERTY: header-args :results silent :exports code :session cryptarithm
+#+HTML_HEAD:    <link rel="stylesheet" type="text/css" href="http://www.i3s.unice.fr/~malapert/css/worg.min.css" />
+* Initialize and Configure
+** Create Symlinks
+
+#+BEGIN_SRC sh :results silent
+   ln -s ../words .
+   ln -s ../../../target/cryptator-0.5.1-SNAPSHOT-with-dependencies.jar .
+ #+END_SRC
+
+** Clear directories
+
+ #+BEGIN_SRC sh
+   rm -fr instances
+   mkdir instances/
+ #+END_SRC
+
+ #+BEGIN_SRC sh
+   rm -fr algorithms
+   mkdir algorithms/
+ #+END_SRC
+
+** Generation functions
+
+ #+BEGIN_SRC sh
+   function generateWordList() {
+       find words/ -type f -name '*.txt' -exec wc -w {} \; | while read WORDCOUNT PATHNAME ; do
+           if [ $WORDCOUNT -ge $1 ] && [ $WORDCOUNT -le $2 ] ; then
+               INSTANCE="instances/"`basename -s .txt $PATHNAME`.dat
+               echo $PATHNAME > $INSTANCE
+            fi
+        done
+   }
+
+    function generateDoublyTrue() {
+       LANGUAGES=../shell/language-codes.csv
+       # Read the csf files with a list of country codes, and languages codes
+       while IFS="," read ctry lang ; do
+           INSTANCE="instances/$lang-$1-$2.dat"
+           echo -ctry $ctry -lang $lang $1 $2 > $INSTANCE
+       done < <(grep -v "^#\|^$" $LANGUAGES)
+   }
+ #+END_SRC
+
+* Generate
+
+** Configure the solver
+
+#+BEGIN_SRC sh
+  rm solver.sh
+  ln -s solver-generate.sh solver.sh
+ #+END_SRC
+
+** Configure instances
+
+#+BEGIN_SRC sh
+  generateWordList 1 70
+  generateDoublyTrue 1 200
+ #+END_SRC
+
+** Configure algorithms
+
+*** Best algorithm
+ #+BEGIN_SRC sh
+   echo -v normal -d TRUE -lightM FALSE -lightP FALSE > algorithms/FF.dat
+ #+END_SRC
+
+*** Other algorithms
+
+ #+BEGIN_SRC sh
+   echo -v normal -d TRUE -lightM FALSE -lightP FALSE > algorithms/FF.dat
+   echo -v normal -d TRUE -lightM FALSE -lightP TRUE > algorithms/FT.dat
+   echo -v normal -d TRUE -lightM TRUE -lightP FALSE > algorithms/TF.dat
+   echo -v normal -d TRUE -lightM TRUE -lightP TRUE > algorithms/TT.dat
+ #+END_SRC
+
+* Generate and Solve
+
+** Configure the solver
+
+#+BEGIN_SRC sh
+  rm solver.sh
+  ln -s solver-generate-and-solve.sh solver.sh
+ #+END_SRC
+
+** Configure instances
+
+*** Enumerate all cryptarithms
+
+The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (around 110K candidates).
+
+#+BEGIN_SRC sh
+  for FILENAME in sports.txt virtues.txt astro.txt alpha.txt europeans.txt vegetables.txt games.txt fruits.txt cryptarithm.txt instruments.txt happy.txt rainbow.txt planets.txt mythologie-grecque/cyclopes.txt mythologie-grecque/divinites-olympiennes.txt mythologie-grecque/divinites-primordiales.txt mythologie-grecque/geants.txt mythologie-grecque/demi-dieux.txt mythologie-grecque/titans.txt asterix/asterix.txt colors.txt monsters.txt; do
+      PATHNAME="words/$FILENAME"
+      INSTANCE="instances/"`basename -s .txt $FILENAME`.dat
+      echo $PATHNAME > $INSTANCE
+  done
+ #+END_SRC
+
+*** Enumerate the longest cryptarithms
+
+  I have found manually the longest cryptarithms of the remaining word lists.
+
+ #+BEGIN_SRC sh
+   function generateLong() {
+       echo -minop $1 -maxop $1 words/$2 > instances/`basename -s .txt $2`-$1.dat
+   }
+
+   # generateLong 9 9 monsters.txt
+   # generateLong 9 9 colors.txt
+   generateLong 14 elements.txt
+   generateLong 49 palindromes-fr.txt
+   generateLong 41 palindromes-en.txt
+   generateLong 14 countries.txt
+   generateLong 11 computer.txt
+   generateLong 12 jobs.txt
+   generateLong 13 jobs.txt
+   generateLong 13 vins.txt
+   generateLong 28 mythologie-grecque/mythologie-grecque.txt
+ #+END_SRC
+
+** Configure the algorithm
+
+ #+BEGIN_SRC sh
+   echo -v quiet -d FALSE -l TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
+ #+END_SRC
+
+* Testing
+** Solve instances in sequential
+   #+BEGIN_SRC sh
+     nohup gridjobs  -l -p '*.dat' &
+   #+END_SRC
+
+** Solve instances in parallel.
+   #+BEGIN_SRC sh
+     gridjobs  -d 0 -p '*.dat' | nohup parallel -j 20 &
+   #+END_SRC
+
+* Reporting
+
+#+BEGIN_SRC sh
+  gridres -z -k table_keys.txt
+#+END_SRC
+
+  Look for the files .res in the results directory.
+
+** Create cryptarithm database
+
+#+BEGIN_SRC sh
+  OUTDIR=results-cryptarithms
+  rm -fr $OUTDIR
+  mkdir $OUTDIR
+  ## Extract cryptarithms
+  SED_EXPR="N;  s/^[^\n]*Find .*\[OK\]\n//p ; D"
+  find results -name '*.o' | while read INFILE ; do
+      OUTFILE=$OUTDIR/`basename -s .o $INFILE`.db.txt
+       sed -n "$SED_EXPR" $INFILE >> $OUTFILE
+    done
+  ## Sort cryptarithms
+  find $OUTDIR -name '*.txt' -exec sort -u -o {} {} \;
+
+#+END_SRC
+
+* Analysis
