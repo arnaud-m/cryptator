@@ -1,0 +1,5 @@
+finland + ireland = denmark 
+france + greece = finland 
+greece + italy = latvia 
+ireland + romania = denmark 
+spain + sweden = poland 
