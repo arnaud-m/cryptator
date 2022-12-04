@@ -53,8 +53,7 @@ public interface ICryptaNode {
      * @return true, if it is internal node, otherwise it is a leaf
      */
     boolean isInternalNode();
-    
-    
+
     /**
      * Checks if the subtree is a constant of the tree.
      *
@@ -63,14 +62,13 @@ public interface ICryptaNode {
     boolean isConstant();
 
     /**
-     * Checks if the node represents a word, i.e. it is a leaf and not constant. 
+     * Checks if the node represents a word, i.e. it is a leaf and not constant.
      *
      * @return true, if it is a word leaf, otherwise false.
      */
     default boolean isWord() {
-    	return !isInternalNode() && !isConstant();
+        return !isInternalNode() && !isConstant();
     }
-    
 
     /**
      * Transform parsed node to string recognized by the grammar.
@@ -78,5 +76,5 @@ public interface ICryptaNode {
      * @return the string representation of the node accepted by the grammar
      */
     String toGrammarString();
-    
+
 }

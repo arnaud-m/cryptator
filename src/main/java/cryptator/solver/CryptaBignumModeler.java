@@ -29,13 +29,15 @@ import cryptator.tree.TreeUtils;
 public class CryptaBignumModeler implements ICryptaModeler {
 
     /**
-     * bignum model with addition only that uses a little endian representation with a variable number of digits.
+     * bignum model with addition only that uses a little endian representation with
+     * a variable number of digits.
      */
     @Override
-    public CryptaModel model(ICryptaNode cryptarithm, CryptaConfig config) throws CryptaModelException {
+    public CryptaModel model(final ICryptaNode cryptarithm, final CryptaConfig config) throws CryptaModelException {
         final CryptaOperatorDetection detect = TreeUtils.computeUnsupportedBignumOperator(cryptarithm);
-        if (detect.hasUnsupportedOperator())
-            throw new CryptaModelException("Unsupported bignum operator(s): " + detect.getUnsupportedOperator());
+        if (detect.hasUnsupportedOperator()) {
+            throw new CryptaModelException("Unsupported bignum operator(s): " + detect.getUnsupportedOperators());
+        }
 
         final Model model = new Model("Cryptarithm-bignum");
         final AbstractModelerNodeConsumer modelerNodeConsumer = new ModelerBignumConsumer(model, config);
@@ -49,11 +51,11 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 
     private final Deque<ArExpression[]> stack = new ArrayDeque<>();
 
-    public ModelerBignumConsumer(Model model, CryptaConfig config) {
+    ModelerBignumConsumer(final Model model, final CryptaConfig config) {
         super(model, config);
     }
 
-    private ArExpression[] makeWordVars(char[] word) {
+    private ArExpression[] makeWordVars(final char[] word) {
         final int n = word.length;
         // little endian
         ArExpression[] vars = new ArExpression[n];
@@ -63,21 +65,20 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return vars;
     }
 
-    private ArExpression[] makeConstVars(char[] word) {
-    	List<ArExpression> vars = new ArrayList<>();
+    private ArExpression[] makeConstVars(final char[] word) {
+        List<ArExpression> vars = new ArrayList<>();
         BigInteger n = new BigInteger(new String(word));
-        BigInteger b = BigInteger.valueOf(config.getArithmeticBase());	
+        BigInteger b = BigInteger.valueOf(config.getArithmeticBase());
         while (n.compareTo(BigInteger.ZERO) > 0) {
-        	BigInteger[] r = n.divideAndRemainder(b);
-        	n = r[0];
-        	vars.add(model.intVar(r[1].intValueExact()));
-        }	
-		ArExpression[] res = new ArExpression[vars.size()];
-		return vars.toArray(res);
+            BigInteger[] r = n.divideAndRemainder(b);
+            n = r[0];
+            vars.add(model.intVar(r[1].intValueExact()));
+        }
+        ArExpression[] res = new ArExpression[vars.size()];
+        return vars.toArray(res);
     }
 
-
-    private ArExpression[] applyADD(ArExpression[] a, ArExpression[] b) {
+    private ArExpression[] applyADD(final ArExpression[] a, final ArExpression[] b) {
         final int m = Math.min(a.length, b.length);
         final int n = Math.max(a.length, b.length);
         final ArExpression[] c = new ArExpression[n];
@@ -94,7 +95,7 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return c;
     }
 
-    private void applyEQ(ArExpression[] a, ArExpression[] b) {
+    private void applyEQ(final ArExpression[] a, final ArExpression[] b) {
         int n = Math.max(a.length, b.length);
         BignumArExpression a1 = new BignumArExpression(a, n, "l");
         BignumArExpression b1 = new BignumArExpression(b, n, "r");
@@ -104,37 +105,41 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         a1.carries[n - 1].eq(b1.carries[n - 1]).decompose().post();
     }
 
-    private void apply(CryptaOperator op, ArExpression[] a, ArExpression[] b) {
-    	  switch (op) {
-          case ADD: {
-          	stack.push(applyADD(a, b));
-          	break;
-          }
-          case EQ: {
-              applyEQ(a, b);
-              if (!stack.isEmpty()) // TODO Raise CryptaModelException instead !
-                  throw new IllegalStateException("Stack is not empty after accepting a relational operator.");
-              else break;
-          }
-          default :
-              //	Should never be in the default case, this exception is
-              //  a program break in order to recall to modify the switch if
-              //  a new operator in BigNum is added.
-              //  Example case : we remove the MUL operator in computeUnsupportedBignumOperator
-                  throw new IllegalStateException("Bignum operator is not yet implemented");
-      }
+    private void apply(final CryptaOperator op, final ArExpression[] a, final ArExpression[] b) {
+        switch (op) {
+        case ADD: {
+            stack.push(applyADD(a, b));
+            break;
+        }
+        case EQ: {
+            applyEQ(a, b);
+            if (!stack.isEmpty()) {
+                throw new IllegalStateException("Stack is not empty after accepting a relational operator.");
+            } else {
+                break;
+            }
+        }
+        default:
+            // Should never be in the default case, this exception is
+            // a program break in order to recall to modify the switch if
+            // a new operator in BigNum is added.
+            // Example case : we remove the MUL operator in computeUnsupportedBignumOperator
+            throw new IllegalStateException("Bignum operator is not yet implemented");
+        }
     }
+
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         super.accept(node, numNode);
-        if(node.isInternalNode()) {
-        	if(! node.getOperator().equals(CryptaOperator.AND)) {
-        	  final ArExpression[] b = stack.pop();
-              final ArExpression[] a = stack.pop();
-              apply(node.getOperator(), a, b);
-        	} // else do nothing ; constraint are posted when the relational operator is popped.
+        if (node.isInternalNode()) {
+            if (!node.getOperator().equals(CryptaOperator.AND)) {
+                final ArExpression[] b = stack.pop();
+                final ArExpression[] a = stack.pop();
+                apply(node.getOperator(), a, b);
+            } // else do nothing ; constraint are posted when the relational operator is
+              // popped.
         } else {
-        	if (node.isConstant()){
+            if (node.isConstant()) {
                 stack.push(makeConstVars(node.getWord()));
             } else {
                 stack.push(makeWordVars(node.getWord()));
@@ -144,40 +149,36 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
 
     @Override
     public void postCryptarithmEquationConstraint() throws CryptaModelException {
-        if (!stack.isEmpty()) throw new CryptaModelException("Invalid stack size at the end of modeling.");
+        if (!stack.isEmpty()) {
+            throw new CryptaModelException("Invalid stack size at the end of modeling.");
+        }
     }
 
-    class BignumArExpression {
+    private class BignumArExpression {
 
-        public final IntVar[] digits;
+        private final IntVar[] digits;
 
-        public final IntVar[] carries;
+        private final IntVar[] carries;
 
-        public BignumArExpression(ArExpression[] a, int n, String suffix) {
+        BignumArExpression(final ArExpression[] a, final int n, final String suffix) {
             super();
             digits = model.intVarArray("D" + suffix, n, 0, config.getArithmeticBase() - 1);
             // TODO improve the bound ?
             carries = model.intVarArray("C" + suffix, n, 0, IntVar.MAX_INT_BOUND / config.getArithmeticBase());
-            postScalar(
-                    new IntVar[]{carries[0], digits[0], a[0].intVar()},
-                    new int[]{config.getArithmeticBase(), 1, -1}
-            );
+            postScalar(new IntVar[] {carries[0], digits[0], a[0].intVar()},
+                    new int[] {config.getArithmeticBase(), 1, -1});
 
             for (int i = 1; i < a.length; i++) {
-                postScalar(
-                        new IntVar[]{carries[i], digits[i], a[i].intVar(), carries[i - 1]},
-                        new int[]{config.getArithmeticBase(), 1, -1, -1}
-                );
+                postScalar(new IntVar[] {carries[i], digits[i], a[i].intVar(), carries[i - 1]},
+                        new int[] {config.getArithmeticBase(), 1, -1, -1});
             }
             for (int i = a.length; i < n; i++) {
-                postScalar(
-                        new IntVar[]{carries[i], digits[i], carries[i - 1]},
-                        new int[]{config.getArithmeticBase(), 1, -1}
-                );
+                postScalar(new IntVar[] {carries[i], digits[i], carries[i - 1]},
+                        new int[] {config.getArithmeticBase(), 1, -1});
             }
         }
 
-        private void postScalar(IntVar[] vars, int[] coeffs) {
+        private void postScalar(final IntVar[] vars, final int[] coeffs) {
             model.scalar(vars, coeffs, "=", 0).post();
         }
 

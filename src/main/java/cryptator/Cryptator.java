@@ -8,14 +8,11 @@
  */
 package cryptator;
 
-import static cryptator.tree.TreeUtils.writePostorder;
-
-import java.io.ByteArrayOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import cryptator.cmd.CryptaBiConsumer;
-import cryptator.cmd.AbstractOptionsParser;
+import cryptator.cmd.OptionsParserWithLog;
 import cryptator.config.CryptatorConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
@@ -24,105 +21,97 @@ import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
-import cryptator.tree.TreeUtils;
 
-public class Cryptator {
+public final class Cryptator {
 
-	public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
 
-	private Cryptator() {}
+    private Cryptator() {
+    }
 
+    public static void main(final String[] args) {
+        JULogUtil.configureDefaultLoggers();
+        final int exitCode = doMain(args);
+        System.exit(exitCode);
+    }
 
-	public static void main(String[] args) {
-		JULogUtil.configureLoggers();
+    public static int doMain(final String[] args) {
+        CryptatorOptionsParser optparser = new CryptatorOptionsParser();
+        if (!optparser.parseOptions(args)) {
+            return -1;
+        }
+        final CryptatorConfig config = optparser.getConfig();
 
-		CryptatorOptionsParser optparser = new CryptatorOptionsParser();
-		if ( !optparser.parseOptions(args)) return;
-		final CryptatorConfig config = optparser.getConfig();
+        final ICryptaSolver solver = buildSolver(config);
 
-		final ICryptaSolver solver = buildSolver(config);
+        final CryptaParserWrapper parser = new CryptaParserWrapper();
 
-		final CryptaParserWrapper parser = new CryptaParserWrapper();
-		
-		int exitStatus = 0;
-		for (String cryptarithm : config.getArguments()) {
-			exitStatus += solve(cryptarithm, parser, solver, config);
-		}
-		JULogUtil.flushLogs();
-		System.exit(exitStatus);
-	}
+        int exitCode = 0;
+        for (String cryptarithm : config.getArguments()) {
+            exitCode += solve(cryptarithm, parser, solver, config);
+        }
+        JULogUtil.flushLogs();
+        return exitCode;
+    }
 
-	private static class CryptatorOptionsParser extends AbstractOptionsParser<CryptatorConfig> {
+    private static class CryptatorOptionsParser extends OptionsParserWithLog<CryptatorConfig> {
 
-		public CryptatorOptionsParser() {
-			super(Cryptator.class, new CryptatorConfig());
-		}
+        private static final String ARG_NAME = "CRYPTARITHMS...";
 
-		@Override
-		public String getArgumentName() {
-			return "CRYPTARITHMS...";
-		}
+        CryptatorOptionsParser() {
+            super(Cryptator.class, new CryptatorConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
+        }
+    }
 
-		@Override
-		protected void configureLoggers() {
-			if(config.isVerbose()) {
-				JULogUtil.setLevel(Level.CONFIG, getLogger(), CryptaSolver.LOGGER);
-			}
-		}	
-	}
+    private static ICryptaSolver buildSolver(final CryptatorConfig config) {
+        final CryptaSolver solver = new CryptaSolver(config.useBignum());
+        solver.limitSolution(config.getSolutionLimit());
+        solver.limitTime(config.getTimeLimit());
+        return solver;
+    }
 
-	private static final ICryptaSolver buildSolver(CryptatorConfig config) {
-		final CryptaSolver solver = new CryptaSolver(config.useBignum());
-		solver.limitSolution(config.getSolutionLimit());
-		solver.limitTime(config.getTimeLimit());
-		return solver;
-	}
+    public static ICryptaNode parseCryptarithm(final String cryptarithm, final CryptaParserWrapper parser,
+            final Logger logger) throws CryptaParserException {
+        final ICryptaNode node = parser.parse(cryptarithm);
+        logger.log(Level.INFO, "Parse cryptarithm [OK]\n{0}", cryptarithm);
+        return node;
 
-	public static ICryptaNode parseCryptarithm(String cryptarithm, CryptaParserWrapper parser, Logger logger) throws CryptaParserException  {
-		final ICryptaNode node = parser.parse(cryptarithm);
-		logger.log(Level.INFO, "Parse cryptarithm {0} [OK]", cryptarithm);
-		if(logger.isLoggable(Level.CONFIG)) {
-			final ByteArrayOutputStream os = new ByteArrayOutputStream();
-			writePostorder(node, os);
-			logger.log(Level.CONFIG, "Display postorder internal cryptarithm:\n{0}", os);
-		}
-		return node;
+    }
 
-	}
+    private static long solve(final String cryptarithm, final CryptaParserWrapper parser, final ICryptaSolver solver,
+            final CryptatorConfig config) {
+        try {
+            final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
 
-	private static long solve(String cryptarithm, CryptaParserWrapper parser, ICryptaSolver solver , CryptatorConfig config) {
-		try {
-			final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
+            final CryptaBiConsumer consumer = buildBiConsumer(config);
+            final boolean solved = solver.solve(node, config, consumer);
+            String status = "ERROR";
+            if (consumer.getErrorCount() == 0) {
+                status = solved ? "OK" : "KO";
+            }
+            consumer.logOnLastSolution();
+            LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
+            return consumer.getErrorCount();
+        } catch (CryptaParserException e) {
+            LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
+        } catch (CryptaModelException e) {
+            LOGGER.log(Level.SEVERE, "Model cryptarithm [FAIL]", e);
+        } catch (CryptaSolverException e) {
+            LOGGER.log(Level.SEVERE, "Solve cryptarithm [FAIL]", e);
+        }
+        return 1;
+    }
 
-			if(LOGGER.isLoggable(Level.INFO)) {
-				LOGGER.log(Level.INFO, "Cryptarithm features:\n{0}", TreeUtils.computeFeatures(node));
-			}
-			
-			final CryptaBiConsumer consumer = buildBiConsumer(config);
-			final boolean solved = solver.solve(node, config, s -> consumer.accept(node, s)) ;
-			String status = "ERROR";
-			if(consumer.getErrorCount() == 0) {
-				status = solved ? "OK" : "KO";
-			}
-			LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
-			return consumer.getErrorCount();
-		} catch (CryptaParserException e) {
-			LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
-		} catch (CryptaModelException e) {
-			LOGGER.log(Level.SEVERE, "Model cryptarithm [FAIL]", e);
-		} catch (CryptaSolverException e) {
-			LOGGER.log(Level.SEVERE, "Solve cryptarithm [FAIL]", e);
-		}
-		return 1;
-	}
-
-	private static CryptaBiConsumer buildBiConsumer(final CryptatorConfig config) {
-		CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
-		consumer.withSolutionLog();
-		if(config.isCheckSolution()) consumer.withSolutionCheck(config.getArithmeticBase());
-		if(config.isExportGraphiz()) consumer.withGraphvizExport();
-		return consumer;
-	}
-	
+    private static CryptaBiConsumer buildBiConsumer(final CryptatorConfig config) {
+        CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
+        consumer.withSolutionLog();
+        if (config.isCheckSolution()) {
+            consumer.withSolutionCheck(config.getArithmeticBase());
+        }
+        if (config.isExportGraphiz()) {
+            consumer.withGraphvizExport();
+        }
+        return consumer;
+    }
 
 }

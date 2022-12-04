@@ -8,25 +8,29 @@
  */
 package cryptator.solver;
 
-import cryptator.config.CryptaConfig;
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalNodeConsumer;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
-import java.util.*;
+import cryptator.config.CryptaConfig;
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalNodeConsumer;
 
 public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsumer {
 
-    public final Model model;
-    public final CryptaConfig config;
-    public final Map<Character, IntVar> symbolsToVariables;
+    protected final Model model;
+    protected final CryptaConfig config;
+    protected final Map<Character, IntVar> symbolsToVariables;
     protected final Set<Character> firstSymbols;
 
-
-    protected AbstractModelerNodeConsumer(Model model, CryptaConfig config) {
+    protected AbstractModelerNodeConsumer(final Model model, final CryptaConfig config) {
         super();
         this.model = model;
         this.config = config;
@@ -34,11 +38,11 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         firstSymbols = new HashSet<>();
     }
 
-    private IntVar createSymbolVar(char symbol) {
+    private IntVar createSymbolVar(final char symbol) {
         return model.intVar(String.valueOf(symbol), 0, config.getArithmeticBase() - 1, false);
     }
 
-    protected IntVar getSymbolVar(char symbol) {
+    protected IntVar getSymbolVar(final char symbol) {
         return symbolsToVariables.computeIfAbsent(symbol, this::createSymbolVar);
     }
 
@@ -47,15 +51,17 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         return vars.toArray(new IntVar[vars.size()]);
     }
 
-    private IntVar[] getGCCOccs(int lb, int ub) {
+    private IntVar[] getGCCOccs(final int lb, final int ub) {
         return model.intVarArray("O", config.getArithmeticBase(), lb, ub, false);
     }
 
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         if (node.isWord()) {
             final char[] w = node.getWord();
-            if (w.length > 0) firstSymbols.add(node.getWord()[0]);
+            if (w.length > 0) {
+                firstSymbols.add(node.getWord()[0]);
+            }
         }
     }
 
@@ -70,7 +76,9 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
     private Constraint globalCardinalityConstraint() {
         final IntVar[] vars = getGCCVars();
         final int n = vars.length;
-        if (n == 0) return model.trueConstraint();
+        if (n == 0) {
+            return model.trueConstraint();
+        }
 
         final int maxOcc = config.getMaxDigitOccurence(n);
         if (maxOcc == 1) {
@@ -78,10 +86,7 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         } else {
             final int minOcc = config.getMinDigitOccurence(n);
             final int[] values = ArrayUtils.array(0, config.getArithmeticBase() - 1);
-            return model.globalCardinality(
-                    vars, values,
-                    getGCCOccs(minOcc, maxOcc),
-                    true);
+            return model.globalCardinality(vars, values, getGCCOccs(minOcc, maxOcc), true);
 
         }
     }
@@ -92,7 +97,6 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         postFirstSymbolConstraints();
         globalCardinalityConstraint().post();
         postCryptarithmEquationConstraint();
-
 
     }
 

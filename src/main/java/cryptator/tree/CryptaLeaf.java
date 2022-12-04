@@ -13,53 +13,53 @@ import cryptator.specs.ICryptaNode;
 
 public class CryptaLeaf implements ICryptaNode {
 
-	private final char[] word;
+    private final char[] word;
 
-	public CryptaLeaf(String word) {
-		this(word.toCharArray());
-	}
+    public CryptaLeaf(final String word) {
+        this(word.toCharArray());
+    }
 
-	public CryptaLeaf(char[] word) {
-		this.word = word;
-	}
+    public CryptaLeaf(final char[] word) {
+        this.word = word;
+    }
 
-	@Override
-	public CryptaOperator getOperator() {
-		return CryptaOperator.ID;
-	}
+    @Override
+    public CryptaOperator getOperator() {
+        return CryptaOperator.ID;
+    }
 
-	@Override
-	public char[] getWord() {
-		return word;
-	}
+    @Override
+    public char[] getWord() {
+        return word;
+    }
 
-	@Override
-	public ICryptaNode getLeftChild() {
-		return null;
-	}
+    @Override
+    public ICryptaNode getLeftChild() {
+        return null;
+    }
 
-	@Override
-	public ICryptaNode getRightChild() {
-		return null;
-	}
+    @Override
+    public ICryptaNode getRightChild() {
+        return null;
+    }
 
-	@Override
-	public boolean isInternalNode() {
-		return false;
-	}
-	
-	@Override
-	public boolean isConstant() {
-		return false;
-	}
+    @Override
+    public boolean isInternalNode() {
+        return false;
+    }
 
-	@Override
-	public String toString() {
-		return new String(word);
-	}
+    @Override
+    public boolean isConstant() {
+        return false;
+    }
 
-	@Override
-	public String toGrammarString(){
-		return new String(getWord());
-	}
+    @Override
+    public String toString() {
+        return new String(word);
+    }
+
+    @Override
+    public String toGrammarString() {
+        return new String(getWord());
+    }
 }

@@ -10,16 +10,14 @@ package cryptator.tree;
 
 public class CryptaEvaluationException extends Exception {
 
-	private static final long serialVersionUID = 3504706627293932594L;
+    private static final long serialVersionUID = 3504706627293932594L;
 
-	public CryptaEvaluationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public CryptaEvaluationException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
-	public CryptaEvaluationException(String message) {
-		super(message);
-	}
-	
-	
-	
+    public CryptaEvaluationException(final String message) {
+        super(message);
+    }
+
 }

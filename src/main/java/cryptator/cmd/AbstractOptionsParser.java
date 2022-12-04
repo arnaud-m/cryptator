@@ -8,6 +8,8 @@
  */
 package cryptator.cmd;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,76 +21,104 @@ import cryptator.config.CryptaConfig;
 
 public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
-	protected final Class<?> mainClass;
+    private final Class<?> mainClass;
 
-	protected final E config;
+    protected final E config;
 
-	protected AbstractOptionsParser(Class<?> mainClass, E config) {
-		super();
-		this.mainClass = mainClass;
-		this.config = config;
-	}
+    private final String argumentName;
 
-	public final Logger getLogger() {
-		return Logger.getLogger(mainClass.getName());
-	}
+    protected AbstractOptionsParser(final Class<?> mainClass, final E config, final String argumentName) {
+        super();
+        this.mainClass = mainClass;
+        this.config = config;
+        this.argumentName = argumentName;
+    }
 
-	protected final String getCommandName() {
-		return mainClass.getName();
-	}
+    public final Logger getLogger() {
+        return Logger.getLogger(mainClass.getName());
+    }
 
-	protected abstract String getArgumentName();
+    private final String getCommandName() {
+        return mainClass.getName();
+    }
 
-	protected abstract void configureLoggers();
+    private final String getArgumentName() {
+        return argumentName;
+    }
 
-	protected boolean checkConfiguration() {
-		if(config.getArithmeticBase() < 2) {
-			getLogger().severe("The Arithmetic base must be greater than 1.");
-			return false;
-		} 
-		if(config.getRelaxMinDigitOccurence() < 0 || config.getRelaxMaxDigitOccurence() < 0) {
-			getLogger().severe("Min/Max digit occurence is ignored because it cannot be negative.");
-		}
-		return true;
-	}
+    protected abstract void configureLoggers();
 
-	protected boolean checkArguments() {
-		return ! config.getArguments().isEmpty();
-	}
+    protected boolean checkConfiguration() {
+        if (config.getArithmeticBase() < 2) {
+            getLogger().severe("The Arithmetic base must be greater than 1.");
+            return false;
+        }
+        if ((config.getRelaxMinDigitOccurence() < 0) || (config.getRelaxMaxDigitOccurence() < 0)) {
+            getLogger().severe("Min/Max digit occurence is ignored because it cannot be negative.");
+        }
+        return true;
+    }
 
-	
-	public final E getConfig() {
-		return config;
-	}
+    protected boolean checkArguments() {
+        return !config.getArguments().isEmpty();
+    }
 
-	public final boolean parseOptions(String[] args) {
-		final CmdLineParser parser = new CmdLineParser(config);
-		try {
-			// parse the arguments.
-			parser.parseArgument(args);
-			configureLoggers();
-			if(checkConfiguration()) {
-				if(checkArguments()) {
-					getLogger().log(Level.CONFIG, "Parse options [OK]\n{0}", config);
-					return true;
-				} else {
-					getLogger().log(Level.SEVERE, "Parse arguments [FAIL]\n{0}", config.getArguments());
-				}
-			} 
-		} catch( CmdLineException e ) {
-			getLogger().log(Level.SEVERE, "Parse arguments [FAIL]", e);
-		}
+    public final E getConfig() {
+        return config;
+    }
 
-		// if there's a problem in the command line,
-		// you'll get this exception. this will report
-		// an error message.
-		System.err.println("java " + getCommandName() + " [options...] "+ getArgumentName());
-		// print the list of available options
-		parser.printUsage(System.err);
-		// print option sample. This is useful some time
-		System.err.println("\n  Example: java "+ getCommandName() +  " " + parser.printExample(OptionHandlerFilter.ALL) + " " + getArgumentName());
-		getLogger().severe("Parse options [FAIL]");
-		return false;
+    public final boolean parseOptions(final String[] args) {
+        final CmdLineParser parser = new CmdLineParser(config);
+        try {
+            // parse the arguments.
+            parser.parseArgument(args);
+            configureLoggers();
+            if (checkConfiguration()) {
+                if (checkArguments()) {
+                    getLogger().log(Level.CONFIG, "Parse options [OK]");
+                    getLogger().log(Level.FINE, "Configuration:\n{0}", config);
+                    return true;
+                } else {
+                    getLogger().log(Level.SEVERE, "Parse arguments [FAIL]\n{0}", config.getArguments());
+                }
+            } else {
+                getLogger().log(Level.SEVERE, "Check options [FAIL]");
+            }
 
-	}	
+        } catch (CmdLineException e) {
+            getLogger().log(Level.SEVERE, "Parse options [FAIL]", e);
+        }
+
+        if (getLogger().isLoggable(Level.INFO)) {
+            getLogger().info(buildHelpMessage(parser, OptionHandlerFilter.PUBLIC));
+        }
+        return false;
+
+    }
+
+    private String printUsage(CmdLineParser parser, OptionHandlerFilter filter) {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        parser.printUsage(new OutputStreamWriter(os), null, filter);
+        return os.toString();
+    }
+
+    private String printExample(String options) {
+        return "java " + getCommandName() + " " + options + " " + getArgumentName();
+    }
+
+    private String printExample(CmdLineParser parser, OptionHandlerFilter filter) {
+        return printExample(parser.printExample(filter));
+    }
+
+    private String buildHelpMessage(CmdLineParser parser, OptionHandlerFilter filter) {
+        StringBuilder b = new StringBuilder();
+        b.append(" Help message:\n");
+        b.append(printExample("[options...]")).append("\n");
+        b.append(printUsage(parser, filter));
+        b.append("\nExamples:");
+        b.append("\n").append(printExample(parser, OptionHandlerFilter.REQUIRED));
+        b.append("\n").append(printExample(parser, filter));
+        return b.toString();
+    }
+
 }

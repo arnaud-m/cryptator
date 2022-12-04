@@ -8,8 +8,6 @@
 
 [[https://github.com/arnaud-m/cryptator/actions/workflows/CryptatorTest.yml][file:https://github.com/arnaud-m/cryptator/actions/workflows/CryptatorTest.yml/badge.svg]]
 
-Cryptator is distributed under BSD 3-Clause License (Copyright (c) 2022, Université Côte d'Azur).
-
 Cryptator is a cryptarithm solver using [[https://en.wikipedia.org/wiki/Constraint_programming][Constraint Programming]].\\
 It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which is an open-source Java library for Constraint Programming.
 
@@ -66,7 +64,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
  <dependency>
     <groupId>fr.univ-cotedazur</groupId>
     <artifactId>cryptator</artifactId>
-    <version>0.5.0-SNAPSHOT</version>
+    <version>0.5.1-SNAPSHOT</version>
  </dependency>
  #+END_EXAMPLE
 
@@ -78,3 +76,23 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
  Just include it manually by feeding it as a parameter to the runner.
 
  : mvn test -Dtest=ExtensiveTesting
+
+
+
+* Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our how you can
+become a contributor and the process for submitting pull requests to us.
+
+* Versioning
+
+This project makes use of [SemVer](http://semver.org/) for versioning. A list of
+existing versions can be found in the [project's releases]().
+
+* Authors
+
+See [AUTHORS](AUTHORS) and [CONTRIBUTORS](CONTRIBUTORS) files.
+
+* License
+
+This project is licensed under the [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause/) - see the [LICENSE](LICENSE) file for details.

@@ -12,91 +12,108 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
+import cryptator.choco.ChocoLogger;
 import cryptator.config.CryptaConfig;
+import cryptator.gen.TransformWord;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
+import cryptator.tree.TreeUtils;
 
 public final class CryptaSolver implements ICryptaSolver {
 
-	public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
+    private static final int MS = 1000;
 
-	private ICryptaModeler modeler;
+    public static final Logger LOGGER = Logger.getLogger(CryptaSolver.class.getName());
 
-	private long timeLimit = 0;
+    private static final ChocoLogger CLOG = new ChocoLogger(LOGGER);
 
-	private long solutionLimit = 0;
+    private ICryptaModeler modeler;
 
-	public CryptaSolver() {
-		this(false);		
-	}
+    private long timeLimit = 0;
 
-	public CryptaSolver(boolean useBignum) {		
-		super();
-		modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
-	}
-	
-	public final long getTimeLimit() {
-		return timeLimit;
-	}
+    private long solutionLimit = 0;
 
-	@Override
-	public final void limitTime(long limit) {
-		this.timeLimit = limit;
-	}
+    public CryptaSolver() {
+        this(false);
+    }
 
-	public final long getSolutionLimit() {
-		return solutionLimit;
-	}
+    public CryptaSolver(final boolean useBignum) {
+        super();
+        modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
+    }
 
+    public long getTimeLimit() {
+        return timeLimit;
+    }
 
-	public final void limitSolution(long limit) {
-		this.solutionLimit = limit;
-	}
+    @Override
+    public void limitTime(final long limit) {
+        this.timeLimit = limit;
+    }
 
-	public void setBignum() {
-		modeler = new CryptaBignumModeler();
-	}
-	
-	public void unsetBignum() {
-		modeler = new CryptaModeler();
-	}
-	
-	private final void logOnSolution(CryptaModel m) {
-		if(LOGGER.isLoggable(Level.CONFIG)) {
-			final Solution sol = new Solution(m.getModel());
-			sol.record();
-			LOGGER.log(Level.CONFIG, "Display internal solver solution.\n{0}", sol);
-		}
-	}
+    public long getSolutionLimit() {
+        return solutionLimit;
+    }
 
+    @Override
+    public void limitSolution(final long limit) {
+        this.solutionLimit = limit;
+    }
 
-	@Override
-	public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
-		final CryptaModel m = modeler.model(cryptarithm, config);
-		LOGGER.log(Level.CONFIG, "Display model{0}", m.getModel());
-		final Solver s = m.getModel().getSolver();
-		if(timeLimit > 0) s.limitTime(timeLimit * 1000); // in ms
-		int solutionCount = 0;
-		if(solutionLimit > 0) {
-			while(solutionCount < solutionLimit && s.solve()) {
-				logOnSolution(m);
-				solutionConsumer.accept(m.recordSolution());
-				solutionCount++;
-			}
-		} else {
-			while(s.solve()) {
-				logOnSolution(m);
-				solutionConsumer.accept(m.recordSolution());
-				solutionCount++;
-			}
-		}
-		LOGGER.log(Level.INFO, "{0}", s.getMeasures());
-		return solutionCount > 0;
-	}
+    public void setBignum() {
+        modeler = new CryptaBignumModeler();
+    }
+
+    public void unsetBignum() {
+        modeler = new CryptaModeler();
+    }
+
+    private static void logOnCryptarithm(final ICryptaNode cryptarithm) {
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO, "Declare instance:\ni {0}",
+                    TransformWord.removeWhitespaces(TreeUtils.writeInorder(cryptarithm)));
+            if (LOGGER.isLoggable(Level.CONFIG)) {
+                LOGGER.log(Level.CONFIG, "Cryptarithm features:\n{0}", TreeUtils.computeFeatures(cryptarithm));
+            }
+        }
+    }
+
+    public static void logOnConfiguration(final CryptaConfig config) {
+        LOGGER.log(Level.CONFIG, "Configuration:\n{0}", config);
+    }
+
+    @Override
+    public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
+            final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
+        final CryptaModel m = modeler.model(cryptarithm, config);
+        logOnCryptarithm(cryptarithm);
+        logOnConfiguration(config);
+        CLOG.logOnModel(m);
+
+        final Solver s = m.getModel().getSolver();
+        if (timeLimit > 0) {
+            s.limitTime(timeLimit * MS); // in ms
+        }
+        int solutionCount = 0;
+        if (solutionLimit > 0) {
+            while ((solutionCount < solutionLimit) && s.solve()) {
+                CLOG.logOnSolution(m.getModel());
+                solutionConsumer.accept(m.recordSolution());
+                solutionCount++;
+            }
+        } else {
+            while (s.solve()) {
+                CLOG.logOnSolution(m.getModel());
+                solutionConsumer.accept(m.recordSolution());
+                solutionCount++;
+            }
+        }
+        CLOG.logOnSolver(m);
+        return solutionCount > 0;
+    }
 
 }

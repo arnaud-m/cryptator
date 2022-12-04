@@ -8,23 +8,23 @@
  */
 package cryptator.tree;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalNodeConsumer;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public final class CryptaSymbols implements ITraversalNodeConsumer {
 
     private final Set<Character> letters;
 
     public CryptaSymbols() {
-        this.letters = new HashSet<>();
+        this.letters = new TreeSet<>();
     }
 
     @Override
-    public void accept(ICryptaNode node, int numNode) {
+    public void accept(final ICryptaNode node, final int numNode) {
         if (node.isWord()) {
             for (Character c : node.getWord()) {
                 letters.add(c);

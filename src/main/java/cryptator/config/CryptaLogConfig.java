@@ -9,16 +9,16 @@
 package cryptator.config;
 
 import org.kohsuke.args4j.Option;
-import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
-public class CryptamancerConfig extends CryptaConfig {
-	
-	@Option(name="-v",handler=ExplicitBooleanOptionHandler.class,usage="increase the verbosity of the program")
-	private boolean verbose;
+import cryptator.cmd.Verbosity;
 
-	public final boolean isVerbose() {
-		return verbose;
-	}
-	
-	
+public class CryptaLogConfig extends CryptaConfig {
+
+    @Option(name = "-v", usage = "increase the verbosity of the program")
+    private Verbosity verbosity = Verbosity.NORMAL;
+
+    public final Verbosity getVerbosity() {
+        return verbosity;
+    }
+
 }

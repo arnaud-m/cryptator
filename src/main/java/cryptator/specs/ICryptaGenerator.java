@@ -17,13 +17,15 @@ import cryptator.solver.CryptaModelException;
  */
 public interface ICryptaGenerator {
 
-	/**
-	 * Generate cryptarithms and feed them to the consumer.
-	 * Usually, there must be a unique solution to the cryptarithm.
-	 *
-	 * @param consumer the consumer that handles the generated cryptarithm along with its solution.
-	 * @throws CryptaModelException if there was an error during the generation.
-	 */
-	void generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException;
+    /**
+     * Generate cryptarithms and feed them to the consumer. Usually, there must be a
+     * unique solution to the cryptarithm.
+     *
+     * @param consumer the consumer that handles the generated cryptarithm along
+     *                 with its solution.
+     * @return the number of candidate cryptarithm
+     * @throws CryptaModelException if there was an error during the generation.
+     */
+    long generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException;
 
 }

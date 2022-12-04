@@ -14,103 +14,96 @@ import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
+import cryptator.specs.ICryptaGenModel;
 import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
 public class CryptaGenModel extends WordsListModel {
 
-	private final CryptaEqnMember left;
+    private final CryptaMemberLen left;
 
-	private final CryptaEqnMember right;
+    private final ICryptaGenModel right;
 
-	public CryptaGenModel(String[] words) {
-		super(new Model("Generate"), words);		
-		left = new CryptaEqnMember(model, words, "L_");
-		right = new CryptaEqnMember(model, words, "R_");
-		buildCoreModel();
-	}
+    public CryptaGenModel(final String[] words, final boolean lenOrCardModel) {
+        super(new Model("Generate"), words);
+        left = lenOrCardModel ? new CryptaMemberLen(model, words, "L_") : new CryptaMemberCard(model, words, "L_");
+        right = new CryptaMemberElt(model, words, "R_");
+        this.buildModel();
+    }
 
+    @Override
+    public void buildModel() {
+        super.buildModel();
+        left.buildModel();
+        right.buildModel();
+        postLeftOrRightConstraints();
+        postSymBreakLengthLenConstraint();
+    }
 
-	private void postLeftOrRightMemberConstraints() {
-		for (int i = 0; i < words.length; i++) {
-			left.words[i].add(right.words[i]).eq(wordVariables[i]).post();
-		}
-	}
+    @Override
+    protected void postMaxLengthConstraints() {
+        model.max(maxLength, left.getMaxLength(), right.getMaxLength()).post();
+    }
 
-	
-	private void postMemberMaxLenConstraint() {
-		right.maxLength.ge(left.maxLength).post();
-			
-	}
+    private void postLeftOrRightConstraints() {
+        final BoolVar[] l = left.getWordVars();
+        final BoolVar[] r = right.getWordVars();
+        for (int i = 0; i < vwords.length; i++) {
+            l[i].add(r[i]).eq(vwords[i]).post();
+        }
+    }
 
-	private void buildCoreModel() {
-		postLeftOrRightMemberConstraints();
-		postMemberMaxLenConstraint();
-	}
-	
-	public void postMemberCardConstraints(int min, int max) {
-		if(min > 1) left.wordCount.ge(min).post();
-		else left.wordCount.ge(2).post();
-		if(max >= min) left.wordCount.le(max).post();
-		
-		// TODO Option to relax the constraint (allow subtractions in the bignum model)
-		// Would need to break reflexion symmetry
-		right.wordCount.eq(1).post();
-	}
-	
-	public void postLeftMinCardConstraints(int base) {
-		IntVar diff = right.maxLength.sub(left.maxLength).intVar();
-		final int n = words.length;
-		int prod = base;
-		int i = 2;
-		while(prod <= n) {
-			diff.ge(i).imp(left.wordCount.ge(prod)).post();
-			prod *= base;
-			i++;
-		}
-		diff.lt(i).post();
-	}
-	
-	public void postRightMemberConstraint() {
-		BoolVar[] vars = right.getWords();
-		vars[vars.length - 1].eq(1).post();
-	}
-	
-	public void postDoublyTrueConstraint(int lb) {
-		final int n = words.length;
-		final IntVar sum = model.intVar("SUM", lb, n - 1);
-		
-		final IntVar[] lvars = new IntVar[n+1];
-		System.arraycopy(left.getWords(), 0, lvars, 0, n);
-		lvars[n] = sum; 
-		
-		final IntVar[] rvars = new IntVar[n+1];
-		System.arraycopy(right.getWords(), 0, rvars, 0, n);
-		rvars[n] = sum; 
-		
-		final int[] coeffs = ArrayUtils.array(0, n);
-		coeffs[n] = -1;
-		
-		model.scalar(lvars, coeffs, "=", 0).post();
-		model.scalar(rvars, coeffs, "=", 0).post();
-	}
+    private void postSymBreakLengthLenConstraint() {
+        left.getMaxLength().le(right.getMaxLength()).post();
 
-	private ICryptaNode recordMember(CryptaEqnMember member) {
-		BoolVar[] vars = member.getWords();
-		ICryptaNode node = null;
-		for (int i = 0; i < vars.length; i++) {
-			if(vars[i].isInstantiatedTo(1)) {
-				final CryptaLeaf leaf = new CryptaLeaf(words[i]);
-				node = node == null ? leaf : new CryptaNode(CryptaOperator.ADD, node, leaf);
-			}
-		}
-		return node;
-	}
-	
-	public final ICryptaNode recordCryptarithm() {
-		return new CryptaNode(CryptaOperator.EQ, recordMember(left), recordMember(right));
-	}
-	
+    }
+
+    public void postLeftCountConstraints(final int min, final int max) {
+        final int min2 = Math.max(min, 2);
+        left.getWordCount().ge(min2).post();
+        if (max >= min2) {
+            left.getWordCount().le(max).post();
+        }
+
+    }
+
+    public void postMinLeftCountConstraints(final int base) {
+        left.postLentghSumConstraints(right.getMaxLength(), base);
+    }
+
+    public void postFixedRightMemberConstraint() {
+        final BoolVar[] vars = right.getWordVars();
+        vars[vars.length - 1].eq(1).post();
+    }
+
+    public void postDoublyTrueConstraint(final int lb) {
+        final int n = getN();
+        final IntVar sum = model.intVar("SUM", lb, n - 1);
+
+        final IntVar[] lvars = new IntVar[n + 1];
+        System.arraycopy(left.getWordVars(), 0, lvars, 0, n);
+        lvars[n] = sum;
+
+        final IntVar[] rvars = new IntVar[n + 1];
+        System.arraycopy(right.getWordVars(), 0, rvars, 0, n);
+        rvars[n] = sum;
+
+        final int[] coeffs = ArrayUtils.array(0, n);
+        coeffs[n] = -1;
+
+        model.scalar(lvars, coeffs, "=", 0).post();
+        model.scalar(rvars, coeffs, "=", 0).post();
+    }
+
+    public final ICryptaNode recordCryptarithm() {
+        final ICryptaNode l = recordAddition(left);
+        final ICryptaNode r = recordAddition(right);
+        return (r == null) || (l == null) ? null : new CryptaNode(CryptaOperator.EQ, l, r);
+    }
+
+    @Override
+    public String toString() {
+        return left.toString() + " = " + right.toString();
+    }
 
 }

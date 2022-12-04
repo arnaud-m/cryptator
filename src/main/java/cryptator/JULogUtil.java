@@ -18,68 +18,95 @@ import java.util.logging.Logger;
 
 import cryptator.game.CryptaGameEngine;
 import cryptator.solver.CryptaSolver;
+import cryptator.specs.ICryptaLogManager;
 
 public final class JULogUtil {
-	
-	private static final String PROPERTIES = "logging.properties";
 
-	private JULogUtil() {}
+    private static final String PROPERTIES = "logging.properties";
 
-	public static final void readResourceConfigurationLoggers(String resourcePath) {
-		final InputStream stream = Cryptator.class.getClassLoader().
-				getResourceAsStream(resourcePath);
-		try {
-			LogManager.getLogManager().readConfiguration(stream);
-	
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static final void configureLoggers() {
-		readResourceConfigurationLoggers(PROPERTIES);
-	}
+    private JULogUtil() {
+    }
 
-	public static final void configureTestLoggers() {
-		readResourceConfigurationLoggers(PROPERTIES);
-		setLevel(Level.WARNING, 
-				Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, 
-				CryptaSolver.LOGGER, CryptaGameEngine.LOGGER
-				);
-	}
-	
-	public static final void configureJsonLoggers() {
-		readResourceConfigurationLoggers(PROPERTIES);
-		setLevel(Level.INFO, 
-				Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, 
-				CryptaSolver.LOGGER, CryptaGameEngine.LOGGER
-				);
-	}
-	
-	public static final void setLevel(Level level, Logger...loggers) {
-		for (Logger logger : loggers) {
-			logger.setLevel(level);
-		}
-	}
-	
-	public static final void flushLogs(Logger logger) {
-		logger.log(Level.FINE, "Flush logger {0}", logger.getName());	
-		for (Handler handler: logger.getHandlers()) {
-			handler.flush();
-		}
-	}
-			
-	public static final void flushLogs() {
-		final LogManager manager = LogManager.getLogManager();
+    public static void readResourceConfigurationLoggers(final String resourcePath) {
+        final InputStream stream = Cryptator.class.getClassLoader().getResourceAsStream(resourcePath);
+        try {
+            LogManager.getLogManager().readConfiguration(stream);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void configureDefaultLoggers() {
+        readResourceConfigurationLoggers(PROPERTIES);
+    }
+
+    public static void configureTestLoggers() {
+        readResourceConfigurationLoggers(PROPERTIES);
+        configureLoggers(Level.WARNING);
+    }
+
+    public static void configureSilentLoggers() {
+        readResourceConfigurationLoggers(PROPERTIES);
+        configureLoggers(Level.OFF);
+    }
+
+    public static void configureLoggers(final Level level) {
+        setLevel(level, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, CryptaSolver.LOGGER,
+                CryptaGameEngine.LOGGER);
+    }
+
+    public static void setLevel(final Level level, final Logger... loggers) {
+        for (Logger logger : loggers) {
+            logger.setLevel(level);
+        }
+    }
+
+    public static void flushLogs(final Logger logger) {
+        logger.log(Level.FINEST, "Flush logger {0}", logger.getName());
+        for (Handler handler : logger.getHandlers()) {
+            handler.flush();
+        }
+    }
+
+    public static void flushLogs() {
+        final LogManager manager = LogManager.getLogManager();
         final Enumeration<String> names = manager.getLoggerNames();
         final String pkg = JULogUtil.class.getPackage().getName();
-        while(names.hasMoreElements()){
+        while (names.hasMoreElements()) {
             final String name = names.nextElement();
-        	if(name.startsWith(pkg)){
-               flushLogs(manager.getLogger(name));
+            if (name.startsWith(pkg)) {
+                flushLogs(manager.getLogger(name));
             }
         }
+    }
 
-	}
+    public static final ICryptaLogManager DEFAULT_LOG_MANAGER = new DefaultLogManager();
+
+    public static ICryptaLogManager getDefaultLogManager() {
+        return DEFAULT_LOG_MANAGER;
+    }
+
+    private static class DefaultLogManager implements ICryptaLogManager {
+
+        @Override
+        public void setQuiet() {
+            ICryptaLogManager.super.setQuiet();
+            JULogUtil.setLevel(Level.INFO, Cryptagen.LOGGER, Cryptator.LOGGER);
+        }
+
+        @Override
+        public void setNormal() {
+            ICryptaLogManager.super.setNormal();
+            JULogUtil.setLevel(Level.CONFIG, Cryptagen.LOGGER);
+        }
+
+        @Override
+        public void setVerbose() {
+            ICryptaLogManager.super.setVerbose();
+            JULogUtil.setLevel(Level.FINE, Cryptagen.LOGGER);
+        }
+
+    }
 
 }

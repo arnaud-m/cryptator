@@ -11,6 +11,7 @@ package cryptator.cmd;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +19,7 @@ import java.util.logging.Logger;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
+import cryptator.specs.ICryptaSolutionStore;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.GraphvizExport;
@@ -26,119 +28,137 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.Graph;
 
-public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
+public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution>, ICryptaSolutionStore {
 
-	private final Logger logger;
+    private final Logger logger;
 
-	private long solutionCount;
+    private int solutionCount;
 
-	private int errorCount;
+    private Optional<ICryptaSolution> lastSolution;
 
-	BiConsumer<ICryptaNode, ICryptaSolution> internal;
+    private int errorCount;
 
-	public CryptaBiConsumer(Logger logger) {
-		super();
-		this.logger = logger;
-		internal = new SolutionCounter();
-	}
+    private BiConsumer<ICryptaNode, ICryptaSolution> internal;
 
-	public final long getSolutionCount() {
-		return solutionCount;
-	}
+    public CryptaBiConsumer(final Logger logger) {
+        super();
+        this.logger = logger;
+        lastSolution = Optional.empty();
+        internal = new SolutionCounter();
+    }
 
-	public final int getErrorCount() {
-		return errorCount;
-	}
+    @Override
+    public final int getSolutionCount() {
+        return solutionCount;
+    }
 
-	public void withSolutionLog() {
-		internal = internal.andThen(new SolutionLogger());
-	}
+    public final Optional<ICryptaSolution> getLastSolution() {
+        return lastSolution;
+    }
 
-	public void withCryptarithmLog() {
-		internal = internal.andThen(new CryptarithmLogger());
-	}
+    public final int getErrorCount() {
+        return errorCount;
+    }
 
-	public void withSolutionCheck(int base) {
-		internal = internal.andThen(new SolutionChecker(base));
-	}
+    public void withSolutionLog() {
+        internal = internal.andThen(new SolutionLogger());
+    }
 
-	public void withGraphvizExport() {
-		internal = internal.andThen(new GraphvizConsumer());
-	}
+    public void withCryptarithmLog() {
+        internal = internal.andThen(new CryptarithmLogger());
+    }
 
-	@Override
-	public void accept(ICryptaNode t, ICryptaSolution u) {
-		internal.accept(t, u);
-	}
+    public void withSolutionCheck(final int base) {
+        internal = internal.andThen(new SolutionChecker(base));
+    }
 
-	private class SolutionCounter implements BiConsumer<ICryptaNode, ICryptaSolution> {
+    public void withGraphvizExport() {
+        internal = internal.andThen(new GraphvizConsumer());
+    }
 
-		@Override
-		public void accept(ICryptaNode t, ICryptaSolution u) {
-			solutionCount++;
-		}
-	}
+    @Override
+    public void accept(final ICryptaNode t, final ICryptaSolution u) {
+        internal.accept(t, u);
+    }
 
-	private class SolutionLogger implements BiConsumer<ICryptaNode, ICryptaSolution> {
+    public void logOnLastSolution() {
+        if (lastSolution.isPresent()) {
+            logger.log(Level.INFO, "Last cryptarithm solution #{0}:\n{1}",
+                    new Object[] {solutionCount, lastSolution.get()});
+        }
+    }
 
-		@Override
-		public void accept(ICryptaNode t, ICryptaSolution u) {
-			logger.log(Level.INFO, "Find cryptarithm solution #{0} [OK]\n{1}", new Object[] { solutionCount, u });
-		}
-	}
+    private class SolutionCounter implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-	private class CryptarithmLogger implements BiConsumer<ICryptaNode, ICryptaSolution> {
+        @Override
+        public void accept(final ICryptaNode t, final ICryptaSolution u) {
+            solutionCount++;
+            lastSolution = Optional.of(u);
+        }
+    }
 
-		@Override
-		public void accept(ICryptaNode t, ICryptaSolution u) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.log(Level.INFO, "Find cryptarithm #{0} [OK]\n{1}\n{2}",
-						new Object[] { solutionCount, TreeUtils.writeInorder(t), u });
-			}
-		}
-	}
+    private class SolutionLogger implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-	private class SolutionChecker implements BiConsumer<ICryptaNode, ICryptaSolution> {
+        @Override
+        public void accept(final ICryptaNode t, final ICryptaSolution u) {
+            logger.log(Level.INFO, "Find cryptarithm solution #{0} [OK]\n{1}", new Object[] {solutionCount, u});
+        }
+    }
 
-		private final int base;
+    private class CryptarithmLogger implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-		private final ICryptaEvaluation eval = new CryptaEvaluation();
+        @Override
+        public void accept(final ICryptaNode t, final ICryptaSolution u) {
+            if (logger.isLoggable(Level.INFO)) {
+                logger.log(Level.INFO, "Find cryptarithm #{0} [OK]\n{1}\n{2}",
+                        new Object[] {solutionCount, TreeUtils.writeInorder(t), u});
+            }
+        }
+    }
 
-		public SolutionChecker(int base) {
-			super();
-			this.base = base;
-		}
+    private class SolutionChecker implements BiConsumer<ICryptaNode, ICryptaSolution> {
 
-		@Override
-		public void accept(ICryptaNode n, ICryptaSolution s) {
-			try {
-				if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
-					logger.info("Eval cryptarithm solution [OK]");
-					return;
-				} else
-					logger.severe("Eval cryptarithm solution [KO]");
-			} catch (CryptaEvaluationException e) {
-				logger.log(Level.SEVERE, "Eval cryptarithm solution [FAIL]", e);
-			}
-			errorCount++;
-		}
-	}
+        private final int base;
 
-	private class GraphvizConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
+        private final ICryptaEvaluation eval = new CryptaEvaluation();
 
-		@Override
-		public void accept(ICryptaNode n, ICryptaSolution s) {
-			try {
-				final Graph graph = GraphvizExport.exportToGraphviz(n, s);
-				final File file = File.createTempFile("cryptarithm-", ".svg");
-				Graphviz.fromGraph(graph).width(800).render(Format.SVG).toFile(file);
-				logger.log(Level.INFO, "Export cryptarithm solution [OK]\n{0}", file);
-			} catch (IOException e) {
-				logger.log(Level.SEVERE, "Export cryptarithm solution [FAIL]", e);
+        SolutionChecker(final int base) {
+            super();
+            this.base = base;
+        }
 
-			}
-		}
+        @Override
+        public void accept(final ICryptaNode n, final ICryptaSolution s) {
+            try {
+                if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
+                    logger.log(Level.FINE, "Eval cryptarithm solution #{0} [OK]", solutionCount);
+                } else {
+                    errorCount++;
+                    logger.log(Level.SEVERE, "Eval cryptarithm solution #{0} [KO]", solutionCount);
+                }
+            } catch (CryptaEvaluationException e) {
+                errorCount++;
+                logger.log(Level.SEVERE, e, () -> "Eval cryptarithm solution #" + solutionCount + " [FAIL]");
+            }
+        }
+    }
 
-	}
+    private class GraphvizConsumer implements BiConsumer<ICryptaNode, ICryptaSolution> {
+        private static final int WIDTH = 800;
+
+        @Override
+        public void accept(final ICryptaNode n, final ICryptaSolution s) {
+            try {
+                final Graph graph = GraphvizExport.exportToGraphviz(n, s);
+                final File file = File.createTempFile("cryptarithm-", ".svg");
+                Graphviz.fromGraph(graph).width(WIDTH).render(Format.SVG).toFile(file);
+                logger.log(Level.INFO, "Export cryptarithm solution #{0} [OK]\n{1}",
+                        new Object[] {solutionCount, file});
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e, () -> "Export cryptarithm solution #" + solutionCount + " [FAIL]\n");
+            }
+        }
+
+    }
 
 }
