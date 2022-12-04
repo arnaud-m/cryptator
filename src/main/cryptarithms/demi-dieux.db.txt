@@ -1,0 +1,6 @@
+achille + aristee + attis + castor = hilaire 
+achille + aristee + attis = hilaire 
+achille + aristee + castor = hilaire 
+achille + attis + castor + eole = aristee 
+aristee + castor + eole = hilaire 
+ino + minos = eaque 

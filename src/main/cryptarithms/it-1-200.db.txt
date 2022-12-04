@@ -1,0 +1,6 @@
+due + sette + dieci + undici = trenta 
+otto + nove + tredici + venti + trenta = ottanta 
+tre + sei + dieci + undici = trenta 
+uno + due + tre + dieci + undici + dodici + tredici + diciotto + trent­uno = cento­uno 
+uno + due + tre + otto + undici + dodici + tredici + trenta = ottanta 
+zero + sei + sette + otto + nove = trenta 

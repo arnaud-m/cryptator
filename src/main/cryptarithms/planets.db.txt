@@ -1,0 +1,5 @@
+earth + uranus = saturn 
+mars + saturn + uranus = mercury 
+saturn + uranus = jupiter 
+venus + earth + uranus = saturn 
+venus + mars + saturn + uranus = neptune 
