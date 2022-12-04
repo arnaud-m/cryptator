@@ -36,7 +36,7 @@
    - ~games.txt~.
  - [[https://fr.wikipedia.org/wiki/Liste_des_capitales_du_monde][List of National Capitals]]
    - ~capitals.txt~.
- - [[https://fr.wikipedia.org/wiki/Liste_des_pr%C3%A9sidents_de_la_R%C3%A9publique_fran%C3%A7aise][List of Fernch Presidents]]
+ - [[https://fr.wikipedia.org/wiki/Liste_des_pr%C3%A9sidents_de_la_R%C3%A9publique_fran%C3%A7aise][List of French Presidents]]
    - ~french-presidents.txt~.
  - [[https://fr.wikipedia.org/wiki/Liste_des_dirigeants_actuels_des_%C3%89tats][List of Current Rulers of States]]
    - ~leaders.txt~.
