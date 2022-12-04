@@ -84,7 +84,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     }
 
     private void sequentialSolve(final CryptaGenModel gen, final Consumer<ICryptaNode> cons) {
-        final Solver s = gen.getModel().getSolver();
+        final Solver s = gen.getSolver();
         while (s.solve()) {
             cons.accept(gen.recordCryptarithm());
         }
@@ -92,7 +92,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
     private static void parallelSolve(final CryptaGenModel gen, final Consumer<ICryptaNode> cons, final int nthreads) {
         final ExecutorService executor = Executors.newFixedThreadPool(nthreads);
-        final Solver s = gen.getModel().getSolver();
+        final Solver s = gen.getSolver();
         while (s.solve()) {
             final ICryptaNode cryptarithm = gen.recordCryptarithm();
             executor.execute(() -> cons.accept(cryptarithm));
@@ -121,7 +121,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
             parallelSolve(gen, cons, nthreads);
         }
         clog.logOnSolver(gen);
-        return gen.getModel().getSolver().getSolutionCount();
+        return gen.getSolver().getSolutionCount();
     }
 
     // FIXME are consumers thread-safe ? they are used in parallel !
@@ -141,7 +141,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
                 logger.log(Level.FINE, "Candidate cryptarithm:\n{0}", TreeUtils.writeInorder(t));
             }
         }
-
     }
 
     private class GenerateConsumer implements Consumer<ICryptaNode> {

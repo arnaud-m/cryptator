@@ -47,7 +47,7 @@ public class GenModelTest {
     }
 
     private void testGenModel(final ICryptaGenModel model, final int expectedSolutionCount) {
-        assertEquals(expectedSolutionCount, model.getModel().getSolver().streamSolutions().count());
+        assertEquals(expectedSolutionCount, model.getSolver().streamSolutions().count());
     }
 
     @Test
