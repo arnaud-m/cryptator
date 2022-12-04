@@ -78,21 +78,20 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
  : mvn test -Dtest=ExtensiveTesting
 
 
-
 * Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our how you can
+Please read [[CONTRIBUTING.md][CONTRIBUTING.md]] for details on our how you can
 become a contributor and the process for submitting pull requests to us.
 
 * Versioning
 
-This project makes use of [SemVer](http://semver.org/) for versioning. A list of
-existing versions can be found in the [project's releases]().
+This project makes use of [[http://semver.org/][SemVer]] for versioning.
+A list of existing versions can be found in the [[https://github.com/arnaud-m/cryptator/releases][project's releases]].
 
 * Authors
 
-See [AUTHORS](AUTHORS) and [CONTRIBUTORS](CONTRIBUTORS) files.
+See [[AUTHORS][AUTHORS]] and [[CONTRIBUTORS][CONTRIBUTORS]] files.
 
 * License
 
-This project is licensed under the [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause/) - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [[https://opensource.org/licenses/BSD-3-Clause/][3-Clause BSD License]] - see the [[LICENSE][LICENSE]] file for details.
