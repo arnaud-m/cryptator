@@ -94,7 +94,7 @@ public final class CryptaSolver implements ICryptaSolver {
         logOnConfiguration(config);
         CLOG.logOnModel(m);
 
-        final Solver s = m.getModel().getSolver();
+        final Solver s = m.getSolver();
         if (timeLimit > 0) {
             s.limitTime(timeLimit * MS); // in ms
         }

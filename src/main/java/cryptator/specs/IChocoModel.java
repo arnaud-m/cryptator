@@ -9,6 +9,7 @@
 package cryptator.specs;
 
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.Solver;
 
 /**
  * Getter interface of a Choco model.
@@ -21,5 +22,14 @@ public interface IChocoModel {
      * @return the model
      */
     Model getModel();
+
+    /**
+     * Gets the solver.
+     *
+     * @return the solver
+     */
+    default Solver getSolver() {
+        return getModel().getSolver();
+    }
 
 }

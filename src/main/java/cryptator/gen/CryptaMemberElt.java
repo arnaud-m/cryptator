@@ -22,6 +22,10 @@ public class CryptaMemberElt extends CryptaGenBaseModel {
         index = m.intVar(prefix + "idx", 0, words.length - 1);
     }
 
+    public final IntVar getIndex() {
+        return index;
+    }
+
     @Override
     protected void postWordCountConstraint() {
         super.postWordCountConstraint();
