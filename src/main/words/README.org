@@ -21,7 +21,7 @@
  - [[https://www.enchantedlearning.com/wordlist/][Vocabulary Word Lists by Theme]]
    - ~happy.txt~, ~jobs.txt~, ~monsters.txt~, ~virtues.txt~.
  - [[https://www.coursfrancaisfacile.com/2020/10/vocabulaires-francais-par-theme.html][Vocabulary French Word Lists by Theme]]
-   - ~ecole.txt~, ~quality.txt~.
+   - ~ecole.txt~, ~quality.txt~, ~landscapes.txt~, ~body.txt~, ~food.txt~.
  - [[https://en.wiktionary.org/wiki/Appendix:English_palindromes][English palindromes]]
    - ~palindromes-en.txt~.
  - [[https://fr.wiktionary.org/wiki/Annexe:Liste_de_palindromes_fran%C3%A7ais][Liste de palindromes français]]
