@@ -75,4 +75,15 @@ public class Failing {
         assertTrue(true);
     }
 
+    @Test
+    public void testPrinterError2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        // https://mathworld.wolfram.com/PrintersErrors.html
+        t.testUNIQUE("3^4*425 = 34425");
+    }
+
+    @Test
+    public void testBarker4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("copper*neon=iron*silver");
+    }
+
 }

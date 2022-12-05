@@ -1,3 +1,11 @@
+/**
+ * This file is part of cryptator, https://github.com/arnaud-m/cryptator
+ *
+ * Copyright (c) 2022, Université Côte d'Azur. All rights reserved.
+ *
+ * Licensed under the BSD 3-clause license.
+ * See LICENSE file in the project root for full license information.
+ */
 package cryptator;
 
 import org.chocosolver.solver.Model;
@@ -5,6 +13,7 @@ import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.IntVar;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ProductTest {
@@ -55,6 +64,7 @@ public class ProductTest {
     }
     
     @Test
+    @Ignore
     /***
      * Working version of the previous test.
      */
@@ -65,6 +75,7 @@ public class ProductTest {
         solve(1);
     }
     @Test
+    @Ignore
     /***
      * Creating a model using arithm instead of times directly.
      */
@@ -75,6 +86,7 @@ public class ProductTest {
         solve(1);
     }
     @Test
+    @Ignore
     /***
      * Creating a model using the operators function given by IntVar
      */
@@ -85,6 +97,7 @@ public class ProductTest {
         solve(1);
     }
     @Test
+    @Ignore
     /***
      * Creating a model using the operators function given by IntVar without using result as an intermediary
      */

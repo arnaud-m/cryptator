@@ -358,10 +358,7 @@ public class SolverTest {
         t.testUNIQUE("pear+plum+apple+grape+lemon=orange");
     }
 
-    @Test
-    public void testBarker4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("copper*neon=iron*silver");
-    }
+
 
     @Test
     public void testBarker5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
@@ -386,11 +383,7 @@ public class SolverTest {
         t.testSAT("A = B ^ C", 2);
     }
 
-    @Test
-    public void testPrinterError2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        // https://mathworld.wolfram.com/PrintersErrors.html
-        t.testUNIQUE("3^4*425 = 34425");
-    }
+
 
     @Test
     public void testDivision1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
