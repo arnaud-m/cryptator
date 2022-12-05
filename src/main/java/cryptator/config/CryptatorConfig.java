@@ -9,7 +9,6 @@
 package cryptator.config;
 
 import org.kohsuke.args4j.Option;
-import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptatorConfig extends CryptaCmdConfig {
 
@@ -19,19 +18,12 @@ public class CryptatorConfig extends CryptaCmdConfig {
     @Option(name = "-t", usage = "limit the time taken by a solver (in seconds)")
     private int timeLimit;
 
-    @Option(name = "-l", handler = ExplicitBooleanOptionHandler.class, usage = "use the bignum model (only + and =)")
-    private boolean useBigNum;
-
     public final int getSolutionLimit() {
         return solutionLimit;
     }
 
     public final int getTimeLimit() {
         return timeLimit;
-    }
-
-    public final boolean useBignum() {
-        return useBigNum;
     }
 
     public final void setSolutionLimit(final int solutionLimit) {
@@ -42,13 +34,8 @@ public class CryptatorConfig extends CryptaCmdConfig {
         this.timeLimit = timeLimit;
     }
 
-    public final void setUseBigNum(final boolean useBigNum) {
-        this.useBigNum = useBigNum;
-    }
-
     @Override
     public String toString() {
-        return super.toString() + "\nc TIME_LIMIT " + getTimeLimit() + "\nc SOLUTION_LIMIT " + getSolutionLimit()
-                + "\nc BIGNUM " + useBignum();
+        return super.toString() + "\nc TIME_LIMIT " + getTimeLimit() + "\nc SOLUTION_LIMIT " + getSolutionLimit();
     }
 }

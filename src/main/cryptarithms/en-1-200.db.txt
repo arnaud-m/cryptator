@@ -1,0 +1,12 @@
+eight + ten + sixteen + seventeen + eighteen = sixtynine 
+five + seven + eleven + twelve + fifteen + twenty = seventy 
+five + six + sixteen + nineteen + twenty = sixtysix 
+one + five + ten + eleven + nineteen + fortyfive = ninetyone 
+one + nine + twenty + fifty = eighty 
+one + seven + nine + fifteen + sixteen + seventeen = sixtyfive 
+one + two + five + nine + eleven + twelve + fifty = ninety 
+six + nine + eleven + sixteen + nineteen = sixtyone 
+six + seven + nine + twelve + sixteen + twenty = seventy 
+three + nine + ten + fourteen + fifteen = fiftyone 
+three + seven + ten + twenty + thirty = seventy 
+two + fourteen + fifteen + twenty = fiftyone 

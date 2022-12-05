@@ -1,3 +1,15 @@
+#### Temporary files directories
+
+src/main/benchmarks/instances/
+src/main/benchmarks/algorithms/
+src/main/benchmarks/results/
+src/main/benchmarks/results-cryptarithms/
+src/main/benchmarks/results-archive/
+src/main/benchmarks/solver.sh
+src/main/benchmarks/words
+src/main/benchmarks/oar-stderr.log
+src/main/benchmarks/nohup.out 
+
 #### joe made this: http://goel.io/joe
 
 #####=== Java ===#####

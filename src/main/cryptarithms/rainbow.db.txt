@@ -1,0 +1,4 @@
+green + violet = indigo 
+red + green + indigo = violet 
+red + orange + green = indigo 
+red + orange + green = yellow 

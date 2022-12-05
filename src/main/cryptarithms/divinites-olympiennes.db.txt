@@ -1,0 +1,12 @@
+ares + artemis + athena + hades + hera + hermes + hestia = demeter 
+ares + artemis + athena + hestia = demeter 
+ares + athena + demeter + hades + hera + hermes = artemis 
+ares + athena + demeter + hera + hermes + hestia = artemis 
+ares + athena + demeter + hera + hestia = artemis 
+ares + athena + hades + hera = demeter 
+ares + demeter + hades + hera + hermes = artemis 
+ares + hades + hera + hermes + zeus = demeter 
+ares + hera + hermes + zeus = athena 
+artemis + athena + hermes + hestia = demeter 
+artemis + athena + hestia = demeter 
+athena + demeter + hades + hera + hestia = artemis 

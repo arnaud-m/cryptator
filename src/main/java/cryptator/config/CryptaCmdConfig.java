@@ -19,6 +19,9 @@ public class CryptaCmdConfig extends CryptaLogConfig {
     @Option(name = "-g", handler = ExplicitBooleanOptionHandler.class, usage = "export solutions to graphviz format")
     private boolean exportGraphiz;
 
+    @Option(name = "-l", handler = ExplicitBooleanOptionHandler.class, usage = "use the bignum model (only + and =)")
+    private boolean useBigNum;
+
     public final boolean isExportGraphiz() {
         return exportGraphiz;
     }
@@ -27,4 +30,12 @@ public class CryptaCmdConfig extends CryptaLogConfig {
         return checkSolution;
     }
 
+    public final boolean useBignum() {
+        return useBigNum;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "\nc BIGNUM " + useBignum();
+    }
 }
