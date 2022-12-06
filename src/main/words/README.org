@@ -20,15 +20,23 @@
    - ~vins.txt~
  - [[https://www.enchantedlearning.com/wordlist/][Vocabulary Word Lists by Theme]]
    - ~happy.txt~, ~jobs.txt~, ~monsters.txt~, ~virtues.txt~.
+ - [[https://www.coursfrancaisfacile.com/2020/10/vocabulaires-francais-par-theme.html][Vocabulary French Word Lists by Theme]]
+   - ~ecole.txt~, ~qualites.txt~, ~paysages.txt~, ~corps.txt~, ~nourriture.txt~.
  - [[https://en.wiktionary.org/wiki/Appendix:English_palindromes][English palindromes]]
    - ~palindromes-en.txt~.
  - [[https://fr.wiktionary.org/wiki/Annexe:Liste_de_palindromes_fran%C3%A7ais][Liste de palindromes français]]
    - ~palindromes-fr.txt~.
  - [[https://fr.wikipedia.org/wiki/Liste_des_divinit%C3%A9s_de_la_mythologie_grecque][Liste des divinités de la mythologie grecque]]
    - ~mythologie-grecque.txt~ (toutes les divinités), ~cyclopes.txt~, ~demi-dieux.txt~, ~divinites-olympiennes.txt~, ~divinites-primordiales.txt~, ~geants.txt~, ~titans.txt~.
-   - [[https://www.leguidedufromage.com/liste-fromages-ordre-alphabetique-wo377.html][LISTE DES FROMAGES]]
-     - ~fromages.txt~.
-   - [[https://owdin.live/2018/05/08/la-liste-complete-des-personnages-dasterix-et-obelix/][La liste complète des personnages d’Astérix et Obélix]]
-     - ~asterix.txt~, ~autres.txt~, ~gaulois.txt~, ~romains.txt~.
-   - [[https://en.wikipedia.org/wiki/List_of_video_games_considered_the_best][List of video games considered the best]]
-     - ~games.txt~.
+ - [[https://www.leguidedufromage.com/liste-fromages-ordre-alphabetique-wo377.html][LISTE DES FROMAGES]]
+   - ~fromages.txt~.
+ - [[https://owdin.live/2018/05/08/la-liste-complete-des-personnages-dasterix-et-obelix/][La liste complète des personnages d’Astérix et Obélix]]
+   - ~asterix.txt~, ~autres.txt~, ~gaulois.txt~, ~romains.txt~.
+ - [[https://en.wikipedia.org/wiki/List_of_video_games_considered_the_best][List of video games considered the best]]
+   - ~games.txt~.
+ - [[https://fr.wikipedia.org/wiki/Liste_des_capitales_du_monde][List of National Capitals]]
+   - ~capitales.txt~.
+ - [[https://fr.wikipedia.org/wiki/Liste_des_pr%C3%A9sidents_de_la_R%C3%A9publique_fran%C3%A7aise][List of French Presidents]]
+   - ~presidents-francais.txt~.
+ - [[https://fr.wikipedia.org/wiki/Liste_des_dirigeants_actuels_des_%C3%89tats][List of Current Rulers of States]]
+   - ~leaders.txt~.
