@@ -95,7 +95,7 @@ gold*iron=lead*tin
 gold*neon=lead*zinc
 ## FIXME iron*radium=neon*sodium
 argon*tin=iron*zinc
-copper*neon=iron*silver
+## FIXME copper*neon=iron*silver
 ## Colours of the Rainbow
 green+violet=indigo
 red+green+orange=yellow
