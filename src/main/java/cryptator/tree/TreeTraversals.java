@@ -136,7 +136,9 @@ public final class TreeTraversals {
     private static final class DecoratedTree{
         // The current node of the ICryptaNode tree
         public final ICryptaNode node;
-        // True if the current operator has less priority than the father operator one
+        // True if the current operator OP has less priority than the father operator one
+        // or if the current node is on the right of its father and its father's operator
+        // is not commutative with the same priority of OP
         public final boolean putParenthesis;
         // The children of the Decorated tree
         public DecoratedTree left, right;
@@ -155,7 +157,7 @@ public final class TreeTraversals {
                 node = father.node.getRightChild();
             }
             this.putParenthesis = node.getOperator().getPriority() < op.getPriority() ||
-                    (!isLeft && !op.isCommutative() && op.getPriority() > 0);
+                    (node.getOperator().getPriority() == op.getPriority() && !isLeft && !op.isCommutative());
         }
 
         private DecoratedTree(ICryptaNode node){

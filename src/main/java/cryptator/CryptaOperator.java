@@ -20,20 +20,20 @@ import java.util.function.BinaryOperator;
  * @see https://en.wikipedia.org/wiki/Relational_operator
  */
 public enum CryptaOperator {
-    ADD("+", 1, true, (a, b) -> a.add(b), (a, b) -> a.add(b)),
-    SUB("-", 1, false, (a, b) -> a.subtract(b), (a, b) -> a.sub(b)),
-    MUL("*", 2, true, (a, b) -> a.multiply(b), (a, b) -> a.mul(b)),
-    DIV("//", 2, false, (a, b) -> a.divide(b), (a, b) -> a.div(b)),
-    FDIV("/", 2, false, (a, b) -> fdiv(a, b), (a, b) -> fdiv(a, b)),
-    MOD("%", 3, false, (a, b) -> a.mod(b), (a, b) -> a.mod(b)),
-    POW("^", 4,  false, (a, b) -> a.pow(b.intValue()), (a, b) -> a.pow(b)),
+    ADD("+", 2, true, (a, b) -> a.add(b), (a, b) -> a.add(b)),
+    SUB("-", 2, false, (a, b) -> a.subtract(b), (a, b) -> a.sub(b)),
+    MUL("*", 3, true, (a, b) -> a.multiply(b), (a, b) -> a.mul(b)),
+    DIV("//", 3, false, (a, b) -> a.divide(b), (a, b) -> a.div(b)),
+    FDIV("/", 3, false, (a, b) -> fdiv(a, b), (a, b) -> fdiv(a, b)),
+    MOD("%", 4, false, (a, b) -> a.mod(b), (a, b) -> a.mod(b)),
+    POW("^", 5,  false, (a, b) -> a.pow(b.intValue()), (a, b) -> a.pow(b)),
     ID("", 0, true, (a, b) -> BigInteger.ZERO, (a, b) -> null),
-    EQ("=", 0, true, (a, b) -> toBigInt(a.compareTo(b) == 0), (a, b) -> a.eq(b)),
-    NE("!=", 0, true, (a, b) -> toBigInt(a.compareTo(b) != 0), (a, b) -> a.ne(b)),
-    LT("<", 0, false, (a, b) -> toBigInt(a.compareTo(b) < 0), (a, b) -> a.lt(b)),
-    GT(">", 0, false, (a, b) -> toBigInt(a.compareTo(b) > 0), (a, b) -> a.gt(b)),
-    LE("<=", 0, false, (a, b) -> toBigInt(a.compareTo(b) <= 0), (a, b) -> a.le(b)),
-    GE(">=", 0, false, (a, b) -> toBigInt(a.compareTo(b) >= 0), (a, b) -> a.ge(b)),
+    EQ("=", 1, true, (a, b) -> toBigInt(a.compareTo(b) == 0), (a, b) -> a.eq(b)),
+    NE("!=", 1, true, (a, b) -> toBigInt(a.compareTo(b) != 0), (a, b) -> a.ne(b)),
+    LT("<", 1, false, (a, b) -> toBigInt(a.compareTo(b) < 0), (a, b) -> a.lt(b)),
+    GT(">", 1, false, (a, b) -> toBigInt(a.compareTo(b) > 0), (a, b) -> a.gt(b)),
+    LE("<=", 1, false, (a, b) -> toBigInt(a.compareTo(b) <= 0), (a, b) -> a.le(b)),
+    GE(">=", 1, false, (a, b) -> toBigInt(a.compareTo(b) >= 0), (a, b) -> a.ge(b)),
 
     AND("&&", 0, true, (a, b) -> toBigInt(!a.equals(BigInteger.ZERO) && !b.equals(BigInteger.ZERO)),
             (a, b) -> ((ReExpression) a).and((ReExpression) b));
