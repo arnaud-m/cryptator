@@ -384,6 +384,18 @@ public class ParserTest {
 
     @Test
     public void testInfixPrint13() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("10 // (3 * 4) = R");
+        testInorder("10 // ( 3 * 4 ) = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint14() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("10 // (3 % 4) = R");
+        testInorder("10 // 3 % 4 = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint15() throws CryptaParserException {
         // A big expr where useless parenthesis are not printed
         final ICryptaNode node = parser.parse("(A - Z) - (B + C) < R + 15 % (R ^ 2 + 3) ;; (D - E) / (36 / 12) = (A * B) * 3 // 28 && B != 3");
         testInorder("A - Z - ( B + C ) < R + 15 % ( R ^ 2 + 3 ) && ( D - E ) / ( 36 / 12 ) = A * B * 3 // 28 && B != 3 ", node);
