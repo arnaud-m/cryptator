@@ -359,6 +359,31 @@ public class ParserTest {
     }
 
     @Test
+    public void testInfixPrint09() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("A + (B + C) = R");
+        testInorder("A + B + C = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint10() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("A - (B + C) = R");
+        testInorder("A - ( B + C ) = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint11() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("(10 - 1) - (B + C) = R");
+        testInorder("10 - 1 - ( B + C ) = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint12() throws CryptaParserException {
+        // A big expr where useless parenthesis are not printed
+        final ICryptaNode node = parser.parse("(A - Z) - (B + C) < R + 15 % (R ^ 2 + 3) ;; (D - E) / (36 / 12) = (A * B) * 3 // 28 && B != 3");
+        testInorder("A - Z - ( B + C ) < R + 15 % ( R ^ 2 + 3 ) && ( D - E ) / ( 36 / 12 ) = A * B * 3 // 28 && B != 3 ", node);
+    }
+
+    @Test
     public void testParserAND8symbol() throws CryptaParserException {
         final ICryptaNode node = parser.parse("a=b&& b=c ; c=d");
         testPreorder("&& = a b && = b c = c d ", node);

@@ -154,7 +154,8 @@ public final class TreeTraversals {
                 rightPar = father.rightPar + (father.putParenthesis ? 1 : 0);
                 node = father.node.getRightChild();
             }
-            this.putParenthesis = node.getOperator().getPriority() < op.getPriority();
+            this.putParenthesis = node.getOperator().getPriority() < op.getPriority() ||
+                    (!isLeft && !op.isCommutative() && op.getPriority() > 0);
         }
 
         private DecoratedTree(ICryptaNode node){
