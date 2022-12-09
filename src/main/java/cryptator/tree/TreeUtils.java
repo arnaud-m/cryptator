@@ -8,12 +8,12 @@
  */
 package cryptator.tree;
 
+import cryptator.CryptaOperator;
+import cryptator.specs.ICryptaNode;
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-
-import cryptator.CryptaOperator;
-import cryptator.specs.ICryptaNode;
 
 public final class TreeUtils {
 
@@ -56,7 +56,14 @@ public final class TreeUtils {
 
     public static void writeInorder(final ICryptaNode root, final OutputStream outstream) {
         final PrintWriter out = new PrintWriter(outstream);
-        TreeTraversals.inorderTraversal(root, (node, num) -> writeWord(node, out));
+        TreeTraversals.inorderTraversal(root, (node, num) -> {
+            StringBuilder s = new StringBuilder();
+            s.append((num < 0 ? "( " : ") ").repeat(Math.abs(num)));
+            if (num < 0)
+                out.write(s + node.toGrammarString() + " ");
+            else
+                out.write(node.toGrammarString() + " " + s);
+        });
         out.flush();
     }
 

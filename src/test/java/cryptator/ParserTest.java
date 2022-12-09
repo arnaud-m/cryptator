@@ -8,20 +8,17 @@
  */
 package cryptator;
 
-import static cryptator.TreeTest.testInorder;
-import static cryptator.TreeTest.testPostorder;
-import static cryptator.TreeTest.testPreorder;
-
-import org.junit.Test;
-
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
+import org.junit.Test;
+
+import static cryptator.TreeTest.*;
 
 public class ParserTest {
 
-    private final CryptaParserWrapper parser = new CryptaParserWrapper();
     private static final String ZERO = "'0'";
+    private final CryptaParserWrapper parser = new CryptaParserWrapper();
 
     public ParserTest() {
     }
@@ -47,7 +44,7 @@ public class ParserTest {
         final ICryptaNode node = parser.parse("-send/more=money");
         testPreorder("= / - " + ParserTest.ZERO + " send more money ", node);
         testPostorder("" + ParserTest.ZERO + " send - more / money = ", node);
-        testInorder("" + ParserTest.ZERO + " - send / more = money ", node);
+        testInorder("( " + ParserTest.ZERO + " - send ) / more = money ", node);
     }
 
     @Test
@@ -55,7 +52,7 @@ public class ParserTest {
         final ICryptaNode node = parser.parse("send/-more<money");
         testPreorder("< / send - " + ParserTest.ZERO + " more money ", node);
         testPostorder("send " + ParserTest.ZERO + " more - / money < ", node);
-        testInorder("send / " + ParserTest.ZERO + " - more < money ", node);
+        testInorder("send / ( " + ParserTest.ZERO + " - more ) < money ", node);
     }
 
     @Test
@@ -63,7 +60,7 @@ public class ParserTest {
         final ICryptaNode node = parser.parse("(send/money)%(send+more)>money");
         testPreorder("> % / send money + send more money ", node);
         testPostorder("send money / send more + % money > ", node);
-        testInorder("send / money % send + more > money ", node);
+        testInorder("( send / money ) % ( send + more ) > money ", node);
     }
 
     @Test
@@ -71,7 +68,7 @@ public class ParserTest {
         final ICryptaNode node = parser.parse("(send/money)%(send+more)<=money");
         testPreorder("<= % / send money + send more money ", node);
         testPostorder("send money / send more + % money <= ", node);
-        testInorder("send / money % send + more <= money ", node);
+        testInorder("( send / money ) % ( send + more ) <= money ", node);
     }
 
     @Test
@@ -310,6 +307,55 @@ public class ParserTest {
         testPreorder("= a b ", node);
         testPostorder("a b = ", node);
         testInorder("a = b ", node);
+    }
+
+    @Test
+    public void testInfixPrint01() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("send * (much + more) = money ");
+        testInorder("send * ( much + more ) = money ", node);
+    }
+
+    @Test
+    public void testInfixPrint02() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("A * (B + C * (D + E)) = R ");
+        testInorder("A * ( B + C * ( D + E ) ) = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint03() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("A * B % C = R ");
+        testInorder("A * B % C = R ", node);
+    }
+    @Test
+    public void testInfixPrint04() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("(A * B) % C = R ");
+        testInorder("( A * B ) % C = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint05() throws CryptaParserException {
+        // Note that redundant parenthesis are ignored
+        final ICryptaNode node = parser.parse("A * ( B % C ) = R ");
+        testInorder("A * B % C = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint06() throws CryptaParserException {
+        // With AND symbol
+        final ICryptaNode node = parser.parse("A * ( B % C ) = R; A + D = R1 ");
+        testInorder("A * B % C = R && A + D = R1 ", node);
+    }
+
+    @Test
+    public void testInfixPrint07() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("(A*B) ^ (C%3) = R");
+        testInorder("( A * B ) ^ ( C % 3 ) = R ", node);
+    }
+
+    @Test
+    public void testInfixPrint08() throws CryptaParserException {
+        final ICryptaNode node = parser.parse("((A*B) ^ (C%3)) * 3 = R");
+        testInorder("( A * B ) ^ ( C % 3 ) * 3 = R ", node);
     }
 
     @Test
