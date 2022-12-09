@@ -134,14 +134,15 @@ public final class TreeTraversals {
     }
 
     private static final class DecoratedTree{
+        // The current node of the ICryptaNode tree
         public final ICryptaNode node;
+        // True if the current operator has less priority than the father operator one
         public final boolean putParenthesis;
-
-        public final DecoratedTree father;
+        // The children of the Decorated tree
         public DecoratedTree left, right;
 
-        public int leftPar;
-        public int rightPar;
+        // The number of left/right parenthesis to put when printing in inorder mode
+        public int leftPar, rightPar;
         private DecoratedTree(CryptaOperator op, DecoratedTree father, boolean isLeft) {
             if (isLeft) {
                 father.left = this;
@@ -153,14 +154,12 @@ public final class TreeTraversals {
                 rightPar = father.rightPar + (father.putParenthesis ? 1 : 0);
                 node = father.node.getRightChild();
             }
-            this.putParenthesis = op != null && node.getOperator().getPriority() < op.getPriority();
-            this.father = father;
+            this.putParenthesis = node.getOperator().getPriority() < op.getPriority();
         }
 
         private DecoratedTree(ICryptaNode node){
             this.node = node;
             this.putParenthesis = false;
-            this.father = null;
         }
 
         public int getParenthesisToPut(){
