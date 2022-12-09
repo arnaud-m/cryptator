@@ -77,30 +77,19 @@ public final class TreeTraversals {
         }
     }
 
-    private static boolean shouldParanthesize(final ICryptaNode node, final CryptaOperator op){
-        return node.getOperator().getPriority() < op.getPriority();
-    }
-
-    private static void buildDecoratedTree(final ICryptaNode node, final DecoratedTree decoratedNode){
-        if (node.isInternalNode()){
-            final CryptaOperator op = node.getOperator();
-            final ICryptaNode l = node.getLeftChild();
-            final ICryptaNode r = node.getRightChild();
-            decoratedNode.left = new DecoratedTree(l, shouldParanthesize(l, op), decoratedNode, true);
-            decoratedNode.right = new DecoratedTree(r, shouldParanthesize(r, op), decoratedNode,false);
-//            decoratedNode.left.leftPar = decoratedNode.leftPar + (decoratedNode.putParenthesis ? 1 : 0);
-//            decoratedNode.right.rightPar = decoratedNode.rightPar + (decoratedNode.putParenthesis ? 1 : 0);
-            buildDecoratedTree(l, decoratedNode.left);
-            buildDecoratedTree(r, decoratedNode.right);
+    private static void buildDecoratedTree(final DecoratedTree decoratedNode){
+        if (decoratedNode.node.isInternalNode()){
+            final CryptaOperator op = decoratedNode.node.getOperator();
+            buildDecoratedTree(new DecoratedTree(op, decoratedNode, true));
+            buildDecoratedTree(new DecoratedTree(op, decoratedNode,false));
         }
     }
 
     public static void inorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
-        int num = 1;
 
-        DecoratedTree decoratedNode = new DecoratedTree(root, false, null, false);
-        buildDecoratedTree(root, decoratedNode);
+        DecoratedTree decoratedNode = new DecoratedTree(root);
+        buildDecoratedTree(decoratedNode);
 
         Deque<DecoratedTree> s = new ArrayDeque<>();
         DecoratedTree curr = decoratedNode;
@@ -153,21 +142,29 @@ public final class TreeTraversals {
 
         public int leftPar;
         public int rightPar;
-        private DecoratedTree(ICryptaNode n, boolean putPar, DecoratedTree father, boolean isLeft) {
-            this.node = n;
-            this.putParenthesis = putPar;
-            this.father = father;
-            if (father != null) {
-                if (isLeft)
-                    leftPar += father.leftPar + (father.putParenthesis ? 1 : 0);
-                else
-                    rightPar += father.rightPar + (father.putParenthesis ? 1 : 0);
+        private DecoratedTree(CryptaOperator op, DecoratedTree father, boolean isLeft) {
+            if (isLeft) {
+                father.left = this;
+                leftPar = father.leftPar + (father.putParenthesis ? 1 : 0);
+                node = father.node.getLeftChild();
             }
+            else {
+                father.right = this;
+                rightPar = father.rightPar + (father.putParenthesis ? 1 : 0);
+                node = father.node.getRightChild();
+            }
+            this.putParenthesis = op != null && node.getOperator().getPriority() < op.getPriority();
+            this.father = father;
+        }
+
+        private DecoratedTree(ICryptaNode node){
+            this.node = node;
+            this.putParenthesis = false;
+            this.father = null;
         }
 
         public int getParenthesisToPut(){
             return node.isInternalNode() ? 0 : -leftPar + rightPar;
         }
     }
-
 }
