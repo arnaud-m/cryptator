@@ -146,7 +146,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 * Reporting
 
 #+BEGIN_SRC sh
-  gridres -z -k table_keys.txt
+  gridres -z -k table-keys.txt
 #+END_SRC
 
   Look for the files .res in the results directory.
