@@ -47,7 +47,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
  - *play the game* with [[file:src/main/shell/demo-play.sh][Cryptamancer]].
 
 
-    Execute the main classe without argument to display the help message.
+    Execute the main class without argument to display the help message.
 ** As a library
 
    The jar file does not contains any dependencies, as of being used as a dependency of another application.

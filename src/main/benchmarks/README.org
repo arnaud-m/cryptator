@@ -72,7 +72,7 @@
    echo -v normal -d TRUE -lightM FALSE -lightP FALSE > algorithms/FF.dat
  #+END_SRC
 
-*** Other algorithms
+*** All algorithms
 
  #+BEGIN_SRC sh
    echo -v normal -d TRUE -lightM FALSE -lightP FALSE > algorithms/FF.dat
@@ -82,7 +82,6 @@
  #+END_SRC
 
 * Generate and Solve
-
 ** Configure the solver
 
 #+BEGIN_SRC sh
@@ -131,6 +130,31 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
  #+BEGIN_SRC sh
    echo -v quiet -d FALSE -l TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
  #+END_SRC
+
+
+* Solve
+** Configure the solver
+
+#+BEGIN_SRC sh
+  rm solver.sh
+  ln -s solver-solve.sh solver.sh
+ #+END_SRC
+
+** Configure instances
+
+Select instance files in the directory ~instances-solve~.
+
+ - Filename prefixed by ~long~ requires the bignum model.
+ - Filename prefixed by ~short~ are accepted by the scalar model.
+
+** Configure the algorithm
+
+ #+BEGIN_SRC sh
+   echo -v verbose -l TRUE > algorithms/BIGNUM.dat
+   echo -v verbose -l FALSE -h FALSE > algorithms/SCALAR.dat
+   echo -v verbose -l FALSE -h TRUE > algorithms/HORNER.dat
+ #+END_SRC
+
 
 * Testing
 ** Solve instances in sequential
