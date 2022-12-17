@@ -63,6 +63,7 @@ p <- add_argument(p, "--letters", help="number of letters", type="integer", defa
 p <- add_argument(p, "--vowels", help="number of vowels", type="integer", default = 4)
 p <- add_argument(p, "--words", help="number of words per list", type="integer", default = 50)
 p <- add_argument(p, "--minlen", help="minimal word length", type="integer", default = 2)
+p <- add_argument(p, "--maxlen", help="maximal word length", type="integer", default = Inf)
 
 ## Parse the command line arguments
 argv <- parse_args(p)
@@ -74,8 +75,8 @@ argv <- parse_args(p)
 words <- ScanWords(argv$dictionary)
 cat("Scan", length(words), "words in", argv$dictionary,"\n")
 
-words <- subset(words, nchar(words) >= argv$minlen)
-cat("Find", length(words), "words with length >=", argv$minlen,"\n")
+words <- subset(words, (argv$minlen <= nchar(words)) & (nchar(words) <= argv$maxlen))
+cat("Find ", length(words), " words with length in [", argv$minlen, ", ", argv$maxlen, "]\n", sep = "")
 
 ## Try generating words lists
 i <- 0 # instance
@@ -97,4 +98,4 @@ if(length(words) >= argv$words) {
         j <- j + 1
     }
 }
-cat("Generate", i , "words lists after", j, "tentatives\n")
+cat("Generate", i , "words list(s) after", j, "tentative(s)\n")
