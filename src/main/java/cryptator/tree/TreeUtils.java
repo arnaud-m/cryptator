@@ -54,27 +54,48 @@ public final class TreeUtils {
         return out.toString();
     }
 
-    public static void writeInorder(final ICryptaNode root, final OutputStream outstream) {
+    public static void writeInorder(final ICryptaNode node,
+                                    final PrintWriter out, int leftPar, int rightPar,
+                                    int putPar, final CryptaOperator oldOp, boolean isLeft,
+                                    final boolean allParenthesis){
+        CryptaOperator op1 = node.getOperator();
+        leftPar += isLeft ? putPar : 0; rightPar += !isLeft ? putPar : 0;
+        putPar = (allParenthesis && oldOp != null && oldOp.getPriority() > 1) ||
+                (oldOp != null && (op1.getPriority() < oldOp.getPriority() ||
+                    (op1.getPriority() == oldOp.getPriority() && !isLeft && !oldOp.isCommutative()))) ? 1 : 0;
+        if (node.isInternalNode()){
+            writeInorder(node.getLeftChild(), out, leftPar, 0, putPar, op1, true, allParenthesis);
+            out.write(op1.getToken() + " ");
+            writeInorder(node.getRightChild(), out, 0, rightPar, putPar, op1, false, allParenthesis);
+        } else {
+            out.write(isLeft ?
+                "( ".repeat(leftPar) + node.toGrammarString() + " " :
+                node.toGrammarString() + " " + ") ".repeat(rightPar));
+        }
+    }
+
+    public static void writeInorder(final ICryptaNode root, final OutputStream outstream, boolean allParenthesis) {
         final PrintWriter out = new PrintWriter(outstream);
-        TreeTraversals.inorderTraversal(root, (node, num) -> {
-            StringBuilder s = new StringBuilder();
-            s.append((num < 0 ? "( " : ") ").repeat(Math.abs(num)));
-            if (num < 0)
-                out.write(s + node.toGrammarString() + " ");
-            else
-                out.write(node.toGrammarString() + " " + s);
-        });
+        writeInorder(root, out, 0, 0, 0, null, false, allParenthesis);
         out.flush();
     }
 
-    public static String writeInorder(final ICryptaNode root) {
+    public static String writeInorder(final ICryptaNode root, boolean allParenthesis) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        TreeUtils.writeInorder(root, out);
+        TreeUtils.writeInorder(root, out, allParenthesis);
         return out.toString();
     }
 
+    public static String writeInorder(final ICryptaNode root) {
+        return writeInorder(root, false);
+    }
+
     public static void printInorder(final ICryptaNode root) {
-        writeInorder(root, System.out);
+        printInorder(root, false);
+    }
+
+    public static void printInorder(final ICryptaNode root, boolean allParenthesis) {
+        writeInorder(root, System.out, allParenthesis);
         System.out.println();
     }
 

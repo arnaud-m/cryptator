@@ -313,23 +313,27 @@ public class ParserTest {
     public void testInfixPrint01() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send * (much + more) = money ");
         testInorder("send * ( much + more ) = money ", node);
+        testInorder("send * ( much + more ) = money ", node, true);
     }
 
     @Test
     public void testInfixPrint02() throws CryptaParserException {
         final ICryptaNode node = parser.parse("A * (B + C * (D + E)) = R ");
         testInorder("A * ( B + C * ( D + E ) ) = R ", node);
+        testInorder("A * ( B + ( C * ( D + E ) ) ) = R ", node, true);
     }
 
     @Test
     public void testInfixPrint03() throws CryptaParserException {
         final ICryptaNode node = parser.parse("A * B % C = R ");
         testInorder("A * B % C = R ", node);
+        testInorder("A * ( B % C ) = R ", node, true);
     }
     @Test
     public void testInfixPrint04() throws CryptaParserException {
         final ICryptaNode node = parser.parse("(A * B) % C = R ");
         testInorder("( A * B ) % C = R ", node);
+        testInorder("( A * B ) % C = R ", node, true);
     }
 
     @Test
@@ -337,6 +341,7 @@ public class ParserTest {
         // Note that redundant parenthesis are ignored
         final ICryptaNode node = parser.parse("A * ( B % C ) = R ");
         testInorder("A * B % C = R ", node);
+        testInorder("A * ( B % C ) = R ", node, true);
     }
 
     @Test
@@ -344,54 +349,63 @@ public class ParserTest {
         // With AND symbol
         final ICryptaNode node = parser.parse("A * ( B % C ) = R; A + D = R1 ");
         testInorder("A * B % C = R && A + D = R1 ", node);
+        testInorder("A * ( B % C ) = R && A + D = R1 ", node, true);
     }
 
     @Test
     public void testInfixPrint07() throws CryptaParserException {
         final ICryptaNode node = parser.parse("(A*B) ^ (C%3) = R");
         testInorder("( A * B ) ^ ( C % 3 ) = R ", node);
+        testInorder("( A * B ) ^ ( C % 3 ) = R ", node, true);
     }
 
     @Test
     public void testInfixPrint08() throws CryptaParserException {
         final ICryptaNode node = parser.parse("((A*B) ^ (C%3)) * 3 = R");
         testInorder("( A * B ) ^ ( C % 3 ) * 3 = R ", node);
+        testInorder("( ( A * B ) ^ ( C % 3 ) ) * 3 = R ", node, true);
     }
 
     @Test
     public void testInfixPrint09() throws CryptaParserException {
         final ICryptaNode node = parser.parse("A + (B + C) = R");
         testInorder("A + B + C = R ", node);
+        testInorder("A + ( B + C ) = R ", node, true);
     }
 
     @Test
     public void testInfixPrint10() throws CryptaParserException {
         final ICryptaNode node = parser.parse("A - (B + C) = R");
         testInorder("A - ( B + C ) = R ", node);
+        testInorder("A - ( B + C ) = R ", node, true);
     }
 
     @Test
     public void testInfixPrint11() throws CryptaParserException {
         final ICryptaNode node = parser.parse("(10 - 1) - (B + C) = R");
         testInorder("10 - 1 - ( B + C ) = R ", node);
+        testInorder("( 10 - 1 ) - ( B + C ) = R ", node, true);
     }
 
     @Test
     public void testInfixPrint12() throws CryptaParserException {
         final ICryptaNode node = parser.parse("10 - (3 * 4) = R");
         testInorder("10 - 3 * 4 = R ", node);
+        testInorder("10 - ( 3 * 4 ) = R ", node, true);
     }
 
     @Test
     public void testInfixPrint13() throws CryptaParserException {
         final ICryptaNode node = parser.parse("10 // (3 * 4) = R");
         testInorder("10 // ( 3 * 4 ) = R ", node);
+        testInorder("10 // ( 3 * 4 ) = R ", node, true);
     }
 
     @Test
     public void testInfixPrint14() throws CryptaParserException {
         final ICryptaNode node = parser.parse("10 // (3 % 4) = R");
         testInorder("10 // 3 % 4 = R ", node);
+        testInorder("10 // ( 3 % 4 ) = R ", node, true);
     }
 
     @Test
@@ -399,6 +413,7 @@ public class ParserTest {
         // A big expr where useless parenthesis are not printed
         final ICryptaNode node = parser.parse("(A - Z) - (B + C) < R + 15 % (R ^ 2 + 3) ;; (D - E) / (36 / 12) = (A * B) * 3 // 28 && B != 3");
         testInorder("A - Z - ( B + C ) < R + 15 % ( R ^ 2 + 3 ) && ( D - E ) / ( 36 / 12 ) = A * B * 3 // 28 && B != 3 ", node);
+        testInorder("( A - Z ) - ( B + C ) < R + ( 15 % ( ( R ^ 2 ) + 3 ) ) && ( D - E ) / ( 36 / 12 ) = ( ( A * B ) * 3 ) // 28 && B != 3 ", node, true);
     }
 
     @Test

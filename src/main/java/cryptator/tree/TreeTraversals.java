@@ -8,7 +8,6 @@
  */
 package cryptator.tree;
 
-import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ITraversalEdgeConsumer;
 import cryptator.specs.ITraversalNodeConsumer;
@@ -77,30 +76,21 @@ public final class TreeTraversals {
         }
     }
 
-    private static void buildDecoratedTree(final DecoratedTree decoratedNode){
-        if (decoratedNode.node.isInternalNode()){
-            final CryptaOperator op = decoratedNode.node.getOperator();
-            buildDecoratedTree(new DecoratedTree(op, decoratedNode, true));
-            buildDecoratedTree(new DecoratedTree(op, decoratedNode,false));
-        }
-    }
-
     public static void inorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
 
-        DecoratedTree decoratedNode = new DecoratedTree(root);
-        buildDecoratedTree(decoratedNode);
+        int num = 1;
+        Deque<ICryptaNode> s = new ArrayDeque<>();
+        ICryptaNode curr = root;
 
-        Deque<DecoratedTree> s = new ArrayDeque<>();
-        DecoratedTree curr = decoratedNode;
         while ((curr != null) || !s.isEmpty()) {
             while (curr != null) {
                 s.push(curr);
-                curr = curr.left;
+                curr = curr.getLeftChild();
             }
             curr = s.pop();
-            traversalNodeConsumer.accept(curr.node, curr.getParenthesisToPut());
-            curr = curr.right;
+            traversalNodeConsumer.accept(curr, num++);
+            curr = curr.getRightChild();
         }
     }
 
@@ -131,42 +121,5 @@ public final class TreeTraversals {
             return numFather;
         }
 
-    }
-
-    private static final class DecoratedTree{
-        // The current node of the ICryptaNode tree
-        public final ICryptaNode node;
-        // True if the current operator OP has less priority than the father operator one
-        // or if the current node is on the right of its father and its father's operator
-        // is not commutative with the same priority of OP
-        public final boolean putParenthesis;
-        // The children of the Decorated tree
-        public DecoratedTree left, right;
-
-        // The number of left/right parenthesis to put when printing in inorder mode
-        public int leftPar, rightPar;
-        private DecoratedTree(CryptaOperator op, DecoratedTree father, boolean isLeft) {
-            if (isLeft) {
-                father.left = this;
-                leftPar = father.leftPar + (father.putParenthesis ? 1 : 0);
-                node = father.node.getLeftChild();
-            }
-            else {
-                father.right = this;
-                rightPar = father.rightPar + (father.putParenthesis ? 1 : 0);
-                node = father.node.getRightChild();
-            }
-            this.putParenthesis = node.getOperator().getPriority() < op.getPriority() ||
-                    (node.getOperator().getPriority() == op.getPriority() && !isLeft && !op.isCommutative());
-        }
-
-        private DecoratedTree(ICryptaNode node){
-            this.node = node;
-            this.putParenthesis = false;
-        }
-
-        public int getParenthesisToPut(){
-            return node.isInternalNode() ? 0 : -leftPar + rightPar;
-        }
     }
 }
