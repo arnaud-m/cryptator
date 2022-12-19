@@ -8,15 +8,26 @@
  */
 package cryptator;
 
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalEdgeConsumer;
-import cryptator.tree.*;
-import org.junit.Test;
+import static cryptator.tree.TreeUtils.computeSymbols;
+import static cryptator.tree.TreeUtils.writeInorder;
+import static cryptator.tree.TreeUtils.writePostorder;
+import static cryptator.tree.TreeUtils.writePreorder;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
-import static cryptator.tree.TreeUtils.*;
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalEdgeConsumer;
+import cryptator.tree.CryptaConstant;
+import cryptator.tree.CryptaLeaf;
+import cryptator.tree.CryptaNode;
+import cryptator.tree.CryptaOperatorDetection;
+import cryptator.tree.TreeTraversals;
 
 public class TreeTest {
 
@@ -58,7 +69,7 @@ public class TreeTest {
 
         TreeTest.testPreorder("= + send more money ", sendMoreMoney);
         TreeTest.testPostorder("send more + money = ", sendMoreMoney);
-        TreeTest.testInorder("send + more = money ", sendMoreMoney);
+        TreeTest.testInorder("send + more = money", sendMoreMoney);
 
         assertArrayEquals("demnorsy".toCharArray(), computeSymbols(sendMoreMoney));
     }
@@ -75,7 +86,7 @@ public class TreeTest {
 
         TreeTest.testPreorder("= + send + much more money ", sendMuchMoreMoney);
         TreeTest.testPostorder("send much more + + money = ", sendMuchMoreMoney);
-        TreeTest.testInorder("send + much + more = money ", sendMuchMoreMoney);
+        TreeTest.testInorder("send + much + more = money", sendMuchMoreMoney);
 
         assertArrayEquals("cdehmnorsuy".toCharArray(), computeSymbols(sendMuchMoreMoney));
 

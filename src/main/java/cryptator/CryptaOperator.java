@@ -8,13 +8,13 @@
  */
 package cryptator;
 
+import java.math.BigInteger;
+import java.util.function.BinaryOperator;
+
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.VariableUtils;
-
-import java.math.BigInteger;
-import java.util.function.BinaryOperator;
 
 /**
  * @see https://en.wikipedia.org/wiki/Relational_operator
@@ -26,8 +26,8 @@ public enum CryptaOperator {
     DIV("//", 3, false, (a, b) -> a.divide(b), (a, b) -> a.div(b)),
     FDIV("/", 3, false, (a, b) -> fdiv(a, b), (a, b) -> fdiv(a, b)),
     MOD("%", 4, false, (a, b) -> a.mod(b), (a, b) -> a.mod(b)),
-    POW("^", 4,  false, (a, b) -> a.pow(b.intValue()), (a, b) -> a.pow(b)),
-    ID("", 0, true, (a, b) -> BigInteger.ZERO, (a, b) -> null),
+    POW("^", 4, false, (a, b) -> a.pow(b.intValue()), (a, b) -> a.pow(b)),
+    ID("", 5, true, (a, b) -> BigInteger.ZERO, (a, b) -> null),
     EQ("=", 1, true, (a, b) -> toBigInt(a.compareTo(b) == 0), (a, b) -> a.eq(b)),
     NE("!=", 1, true, (a, b) -> toBigInt(a.compareTo(b) != 0), (a, b) -> a.ne(b)),
     LT("<", 1, false, (a, b) -> toBigInt(a.compareTo(b) < 0), (a, b) -> a.lt(b)),
