@@ -24,9 +24,15 @@ public class CommandTest {
     }
 
     @Test
-    public void testCryptatorException() throws FileNotFoundException {
+    public void testCryptatorException1() throws FileNotFoundException {
         String[] args = {"-b", "N", "saturn+uranus=planets"};
         assertNotEquals(0, Cryptator.doMain(args));
+    }
+
+    @Test
+    public void testCryptatorException2() throws FileNotFoundException {
+        String[] args = {"more+more+veryverylongword=requirebignummodel", "send+more=money"};
+        assertEquals(1, Cryptator.doMain(args));
     }
 
     @Test
