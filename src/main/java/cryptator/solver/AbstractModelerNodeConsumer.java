@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
+import org.chocosolver.solver.search.strategy.Search;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
@@ -97,7 +98,15 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         postFirstSymbolConstraints();
         globalCardinalityConstraint().post();
         postCryptarithmEquationConstraint();
+    }
 
+    public void configureSearch() {
+        // model.getSolver().showDecisions();
+        final int searchType = config.getSearchStrategy();
+        if (searchType == 1) {
+            IntVar[] vars = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
+            model.getSolver().setSearch(Search.intVarSearch(vars));
+        }
     }
 
     public CryptaModel buildCryptaModel() {

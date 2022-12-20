@@ -44,6 +44,7 @@ public class CryptaBignumModeler implements ICryptaModeler {
             final AbstractModelerNodeConsumer modelerNodeConsumer = new ModelerBignumConsumer(model, config);
             TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
             modelerNodeConsumer.postConstraints();
+            modelerNodeConsumer.configureSearch();
             return modelerNodeConsumer.buildCryptaModel();
         } catch (SolverException e) {
             throw new CryptaModelException("Internal choco exception");

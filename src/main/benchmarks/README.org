@@ -117,12 +117,8 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    generateLong 14 elements.txt
    generateLong 49 palindromes-fr.txt
    generateLong 41 palindromes-en.txt
-   generateLong 14 countries.txt
-   generateLong 11 computer.txt
-   generateLong 12 jobs.txt
-   generateLong 13 jobs.txt
-   generateLong 13 vins.txt
-   generateLong 28 mythologie-grecque/mythologie-grecque.txt
+   generateLong 15 capitales.txt
+   generateLong 16 capitales.txt
  #+END_SRC
 
 ** Configure the algorithm
@@ -150,13 +146,22 @@ Select instance files in the directory ~instances-solve~.
 ** Configure the algorithm
 
  #+BEGIN_SRC sh
-   echo -v verbose -l TRUE > algorithms/BIGNUM.dat
-   echo -v verbose -l FALSE -h FALSE > algorithms/SCALAR.dat
-   echo -v verbose -l FALSE -h TRUE > algorithms/HORNER.dat
+   ARGS=" -v verbose -t 10"
+   echo $ARGS -l TRUE > algorithms/BIGNUM.dat
+   echo $ARGS -l FALSE -h FALSE > algorithms/SCALAR.dat
+   echo $ARGS -l FALSE -h TRUE > algorithms/HORNER.dat
+
+   echo $ARGS -l TRUE -search 1 > algorithms/BIGNUM-1.dat
+   echo $ARGS -l FALSE -h FALSE -search 1 > algorithms/SCALAR-1.dat
+   echo $ARGS -l FALSE -h TRUE -search 1 > algorithms/HORNER-1.dat
+
  #+END_SRC
 
 
 * Testing
+
+Change the file extension accordingly.
+
 ** Solve instances in sequential
    #+BEGIN_SRC sh
      nohup gridjobs  -l -p '*.dat' &

@@ -32,6 +32,7 @@ public class CryptaModeler implements ICryptaModeler {
             final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
             TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
             modelerNodeConsumer.postConstraints();
+            modelerNodeConsumer.configureSearch();
             return modelerNodeConsumer.buildCryptaModel();
         } catch (SolverException e) {
             throw new CryptaModelException("Internal choco exception");
