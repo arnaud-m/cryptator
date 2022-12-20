@@ -64,7 +64,7 @@ public class ProductTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("It is a choco issue")
     /***
      * Working version of the previous test.
      */
@@ -76,7 +76,7 @@ public class ProductTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("It is a choco issue")
     /***
      * Creating a model using arithm instead of times directly.
      */
@@ -88,7 +88,7 @@ public class ProductTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("It is a choco issue")
     /***
      * Creating a model using the operators function given by IntVar
      */
@@ -100,7 +100,7 @@ public class ProductTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("It is a choco issue")
     /***
      * Creating a model using the operators function given by IntVar without using
      * result as an intermediary
