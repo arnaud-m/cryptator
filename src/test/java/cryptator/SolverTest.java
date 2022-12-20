@@ -8,18 +8,6 @@
  */
 package cryptator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import cryptator.config.CryptaConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
@@ -31,6 +19,15 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.Assert.*;
 
 final class CryptaSolvingTester {
 
@@ -91,7 +88,7 @@ final class CryptaSolvingTester {
 
 public class SolverTest {
 
-    private CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
+    private final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
 
     public SolverTest() {
     }

@@ -8,15 +8,13 @@
  */
 package cryptator;
 
-import static cryptator.TreeTest.testInorder;
-import static cryptator.TreeTest.testPostorder;
-import static cryptator.TreeTest.testPreorder;
-
-import org.junit.Test;
-
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
+import cryptator.tree.TreeUtils;
+import org.junit.Test;
+
+import static cryptator.TreeTest.*;
 
 public class ParserTest {
 
@@ -421,6 +419,12 @@ public class ParserTest {
         testInorder(
                 "(A - Z) - (B + C) < R + (15 % ((R ^ 2) + 3)) && (D - E) / (36 / 12) = ((A * B) * 3) // 28 && B != 3",
                 node, true);
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void invalidSpaceTest() {
+        ICryptaNode parsed = parser.parse("send more = money");
+        System.out.println(TreeUtils.writePreorder(parsed));
     }
 
     @Test
