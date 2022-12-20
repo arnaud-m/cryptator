@@ -24,7 +24,7 @@ public enum CryptaOperator {
     SUB("-", 2, false, (a, b) -> a.subtract(b), (a, b) -> a.sub(b)),
     MUL("*", 3, true, (a, b) -> a.multiply(b), (a, b) -> a.mul(b)),
     DIV("//", 3, false, (a, b) -> a.divide(b), (a, b) -> a.div(b)),
-    FDIV("/", 3, false, (a, b) -> fdiv(a, b), (a, b) -> fdiv(a, b)),
+    FDIV("/", 3, false, CryptaOperator::fdiv, CryptaOperator::fdiv),
     MOD("%", 4, false, (a, b) -> a.mod(b), (a, b) -> a.mod(b)),
     POW("^", 4, false, (a, b) -> a.pow(b.intValue()), (a, b) -> a.pow(b)),
     ID("", 5, true, (a, b) -> BigInteger.ZERO, (a, b) -> null),

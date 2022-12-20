@@ -152,7 +152,7 @@ public final class WordSumTuplesBuilder {
      * @return the minimal number of digits of the sum
      */
     public int getMaxLen(final int k, final int x, final int y, final int z) {
-        final BigInteger xyz = BigInteger.valueOf(x + y + z);
+        final BigInteger xyz = BigInteger.valueOf((long) x + y + z);
         final BigInteger v = exp(x, k).add(exp(y, k - 1)).add(exp(z, k - 2)).subtract(xyz);
         // System.out.println(v + " " + Integer.toBinaryString(v.intValue()));
         return logFloor(v, base) + 1;
@@ -190,7 +190,6 @@ public final class WordSumTuplesBuilder {
         for (int i = 0; i < (k - 1); i++) {
             maxz += values[i];
         }
-        // System.out.println(maxz);
         return maxz;
     }
 

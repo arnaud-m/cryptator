@@ -27,7 +27,7 @@ public interface ICryptaSolver {
     default boolean solve(ICryptaNode cryptarithm, CryptaConfig config,
             final BiConsumer<ICryptaNode, ICryptaSolution> consumer)
             throws CryptaModelException, CryptaSolverException {
-        return solve(cryptarithm, config, (solution) -> consumer.accept(cryptarithm, solution));
+        return solve(cryptarithm, config, solution -> consumer.accept(cryptarithm, solution));
     }
 
 }
