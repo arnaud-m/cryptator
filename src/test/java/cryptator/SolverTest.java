@@ -358,8 +358,6 @@ public class SolverTest {
         t.testUNIQUE("pear+plum+apple+grape+lemon=orange");
     }
 
-
-
     @Test
     public void testBarker5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.testUNIQUE("cinq*six=trente");
@@ -382,8 +380,6 @@ public class SolverTest {
     public void testPow1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.testSAT("A = B ^ C", 2);
     }
-
-
 
     @Test
     public void testDivision1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
@@ -493,7 +489,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication1()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "SEE * SO = MIMEO; MIMEO = EMOO + '10'*MESS;SEE * O = EMOO;SEE * S = MESS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -501,7 +496,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication1doubleticks()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "SEE * SO = MIMEO; MIMEO = EMOO + \"10\"*MESS;SEE * O = EMOO;SEE * S = MESS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -512,7 +506,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication2()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "CUT * T = BUST; CUT * I = TNNT; TNNT * '10' + BUST = TENET; TENET = CUT * IT";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -523,7 +516,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication3()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "RED * S = ARCS; RED * A = RED; RED * '10' + ARCS = CDTS; CDTS = RED * AS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -541,7 +533,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication4()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "HOW * E = HAIL; HOW * W = PAL; HAIL + PAL * '10' = LHAL; HOW * WE = LHAL";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -554,7 +545,6 @@ public class SolverTest {
     public void testEvaluationLongDivision1()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "AKA * K = DYNA; DADD - DYNA = ARM; AKA * M = ARKA; ARMY - ARKA = RA; AKA * KM + RA = DADDY";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -661,7 +651,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication1symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "SEE * SO = MIMEO&& MIMEO = EMOO + '10'*MESS&&SEE * O = EMOO&&SEE * S = MESS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -669,7 +658,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication2symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "CUT * T = BUST&& CUT * I = TNNT&& TNNT * '10' + BUST = TENET&& TENET = CUT * IT";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -677,7 +665,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication3symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "RED * S = ARCS&& RED * A = RED&& RED * '10' + ARCS = CDTS&& CDTS = RED * AS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -692,7 +679,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication4symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "HOW * E = HAIL&& HOW * W = PAL&& HAIL + PAL * '10' = LHAL&& HOW * WE = LHAL";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -702,7 +688,6 @@ public class SolverTest {
     public void testEvaluationLongDivision1symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "AKA * K = DYNA&& DADD - DYNA = ARM&& AKA * M = ARKA&& ARMY - ARKA = RA&& AKA * KM + RA = DADDY";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 

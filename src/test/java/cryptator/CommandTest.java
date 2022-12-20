@@ -31,7 +31,7 @@ public class CommandTest {
 
     @Test
     public void testCryptatorException2() throws FileNotFoundException {
-        String[] args = {"more+more+veryverylongword=requirebignummodel", "send+more=money"};
+        String[] args = {"-v", "SILENT", "more+more+veryverylongword=requirebignummodel", "send+more=money"};
         assertEquals(1, Cryptator.doMain(args));
     }
 
