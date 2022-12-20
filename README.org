@@ -17,7 +17,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
   - [[http://www.cadaeic.net/alphas.htm][An Alphametic Page]], Mike Keith - a must for alphametic lovers.
   - [[http://cryptarithms.awardspace.us/][Cryptarithms Online]], Jorge A. C. B. Soares - it contains the Sphinx collection, links, books.
   - [[http://www.tkcs-collins.com/truman/alphamet/alphamet.shtml][Alphametic Puzzles]], Truman Collins - he has solvers and even generators.
-
+  - You can also browse our [[file:src/main/cryptarithms/][collection of cryptarithms]].
 
 * Download and Installation
 
@@ -39,13 +39,14 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
    : mvn clean package -DskipTests=true
 
    The jar file contains all required dependencies.
-   The next step is simply to run one of the console applications.
-   The links point to demonstration scripts.
+   The next step is simply to run the console application.
+   : java -cp target/cryptator-0.5.1-SNAPSHOT-with-dependencies.jar cryptator.Cryptator send+more=money
+
+   There are three console applications and the links below point to demonstration scripts.
 
  - *solve a cryptarithm* with [[file:src/main/shell/demo-solve.sh][Cryptator]].
  - *generate cryptarithms* with [[file:src/main/shell/demo-generate.sh][Cryptagen]] (see the [[file:src/main/shell/demo-generate-output.md][demo output]]).
  - *play the game* with [[file:src/main/shell/demo-play.sh][Cryptamancer]].
-
 
     Execute the main class without argument to display the help message.
 ** As a library
