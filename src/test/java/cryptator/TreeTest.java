@@ -43,6 +43,22 @@ public class TreeTest {
     public TreeTest() {
     }
 
+    public static void testInorder(final String expected, final ICryptaNode node) {
+        testInorder(expected, node, false);
+    }
+
+    public static void testInorder(final String expected, final ICryptaNode node, boolean allParenthesis) {
+        assertEquals(expected, writeInorder(node, allParenthesis));
+    }
+
+    public static void testPostorder(final String expected, final ICryptaNode node) {
+        assertEquals(expected, writePostorder(node));
+    }
+
+    public static void testPreorder(final String expected, final ICryptaNode node) {
+        assertEquals(expected, writePreorder(node));
+    }
+
     @Test
     public void testSendMoreMoney() throws Exception {
         assertEquals("=", sendMoreMoney.toString());
@@ -53,7 +69,7 @@ public class TreeTest {
 
         TreeTest.testPreorder("= + send more money ", sendMoreMoney);
         TreeTest.testPostorder("send more + money = ", sendMoreMoney);
-        TreeTest.testInorder("send + more = money ", sendMoreMoney);
+        TreeTest.testInorder("send + more = money", sendMoreMoney);
 
         assertArrayEquals("demnorsy".toCharArray(), computeSymbols(sendMoreMoney));
     }
@@ -70,22 +86,10 @@ public class TreeTest {
 
         TreeTest.testPreorder("= + send + much more money ", sendMuchMoreMoney);
         TreeTest.testPostorder("send much more + + money = ", sendMuchMoreMoney);
-        TreeTest.testInorder("send + much + more = money ", sendMuchMoreMoney);
+        TreeTest.testInorder("send + much + more = money", sendMuchMoreMoney);
 
         assertArrayEquals("cdehmnorsuy".toCharArray(), computeSymbols(sendMuchMoreMoney));
 
-    }
-
-    public static void testInorder(final String expected, final ICryptaNode node) {
-        assertEquals(expected, writeInorder(node));
-    }
-
-    public static void testPostorder(final String expected, final ICryptaNode node) {
-        assertEquals(expected, writePostorder(node));
-    }
-
-    public static void testPreorder(final String expected, final ICryptaNode node) {
-        assertEquals(expected, writePreorder(node));
     }
 
     @Test
@@ -99,21 +103,6 @@ public class TreeTest {
         TreeTraversals.postorderTraversal(sendMuchMoreMoney, detect);
         assertFalse(detect.hasUnsupportedOperator());
         assertTrue(detect.getUnsupportedOperators().isEmpty());
-
-    }
-
-    private static class EdgeCounter implements ITraversalEdgeConsumer {
-
-        private int count;
-
-        @Override
-        public void accept(final ICryptaNode node, final int numNode, final ICryptaNode father, final int numFather) {
-            count++;
-        }
-
-        public final int getCount() {
-            return count;
-        }
 
     }
 
@@ -144,6 +133,21 @@ public class TreeTest {
         assertTrue(node.getLeftChild().isInternalNode());
         assertFalse(node.getLeftChild().getLeftChild().isInternalNode());
         assertFalse(node.getRightChild().isInternalNode());
+
+    }
+
+    private static class EdgeCounter implements ITraversalEdgeConsumer {
+
+        private int count;
+
+        @Override
+        public void accept(final ICryptaNode node, final int numNode, final ICryptaNode father, final int numFather) {
+            count++;
+        }
+
+        public final int getCount() {
+            return count;
+        }
 
     }
 

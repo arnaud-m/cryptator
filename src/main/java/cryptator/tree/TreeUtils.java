@@ -11,6 +11,7 @@ package cryptator.tree;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.function.Predicate;
 
 import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaNode;
@@ -54,20 +55,81 @@ public final class TreeUtils {
         return out.toString();
     }
 
-    public static void writeInorder(final ICryptaNode root, final OutputStream outstream) {
+    private static void writeInorderChild(final ICryptaNode node, final PrintWriter out, final boolean hasPar,
+            final Predicate<ICryptaNode> hasLeftPar, final Predicate<ICryptaNode> hasRightPar) {
+        if (hasPar) {
+            out.write("(");
+            writeInorder(node, out, hasLeftPar, hasRightPar);
+            out.write(")");
+        } else {
+            writeInorder(node, out, hasLeftPar, hasRightPar);
+        }
+    }
+
+    private static void writeInorder(final ICryptaNode node, final PrintWriter out,
+            final Predicate<ICryptaNode> hasLeftPar, final Predicate<ICryptaNode> hasRightPar) {
+        // Handle internal node or leaf.
+        if (node.isInternalNode()) {
+            // Write the left child
+            writeInorderChild(node.getLeftChild(), out, hasLeftPar.test(node), hasLeftPar, hasRightPar);
+            // Write the operator
+            out.write(" ");
+            out.write(node.getOperator().getToken());
+            out.write(" ");
+            // Write the right child
+            writeInorderChild(node.getRightChild(), out, hasRightPar.test(node), hasLeftPar, hasRightPar);
+        } else {
+            // Write a leaf
+            out.write(node.toGrammarString());
+        }
+
+    }
+
+    private static void writeInorder(final ICryptaNode node, final OutputStream outstream,
+            final boolean allParenthesis) {
         final PrintWriter out = new PrintWriter(outstream);
-        TreeTraversals.inorderTraversal(root, (node, num) -> writeWord(node, out));
+        if (allParenthesis) {
+            // Left parenthesis
+            final Predicate<ICryptaNode> hasLeftPar = n -> n.getOperator().getPriority() > 1
+                    && n.getLeftChild().isInternalNode();
+            // Right parenthesis
+            final Predicate<ICryptaNode> hasRightPar = n -> n.getOperator().getPriority() > 1
+                    && n.getRightChild().isInternalNode();
+            // Recursive traversal
+            writeInorder(node, out, hasLeftPar, hasRightPar);
+        } else {
+            // Left parenthesis
+            final Predicate<ICryptaNode> hasLeftPar = n -> n.getOperator().getPriority() > n.getLeftChild()
+                    .getOperator().getPriority();
+
+            // Right parenthesis
+            final Predicate<ICryptaNode> hasRightPar = n -> {
+                final int p1 = n.getOperator().getPriority();
+                final int p2 = n.getRightChild().getOperator().getPriority();
+                return p1 > p2 || (p1 == p2 && !n.getOperator().isCommutative());
+            };
+            // Recursive traversal
+            writeInorder(node, out, hasLeftPar, hasRightPar);
+        }
         out.flush();
     }
 
-    public static String writeInorder(final ICryptaNode root) {
+    public static String writeInorder(final ICryptaNode root, boolean allParenthesis) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        TreeUtils.writeInorder(root, out);
+        TreeUtils.writeInorder(root, out, allParenthesis);
         return out.toString();
     }
 
+    public static String writeInorder(final ICryptaNode root) {
+        return writeInorder(root, false);
+    }
+
     public static void printInorder(final ICryptaNode root) {
-        writeInorder(root, System.out);
+        printInorder(root, false);
+    }
+
+    public static void printInorder(final ICryptaNode root, boolean allParenthesis) {
+        writeInorder(root, System.out, allParenthesis);
         System.out.println();
     }
 

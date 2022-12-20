@@ -20,18 +20,22 @@ import org.chocosolver.util.tools.VariableUtils;
  * @see https://en.wikipedia.org/wiki/Relational_operator
  */
 public enum CryptaOperator {
-    ADD("+", (a, b) -> a.add(b), (a, b) -> a.add(b)), SUB("-", (a, b) -> a.subtract(b), (a, b) -> a.sub(b)),
-    MUL("*", (a, b) -> a.multiply(b), (a, b) -> a.mul(b)), DIV("//", (a, b) -> a.divide(b), (a, b) -> a.div(b)),
-    FDIV("/", (a, b) -> fdiv(a, b), (a, b) -> fdiv(a, b)), MOD("%", (a, b) -> a.mod(b), (a, b) -> a.mod(b)),
-    POW("^", (a, b) -> a.pow(b.intValue()), (a, b) -> a.pow(b)), ID("", (a, b) -> BigInteger.ZERO, (a, b) -> null),
-    EQ("=", (a, b) -> toBigInt(a.compareTo(b) == 0), (a, b) -> a.eq(b)),
-    NE("!=", (a, b) -> toBigInt(a.compareTo(b) != 0), (a, b) -> a.ne(b)),
-    LT("<", (a, b) -> toBigInt(a.compareTo(b) < 0), (a, b) -> a.lt(b)),
-    GT(">", (a, b) -> toBigInt(a.compareTo(b) > 0), (a, b) -> a.gt(b)),
-    LE("<=", (a, b) -> toBigInt(a.compareTo(b) <= 0), (a, b) -> a.le(b)),
-    GE(">=", (a, b) -> toBigInt(a.compareTo(b) >= 0), (a, b) -> a.ge(b)),
+    ADD("+", 2, true, (a, b) -> a.add(b), (a, b) -> a.add(b)),
+    SUB("-", 2, false, (a, b) -> a.subtract(b), (a, b) -> a.sub(b)),
+    MUL("*", 3, true, (a, b) -> a.multiply(b), (a, b) -> a.mul(b)),
+    DIV("//", 3, false, (a, b) -> a.divide(b), (a, b) -> a.div(b)),
+    FDIV("/", 3, false, (a, b) -> fdiv(a, b), (a, b) -> fdiv(a, b)),
+    MOD("%", 4, false, (a, b) -> a.mod(b), (a, b) -> a.mod(b)),
+    POW("^", 4, false, (a, b) -> a.pow(b.intValue()), (a, b) -> a.pow(b)),
+    ID("", 5, true, (a, b) -> BigInteger.ZERO, (a, b) -> null),
+    EQ("=", 1, true, (a, b) -> toBigInt(a.compareTo(b) == 0), (a, b) -> a.eq(b)),
+    NE("!=", 1, true, (a, b) -> toBigInt(a.compareTo(b) != 0), (a, b) -> a.ne(b)),
+    LT("<", 1, false, (a, b) -> toBigInt(a.compareTo(b) < 0), (a, b) -> a.lt(b)),
+    GT(">", 1, false, (a, b) -> toBigInt(a.compareTo(b) > 0), (a, b) -> a.gt(b)),
+    LE("<=", 1, false, (a, b) -> toBigInt(a.compareTo(b) <= 0), (a, b) -> a.le(b)),
+    GE(">=", 1, false, (a, b) -> toBigInt(a.compareTo(b) >= 0), (a, b) -> a.ge(b)),
 
-    AND("&&", (a, b) -> toBigInt(!a.equals(BigInteger.ZERO) && !b.equals(BigInteger.ZERO)),
+    AND("&&", 0, true, (a, b) -> toBigInt(!a.equals(BigInteger.ZERO) && !b.equals(BigInteger.ZERO)),
             (a, b) -> ((ReExpression) a).and((ReExpression) b));
 
     private final String token;
@@ -40,11 +44,16 @@ public enum CryptaOperator {
 
     private final BinaryOperator<ArExpression> expression;
 
-    CryptaOperator(final String token, final BinaryOperator<BigInteger> function,
+    private final int priority;
+    private final boolean isCommutative;
+
+    CryptaOperator(final String token, int priority, boolean isCommutative, final BinaryOperator<BigInteger> function,
             final BinaryOperator<ArExpression> expression) {
         this.token = token;
         this.function = function;
         this.expression = expression;
+        this.priority = priority;
+        this.isCommutative = isCommutative;
     }
 
     public static CryptaOperator valueOfToken(final String token) {
@@ -84,6 +93,14 @@ public enum CryptaOperator {
 
     public String getToken() {
         return token;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public boolean isCommutative() {
+        return isCommutative;
     }
 
     public BinaryOperator<BigInteger> getFunction() {

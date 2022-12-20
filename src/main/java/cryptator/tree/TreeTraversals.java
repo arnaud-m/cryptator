@@ -8,47 +8,18 @@
  */
 package cryptator.tree;
 
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalEdgeConsumer;
+import cryptator.specs.ITraversalNodeConsumer;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.ListIterator;
 
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalEdgeConsumer;
-import cryptator.specs.ITraversalNodeConsumer;
-
 public final class TreeTraversals {
 
     private TreeTraversals() {
-    }
-
-    private static class TraversalEdge {
-
-        private final ICryptaNode node;
-
-        private final ICryptaNode father;
-
-        private final int numFather;
-
-        TraversalEdge(final ICryptaNode node, final ICryptaNode father, final int numFather) {
-            super();
-            this.node = node;
-            this.father = father;
-            this.numFather = numFather;
-        }
-
-        public final ICryptaNode getNode() {
-            return node;
-        }
-
-        public final ICryptaNode getFather() {
-            return father;
-        }
-
-        public final int getNumFather() {
-            return numFather;
-        }
-
     }
 
     public static void preorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalConsumer) {
@@ -107,9 +78,11 @@ public final class TreeTraversals {
 
     public static void inorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
+
         int num = 1;
         Deque<ICryptaNode> s = new ArrayDeque<>();
         ICryptaNode curr = root;
+
         while ((curr != null) || !s.isEmpty()) {
             while (curr != null) {
                 s.push(curr);
@@ -119,7 +92,34 @@ public final class TreeTraversals {
             traversalNodeConsumer.accept(curr, num++);
             curr = curr.getRightChild();
         }
-
     }
 
+    private static class TraversalEdge {
+
+        private final ICryptaNode node;
+
+        private final ICryptaNode father;
+
+        private final int numFather;
+
+        TraversalEdge(final ICryptaNode node, final ICryptaNode father, final int numFather) {
+            super();
+            this.node = node;
+            this.father = father;
+            this.numFather = numFather;
+        }
+
+        public final ICryptaNode getNode() {
+            return node;
+        }
+
+        public final ICryptaNode getFather() {
+            return father;
+        }
+
+        public final int getNumFather() {
+            return numFather;
+        }
+
+    }
 }
