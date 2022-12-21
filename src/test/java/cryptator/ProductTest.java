@@ -44,9 +44,9 @@ public class ProductTest {
     public void solve(final int solutionCount) {
         Solver solver = model.getSolver();
         // System.out.println(model);
-        solver.printVersion();
-        solver.showStatistics();
-        solver.showSolutions();
+        // solver.printVersion();
+        // solver.showStatistics();
+        // solver.showSolutions();
         solver.findSolution();
         Assert.assertEquals(solutionCount, solver.getSolutionCount());
     }

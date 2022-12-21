@@ -377,7 +377,6 @@ public class EvaluationTest {
                 e.printStackTrace();
                 fail("Exception raised while testing");
             }
-            System.out.println(s);
         });
     }
 
