@@ -19,7 +19,7 @@ import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaNode;
 
-public class CryptaGenModel extends WordsListModel implements ICryptaGenSolver {
+public class CryptaGenModel extends WordListModel implements ICryptaGenSolver {
 
     private final CryptaMemberLen left;
 
