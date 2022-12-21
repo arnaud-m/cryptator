@@ -8,20 +8,35 @@
  */
 package cryptator.tree;
 
-import cryptator.specs.ICryptaNode;
-import cryptator.specs.ITraversalEdgeConsumer;
-import cryptator.specs.ITraversalNodeConsumer;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.ListIterator;
 
+import cryptator.specs.ICryptaNode;
+import cryptator.specs.ITraversalEdgeConsumer;
+import cryptator.specs.ITraversalNodeConsumer;
+
+/**
+ * The Class TreeTraversals provides static functions for common tree
+ * traversals.
+ */
 public final class TreeTraversals {
 
+    /**
+     * Does nothing.
+     */
     private TreeTraversals() {
     }
 
+    /**
+     * Iterative preorder traversal of the tree that feeds a consumer.
+     * 
+     * The consumer accepts a node represented by a pair (node, number).
+     *
+     * @param root              the root of the tree
+     * @param traversalConsumer the traversal consumer of pairs (node, number)
+     */
     public static void preorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalConsumer) {
         final Deque<ICryptaNode> stack = new ArrayDeque<>();
         int num = 1;
@@ -37,6 +52,13 @@ public final class TreeTraversals {
         }
     }
 
+    /**
+     * Push children of a father node on the stack.
+     *
+     * @param stack the stack
+     * @param n     the father node
+     * @param num   the number of the father node
+     */
     private static void pushChildren(final Deque<TraversalEdge> stack, final ICryptaNode n, final int num) {
         if (n.isInternalNode()) {
             stack.push(new TraversalEdge(n.getRightChild(), n, num));
@@ -44,6 +66,16 @@ public final class TreeTraversals {
         }
     }
 
+    /**
+     * Iterative preorder traversal of the tree that feeds a consumer.
+     * 
+     * The consumer accepts an edge represented by two pairs (node, number)).
+     * 
+     * The pairs stand for the father and the child of the edge.
+     *
+     * @param root              the root of the tree
+     * @param traversalConsumer the traversal consumer of pairs of pair.
+     */
     public static void preorderTraversal(final ICryptaNode root, final ITraversalEdgeConsumer traversalConsumer) {
         final Deque<TraversalEdge> stack = new ArrayDeque<>();
         int num = 1;
@@ -57,6 +89,14 @@ public final class TreeTraversals {
         }
     }
 
+    /**
+     * Iterative postorder traversal of the tree that feeds a consumer.
+     * 
+     * The consumer accepts a node represented by a pair (node, number).
+     *
+     * @param root              the root of the tree
+     * @param traversalConsumer the traversal consumer of pairs (node, number)
+     */
     public static void postorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         final Deque<ICryptaNode> stack = new ArrayDeque<>();
         final ArrayList<ICryptaNode> order = new ArrayList<>();
@@ -76,9 +116,16 @@ public final class TreeTraversals {
         }
     }
 
+    /**
+     * Iterative inorder traversal of the tree that feeds a consumer.
+     * 
+     * The consumer accepts a node represented by a pair (node, number).
+     *
+     * @param root              the root of the tree
+     * @param traversalConsumer the consumer of pairs (node, number)
+     */
     public static void inorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
-
         int num = 1;
         Deque<ICryptaNode> s = new ArrayDeque<>();
         ICryptaNode curr = root;
@@ -94,14 +141,27 @@ public final class TreeTraversals {
         }
     }
 
+    /**
+     * The Class TraversalEdge.
+     */
     private static class TraversalEdge {
 
+        /** The node. */
         private final ICryptaNode node;
 
+        /** The father. */
         private final ICryptaNode father;
 
+        /** The num father. */
         private final int numFather;
 
+        /**
+         * Instantiates a new traversal edge.
+         *
+         * @param node      the node
+         * @param father    the father
+         * @param numFather the num father
+         */
         TraversalEdge(final ICryptaNode node, final ICryptaNode father, final int numFather) {
             super();
             this.node = node;
@@ -109,14 +169,29 @@ public final class TreeTraversals {
             this.numFather = numFather;
         }
 
+        /**
+         * Gets the node.
+         *
+         * @return the node
+         */
         public final ICryptaNode getNode() {
             return node;
         }
 
+        /**
+         * Gets the father.
+         *
+         * @return the father
+         */
         public final ICryptaNode getFather() {
             return father;
         }
 
+        /**
+         * Gets the num father.
+         *
+         * @return the num father
+         */
         public final int getNumFather() {
             return numFather;
         }

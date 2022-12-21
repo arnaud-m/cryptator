@@ -10,13 +10,39 @@ package cryptator.cmd;
 
 import cryptator.specs.ICryptaLogManager;
 
+/**
+ * The Enum Verbosity represents the verbosity levels of a program.
+ */
 public enum Verbosity {
-    SILENT, QUIET, NORMAL, VERBOSE, VERY_VERBOSE, DEBUG;
 
+    /** The silent level. */
+    SILENT,
+    /** The quiet level. */
+    QUIET,
+    /** The normal level. */
+    NORMAL,
+    /** The verbose level. */
+    VERBOSE,
+    /** The very verbose level. */
+    VERY_VERBOSE,
+    /** The debug level. */
+    DEBUG;
+
+    /**
+     * Apply this verbosity level to a logging manager.
+     *
+     * @param manager the logging manager
+     */
     public void applyTo(ICryptaLogManager manager) {
         setVerbosity(manager, this);
     }
 
+    /**
+     * Sets the verbosity of a logging manager.
+     *
+     * @param manager   the manager
+     * @param verbosity the verbosity level
+     */
     public static void setVerbosity(ICryptaLogManager manager, Verbosity verbosity) {
         if (verbosity != null && manager != null) {
             if (verbosity.equals(SILENT)) {
