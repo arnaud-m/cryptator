@@ -26,7 +26,7 @@ import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
 /**
- * Base class for generation model..
+ * Base class for generation model.
  */
 public class CryptaGenBaseModel implements ICryptaGenModel {
 

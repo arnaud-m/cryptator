@@ -17,6 +17,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
   - [[http://www.cadaeic.net/alphas.htm][An Alphametic Page]], Mike Keith - a must for alphametic lovers.
   - [[http://cryptarithms.awardspace.us/][Cryptarithms Online]], Jorge A. C. B. Soares - it contains the Sphinx collection, links, books.
   - [[http://www.tkcs-collins.com/truman/alphamet/alphamet.shtml][Alphametic Puzzles]], Truman Collins - he has solvers and even generators.
+  - [[https://www.math.uni-bielefeld.de/~sillke/PUZZLES/ALPHAMETIC/][Alphametic]], Torsten Sillke - collection, variants, references, and links.
   - You can also browse our [[file:src/main/cryptarithms/][collection of cryptarithms]].
 
 * Download and Installation
