@@ -269,7 +269,7 @@ public class SolverTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("It is a choco issue.")
     public void testEMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.solver.limitSolution(100);
         t.testSAT("nrgy = MC ^ 2");
