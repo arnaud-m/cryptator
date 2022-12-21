@@ -37,23 +37,23 @@ public interface ICryptaSolver {
     /**
      * Solve the cryptarithm and feed the consumer with each solution found.
      *
-     * @param cryptarithm      the cryptarithm
-     * @param config           the configuration
-     * @param solutionConsumer the solution consumer
+     * @param cryptarithm the cryptarithm
+     * @param config      the configuration
+     * @param consumer    the solution consumer
      * @return true, if successful
      * @throws CryptaModelException  if there is a modeling exception
      * @throws CryptaSolverException if there is a solving exception.
      */
-    boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> solutionConsumer)
+    boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> consumer)
             throws CryptaModelException, CryptaSolverException;
 
     /**
      * Solve the cryptarithm and feed the consumer with each pair (cryptarithm,
      * solution) found.
      *
-     * @param cryptarithm      the cryptarithm
-     * @param config           the configuration
-     * @param solutionConsumer the solution consumer
+     * @param cryptarithm the cryptarithm
+     * @param config      the configuration
+     * @param consumer    the solution consumer
      * @return true, if successful
      * @throws CryptaModelException  if there is a modeling exception
      * @throws CryptaSolverException if there is a solving exception.

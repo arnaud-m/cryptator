@@ -17,21 +17,21 @@ public interface ICryptaSolutionStore {
 
     /**
      * Total number of solutions found.
-     * 
+     *
      * @return the number of solution
      */
     int getSolutionCount();
 
     /**
      * Getter for the last solution found.
-     * 
+     *
      * @return the last solution found if any.
      */
     Optional<ICryptaSolution> getLastSolution();
 
     /**
      * Getter for the unique solution.
-     * 
+     *
      * @return the unique solution.
      */
     default Optional<ICryptaSolution> getUniqueSolution() {

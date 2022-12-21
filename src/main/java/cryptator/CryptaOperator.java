@@ -47,8 +47,8 @@ public enum CryptaOperator {
     private final int priority;
     private final boolean isCommutative;
 
-    CryptaOperator(final String token, int priority, boolean isCommutative, final BinaryOperator<BigInteger> function,
-            final BinaryOperator<ArExpression> expression) {
+    CryptaOperator(final String token, final int priority, final boolean isCommutative,
+            final BinaryOperator<BigInteger> function, final BinaryOperator<ArExpression> expression) {
         this.token = token;
         this.function = function;
         this.expression = expression;

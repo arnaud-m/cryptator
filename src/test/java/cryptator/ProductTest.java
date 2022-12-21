@@ -21,11 +21,11 @@ public class ProductTest {
     private Model model;
     private IntVar copper, neon, iron, silver, result;
 
-    @Before
     /***
      * Tests if choco can solve "copper*neon=iron*silver" via various way of writing
      * constraints
      */
+    @Before
     public void setup() {
         model = new Model("copper*neon=iron*silver");
         copper = model.intVar("copper", 100000, 999999);
@@ -35,13 +35,13 @@ public class ProductTest {
         model.allDifferent(new IntVar[] {copper, neon, iron, silver}).post();
     }
 
-    public void setupResult(int factor) {
+    public void setupResult(final int factor) {
         // result is an intermediary to compare copper*neon and iron*silver
         // all test would fail if factor = 1.
         result = model.intVar("result", 0, factor * IntVar.MAX_INT_BOUND);
     }
 
-    public void solve(int solutionCount) {
+    public void solve(final int solutionCount) {
         Solver solver = model.getSolver();
         // System.out.println(model);
         solver.printVersion();
@@ -51,11 +51,11 @@ public class ProductTest {
         Assert.assertEquals(solutionCount, solver.getSolutionCount());
     }
 
-    @Test
     /***
      * Using times directly to make our constraint will fail to find any solution
      * because value needed is greater than the result's upper bound.
      */
+    @Test
     public void model1NoSol() {
         setupResult(1);
         model.times(copper, neon, result).post();
@@ -63,11 +63,11 @@ public class ProductTest {
         solve(0);
     }
 
-    @Test
-    @Ignore("It is a choco issue")
     /***
      * Working version of the previous test.
      */
+    @Test
+    @Ignore("It is a choco issue")
     public void model1() {
         setupResult(10);
         model.times(copper, neon, result).post();
@@ -75,11 +75,12 @@ public class ProductTest {
         solve(1);
     }
 
-    @Test
-    @Ignore("It is a choco issue")
     /***
      * Creating a model using arithm instead of times directly.
      */
+
+    @Test
+    @Ignore("It is a choco issue")
     public void model2() {
         setupResult(10);
         model.arithm(copper, "*", neon, "=", result).post();
@@ -87,11 +88,11 @@ public class ProductTest {
         solve(1);
     }
 
-    @Test
-    @Ignore("It is a choco issue")
     /***
      * Creating a model using the operators function given by IntVar
      */
+    @Test
+    @Ignore("It is a choco issue")
     public void model3() {
         setupResult(10);
         copper.mul(neon).eq(result).post();
@@ -99,12 +100,12 @@ public class ProductTest {
         solve(1);
     }
 
-    @Test
-    @Ignore("It is a choco issue")
     /***
      * Creating a model using the operators function given by IntVar without using
      * result as an intermediary
      */
+    @Test
+    @Ignore("It is a choco issue")
     public void model4() {
         copper.mul(neon).eq(iron.mul(silver)).post();
         solve(1);

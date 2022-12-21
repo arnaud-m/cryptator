@@ -33,7 +33,7 @@ public enum Verbosity {
      *
      * @param manager the logging manager
      */
-    public void applyTo(ICryptaLogManager manager) {
+    public void applyTo(final ICryptaLogManager manager) {
         setVerbosity(manager, this);
     }
 
@@ -43,7 +43,7 @@ public enum Verbosity {
      * @param manager   the manager
      * @param verbosity the verbosity level
      */
-    public static void setVerbosity(ICryptaLogManager manager, Verbosity verbosity) {
+    public static void setVerbosity(final ICryptaLogManager manager, final Verbosity verbosity) {
         if (verbosity != null && manager != null) {
             if (verbosity.equals(SILENT)) {
                 manager.setSilent();

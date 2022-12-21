@@ -44,7 +44,7 @@ public class EvaluationTest {
     public EvaluationTest() {
     }
 
-    public final static void testInSolution(final ICryptaSolution s, final char symbol, final int digit)
+    public static final void testInSolution(final ICryptaSolution s, final char symbol, final int digit)
             throws CryptaSolutionException {
         assertTrue(s.hasDigit(symbol));
         assertTrue(s.hasDomain(symbol));
@@ -52,7 +52,7 @@ public class EvaluationTest {
         assertNotNull(s.getDomain(symbol));
     }
 
-    public final static void testNotInSolution(final ICryptaSolution s, final char symbol)
+    public static final void testNotInSolution(final ICryptaSolution s, final char symbol)
             throws CryptaSolutionException {
         assertFalse(s.hasDigit(symbol));
         assertFalse(s.hasDomain(symbol));

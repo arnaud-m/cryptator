@@ -31,7 +31,7 @@ public final class TreeTraversals {
 
     /**
      * Iterative preorder traversal of the tree that feeds a consumer.
-     * 
+     *
      * The consumer accepts a node represented by a pair (node, number).
      *
      * @param root              the root of the tree
@@ -68,9 +68,9 @@ public final class TreeTraversals {
 
     /**
      * Iterative preorder traversal of the tree that feeds a consumer.
-     * 
+     *
      * The consumer accepts an edge represented by two pairs (node, number)).
-     * 
+     *
      * The pairs stand for the father and the child of the edge.
      *
      * @param root              the root of the tree
@@ -91,11 +91,11 @@ public final class TreeTraversals {
 
     /**
      * Iterative postorder traversal of the tree that feeds a consumer.
-     * 
+     *
      * The consumer accepts a node represented by a pair (node, number).
      *
-     * @param root              the root of the tree
-     * @param traversalConsumer the traversal consumer of pairs (node, number)
+     * @param root                  the root of the tree
+     * @param traversalNodeConsumer the traversal consumer of pairs (node, number)
      */
     public static void postorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         final Deque<ICryptaNode> stack = new ArrayDeque<>();
@@ -118,11 +118,11 @@ public final class TreeTraversals {
 
     /**
      * Iterative inorder traversal of the tree that feeds a consumer.
-     * 
+     *
      * The consumer accepts a node represented by a pair (node, number).
      *
-     * @param root              the root of the tree
-     * @param traversalConsumer the consumer of pairs (node, number)
+     * @param root                  the root of the tree
+     * @param traversalNodeConsumer the consumer of pairs (node, number)
      */
     public static void inorderTraversal(final ICryptaNode root, final ITraversalNodeConsumer traversalNodeConsumer) {
         // https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/

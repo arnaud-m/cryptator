@@ -136,7 +136,7 @@ public class ParserTest {
 
     @Test
     public void testParserAND2() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("send+more=	money; -send -more= \n -money");
+        final ICryptaNode node = parser.parse("send+more=\tmoney; -send -more= \n -money");
 
         testPreorder("&& = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ",
                 node);
@@ -257,7 +257,7 @@ public class ParserTest {
 
     @Test
     public void testParserAND2symbol() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("send+more=	money&& -send -more= \n -money");
+        final ICryptaNode node = parser.parse("send+more=\tmoney&& -send -more= \n -money");
 
         testPreorder("&& = + send more money = - - " + ParserTest.ZERO + " send more - " + ParserTest.ZERO + " money ",
                 node);
