@@ -1,0 +1,11 @@
+bir + iki + on + oniki + kırkbir + kırkiki + yuziki = ikiyuzon 
+dort + dokuz + ikiyuzondokuz = ikiyuzotuziki 
+dort + oniki + otuz + otuzdort + yuzotuz = ikiyuzon 
+iki + ondort + ondokuz + otuziki + otuzdort + yuzdokuz = ikiyuzon 
+iki + on + oniki + onuc + elli + yuzuc + yuzon = ucyuz 
+iki + on + onuc + yirmi + yirmiiki + yirmiuc + yuzyirmi = ikiyuzon 
+iki + uc + dokuz + oniki + ondokuz + otuz + otuziki + yuzuc = ikiyuzon 
+iki + uc + dokuz + on + oniki + onuc + ondokuz + otuziki + yuzon = ikiyuzon 
+iki + uc + dokuz + on + oniki + onuc + ondokuz + otuziki + yuzuc = ikiyuzuc 
+iki + uc + onuc + yirmi + yirmiiki + yirmiuc + yuzyirmi = ikiyuzuc 
+yedi + dokuz + onyedi + ikiyuzondokuz = ikiyuzelliiki 
