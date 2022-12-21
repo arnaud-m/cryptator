@@ -1,0 +1,6 @@
+aligote + calitor + carignan + clairet + corton + cot + ginglet + goron + grollea + lirac + regnie + tannat = alicante 
+amigne + aramon + arvine + goron + graves + marsanne + morgon + regnie + rivaner + romanee + samos + viognier = savagnin 
+amigne + aramon + asti + gamet + manseng + morgon + regnie + retsina + romanee + samos + tannat + traminer = marsanne 
+amigne + aramon + goron + grollea + malaga + manseng + marsala + morgon + moselle + regnie + romanee + samos = semillon 
+aramon + gamet + goron + grollea + malaga + marsala + merlot + morgon + moselle + romanee + samos + tannat = marsanne 
+aramon + gamet + goron + manseng + marsanne + morgon + roussane + samos + saumur + sauternes + tannat + tursan = roussanne 
