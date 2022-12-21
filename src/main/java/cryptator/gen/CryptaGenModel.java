@@ -15,10 +15,11 @@ import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaGenModel;
+import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaNode;
 
-public class CryptaGenModel extends WordsListModel {
+public class CryptaGenModel extends WordsListModel implements ICryptaGenSolver {
 
     private final CryptaMemberLen left;
 
@@ -28,7 +29,6 @@ public class CryptaGenModel extends WordsListModel {
         super(new Model("Generate"), words);
         left = lenOrCardModel ? new CryptaMemberLen(model, words, "L_") : new CryptaMemberCard(model, words, "L_");
         right = new CryptaMemberElt(model, words, "R_");
-        this.buildModel();
     }
 
     @Override
@@ -95,6 +95,7 @@ public class CryptaGenModel extends WordsListModel {
         model.scalar(rvars, coeffs, "=", 0).post();
     }
 
+    @Override
     public final ICryptaNode recordCryptarithm() {
         final ICryptaNode l = recordAddition(left);
         final ICryptaNode r = recordAddition(right);
