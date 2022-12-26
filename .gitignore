@@ -2,13 +2,13 @@
 
 src/main/benchmarks/instances/
 src/main/benchmarks/algorithms/
-src/main/benchmarks/results/
-src/main/benchmarks/results-cryptarithms/
-src/main/benchmarks/results-archive/
+src/main/benchmarks/results*/
+src/main/benchmarks/results*.tar.gz
 src/main/benchmarks/solver.sh
 src/main/benchmarks/words
 src/main/benchmarks/oar-stderr.log
-src/main/benchmarks/nohup.out 
+src/main/benchmarks/nohup.out
+src/main/benchmarks/classify-additions.awk 
 
 #### joe made this: http://goel.io/joe
 

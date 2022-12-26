@@ -81,6 +81,9 @@
    echo -v normal -d TRUE -lightM TRUE -lightP TRUE > algorithms/TT.dat
  #+END_SRC
 
+
+
+
 * Generate and Solve
 ** Configure the solver
 
@@ -120,6 +123,17 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    generateLong 15 capitales.txt
    generateLong 16 capitales.txt
  #+END_SRC
+
+*** Generate languages
+
+ #+BEGIN_SRC R :results output file :file "words-10-2.txt"
+   base <- 10
+   x <- head(letters, base)
+   xy <- expand.grid(x = x, y = x)
+   cat(paste(x, '\n', collapse = ''))
+   cat(paste(xy$x, xy$y, '\n', sep = "", collapse = ''))
+#+END_SRC
+
 
 ** Configure the algorithm
 
@@ -193,8 +207,46 @@ Change the file extension accordingly.
        sed -n "$SED_EXPR" $INFILE >> $OUTFILE
     done
   ## Sort cryptarithms
-  find $OUTDIR -name '*.txt' -exec sort -u -o {} {} \;
+  find $OUTDIR -name '*.db.txt' -exec sort -u -o {} {} \;
 
 #+END_SRC
+
+** Classify cryptarithms
+
+
+#+BEGIN_SRC awk :tangle classify-additions.awk
+  {
+   operands = int(NF/2)
+   minlen = length($1)
+   maxlen = length($1)
+   for(i = 3 ; i < NF ; i+=2) {
+       if(length($i) < minlen) minlen=length($i);
+       else if(length($i) > maxlen) maxlen=length($i);
+   }
+   filename=sprintf("N%02d-%02d-%02d.db.txt", operands, minlen, maxlen)
+   #print operands, minlen, maxlen, filename, $0
+   print $0 >> filename;
+  }
+
+#+END_SRC
+
+
+#+BEGIN_SRC sh
+  INDIR=results-cryptarithms
+  OUTDIR=results-classified
+  rm -fr $OUTDIR
+  mkdir $OUTDIR
+  ## Classify
+  (
+      cd $OUTDIR
+      find ../$INDIR -name "*.db.txt" -exec awk -f ../classify-additions.awk {} \;
+
+  )
+  ## Sort cryptarithms
+  find $OUTDIR -name '*.db.txt' -exec sort -u -o {} {} \;
+
+#+END_SRC
+
+
 
 * Analysis

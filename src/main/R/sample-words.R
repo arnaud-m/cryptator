@@ -98,4 +98,4 @@ if(length(words) >= argv$words) {
         j <- j + 1
     }
 }
-cat("Generate", i , "words list(s) after", j, "tentative(s)\n")
+cat("Generate", i , "word list(s) after", j, "tentative(s)\n")
