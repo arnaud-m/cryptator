@@ -23,7 +23,7 @@ import org.chocosolver.solver.variables.IntVar;
  * symbol is present if and only if at least one word that contains the symbol
  * is present.
  */
-public class WordsListModel extends CryptaGenBaseModel {
+public class WordListModel extends CryptaGenBaseModel {
 
     /** The map that associates a variable to each symbol of the words. */
     protected final Map<Character, BoolVar> symbolsToVariables;
@@ -37,7 +37,7 @@ public class WordsListModel extends CryptaGenBaseModel {
      * @param model the model to use
      * @param words the words list
      */
-    public WordsListModel(final Model model, final String[] words) {
+    public WordListModel(final Model model, final String[] words) {
         super(model, words, "", false);
         symbolsToVariables = buildSymbolVars(model, words);
         symbolCount = model.intVar("symbCount", 0, symbolsToVariables.size());

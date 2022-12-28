@@ -17,7 +17,7 @@ import org.junit.Test;
 import cryptator.gen.CryptaMemberCard;
 import cryptator.gen.CryptaMemberElt;
 import cryptator.gen.CryptaMemberLen;
-import cryptator.gen.WordsListModel;
+import cryptator.gen.WordListModel;
 import cryptator.specs.ICryptaGenModel;
 
 public class GenModelTest {
@@ -29,7 +29,7 @@ public class GenModelTest {
     @Before
     public void buildGenModels() {
         models = new ICryptaGenModel[] {new CryptaMemberLen(new Model(), words, ""),
-                new CryptaMemberCard(new Model(), words, ""), new WordsListModel(new Model(), words)};
+                new CryptaMemberCard(new Model(), words, ""), new WordListModel(new Model(), words)};
         for (ICryptaGenModel m : models) {
             m.buildModel();
         }
@@ -67,7 +67,7 @@ public class GenModelTest {
 
     @Test
     public void testWLModel() {
-        WordsListModel m = new WordsListModel(new Model(), words);
+        WordListModel m = new WordListModel(new Model(), words);
         m.buildModel();
         m.postMaxSymbolCountConstraint(1);
         postMaxWordCountConstraint(m, 2);

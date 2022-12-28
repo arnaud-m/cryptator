@@ -114,7 +114,7 @@ public final class TreeUtils {
         out.flush();
     }
 
-    public static String writeInorder(final ICryptaNode root, boolean allParenthesis) {
+    public static String writeInorder(final ICryptaNode root, final boolean allParenthesis) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         TreeUtils.writeInorder(root, out, allParenthesis);
         return out.toString();
@@ -128,7 +128,7 @@ public final class TreeUtils {
         printInorder(root, false);
     }
 
-    public static void printInorder(final ICryptaNode root, boolean allParenthesis) {
+    public static void printInorder(final ICryptaNode root, final boolean allParenthesis) {
         writeInorder(root, System.out, allParenthesis);
         System.out.println();
     }

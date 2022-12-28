@@ -38,11 +38,11 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         return Logger.getLogger(mainClass.getName());
     }
 
-    private final String getCommandName() {
+    private String getCommandName() {
         return mainClass.getName();
     }
 
-    private final String getArgumentName() {
+    private String getArgumentName() {
         return argumentName;
     }
 
@@ -96,21 +96,21 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
     }
 
-    private String printUsage(CmdLineParser parser, OptionHandlerFilter filter) {
+    private String printUsage(final CmdLineParser parser, final OptionHandlerFilter filter) {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         parser.printUsage(new OutputStreamWriter(os), null, filter);
         return os.toString();
     }
 
-    private String printExample(String options) {
+    private String printExample(final String options) {
         return "java " + getCommandName() + " " + options + " " + getArgumentName();
     }
 
-    private String printExample(CmdLineParser parser, OptionHandlerFilter filter) {
+    private String printExample(final CmdLineParser parser, final OptionHandlerFilter filter) {
         return printExample(parser.printExample(filter));
     }
 
-    private String buildHelpMessage(CmdLineParser parser, OptionHandlerFilter filter) {
+    private String buildHelpMessage(final CmdLineParser parser, final OptionHandlerFilter filter) {
         StringBuilder b = new StringBuilder();
         b.append(" Help message:\n");
         b.append(printExample("[options...]")).append("\n");

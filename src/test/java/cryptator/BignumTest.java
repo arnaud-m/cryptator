@@ -83,7 +83,7 @@ public class BignumTest {
 
     @Test
     public void testBigNumCrossWord1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-//		"symbols":"ACEINOPRST","solutions":[[1,0,5,7,4,3,2,6,8,9]
+// "symbols":"ACEINOPRST","solutions":[[1,0,5,7,4,3,2,6,8,9]
         var horizontal = "ARISTOCRATIC + PRESCRIPTION + PROSOPOPOEIA + PROTECTORATE = TRANSOCEANIC;"
                 + "PRESCRIPTION + PROSOPOPOEIA + PROTECTORATE + ARISTOCRATIC = TRANSOCEANIC;"
                 + "PROSOPOPOEIA + PROTECTORATE + ARISTOCRATIC + PRESCRIPTION = TRANSOCEANIC;"

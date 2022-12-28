@@ -15,7 +15,7 @@ public class CryptaParserException extends CancellationException {
     private static final long serialVersionUID = 6706871076287552877L;
 
     private String cryptarithm;
-    private final Object offendingSymbol;
+    private final transient Object offendingSymbol;
     private final int line;
     private final int charPositionInLine;
     private final String msg;

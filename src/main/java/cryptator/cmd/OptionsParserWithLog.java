@@ -15,7 +15,8 @@ public class OptionsParserWithLog<E extends CryptaLogConfig> extends AbstractOpt
 
     private final ICryptaLogManager logManager;
 
-    public OptionsParserWithLog(Class<?> mainClass, E config, String argumentName, ICryptaLogManager logManager) {
+    public OptionsParserWithLog(final Class<?> mainClass, final E config, final String argumentName,
+            final ICryptaLogManager logManager) {
         super(mainClass, config, argumentName);
         this.logManager = logManager;
     }

@@ -23,7 +23,7 @@ public final class ChocoLogger {
 
     private final Logger logger;
 
-    public ChocoLogger(Logger logger) {
+    public ChocoLogger(final Logger logger) {
         super();
         this.logger = logger;
     }
@@ -58,13 +58,13 @@ public final class ChocoLogger {
         logOnSolver(m.getModel());
     }
 
-    public void logOnSolver(Model model) {
+    public void logOnSolver(final Model model) {
         if (logger.isLoggable(Level.INFO)) {
             logger.log(Level.INFO, "Solver diagnostics:\n{0}", toDimacs(model.getSolver()));
         }
     }
 
-    public static String toDimacs(Model model) {
+    public static String toDimacs(final Model model) {
         final StringBuilder b = new StringBuilder();
         Formatter fmt = new Formatter(b, Locale.US);
         fmt.format("c MODEL_NAME %s", model.getName());

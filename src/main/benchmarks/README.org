@@ -12,7 +12,7 @@
 
 #+BEGIN_SRC sh :results silent
    ln -s ../words .
-   ln -s ../../../target/cryptator-0.5.1-SNAPSHOT-with-dependencies.jar .
+   ln -s ../../../target/cryptator-0.5.1-with-dependencies.jar .
  #+END_SRC
 
 ** Clear directories
@@ -49,13 +49,22 @@
    }
  #+END_SRC
 
+
 * Generate
 
-** Configure the solver
+** Create the solver
 
-#+BEGIN_SRC sh
-  rm solver.sh
-  ln -s solver-generate.sh solver.sh
+#+BEGIN_SRC sh :tangle solver.sh
+JAR=cryptator-0.5.1-with-dependencies.jar
+MAINCLASS=cryptator.Cryptagen
+
+MAINARGS=`cat $1 $2 | xargs`
+
+INSTNAME=`echo $INSTNAME | sed 's/\s-*/-/g'`
+echo i `basename -s .dat $2`
+## SEED=`shuf -i1-1000 -n1`
+java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+exit $?
  #+END_SRC
 
 ** Configure instances
@@ -81,12 +90,20 @@
    echo -v normal -d TRUE -lightM TRUE -lightP TRUE > algorithms/TT.dat
  #+END_SRC
 
-* Generate and Solve
-** Configure the solver
 
-#+BEGIN_SRC sh
-  rm solver.sh
-  ln -s solver-generate-and-solve.sh solver.sh
+
+
+* Generate and Solve
+** Create the solver
+
+#+BEGIN_SRC sh :tangle solver.sh
+JAR=cryptator-0.5.1-with-dependencies.jar
+MAINCLASS=cryptator.Cryptagen
+
+MAINARGS=`cat $1 $2 | xargs`
+
+java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS | head -n -10
+exit $?
  #+END_SRC
 
 ** Configure instances
@@ -121,6 +138,17 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    generateLong 16 capitales.txt
  #+END_SRC
 
+*** Generate languages
+
+ #+BEGIN_SRC R :results output file :file "words-10-2.txt"
+   base <- 10
+   x <- head(letters, base)
+   xy <- expand.grid(x = x, y = x)
+   cat(paste(x, '\n', collapse = ''))
+   cat(paste(xy$x, xy$y, '\n', sep = "", collapse = ''))
+#+END_SRC
+
+
 ** Configure the algorithm
 
  #+BEGIN_SRC sh
@@ -129,11 +157,23 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 
 * Solve
-** Configure the solver
+** Create the solver
 
-#+BEGIN_SRC sh
-  rm solver.sh
-  ln -s solver-solve.sh solver.sh
+#+BEGIN_SRC sh :tangle solver.sh
+  JAR=cryptator-0.5.1-with-dependencies.jar
+  MAINCLASS=cryptator.Cryptator
+
+  MAINARGS=`cat $1 | xargs`
+
+  ## exclude cryptarithm with long words
+  ## grep -wvE '\w{10,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+
+  ## exclude cryptarithm without long words
+  ## grep -wE '\w{10,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+
+  ## Do not exclude anything
+  sed 's/[[:space:]]//g'  $2 | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+  exit $?
  #+END_SRC
 
 ** Configure instances
@@ -193,8 +233,46 @@ Change the file extension accordingly.
        sed -n "$SED_EXPR" $INFILE >> $OUTFILE
     done
   ## Sort cryptarithms
-  find $OUTDIR -name '*.txt' -exec sort -u -o {} {} \;
+  find $OUTDIR -name '*.db.txt' -exec sort -u -o {} {} \;
 
 #+END_SRC
+
+** Classify cryptarithms
+
+
+#+BEGIN_SRC awk :tangle classify-additions.awk
+  {
+   operands = int(NF/2)
+   minlen = length($1)
+   maxlen = length($1)
+   for(i = 3 ; i < NF ; i+=2) {
+       if(length($i) < minlen) minlen=length($i);
+       else if(length($i) > maxlen) maxlen=length($i);
+   }
+   filename=sprintf("N%02d-%02d-%02d.db.txt", operands, minlen, maxlen)
+   #print operands, minlen, maxlen, filename, $0
+   print $0 >> filename;
+  }
+
+#+END_SRC
+
+
+#+BEGIN_SRC sh
+  INDIR=results-cryptarithms
+  OUTDIR=results-classified
+  rm -fr $OUTDIR
+  mkdir $OUTDIR
+  ## Classify
+  (
+      cd $OUTDIR
+      find ../$INDIR -name "*.db.txt" -exec awk -f ../classify-additions.awk {} \;
+
+  )
+  ## Sort cryptarithms
+  find $OUTDIR -name '*.db.txt' -exec sort -u -o {} {} \;
+
+#+END_SRC
+
+
 
 * Analysis

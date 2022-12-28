@@ -26,7 +26,7 @@ import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
 /**
- * Base class for generation model..
+ * Base class for generation model.
  */
 public class CryptaGenBaseModel implements ICryptaGenModel {
 
@@ -138,9 +138,8 @@ public class CryptaGenBaseModel implements ICryptaGenModel {
     }
 
     public static ICryptaNode recordAddition(final ICryptaGenModel model) {
-        BinaryOperator<ICryptaNode> add = (a, b) -> {
-            return a == null ? b : new CryptaNode(CryptaOperator.ADD, a, b);
-        };
+        BinaryOperator<ICryptaNode> add = (a, b) -> a == null ? b : new CryptaNode(CryptaOperator.ADD, a, b);
+
         return wordStream(model).map(CryptaLeaf::new).map(ICryptaNode.class::cast).reduce(null, add);
     }
 

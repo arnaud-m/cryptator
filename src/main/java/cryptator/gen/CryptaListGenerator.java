@@ -29,6 +29,8 @@ import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
+import cryptator.specs.IChocoModel;
+import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaGenerator;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
@@ -60,8 +62,9 @@ public class CryptaListGenerator implements ICryptaGenerator {
         return errorCount.intValue();
     }
 
-    private CryptaGenModel buildModel() {
+    private ICryptaGenSolver buildModel() {
         final CryptaGenModel gen = new CryptaGenModel(words.getWords(), config.isLightModel());
+        gen.buildModel();
         gen.postLeftCountConstraints(config.getMinLeftOperands(), config.getMaxLeftOperands());
         gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
         if (!config.isLightPropagation()) {
@@ -76,21 +79,22 @@ public class CryptaListGenerator implements ICryptaGenerator {
         return gen;
     }
 
-    private Consumer<ICryptaNode> buildConsumer(final CryptaGenModel gen,
+    private Consumer<ICryptaNode> buildConsumer(final IChocoModel gen,
             final BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
         final Consumer<ICryptaNode> cons = new LogConsumer(gen);
         final ICryptaSolver solver = config.useBignum() ? new CryptaSolver(true) : new AdaptiveSolver();
         return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(solver, consumer));
     }
 
-    private void sequentialSolve(final CryptaGenModel gen, final Consumer<ICryptaNode> cons) {
+    private void sequentialSolve(final ICryptaGenSolver gen, final Consumer<ICryptaNode> cons) {
         final Solver s = gen.getSolver();
         while (s.solve()) {
             cons.accept(gen.recordCryptarithm());
         }
     }
 
-    private static void parallelSolve(final CryptaGenModel gen, final Consumer<ICryptaNode> cons, final int nthreads) {
+    private static void parallelSolve(final ICryptaGenSolver gen, final Consumer<ICryptaNode> cons,
+            final int nthreads) {
         final ExecutorService executor = Executors.newFixedThreadPool(nthreads);
         final Solver s = gen.getSolver();
         while (s.solve()) {
@@ -109,7 +113,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
     @Override
     public long generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
-        final CryptaGenModel gen = buildModel();
+        final ICryptaGenSolver gen = buildModel();
         clog.logOnModel(gen);
 
         final Consumer<ICryptaNode> cons = buildConsumer(gen, consumer);
@@ -129,7 +133,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
         private final Solution solution;
 
-        LogConsumer(final CryptaGenModel gen) {
+        LogConsumer(final IChocoModel gen) {
             super();
             solution = new Solution(gen.getModel());
         }

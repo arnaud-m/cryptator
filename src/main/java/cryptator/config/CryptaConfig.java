@@ -91,7 +91,7 @@ public class CryptaConfig {
         return searchStrategy;
     }
 
-    public final void setSearchStrategy(int searchStrategy) {
+    public final void setSearchStrategy(final int searchStrategy) {
         this.searchStrategy = searchStrategy;
     }
 
