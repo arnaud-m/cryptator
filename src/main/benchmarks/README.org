@@ -12,7 +12,7 @@
 
 #+BEGIN_SRC sh :results silent
    ln -s ../words .
-   ln -s ../../../target/cryptator-0.5.1-with-dependencies.jar .
+   ln -s ../../../target/cryptator-0.6.0-SNAPSHOT-with-dependencies.jar .
  #+END_SRC
 
 ** Clear directories
@@ -55,7 +55,7 @@
 ** Create the solver
 
 #+BEGIN_SRC sh :tangle solver.sh
-JAR=cryptator-0.5.1-with-dependencies.jar
+JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
 MAINCLASS=cryptator.Cryptagen
 
 MAINARGS=`cat $1 $2 | xargs`
@@ -97,7 +97,7 @@ exit $?
 ** Create the solver
 
 #+BEGIN_SRC sh :tangle solver.sh
-JAR=cryptator-0.5.1-with-dependencies.jar
+JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
 MAINCLASS=cryptator.Cryptagen
 
 MAINARGS=`cat $1 $2 | xargs`
@@ -160,7 +160,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 ** Create the solver
 
 #+BEGIN_SRC sh :tangle solver.sh
-  JAR=cryptator-0.5.1-with-dependencies.jar
+  JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
   MAINCLASS=cryptator.Cryptator
 
   MAINARGS=`cat $1 | xargs`
