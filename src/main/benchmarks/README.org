@@ -49,13 +49,22 @@
    }
  #+END_SRC
 
+
 * Generate
 
-** Configure the solver
+** Create the solver
 
-#+BEGIN_SRC sh
-  rm solver.sh
-  ln -s solver-generate.sh solver.sh
+#+BEGIN_SRC sh :tangle solver.sh
+JAR=cryptator-0.5.1-SNAPSHOT-with-dependencies.jar
+MAINCLASS=cryptator.Cryptagen
+
+MAINARGS=`cat $1 $2 | xargs`
+
+INSTNAME=`echo $INSTNAME | sed 's/\s-*/-/g'`
+echo i `basename -s .dat $2`
+## SEED=`shuf -i1-1000 -n1`
+java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+exit $?
  #+END_SRC
 
 ** Configure instances
@@ -85,11 +94,16 @@
 
 
 * Generate and Solve
-** Configure the solver
+** Create the solver
 
-#+BEGIN_SRC sh
-  rm solver.sh
-  ln -s solver-generate-and-solve.sh solver.sh
+#+BEGIN_SRC sh :tangle solver.sh
+JAR=cryptator-0.5.1-SNAPSHOT-with-dependencies.jar
+MAINCLASS=cryptator.Cryptagen
+
+MAINARGS=`cat $1 $2 | xargs`
+
+java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS | head -n -10
+exit $?
  #+END_SRC
 
 ** Configure instances
@@ -143,11 +157,23 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 
 * Solve
-** Configure the solver
+** Create the solver
 
-#+BEGIN_SRC sh
-  rm solver.sh
-  ln -s solver-solve.sh solver.sh
+#+BEGIN_SRC sh :tangle solver.sh
+  JAR=cryptator-0.5.1-SNAPSHOT-with-dependencies.jar
+  MAINCLASS=cryptator.Cryptator
+
+  MAINARGS=`cat $1 | xargs`
+
+  ## exclude cryptarithm with long words
+  ## grep -wvE '\w{10,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+
+  ## exclude cryptarithm without long words
+  ## grep -wE '\w{10,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+
+  ## Do not exclude anything
+  sed 's/[[:space:]]//g'  $2 | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+  exit $?
  #+END_SRC
 
 ** Configure instances
