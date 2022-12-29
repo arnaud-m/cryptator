@@ -97,8 +97,8 @@ public class CryptaGenModel extends WordListModel implements ICryptaGenSolver {
 
     @Override
     public final ICryptaNode recordCryptarithm() {
-        final ICryptaNode l = recordAddition(left);
-        final ICryptaNode r = recordAddition(right);
+        final ICryptaNode l = GenerateUtil.recordAddition(left);
+        final ICryptaNode r = GenerateUtil.recordAddition(right);
         return (r == null) || (l == null) ? null : new CryptaNode(CryptaOperator.EQ, l, r);
     }
 

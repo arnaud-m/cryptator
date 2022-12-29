@@ -55,7 +55,7 @@ public class WordListModel extends CryptaGenBaseModel {
     }
 
     protected void postSymbolCountConstraint() {
-        final BoolVar[] symbols = toArray(symbolsToVariables.values());
+        final BoolVar[] symbols = WordListModel.toArray(symbolsToVariables.values());
         model.sum(symbols, "=", symbolCount).post();
     }
 
@@ -101,7 +101,7 @@ public class WordListModel extends CryptaGenBaseModel {
         final Map<Character, List<BoolVar>> symbolsToWords = buildSymbolsToWords();
         for (Map.Entry<Character, List<BoolVar>> entry : symbolsToWords.entrySet()) {
             final BoolVar max = symbolsToVariables.get(entry.getKey());
-            final BoolVar[] vars = toArray(entry.getValue());
+            final BoolVar[] vars = WordListModel.toArray(entry.getValue());
             model.max(max, vars).post();
         }
     }
@@ -122,6 +122,10 @@ public class WordListModel extends CryptaGenBaseModel {
      */
     public void postMaxWordCountConstraint(final int max) {
         wordCount.le(max).post();
+    }
+
+    private static BoolVar[] toArray(final Collection<BoolVar> vars) {
+        return vars.toArray(new BoolVar[vars.size()]);
     }
 
 }

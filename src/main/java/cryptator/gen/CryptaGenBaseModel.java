@@ -9,21 +9,12 @@
 package cryptator.gen;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
-import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaGenModel;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaLeaf;
-import cryptator.tree.CryptaNode;
 
 /**
  * Base class for generation model.
@@ -123,29 +114,9 @@ public class CryptaGenBaseModel implements ICryptaGenModel {
         return v;
     }
 
-    public static BoolVar[] toArray(final Collection<BoolVar> vars) {
-        return vars.toArray(new BoolVar[vars.size()]);
-    }
-
-    public static Stream<String> wordStream(final ICryptaGenModel model) {
-        final BoolVar[] v = model.getWordVars();
-        final String[] w = model.getWords();
-        return IntStream.range(0, model.getN()).filter(i -> v[i].isInstantiatedTo(1)).mapToObj(i -> w[i]);
-    }
-
-    public static String recordString(final ICryptaGenModel model, final String separator) {
-        return wordStream(model).collect(Collectors.joining(separator));
-    }
-
-    public static ICryptaNode recordAddition(final ICryptaGenModel model) {
-        BinaryOperator<ICryptaNode> add = (a, b) -> a == null ? b : new CryptaNode(CryptaOperator.ADD, a, b);
-
-        return wordStream(model).map(CryptaLeaf::new).map(ICryptaNode.class::cast).reduce(null, add);
-    }
-
     @Override
     public String toString() {
-        return recordString(this, " + ");
+        return GenerateUtil.recordString(this, " ");
     }
 
 }
