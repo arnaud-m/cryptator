@@ -8,8 +8,6 @@
  */
 package cryptator.gen;
 
-import java.util.Arrays;
-
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
@@ -39,8 +37,7 @@ public class CryptaMemberElt extends AbstractCryptaGenModel {
 
     @Override
     protected void postMaxLengthConstraints() {
-        int[] lengths = Arrays.stream(words).mapToInt(String::length).toArray();
-        model.element(maxLength, lengths, index).post();
+        model.element(maxLength, getLengths(words), index).post();
     }
 
 }

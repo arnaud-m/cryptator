@@ -24,7 +24,7 @@ public class CryptaMemberLen extends AbstractCryptaGenModel {
         final int n = words.length;
         IntVar[] vars = new IntVar[n];
         for (int i = 0; i < n; i++) {
-            vars[i] = m.intVar(prefix + "len" + "[" + i + "]", new int[] {0, words[i].length()});
+            vars[i] = m.intVar(prefix + "len_" + words[i], new int[] {0, words[i].length()});
         }
         return vars;
     }

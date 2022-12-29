@@ -84,7 +84,7 @@ public class GenModelTest {
     }
 
     @Test
-    public void testWLModel() {
+    public void testWordListModel() {
         MockWordListModel m = new MockWordListModel(new Model(), words);
         m.buildModel();
         m.postMaxSymbolCountConstraint(1);
@@ -93,7 +93,7 @@ public class GenModelTest {
     }
 
     @Test
-    public void testOneModel() {
+    public void testMemberElt() {
         CryptaMemberElt m = new CryptaMemberElt(new Model(), words, "");
         m.buildModel();
         testGenModel(m, 9);
