@@ -58,10 +58,6 @@ public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGe
 
     }
 
-    public void postLeftCountConstraints(final int min, final int max) {
-        left.postWordCountConstraints(Math.max(min, 2), max);
-    }
-
     public void postMinLeftCountConstraints(final int base) {
         left.postLentghSumConstraints(right.getMaxLength(), base);
     }

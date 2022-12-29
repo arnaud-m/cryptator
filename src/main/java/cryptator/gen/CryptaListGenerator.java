@@ -65,8 +65,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     private ICryptaGenSolver buildModel() {
         final CryptaGenModel gen = new CryptaGenModel(words.getWords(), config.isLightModel());
         gen.buildModel();
-        // TODO Constrain the total number of words (not only for the left member)
-        gen.postLeftCountConstraints(config.getMinLeftOperands(), config.getMaxLeftOperands());
+        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
         gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
         if (!config.isLightPropagation()) {
             gen.postMinLeftCountConstraints(config.getArithmeticBase());
