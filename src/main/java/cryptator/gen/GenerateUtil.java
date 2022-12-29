@@ -8,6 +8,7 @@
  */
 package cryptator.gen;
 
+import java.util.Arrays;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -48,6 +49,19 @@ public class GenerateUtil {
 
     public static ICryptaNode recordAddition(final ICryptaGenModel model) {
         return reduceOperation(leafStream(model), CryptaOperator.ADD);
+    }
+
+    public static int getMaxLength(final String[] words) {
+        return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
+    }
+
+    public static int[] getLengthCounts(final String[] words) {
+        final int n = getMaxLength(words);
+        int[] v = new int[n + 1];
+        for (String w : words) {
+            v[w.length()]++;
+        }
+        return v;
     }
 
 }

@@ -8,8 +8,6 @@
  */
 package cryptator.gen;
 
-import java.util.Arrays;
-
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
@@ -43,7 +41,7 @@ public class CryptaGenBaseModel implements ICryptaGenModel {
         this.words = words;
         this.vwords = buildWordVars(model, words, prefix);
         this.wordCount = model.intVar(prefix + "wordCount", 0, words.length);
-        this.maxLength = model.intVar(prefix + "maxLength", 0, getMaxLength(words), boundedDomain);
+        this.maxLength = model.intVar(prefix + "maxLength", 0, GenerateUtil.getMaxLength(words), boundedDomain);
     }
 
     @Override
@@ -99,19 +97,6 @@ public class CryptaGenBaseModel implements ICryptaGenModel {
     public void buildModel() {
         postWordCountConstraint();
         postMaxLengthConstraints();
-    }
-
-    public static int getMaxLength(final String[] words) {
-        return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
-    }
-
-    public static int[] getLengthCounts(final String[] words) {
-        final int n = getMaxLength(words);
-        int[] v = new int[n + 1];
-        for (String w : words) {
-            v[w.length()]++;
-        }
-        return v;
     }
 
     @Override

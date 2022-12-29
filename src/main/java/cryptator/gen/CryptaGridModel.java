@@ -75,7 +75,7 @@ public final class CryptaGridModel implements IChocoModel {
     public String toString(String[] words) {
         final int n = size();
         final StringBuilder b = new StringBuilder();
-        final int maxlen = CryptaGenBaseModel.getMaxLength(words);
+        final int maxlen = GenerateUtil.getMaxLength(words);
         final String fmt = " %" + maxlen + "s";
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
