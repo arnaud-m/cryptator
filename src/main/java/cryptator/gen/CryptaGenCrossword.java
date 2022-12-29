@@ -17,56 +17,6 @@ import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 
-class CryptaMemberPair implements ICryptaGenSolver {
-
-    protected final CryptaMemberLen left;
-
-    protected final CryptaMemberElt right;
-
-    public CryptaMemberPair(final Model model, final String[] words, final String prefix, boolean useMemberLen) {
-        super();
-        left = buildLeftMember(model, words, prefix, useMemberLen);
-        right = new CryptaMemberElt(model, words, prefix + "R_");
-    }
-
-    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix, boolean useMemberLen) {
-        super();
-        left = buildLeftMember(index.getModel(), words, prefix, useMemberLen);
-        right = new CryptaMemberElt(index, words, prefix + "R_");
-    }
-
-    private static final CryptaMemberLen buildLeftMember(final Model model, final String[] words, final String prefix,
-            boolean useMemberLen) {
-        return useMemberLen ? new CryptaMemberLen(model, words, prefix + "L_")
-                : new CryptaMemberCard(model, words, prefix + "L_");
-    }
-
-    @Override
-    public final Model getModel() {
-        return left.getModel();
-    }
-
-    public void buildModel() {
-        left.buildModel();
-        right.buildModel();
-        postSymBreakLengthConstraint();
-    }
-
-    private void postSymBreakLengthConstraint() {
-        left.getMaxLength().le(right.getMaxLength()).post();
-    }
-
-    public final void postHeavyConstraints(final int base) {
-        left.postLentghSumConstraints(right.getMaxLength(), base);
-    }
-
-    @Override
-    public final ICryptaNode recordCryptarithm() {
-        return GenerateUtil.recordAddition(left, right);
-    }
-
-}
-
 class CryptaCrossPair extends CryptaMemberPair {
 
     private final IntVar[] indices;

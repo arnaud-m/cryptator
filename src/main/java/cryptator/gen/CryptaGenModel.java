@@ -13,55 +13,102 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
-import cryptator.specs.ICryptaGenModel;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 
+class CryptaMemberPair implements ICryptaGenSolver {
+
+    protected final CryptaMemberLen left;
+
+    protected final CryptaMemberElt right;
+
+    public CryptaMemberPair(final Model model, final String[] words, final String prefix, boolean useMemberLen) {
+        super();
+        left = buildLeftMember(model, words, prefix, useMemberLen);
+        right = new CryptaMemberElt(model, words, prefix + "R_");
+    }
+
+    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix, boolean useMemberLen) {
+        super();
+        left = buildLeftMember(index.getModel(), words, prefix, useMemberLen);
+        right = new CryptaMemberElt(index, words, prefix + "R_");
+    }
+
+    private static final CryptaMemberLen buildLeftMember(final Model model, final String[] words, final String prefix,
+            boolean useMemberLen) {
+        return useMemberLen ? new CryptaMemberLen(model, words, prefix + "L_")
+                : new CryptaMemberCard(model, words, prefix + "L_");
+    }
+
+    @Override
+    public final Model getModel() {
+        return left.getModel();
+    }
+
+    public final CryptaMemberLen getLeft() {
+        return left;
+    }
+
+    public final CryptaMemberElt getRight() {
+        return right;
+    }
+
+    public void buildModel() {
+        left.buildModel();
+        right.buildModel();
+        postSymBreakLengthConstraint();
+    }
+
+    private void postSymBreakLengthConstraint() {
+        left.getMaxLength().le(right.getMaxLength()).post();
+    }
+
+    public final void postHeavyConstraints(final int base) {
+        left.postLentghSumConstraints(right.getMaxLength(), base);
+    }
+
+    @Override
+    public final ICryptaNode recordCryptarithm() {
+        return GenerateUtil.recordAddition(left, right);
+    }
+
+}
+
 public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGenSolver {
 
-    private final CryptaMemberLen left;
-
-    private final ICryptaGenModel right;
+    private final CryptaMemberPair addition;
 
     public CryptaGenModel(final String[] words, final boolean useMemberLen) {
         super(new Model("Generate-Addition"), words);
-        left = useMemberLen ? new CryptaMemberLen(model, words, "L_") : new CryptaMemberCard(model, words, "L_");
-        right = new CryptaMemberElt(model, words, "R_");
+        addition = new CryptaMemberPair(model, words, "", useMemberLen);
     }
 
     @Override
     public void buildModel() {
         super.buildModel();
-        left.buildModel();
-        right.buildModel();
-        postSymBreakLengthLenConstraint();
+        addition.buildModel();
     }
 
     @Override
     protected void postMaxLengthConstraints() {
-        model.max(maxLength, left.getMaxLength(), right.getMaxLength()).post();
+        model.max(maxLength, addition.getLeft().getMaxLength(), addition.getRight().getMaxLength()).post();
     }
 
     @Override
     protected void postWordConstraints() {
-        final BoolVar[] l = left.getWordVars();
-        final BoolVar[] r = right.getWordVars();
+        final BoolVar[] l = addition.getLeft().getWordVars();
+        final BoolVar[] r = addition.getRight().getWordVars();
         for (int i = 0; i < vwords.length; i++) {
             l[i].add(r[i]).eq(vwords[i]).post();
         }
     }
 
-    private void postSymBreakLengthLenConstraint() {
-        left.getMaxLength().le(right.getMaxLength()).post();
-
-    }
-
     public void postMinLeftCountConstraints(final int base) {
-        left.postLentghSumConstraints(right.getMaxLength(), base);
+        addition.postHeavyConstraints(base);
     }
 
     public void postFixedRightMemberConstraint() {
-        final BoolVar[] vars = right.getWordVars();
+        final BoolVar[] vars = addition.getRight().getWordVars();
         vars[vars.length - 1].eq(1).post();
     }
 
@@ -70,11 +117,11 @@ public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGe
         final IntVar sum = model.intVar("SUM", lb, n - 1);
 
         final IntVar[] lvars = new IntVar[n + 1];
-        System.arraycopy(left.getWordVars(), 0, lvars, 0, n);
+        System.arraycopy(addition.getLeft().getWordVars(), 0, lvars, 0, n);
         lvars[n] = sum;
 
         final IntVar[] rvars = new IntVar[n + 1];
-        System.arraycopy(right.getWordVars(), 0, rvars, 0, n);
+        System.arraycopy(addition.getRight().getWordVars(), 0, rvars, 0, n);
         rvars[n] = sum;
 
         final int[] coeffs = ArrayUtils.array(0, n);
@@ -86,12 +133,13 @@ public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGe
 
     @Override
     public final ICryptaNode recordCryptarithm() {
-        return GenerateUtil.recordAddition(left, right);
+        return addition.recordCryptarithm();
     }
 
     @Override
     public String toString() {
-        return left.toString() + " = " + right.toString();
+        return GenerateUtil.recordString(addition.getLeft(), " + ") + " = "
+                + GenerateUtil.recordString(addition.getRight(), " + ");
     }
 
 }
