@@ -54,7 +54,7 @@ public class WordListModel extends CryptaGenBaseModel {
         postChannelingConstraints();
     }
 
-    protected void postSymbolCountConstraint() {
+    private void postSymbolCountConstraint() {
         final BoolVar[] symbols = WordListModel.toArray(symbolsToVariables.values());
         model.sum(symbols, "=", symbolCount).post();
     }
@@ -113,15 +113,6 @@ public class WordListModel extends CryptaGenBaseModel {
      */
     public void postMaxSymbolCountConstraint(final int max) {
         symbolCount.le(max).post();
-    }
-
-    /**
-     * Post a constraint over the maximum number of distinct words.
-     *
-     * @param max the maximum number of words
-     */
-    public void postMaxWordCountConstraint(final int max) {
-        wordCount.le(max).post();
     }
 
     private static BoolVar[] toArray(final Collection<BoolVar> vars) {

@@ -59,12 +59,7 @@ public class CryptaGenModel extends WordListModel implements ICryptaGenSolver {
     }
 
     public void postLeftCountConstraints(final int min, final int max) {
-        final int min2 = Math.max(min, 2);
-        left.getWordCount().ge(min2).post();
-        if (max >= min2) {
-            left.getWordCount().le(max).post();
-        }
-
+        left.postWordCountConstraint(Math.max(min, 2), max);
     }
 
     public void postMinLeftCountConstraints(final int base) {
