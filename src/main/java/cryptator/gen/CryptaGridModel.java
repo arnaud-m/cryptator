@@ -68,6 +68,14 @@ public final class CryptaGridModel implements IChocoModel {
         return grid[i][j];
     }
 
+    public IntVar[] getRow(int i) {
+        return grid[i];
+    }
+
+    public IntVar[] getCol(int i) {
+        return tgrid[i];
+    }
+
     public IntVar[][] getMatrix() {
         return grid;
     }

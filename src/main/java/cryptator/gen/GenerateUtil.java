@@ -63,12 +63,4 @@ public class GenerateUtil {
         return reduceOperation(CryptaOperator.EQ, recordAddition(left), recordAddition(right));
     }
 
-    public static ICryptaNode recordAdditions(final ICryptaGenModel[] left, final ICryptaGenModel[] right) {
-        final ICryptaNode[] additions = new ICryptaNode[left.length];
-        for (int i = 0; i < additions.length; i++) {
-            additions[i] = recordAddition(left[i], right[i]);
-        }
-        return reduceOperation(CryptaOperator.AND, additions);
-    }
-
 }

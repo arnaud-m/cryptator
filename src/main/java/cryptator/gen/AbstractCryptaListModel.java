@@ -70,7 +70,7 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel {
         final Map<Character, BoolVar> symbolsToVariables = new HashMap<>();
         for (String word : words) {
             for (char c : word.toCharArray()) {
-                symbolsToVariables.computeIfAbsent(c, s -> model.boolVar(String.valueOf(s)));
+                symbolsToVariables.computeIfAbsent(c, s -> model.boolVar("symb_" + s));
             }
         }
         return symbolsToVariables;
