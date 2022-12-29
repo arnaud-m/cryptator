@@ -19,7 +19,7 @@ import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaNode;
 
-public class CryptaGenModel extends WordListModel implements ICryptaGenSolver {
+public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGenSolver {
 
     private final CryptaMemberLen left;
 
@@ -36,7 +36,6 @@ public class CryptaGenModel extends WordListModel implements ICryptaGenSolver {
         super.buildModel();
         left.buildModel();
         right.buildModel();
-        postLeftOrRightConstraints();
         postSymBreakLengthLenConstraint();
     }
 
@@ -45,7 +44,8 @@ public class CryptaGenModel extends WordListModel implements ICryptaGenSolver {
         model.max(maxLength, left.getMaxLength(), right.getMaxLength()).post();
     }
 
-    private void postLeftOrRightConstraints() {
+    @Override
+    protected void postWordConstraints() {
         final BoolVar[] l = left.getWordVars();
         final BoolVar[] r = right.getWordVars();
         for (int i = 0; i < vwords.length; i++) {
@@ -59,7 +59,7 @@ public class CryptaGenModel extends WordListModel implements ICryptaGenSolver {
     }
 
     public void postLeftCountConstraints(final int min, final int max) {
-        left.postWordCountConstraint(Math.max(min, 2), max);
+        left.postWordCountConstraints(Math.max(min, 2), max);
     }
 
     public void postMinLeftCountConstraints(final int base) {

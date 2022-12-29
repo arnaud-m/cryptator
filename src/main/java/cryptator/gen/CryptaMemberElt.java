@@ -13,7 +13,7 @@ import java.util.Arrays;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
-public class CryptaMemberElt extends CryptaGenBaseModel {
+public class CryptaMemberElt extends AbstractCryptaGenModel {
 
     protected final IntVar index;
 
@@ -27,11 +27,14 @@ public class CryptaMemberElt extends CryptaGenBaseModel {
     }
 
     @Override
+    protected void postWordConstraints() {
+        model.boolsIntChanneling(vwords, index, 0).post();
+    }
+
+    @Override
     protected void postWordCountConstraint() {
         super.postWordCountConstraint();
-        model.boolsIntChanneling(getWordVars(), index, 0).post();
-        wordCount.eq(1).decompose().post();
-
+        postWordCountConstraints(1);
     }
 
     @Override
