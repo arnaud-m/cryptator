@@ -15,9 +15,14 @@ public class CryptaMemberElt extends AbstractCryptaGenModel {
 
     protected final IntVar index;
 
+    public CryptaMemberElt(final IntVar index, final String[] words, final String prefix) {
+        super(index.getModel(), words, prefix);
+        this.index = index;
+    }
+
     public CryptaMemberElt(final Model m, final String[] words, final String prefix) {
-        super(m, words, prefix, true);
-        index = m.intVar(prefix + "idx", 0, words.length - 1);
+        super(m, words, prefix);
+        index = m.intVar(prefix + "idx", 0, words.length - 1, false);
     }
 
     public final IntVar getIndex() {

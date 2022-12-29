@@ -13,11 +13,9 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
-import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaGenModel;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaNode;
 
 public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGenSolver {
 
@@ -88,9 +86,7 @@ public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGe
 
     @Override
     public final ICryptaNode recordCryptarithm() {
-        final ICryptaNode l = GenerateUtil.recordAddition(left);
-        final ICryptaNode r = GenerateUtil.recordAddition(right);
-        return (r == null) || (l == null) ? null : new CryptaNode(CryptaOperator.EQ, l, r);
+        return GenerateUtil.recordAddition(left, right);
     }
 
     @Override

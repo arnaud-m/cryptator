@@ -36,15 +36,13 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
     /** The maximum length of a present word. */
     protected final IntVar maxLength;
 
-    protected AbstractCryptaGenModel(final Model model, final String[] words, final String prefix,
-            final boolean boundedDomain) {
+    protected AbstractCryptaGenModel(final Model model, final String[] words, final String prefix) {
         super();
         this.model = model;
         this.words = words;
         this.vwords = buildWordVars(model, words, prefix);
-        this.wordCount = model.intVar(prefix + "wordCount", 0, words.length);
-        this.maxLength = model.intVar(prefix + "maxLength", 0, AbstractCryptaGenModel.getMaxLength(words),
-                boundedDomain);
+        this.wordCount = model.intVar(prefix + "wordCount", 0, words.length, false);
+        this.maxLength = model.intVar(prefix + "maxLength", 0, AbstractCryptaGenModel.getMaxLength(words), false);
     }
 
     @Override

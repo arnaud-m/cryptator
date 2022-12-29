@@ -41,13 +41,34 @@ public class GenerateUtil {
         return wordStream(model).collect(Collectors.joining(separator));
     }
 
-    public static ICryptaNode reduceOperation(final Stream<ICryptaNode> nodeStream, final CryptaOperator operator) {
-        BinaryOperator<ICryptaNode> binop = (a, b) -> a == null ? b : new CryptaNode(operator, a, b);
+    public static ICryptaNode reduceOperation(final CryptaOperator operator, final ICryptaNode... nodes) {
+        return reduceOperation(operator, Stream.of(nodes));
+    }
+
+    public static ICryptaNode reduceOperation(final CryptaOperator operator, final Stream<ICryptaNode> nodeStream) {
+        BinaryOperator<ICryptaNode> binop = (a, b) -> {
+            if (a == null) {
+                return b;
+            }
+            return b == null ? a : new CryptaNode(operator, a, b);
+        };
         return nodeStream.reduce(null, binop);
     }
 
     public static ICryptaNode recordAddition(final ICryptaGenModel model) {
-        return reduceOperation(leafStream(model), CryptaOperator.ADD);
+        return reduceOperation(CryptaOperator.ADD, leafStream(model));
+    }
+
+    public static ICryptaNode recordAddition(final ICryptaGenModel left, final ICryptaGenModel right) {
+        return reduceOperation(CryptaOperator.EQ, recordAddition(left), recordAddition(right));
+    }
+
+    public static ICryptaNode recordAdditions(final ICryptaGenModel[] left, final ICryptaGenModel[] right) {
+        final ICryptaNode[] additions = new ICryptaNode[left.length];
+        for (int i = 0; i < additions.length; i++) {
+            additions[i] = recordAddition(left[i], right[i]);
+        }
+        return reduceOperation(CryptaOperator.AND, additions);
     }
 
 }

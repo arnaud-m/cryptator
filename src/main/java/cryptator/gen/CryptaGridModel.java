@@ -27,7 +27,7 @@ public final class CryptaGridModel implements IChocoModel {
     public CryptaGridModel(final Model model, final int n, final int m) {
         super();
         this.model = model;
-        this.grid = model.intVarMatrix("grid", n, n, 0, m - 1);
+        this.grid = model.intVarMatrix("grid", n, n, 0, m - 1, false);
         this.tgrid = ArrayUtils.transpose(grid);
         int precision = (int) Math.floor(Math.log10(m)) + 1;
         this.format = " %" + precision + "d";
@@ -62,6 +62,10 @@ public final class CryptaGridModel implements IChocoModel {
 
     public int size() {
         return grid.length;
+    }
+
+    public IntVar getCell(int i, int j) {
+        return grid[i][j];
     }
 
     public IntVar[][] getMatrix() {

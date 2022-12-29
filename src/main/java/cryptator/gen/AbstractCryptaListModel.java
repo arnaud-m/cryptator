@@ -38,7 +38,7 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel {
      * @param words the words list
      */
     protected AbstractCryptaListModel(final Model model, final String[] words) {
-        super(model, words, "", false);
+        super(model, words, "");
         symbolsToVariables = buildSymbolVars(model, words);
         symbolCount = model.intVar("symbCount", 0, symbolsToVariables.size());
     }

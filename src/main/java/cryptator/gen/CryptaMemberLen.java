@@ -16,7 +16,7 @@ public class CryptaMemberLen extends AbstractCryptaGenModel {
     public final IntVar[] lengths;
 
     public CryptaMemberLen(final Model m, final String[] words, final String prefix) {
-        super(m, words, prefix, true);
+        super(m, words, prefix);
         lengths = buildLengths(m, words, prefix);
     }
 
