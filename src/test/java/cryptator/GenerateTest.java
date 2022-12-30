@@ -59,6 +59,12 @@ public class GenerateTest {
         testGenerate(expectedSolCount, expectedCandCount, wordArray, true, true);
     }
 
+    private void testHeavyGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
+            final WordArray wordArray) throws CryptaModelException {
+        testGenerate(expectedSolCount, expectedCandCount, wordArray, false, false);
+        testGenerate(expectedSolCount, expectedCandCount, wordArray, true, false);
+    }
+
     @Test
     public void testSendMoreMoney() throws CryptaModelException {
         final WordArray words = new WordArray(Arrays.asList("send", "more", "money"), null);
@@ -82,6 +88,18 @@ public class GenerateTest {
     public void testPlanets2() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("venus", "earth", "uranus", "saturn"), "planets");
         testGenerate(1, words);
+    }
+
+    @Test
+    public void testAbcde() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("a", "bb", "ccc", "dddd", "eeeee"), null);
+        testHeavyGenerate(0, OptionalInt.of(11), words);
+    }
+
+    @Test
+    public void testAbcdef() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("a", "bb", "ccc", "dddd", "eeeee"), "ffffff");
+        testHeavyGenerate(0, OptionalInt.of(15), words);
     }
 
     @Test
