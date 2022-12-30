@@ -19,53 +19,75 @@ import cryptator.specs.ICryptaNode;
 
 class CryptaMemberPair implements ICryptaGenSolver {
 
-    private final Model model;
+    protected final CryptaMemberLen left;
 
-    private final IntVar[] indices;
+    protected final CryptaMemberElt right;
 
-    private final CryptaMemberLen left;
-
-    private final CryptaMemberElt right;
-
-    public CryptaMemberPair(final IntVar[] indices, final String[] words, final String prefix) {
+    public CryptaMemberPair(final Model model, final String[] words, final String prefix, boolean useMemberLen) {
         super();
-        this.model = indices[0].getModel();
-        this.indices = indices;
-        left = new CryptaMemberLen(model, words, prefix + "L_");
-        right = new CryptaMemberElt(indices[indices.length - 1], words, prefix + "R_");
+        left = buildLeftMember(model, words, prefix, useMemberLen);
+        right = new CryptaMemberElt(model, words, prefix + "R_");
+    }
+
+    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix, boolean useMemberLen) {
+        super();
+        left = buildLeftMember(index.getModel(), words, prefix, useMemberLen);
+        right = new CryptaMemberElt(index, words, prefix + "R_");
+    }
+
+    private static final CryptaMemberLen buildLeftMember(final Model model, final String[] words, final String prefix,
+            boolean useMemberLen) {
+        return useMemberLen ? new CryptaMemberLen(model, words, prefix + "L_")
+                : new CryptaMemberCard(model, words, prefix + "L_");
     }
 
     @Override
-    public Model getModel() {
-        return model;
+    public final Model getModel() {
+        return left.getModel();
     }
 
     public void buildModel() {
         left.buildModel();
         right.buildModel();
         postSymBreakLengthConstraint();
-        postLeftChannelingConstraints();
-    }
-
-    private void postLeftChannelingConstraints() {
-        final IntVar one = model.intVar(1);
-        for (int j = 0; j < indices.length - 1; j++) {
-            model.element(one, left.getWordVars(), indices[j], 0).post();
-        }
-        left.getWordCount().eq(indices.length - 1).post();
     }
 
     private void postSymBreakLengthConstraint() {
         left.getMaxLength().le(right.getMaxLength()).post();
     }
 
-    public void postHeavyConstraints(final int base) {
+    public final void postHeavyConstraints(final int base) {
         left.postLentghSumConstraints(right.getMaxLength(), base);
     }
 
     @Override
-    public ICryptaNode recordCryptarithm() {
+    public final ICryptaNode recordCryptarithm() {
         return GenerateUtil.recordAddition(left, right);
+    }
+
+}
+
+class CryptaCrossPair extends CryptaMemberPair {
+
+    private final IntVar[] indices;
+
+    public CryptaCrossPair(final IntVar[] indices, final String[] words, final String prefix) {
+        super(indices[indices.length - 1], words, prefix, true);
+        this.indices = indices;
+    }
+
+    @Override
+    public void buildModel() {
+        super.buildModel();
+        postLeftChannelingConstraints();
+    }
+
+    private void postLeftChannelingConstraints() {
+        final IntVar one = getModel().intVar(1);
+        for (int j = 0; j < indices.length - 1; j++) {
+            getModel().element(one, left.getWordVars(), indices[j], 0).post();
+        }
+        left.getWordCount().eq(indices.length - 1).post();
     }
 
     Stream<IntVar> maxLengthStream() {
@@ -79,25 +101,25 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
 
     private final CryptaGridModel grid;
 
-    private final CryptaMemberPair[] additions;
+    private final CryptaCrossPair[] additions;
 
     public CryptaGenCrossword(int n, String[] words) {
-        super(new Model(), words);
+        super(new Model("Generate-Crossword"), words);
         this.n = n;
         this.grid = new CryptaGridModel(model, n, words.length);
-        this.additions = new CryptaMemberPair[2 * n];
+        this.additions = new CryptaCrossPair[2 * n];
         createMembers();
     }
 
     private void createMembers() {
         for (int i = 0; i < n; i++) {
             final String prefix = "R" + (i + 1) + "_";
-            additions[i] = new CryptaMemberPair(grid.getRow(i), words, prefix);
+            additions[i] = new CryptaCrossPair(grid.getRow(i), words, prefix);
         }
 
         for (int i = 0; i < n; i++) {
             final String prefix = "C" + (i + 1) + "_";
-            additions[n + i] = new CryptaMemberPair(grid.getCol(i), words, prefix);
+            additions[n + i] = new CryptaCrossPair(grid.getCol(i), words, prefix);
         }
     }
 
@@ -105,7 +127,7 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
     public void buildModel() {
         super.buildModel();
         grid.buildModel();
-        Stream.of(additions).forEach(CryptaMemberPair::buildModel);
+        Stream.of(additions).forEach(CryptaCrossPair::buildModel);
         // TODO Set search strategy ?
         // getSolver().setSearch(Search.intVarSearch(ArrayUtils.flatten(grid.getMatrix())));
 
@@ -141,7 +163,7 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
 
     @Override
     protected void postMaxLengthConstraints() {
-        IntVar[] vars = Stream.of(additions).flatMap(CryptaMemberPair::maxLengthStream).toArray(i -> new IntVar[i]);
+        IntVar[] vars = Stream.of(additions).flatMap(CryptaCrossPair::maxLengthStream).toArray(i -> new IntVar[i]);
         model.max(getMaxLength(), vars).post();
     }
 

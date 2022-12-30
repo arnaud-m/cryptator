@@ -23,9 +23,9 @@ public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGe
 
     private final ICryptaGenModel right;
 
-    public CryptaGenModel(final String[] words, final boolean lenOrCardModel) {
-        super(new Model("Generate"), words);
-        left = lenOrCardModel ? new CryptaMemberLen(model, words, "L_") : new CryptaMemberCard(model, words, "L_");
+    public CryptaGenModel(final String[] words, final boolean useMemberLen) {
+        super(new Model("Generate-Addition"), words);
+        left = useMemberLen ? new CryptaMemberLen(model, words, "L_") : new CryptaMemberCard(model, words, "L_");
         right = new CryptaMemberElt(model, words, "R_");
     }
 
