@@ -47,16 +47,16 @@ public class CryptaMemberCard extends CryptaMemberLen {
         int[] maxCardLengths = getLengthCounts(words);
         final int maxCard = IntStream.of(maxCardLengths).max().orElse(0);
 
-        IntVar[] vars = Arrays.copyOf(cardLengths, maxCard);
-        vars[0] = model.intVar(0);
+        IntVar[] cardLengthsWoZero = Arrays.copyOf(cardLengths, cardLengths.length);
+        cardLengthsWoZero[0] = model.intVar(0);
 
         IntVar x = model.intVar("Xk", 0, maxCard, false);
-        model.element(x, cardLengths, maxLength, 0).post();
+        model.element(x, cardLengthsWoZero, maxLength, 0).post();
 
         IntVar y = model.intVar("Yk", 0, maxCard, false);
-        model.element(y, cardLengths, maxLength.sub(1).intVar(), 0).post();
+        model.element(y, cardLengthsWoZero, maxLength.sub(1).intVar(), 0).post();
 
-        IntVar z = model.intVar("Zk", 0, maxCard, false);
+        IntVar z = model.intVar("Zk", 0, words.length, false);
         z.eq(wordCount.sub(x).sub(y)).decompose().post();
 
         WordSumTuplesBuilder builder = new WordSumTuplesBuilder(base);
