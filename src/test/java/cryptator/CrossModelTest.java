@@ -18,19 +18,31 @@ import cryptator.gen.CryptaGenCrossword;
 public class CrossModelTest {
 
     private void testCrosswordModel(int size, String[] words, int expectedSolutionCount) {
-        final CryptaGenCrossword m = new CryptaGenCrossword(size, words);
+        testCrosswordModel(size, words, true, expectedSolutionCount);
+        testCrosswordModel(size, words, false, expectedSolutionCount);
+    }
+
+    private void testCrosswordModel(int size, String[] words, boolean useLenModel, int expectedSolutionCount) {
+        final CryptaGenCrossword m = new CryptaGenCrossword(size, words, useLenModel);
         m.buildModel();
         // System.out.println(m.getModel());
         assertEquals(expectedSolutionCount, m.getModel().getSolver().streamSolutions().count());
     }
 
     private void testHeavyCrosswordModel(int size, String[] words, int expectedSolutionCount) {
-        final CryptaGenCrossword m = new CryptaGenCrossword(size, words);
+        testHeavyCrosswordModel(size, words, true, expectedSolutionCount);
+        testHeavyCrosswordModel(size, words, false, expectedSolutionCount);
+
+    }
+
+    private void testHeavyCrosswordModel(int size, String[] words, boolean useLenModel, int expectedSolutionCount) {
+        final CryptaGenCrossword m = new CryptaGenCrossword(size, words, useLenModel);
         m.buildModel();
         m.postHeavyConstraints(10);
         // System.out.println(m.getModel());
         assertEquals(expectedSolutionCount, m.getModel().getSolver().streamSolutions().count());
-        // m.getSolver().streamSolutions().forEach(s -> System.out.println(m));
+//        m.getSolver().streamSolutions().forEach(s -> System.out.println(m));
+//        m.getSolver().printStatistics();
     }
 
     @Test
@@ -47,13 +59,13 @@ public class CrossModelTest {
     }
 
     @Test
-    public void testHeavyCrosswordN3W10() {
+    public void testHeavyCrossword1N3W9() {
         final String[] words = new String[] {"a", "b", "cc", "ddd", "eeee", "fffff", "gggggg", "hhhhhh", "iiiiiii"};
         testHeavyCrosswordModel(3, words, 4);
     }
 
     @Test
-    public void testHeavyCrosswordN3W9() {
+    public void testHeavyCrossword2N3W9() {
         final String[] words = new String[] {"A", "B", "F", "CA", "CC", "CD", "CE", "CF", "DE"};
         testHeavyCrosswordModel(3, words, 5040);
     }

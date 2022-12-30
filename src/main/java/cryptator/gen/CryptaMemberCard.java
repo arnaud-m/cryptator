@@ -21,8 +21,7 @@ public class CryptaMemberCard extends CryptaMemberLen {
 
     public CryptaMemberCard(final Model m, final String[] words, final String prefix) {
         super(m, words, prefix);
-        cardLengths = m.intVarArray(prefix + "cardLen", AbstractCryptaGenModel.getMaxLength(words) + 1, 0,
-                words.length);
+        cardLengths = m.intVarArray(prefix + "cardLen", getMaxLength(words) + 1, 0, words.length);
     }
 
     public final IntVar[] getCardLength() {

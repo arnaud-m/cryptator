@@ -21,8 +21,8 @@ class CryptaCrossPair extends CryptaMemberPair {
 
     private final IntVar[] indices;
 
-    public CryptaCrossPair(final IntVar[] indices, final String[] words, final String prefix) {
-        super(indices[indices.length - 1], words, prefix, true);
+    public CryptaCrossPair(final IntVar[] indices, final String[] words, final String prefix, boolean useLenModel) {
+        super(indices[indices.length - 1], words, prefix, useLenModel);
         this.indices = indices;
     }
 
@@ -30,6 +30,7 @@ class CryptaCrossPair extends CryptaMemberPair {
     public void buildModel() {
         super.buildModel();
         postLeftChannelingConstraints();
+
     }
 
     private void postLeftChannelingConstraints() {
@@ -53,23 +54,32 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
 
     private final CryptaCrossPair[] additions;
 
-    public CryptaGenCrossword(int n, String[] words) {
+    public CryptaGenCrossword(int n, String[] words, boolean useLenModel) {
         super(new Model("Generate-Crossword"), words);
         this.n = n;
         this.grid = new CryptaGridModel(model, n, words.length);
         this.additions = new CryptaCrossPair[2 * n];
-        createMembers();
+        createMembers(useLenModel);
     }
 
-    private void createMembers() {
+    private void createMembers(boolean useLenModel) {
         for (int i = 0; i < n; i++) {
             final String prefix = "R" + (i + 1) + "_";
-            additions[i] = new CryptaCrossPair(grid.getRow(i), words, prefix);
+            additions[i] = new CryptaCrossPair(grid.getRow(i), words, prefix, useLenModel);
         }
 
         for (int i = 0; i < n; i++) {
             final String prefix = "C" + (i + 1) + "_";
-            additions[n + i] = new CryptaCrossPair(grid.getCol(i), words, prefix);
+            additions[n + i] = new CryptaCrossPair(grid.getCol(i), words, prefix, useLenModel);
+        }
+    }
+
+    private void setSolution() {
+        int[][] solgrid = new int[][] {new int[] {0, 3, 4}, new int[] {1, 5, 7}, new int[] {2, 6, 8}};
+        for (int i = 0; i < solgrid.length; i++) {
+            for (int j = 0; j < solgrid[i].length; j++) {
+                grid.getCell(i, j).eq(solgrid[i][j]).post();
+            }
         }
     }
 
@@ -78,6 +88,7 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
         super.buildModel();
         grid.buildModel();
         Stream.of(additions).forEach(CryptaCrossPair::buildModel);
+        // setSolution();
         // TODO Set search strategy ?
         // getSolver().setSearch(Search.intVarSearch(ArrayUtils.flatten(grid.getMatrix())));
 

@@ -16,6 +16,9 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "-d", handler = ExplicitBooleanOptionHandler.class, usage = "dry run (generate but do not solve candidate cryptarithms)")
     private boolean dryRun;
 
+    @Option(name = "-grid", usage = "grid size for crossword cryptarithm)")
+    private int gridSize = 0;
+
     @Option(name = "-ctry", usage = "country code for doubly true cryptarithms)")
     private String countryCode = "EN";
 
@@ -39,6 +42,14 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
     public final boolean isDryRun() {
         return dryRun;
+    }
+
+    public final int getGridSize() {
+        return gridSize;
+    }
+
+    public final void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
     }
 
     public final String getCountryCode() {
