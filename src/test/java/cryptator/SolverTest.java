@@ -371,9 +371,32 @@ public class SolverTest {
 
     @Test
     public void testGraham() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        // https://mathworld.wolfram.com/PrintersErrors.html
         t.config.setArithmeticBase(11);
         t.testUNIQUE("UNITED + STATES = AMERICA");
+    }
+
+    @Test
+    public void testFaresMult() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(6);
+        t.testUNIQUE("FARES = FEE * FEE");
+    }
+
+    @Test
+    public void testFaresPow() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(6);
+        t.testUNIQUE("FARES = FEE ^'2'");
+    }
+
+    @Test
+    public void testTokyo10() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(10);
+        t.testUNSAT("TOKYO  =  KYOTO * '3'");
+    }
+
+    @Test
+    public void testTokyo9() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(9);
+        t.testSAT("TOKYO  =  KYOTO * '3'");
     }
 
     @Test
