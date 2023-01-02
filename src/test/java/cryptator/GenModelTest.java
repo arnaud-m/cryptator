@@ -14,11 +14,29 @@ import org.chocosolver.solver.Model;
 import org.junit.Before;
 import org.junit.Test;
 
+import cryptator.gen.AbstractCryptaListModel;
 import cryptator.gen.CryptaMemberCard;
 import cryptator.gen.CryptaMemberElt;
 import cryptator.gen.CryptaMemberLen;
-import cryptator.gen.WordListModel;
 import cryptator.specs.ICryptaGenModel;
+
+class MockWordListModel extends AbstractCryptaListModel {
+
+    public MockWordListModel(final Model model, final String[] words) {
+        super(model, words);
+    }
+
+    @Override
+    protected void postWordConstraints() {
+        // Nothing to do
+    }
+
+    @Override
+    protected void postMaxLengthConstraints() {
+        maxLength.eq(0).decompose().post();
+    }
+
+}
 
 public class GenModelTest {
 
@@ -29,7 +47,7 @@ public class GenModelTest {
     @Before
     public void buildGenModels() {
         models = new ICryptaGenModel[] {new CryptaMemberLen(new Model(), words, ""),
-                new CryptaMemberCard(new Model(), words, ""), new WordListModel(new Model(), words)};
+                new CryptaMemberCard(new Model(), words, ""), new MockWordListModel(new Model(), words)};
         for (ICryptaGenModel m : models) {
             m.buildModel();
         }
@@ -66,8 +84,8 @@ public class GenModelTest {
     }
 
     @Test
-    public void testWLModel() {
-        WordListModel m = new WordListModel(new Model(), words);
+    public void testWordListModel() {
+        MockWordListModel m = new MockWordListModel(new Model(), words);
         m.buildModel();
         m.postMaxSymbolCountConstraint(1);
         postMaxWordCountConstraint(m, 2);
@@ -75,7 +93,7 @@ public class GenModelTest {
     }
 
     @Test
-    public void testOneModel() {
+    public void testMemberElt() {
         CryptaMemberElt m = new CryptaMemberElt(new Model(), words, "");
         m.buildModel();
         testGenModel(m, 9);

@@ -44,7 +44,7 @@ public class CryptaMemberCard extends CryptaMemberLen {
     @Override
     public void postLentghSumConstraints(final IntVar sumLength, final int base) {
 
-        int[] maxCardLengths = getLengthCounts(words);
+        int[] maxCardLengths = CryptaMemberCard.getLengthCounts(words);
         final int maxCard = IntStream.of(maxCardLengths).max().orElse(0);
 
         IntVar[] cardLengthsWoZero = Arrays.copyOf(cardLengths, cardLengths.length);
@@ -69,6 +69,15 @@ public class CryptaMemberCard extends CryptaMemberLen {
     public void buildModel() {
         super.buildModel();
         postGlobalCardLengthConstraint();
+    }
+
+    private static int[] getLengthCounts(final String[] words) {
+        final int n = AbstractCryptaGenModel.getMaxLength(words);
+        int[] v = new int[n + 1];
+        for (String w : words) {
+            v[w.length()]++;
+        }
+        return v;
     }
 
 }

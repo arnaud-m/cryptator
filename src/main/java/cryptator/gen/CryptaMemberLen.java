@@ -11,12 +11,12 @@ package cryptator.gen;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
-public class CryptaMemberLen extends CryptaGenBaseModel {
+public class CryptaMemberLen extends AbstractCryptaGenModel {
 
     public final IntVar[] lengths;
 
     public CryptaMemberLen(final Model m, final String[] words, final String prefix) {
-        super(m, words, prefix, true);
+        super(m, words, prefix);
         lengths = buildLengths(m, words, prefix);
     }
 
@@ -24,9 +24,14 @@ public class CryptaMemberLen extends CryptaGenBaseModel {
         final int n = words.length;
         IntVar[] vars = new IntVar[n];
         for (int i = 0; i < n; i++) {
-            vars[i] = m.intVar(prefix + "len" + "[" + i + "]", new int[] {0, words[i].length()});
+            vars[i] = m.intVar(prefix + "len_" + words[i], new int[] {0, words[i].length()});
         }
         return vars;
+    }
+
+    @Override
+    protected void postWordConstraints() {
+        // Nothing to do
     }
 
     @Override
