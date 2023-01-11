@@ -12,18 +12,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.math.BigInteger;
 
 import org.junit.Test;
 
+import cryptator.config.CryptaConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
+import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolutionException;
 import cryptator.solver.CryptaSolutionMap;
+import cryptator.solver.CryptaSolver;
+import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
+import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
 import cryptator.tree.CryptaLeaf;
@@ -38,7 +44,7 @@ public class EvaluationTest {
     public EvaluationTest() {
     }
 
-    private void testInSolution(final ICryptaSolution s, final char symbol, final int digit)
+    public static final void testInSolution(final ICryptaSolution s, final char symbol, final int digit)
             throws CryptaSolutionException {
         assertTrue(s.hasDigit(symbol));
         assertTrue(s.hasDomain(symbol));
@@ -46,7 +52,8 @@ public class EvaluationTest {
         assertNotNull(s.getDomain(symbol));
     }
 
-    private void testNotInSolution(final ICryptaSolution s, final char symbol) throws CryptaSolutionException {
+    public static final void testNotInSolution(final ICryptaSolution s, final char symbol)
+            throws CryptaSolutionException {
         assertFalse(s.hasDigit(symbol));
         assertFalse(s.hasDomain(symbol));
         assertNotNull(s.getDomain(symbol));
@@ -341,4 +348,36 @@ public class EvaluationTest {
         final ICryptaSolution solution = CryptaSolutionMap.parseSolution("1=1 A=10 B=11 5=5 2=3");
         assertTrueEval(cryptarithm, solution, 16);
     }
+
+    @Test
+    public void testSolverSolution() throws CryptaModelException, CryptaSolverException {
+        final ICryptaSolver solver = new CryptaSolver();
+        final ICryptaNode node = parser.parse("send+more=money");
+        solver.solve(node, new CryptaConfig(), s -> {
+            try {
+                testNotInSolution(s, 'a');
+                testNotInSolution(s, 'b');
+                testNotInSolution(s, 'c');
+
+                testInSolution(s, 'd', 7);
+                testInSolution(s, 'e', 5);
+                testInSolution(s, 'm', 1);
+                testInSolution(s, 'n', 6);
+                testInSolution(s, 'o', 0);
+                testInSolution(s, 'r', 8);
+                testInSolution(s, 's', 9);
+                testInSolution(s, 'y', 2);
+
+                testNotInSolution(s, 'z');
+
+                assertEquals(8, s.size());
+
+                assertTrueEval(node, s, 10);
+            } catch (CryptaSolutionException | CryptaEvaluationException e) {
+                e.printStackTrace();
+                fail("Exception raised while testing");
+            }
+        });
+    }
+
 }

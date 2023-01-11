@@ -47,7 +47,7 @@ public class TreeTest {
         testInorder(expected, node, false);
     }
 
-    public static void testInorder(final String expected, final ICryptaNode node, boolean allParenthesis) {
+    public static void testInorder(final String expected, final ICryptaNode node, final boolean allParenthesis) {
         assertEquals(expected, writeInorder(node, allParenthesis));
     }
 

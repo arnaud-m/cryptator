@@ -1,0 +1,4 @@
+accra + amman + asmara + cairo + caracas + macau + maseru + monaco + moroni + nassau + nicosia + noumea + rome + roseau + sanaa + sucre = asuncion 
+accra + amman + asmara + lome + macau + male + manama + maseru + monaco + nassau + noumea + oslo + rome + roseau + sanaa + seoul = caracas 
+amman + ankara + apia + asmara + kampala + lima + lusaka + manama + manila + minsk + nassau + nuuk + paris + praia + saipan + sanaa = palikir 
+amman + berlin + berne + dili + dodoma + lima + lome + london + madrid + malabo + male + manama + manila + mbabane + moroni + rome = nairobi 

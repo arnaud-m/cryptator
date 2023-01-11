@@ -1,0 +1,9 @@
+albania + algeria + angola + armenia + benin + gabon + gambia + georgia + lebanon + liberia + mali + niger + nigeria + romania = mongolia 
+albania + algeria + angola + armenia + benin + gabon + gambia + georgia + mali + namibia + niger + nigeria + oman + romania = mongolia 
+albania + algeria + angola + armenia + benin + gabon + gambia + lebanon + liberia + mali + namibia + nigeria + oman + romania = mongolia 
+albania + algeria + angola + armenia + gabon + gambia + georgia + iran + lebanon + liberia + namibia + niger + nigeria + romania = mongolia 
+albania + algeria + benin + brunei + burundi + grenada + guinea + india + iran + ireland + liberia + niger + nigeria + uganda = bulgaria 
+albania + angola + armenia + gabon + gambia + georgia + lebanon + liberia + mali + namibia + niger + nigeria + oman + romania = mongolia 
+andorra + armenia + cameroon + canada + congo + greece + grenada + india + iran + monaco + morocco + niger + nigeria + oman = dominica 
+andorra + canada + congo + dominica + georgia + greece + grenada + india + monaco + morocco + niger + nigeria + oman + romania = cameroon 
+angola + armenia + benin + gabon + gambia + georgia + iran + lebanon + liberia + mali + namibia + niger + nigeria + oman = mongolia 

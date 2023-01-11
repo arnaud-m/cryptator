@@ -9,26 +9,17 @@
 package cryptator.gen;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
-import cryptator.CryptaOperator;
 import cryptator.specs.ICryptaGenModel;
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaLeaf;
-import cryptator.tree.CryptaNode;
 
 /**
- * Base class for generation model..
+ * Abstract class for the generation model.
  */
-public class CryptaGenBaseModel implements ICryptaGenModel {
+public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
 
     /** The model. */
     protected final Model model;
@@ -45,14 +36,13 @@ public class CryptaGenBaseModel implements ICryptaGenModel {
     /** The maximum length of a present word. */
     protected final IntVar maxLength;
 
-    public CryptaGenBaseModel(final Model model, final String[] words, final String prefix,
-            final boolean boundedDomain) {
+    protected AbstractCryptaGenModel(final Model model, final String[] words, final String prefix) {
         super();
         this.model = model;
         this.words = words;
         this.vwords = buildWordVars(model, words, prefix);
-        this.wordCount = model.intVar(prefix + "wordCount", 0, words.length);
-        this.maxLength = model.intVar(prefix + "maxLength", 0, getMaxLength(words), boundedDomain);
+        this.wordCount = model.intVar(prefix + "wordCount", 0, words.length, false);
+        this.maxLength = model.intVar(prefix + "maxLength", 0, AbstractCryptaGenModel.getMaxLength(words), false);
     }
 
     @Override
@@ -96,57 +86,48 @@ public class CryptaGenBaseModel implements ICryptaGenModel {
         return vars;
     }
 
+    protected abstract void postWordConstraints();
+
     protected void postWordCountConstraint() {
         model.sum(vwords, "=", wordCount).post();
     }
 
-    protected void postMaxLengthConstraints() {
-        maxLength.eq(0).decompose().post();
-    }
+    protected abstract void postMaxLengthConstraints();
 
     @Override
     public void buildModel() {
+        postWordConstraints();
         postWordCountConstraint();
         postMaxLengthConstraints();
     }
 
-    public static int getMaxLength(final String[] words) {
-        return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
-    }
-
-    public static int[] getLengthCounts(final String[] words) {
-        final int n = getMaxLength(words);
-        int[] v = new int[n + 1];
-        for (String w : words) {
-            v[w.length()]++;
+    /**
+     * Post a constraint over the minimum and maximum number of distinct words.
+     *
+     * @param min the the minimum number of words
+     * @param max the maximum number of words (ignored if lower than the min)
+     */
+    public void postWordCountConstraints(final int min, final int max) {
+        wordCount.ge(min).post();
+        if (max >= min) {
+            wordCount.le(max).post();
         }
-        return v;
     }
 
-    public static BoolVar[] toArray(final Collection<BoolVar> vars) {
-        return vars.toArray(new BoolVar[vars.size()]);
-    }
-
-    public static Stream<String> wordStream(final ICryptaGenModel model) {
-        final BoolVar[] v = model.getWordVars();
-        final String[] w = model.getWords();
-        return IntStream.range(0, model.getN()).filter(i -> v[i].isInstantiatedTo(1)).mapToObj(i -> w[i]);
-    }
-
-    public static String recordString(final ICryptaGenModel model, final String separator) {
-        return wordStream(model).collect(Collectors.joining(separator));
-    }
-
-    public static ICryptaNode recordAddition(final ICryptaGenModel model) {
-        BinaryOperator<ICryptaNode> add = (a, b) -> {
-            return a == null ? b : new CryptaNode(CryptaOperator.ADD, a, b);
-        };
-        return wordStream(model).map(CryptaLeaf::new).map(ICryptaNode.class::cast).reduce(null, add);
+    public void postWordCountConstraints(final int val) {
+        wordCount.eq(val).post();
     }
 
     @Override
     public String toString() {
-        return recordString(this, " + ");
+        return GenerateUtil.recordString(this, " ");
     }
 
+    protected static int getMaxLength(final String[] words) {
+        return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
+    }
+
+    protected static int[] getLengths(final String[] words) {
+        return Arrays.stream(words).mapToInt(String::length).toArray();
+    }
 }

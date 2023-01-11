@@ -105,7 +105,6 @@ public class CryptaGameEngine implements ICryptaGameEngine {
         m.unpost(decision);
         final Constraint opposite = decision.getOpposite();
         m.post(opposite);
-        // FIXME m.getSolver().restart();
         LOGGER.log(Level.CONFIG, "solve decision {0} in model {1}", new Object[] {opposite, m.getName()});
         m.getSolver().reset();
         if (!solveGame()) {

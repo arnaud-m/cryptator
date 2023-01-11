@@ -90,11 +90,11 @@ public class CryptaFeatures implements ITraversalNodeConsumer {
         return String.format("N02%dL%02d-%s", wordCount, maxWordLength, buildSymbols());
     }
 
-    private final String buildSymbols() {
+    private String buildSymbols() {
         return symbols.stream().map(String::valueOf).collect(Collectors.joining());
     }
 
-    private final String buildOperators() {
+    private String buildOperators() {
         return operators.stream().map(String::valueOf).collect(Collectors.joining(" ", "", ""));
     }
 

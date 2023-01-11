@@ -23,7 +23,7 @@ import org.chocosolver.solver.variables.IntVar;
  * symbol is present if and only if at least one word that contains the symbol
  * is present.
  */
-public class WordsListModel extends CryptaGenBaseModel {
+public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel {
 
     /** The map that associates a variable to each symbol of the words. */
     protected final Map<Character, BoolVar> symbolsToVariables;
@@ -37,8 +37,8 @@ public class WordsListModel extends CryptaGenBaseModel {
      * @param model the model to use
      * @param words the words list
      */
-    public WordsListModel(final Model model, final String[] words) {
-        super(model, words, "", false);
+    protected AbstractCryptaListModel(final Model model, final String[] words) {
+        super(model, words, "");
         symbolsToVariables = buildSymbolVars(model, words);
         symbolCount = model.intVar("symbCount", 0, symbolsToVariables.size());
     }
@@ -54,8 +54,8 @@ public class WordsListModel extends CryptaGenBaseModel {
         postChannelingConstraints();
     }
 
-    protected void postSymbolCountConstraint() {
-        final BoolVar[] symbols = toArray(symbolsToVariables.values());
+    private void postSymbolCountConstraint() {
+        final BoolVar[] symbols = AbstractCryptaListModel.toArray(symbolsToVariables.values());
         model.sum(symbols, "=", symbolCount).post();
     }
 
@@ -70,7 +70,7 @@ public class WordsListModel extends CryptaGenBaseModel {
         final Map<Character, BoolVar> symbolsToVariables = new HashMap<>();
         for (String word : words) {
             for (char c : word.toCharArray()) {
-                symbolsToVariables.computeIfAbsent(c, s -> model.boolVar(String.valueOf(s)));
+                symbolsToVariables.computeIfAbsent(c, s -> model.boolVar("symb_" + s));
             }
         }
         return symbolsToVariables;
@@ -101,7 +101,7 @@ public class WordsListModel extends CryptaGenBaseModel {
         final Map<Character, List<BoolVar>> symbolsToWords = buildSymbolsToWords();
         for (Map.Entry<Character, List<BoolVar>> entry : symbolsToWords.entrySet()) {
             final BoolVar max = symbolsToVariables.get(entry.getKey());
-            final BoolVar[] vars = toArray(entry.getValue());
+            final BoolVar[] vars = AbstractCryptaListModel.toArray(entry.getValue());
             model.max(max, vars).post();
         }
     }
@@ -115,13 +115,8 @@ public class WordsListModel extends CryptaGenBaseModel {
         symbolCount.le(max).post();
     }
 
-    /**
-     * Post a constraint over the maximum number of distinct words.
-     *
-     * @param max the maximum number of words
-     */
-    public void postMaxWordCountConstraint(final int max) {
-        wordCount.le(max).post();
+    private static BoolVar[] toArray(final Collection<BoolVar> vars) {
+        return vars.toArray(new BoolVar[vars.size()]);
     }
 
 }

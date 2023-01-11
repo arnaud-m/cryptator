@@ -38,6 +38,9 @@ public class CryptaConfig {
     @Option(name = "-max", usage = "relaxation of the maximum number of occurences of a digit (>=0)")
     private int relaxMaxDigitOccurence = 0;
 
+    @Option(name = "-search", usage = "identifier of the search strategy")
+    private int searchStrategy = 0;
+
     /**
      * Receives other command line parameters than options.
      */
@@ -82,6 +85,14 @@ public class CryptaConfig {
 
     public final void setRelaxMaxDigitOccurence(final int relaxMaxDigitOccurence) {
         this.relaxMaxDigitOccurence = relaxMaxDigitOccurence;
+    }
+
+    public final int getSearchStrategy() {
+        return searchStrategy;
+    }
+
+    public final void setSearchStrategy(final int searchStrategy) {
+        this.searchStrategy = searchStrategy;
     }
 
     public final int getMinDigitOccurence(final int n) {

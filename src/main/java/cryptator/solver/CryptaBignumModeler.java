@@ -15,6 +15,7 @@ import java.util.Deque;
 import java.util.List;
 
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.exception.SolverException;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.variables.IntVar;
 
@@ -38,12 +39,16 @@ public class CryptaBignumModeler implements ICryptaModeler {
         if (detect.hasUnsupportedOperator()) {
             throw new CryptaModelException("Unsupported bignum operator(s): " + detect.getUnsupportedOperators());
         }
-
-        final Model model = new Model("Cryptarithm-bignum");
-        final AbstractModelerNodeConsumer modelerNodeConsumer = new ModelerBignumConsumer(model, config);
-        TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
-        modelerNodeConsumer.postConstraints();
-        return modelerNodeConsumer.buildCryptaModel();
+        try {
+            final Model model = new Model("Cryptarithm-bignum");
+            final AbstractModelerNodeConsumer modelerNodeConsumer = new ModelerBignumConsumer(model, config);
+            TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
+            modelerNodeConsumer.postConstraints();
+            modelerNodeConsumer.configureSearch();
+            return modelerNodeConsumer.buildCryptaModel();
+        } catch (SolverException e) {
+            throw new CryptaModelException("Internal choco exception");
+        }
     }
 }
 

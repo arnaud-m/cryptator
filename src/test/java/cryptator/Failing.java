@@ -48,7 +48,7 @@ public class Failing {
     }
 
     @Test
-    @Ignore
+    @Ignore("Too long (around 1 min).")
     public void testMrazik() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         // Take around 1 minute
         assertEquals("Div and Mult", t.testSAT("A * (4*TH + OF*JULY) = HAPPY"),

@@ -266,7 +266,7 @@ public class SolverTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("It is a choco issue.")
     public void testEMC2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.solver.limitSolution(100);
         t.testSAT("nrgy = MC ^ 2");
@@ -355,8 +355,6 @@ public class SolverTest {
         t.testUNIQUE("pear+plum+apple+grape+lemon=orange");
     }
 
-
-
     @Test
     public void testBarker5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.testUNIQUE("cinq*six=trente");
@@ -370,17 +368,38 @@ public class SolverTest {
 
     @Test
     public void testGraham() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        // https://mathworld.wolfram.com/PrintersErrors.html
         t.config.setArithmeticBase(11);
         t.testUNIQUE("UNITED + STATES = AMERICA");
+    }
+
+    @Test
+    public void testFaresMult() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(6);
+        t.testUNIQUE("FARES = FEE * FEE");
+    }
+
+    @Test
+    public void testFaresPow() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(6);
+        t.testUNIQUE("FARES = FEE ^'2'");
+    }
+
+    @Test
+    public void testTokyo10() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(10);
+        t.testUNSAT("TOKYO  =  KYOTO * '3'");
+    }
+
+    @Test
+    public void testTokyo9() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.config.setArithmeticBase(9);
+        t.testSAT("TOKYO  =  KYOTO * '3'");
     }
 
     @Test
     public void testPow1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.testSAT("A = B ^ C", 2);
     }
-
-
 
     @Test
     public void testDivision1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
@@ -490,7 +509,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication1()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "SEE * SO = MIMEO; MIMEO = EMOO + '10'*MESS;SEE * O = EMOO;SEE * S = MESS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -498,7 +516,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication1doubleticks()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "SEE * SO = MIMEO; MIMEO = EMOO + \"10\"*MESS;SEE * O = EMOO;SEE * S = MESS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -509,7 +526,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication2()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "CUT * T = BUST; CUT * I = TNNT; TNNT * '10' + BUST = TENET; TENET = CUT * IT";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -520,7 +536,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication3()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "RED * S = ARCS; RED * A = RED; RED * '10' + ARCS = CDTS; CDTS = RED * AS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -538,7 +553,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication4()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "HOW * E = HAIL; HOW * W = PAL; HAIL + PAL * '10' = LHAL; HOW * WE = LHAL";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -551,7 +565,6 @@ public class SolverTest {
     public void testEvaluationLongDivision1()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "AKA * K = DYNA; DADD - DYNA = ARM; AKA * M = ARKA; ARMY - ARKA = RA; AKA * KM + RA = DADDY";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -658,7 +671,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication1symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "SEE * SO = MIMEO&& MIMEO = EMOO + '10'*MESS&&SEE * O = EMOO&&SEE * S = MESS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -666,7 +678,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication2symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "CUT * T = BUST&& CUT * I = TNNT&& TNNT * '10' + BUST = TENET&& TENET = CUT * IT";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -674,7 +685,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication3symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "RED * S = ARCS&& RED * A = RED&& RED * '10' + ARCS = CDTS&& CDTS = RED * AS";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -689,7 +699,6 @@ public class SolverTest {
     public void testEvaluationLongMultiplication4symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "HOW * E = HAIL&& HOW * W = PAL&& HAIL + PAL * '10' = LHAL&& HOW * WE = LHAL";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 
@@ -699,7 +708,6 @@ public class SolverTest {
     public void testEvaluationLongDivision1symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "AKA * K = DYNA&& DADD - DYNA = ARM&& AKA * M = ARKA&& ARMY - ARKA = RA&& AKA * KM + RA = DADDY";
-        t.testSAT(cryptarithm);
         t.testUNIQUE(cryptarithm);
     }
 

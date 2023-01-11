@@ -12,7 +12,7 @@
 
 #+BEGIN_SRC sh :results silent
    ln -s ../words .
-   ln -s ../../../target/cryptator-0.5.1-SNAPSHOT-with-dependencies.jar .
+   ln -s ../../../target/cryptator-0.6.0-SNAPSHOT-with-dependencies.jar .
  #+END_SRC
 
 ** Clear directories
@@ -49,13 +49,22 @@
    }
  #+END_SRC
 
+
 * Generate
 
-** Configure the solver
+** Create the solver
 
-#+BEGIN_SRC sh
-  rm solver.sh
-  ln -s solver-generate.sh solver.sh
+#+BEGIN_SRC sh :tangle solver.sh
+JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
+MAINCLASS=cryptator.Cryptagen
+
+MAINARGS=`cat $1 $2 | xargs`
+
+INSTNAME=`echo $INSTNAME | sed 's/\s-*/-/g'`
+echo i `basename -s .dat $2`
+## SEED=`shuf -i1-1000 -n1`
+java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+exit $?
  #+END_SRC
 
 ** Configure instances
@@ -72,7 +81,7 @@
    echo -v normal -d TRUE -lightM FALSE -lightP FALSE > algorithms/FF.dat
  #+END_SRC
 
-*** Other algorithms
+*** All algorithms
 
  #+BEGIN_SRC sh
    echo -v normal -d TRUE -lightM FALSE -lightP FALSE > algorithms/FF.dat
@@ -81,13 +90,20 @@
    echo -v normal -d TRUE -lightM TRUE -lightP TRUE > algorithms/TT.dat
  #+END_SRC
 
+
+
+
 * Generate and Solve
+** Create the solver
 
-** Configure the solver
+#+BEGIN_SRC sh :tangle solver.sh
+JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
+MAINCLASS=cryptator.Cryptagen
 
-#+BEGIN_SRC sh
-  rm solver.sh
-  ln -s solver-generate-and-solve.sh solver.sh
+MAINARGS=`cat $1 $2 | xargs`
+
+java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS | head -n -10
+exit $?
  #+END_SRC
 
 ** Configure instances
@@ -118,13 +134,20 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    generateLong 14 elements.txt
    generateLong 49 palindromes-fr.txt
    generateLong 41 palindromes-en.txt
-   generateLong 14 countries.txt
-   generateLong 11 computer.txt
-   generateLong 12 jobs.txt
-   generateLong 13 jobs.txt
-   generateLong 13 vins.txt
-   generateLong 28 mythologie-grecque/mythologie-grecque.txt
+   generateLong 15 capitales.txt
+   generateLong 16 capitales.txt
  #+END_SRC
+
+*** Generate languages
+
+ #+BEGIN_SRC R :results output file :file "words-10-2.txt"
+   base <- 10
+   x <- head(letters, base)
+   xy <- expand.grid(x = x, y = x)
+   cat(paste(x, '\n', collapse = ''))
+   cat(paste(xy$x, xy$y, '\n', sep = "", collapse = ''))
+#+END_SRC
+
 
 ** Configure the algorithm
 
@@ -132,7 +155,53 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    echo -v quiet -d FALSE -l TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
  #+END_SRC
 
+
+* Solve
+** Create the solver
+
+#+BEGIN_SRC sh :tangle solver.sh
+  JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
+  MAINCLASS=cryptator.Cryptator
+
+  MAINARGS=`cat $1 | xargs`
+
+  ## exclude cryptarithm with long words
+  ## grep -wvE '\w{10,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+
+  ## exclude cryptarithm without long words
+  ## grep -wE '\w{10,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+
+  ## Do not exclude anything
+  sed 's/[[:space:]]//g'  $2 | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+  exit $?
+ #+END_SRC
+
+** Configure instances
+
+Select instance files in the directory ~instances-solve~.
+
+ - Filename prefixed by ~long~ requires the bignum model.
+ - Filename prefixed by ~short~ are accepted by the scalar model.
+
+** Configure the algorithm
+
+ #+BEGIN_SRC sh
+   ARGS=" -v verbose -t 10"
+   echo $ARGS -l TRUE > algorithms/BIGNUM.dat
+   echo $ARGS -l FALSE -h FALSE > algorithms/SCALAR.dat
+   echo $ARGS -l FALSE -h TRUE > algorithms/HORNER.dat
+
+   echo $ARGS -l TRUE -search 1 > algorithms/BIGNUM-1.dat
+   echo $ARGS -l FALSE -h FALSE -search 1 > algorithms/SCALAR-1.dat
+   echo $ARGS -l FALSE -h TRUE -search 1 > algorithms/HORNER-1.dat
+
+ #+END_SRC
+
+
 * Testing
+
+Change the file extension accordingly.
+
 ** Solve instances in sequential
    #+BEGIN_SRC sh
      nohup gridjobs  -l -p '*.dat' &
@@ -146,7 +215,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 * Reporting
 
 #+BEGIN_SRC sh
-  gridres -z -k table_keys.txt
+  gridres -z -k table-keys.txt
 #+END_SRC
 
   Look for the files .res in the results directory.
@@ -164,8 +233,46 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
        sed -n "$SED_EXPR" $INFILE >> $OUTFILE
     done
   ## Sort cryptarithms
-  find $OUTDIR -name '*.txt' -exec sort -u -o {} {} \;
+  find $OUTDIR -name '*.db.txt' -exec sort -u -o {} {} \;
 
 #+END_SRC
+
+** Classify cryptarithms
+
+
+#+BEGIN_SRC awk :tangle classify-additions.awk
+  {
+   operands = int(NF/2)
+   minlen = length($1)
+   maxlen = length($1)
+   for(i = 3 ; i < NF ; i+=2) {
+       if(length($i) < minlen) minlen=length($i);
+       else if(length($i) > maxlen) maxlen=length($i);
+   }
+   filename=sprintf("N%02d-%02d-%02d.db.txt", operands, minlen, maxlen)
+   #print operands, minlen, maxlen, filename, $0
+   print $0 >> filename;
+  }
+
+#+END_SRC
+
+
+#+BEGIN_SRC sh
+  INDIR=results-cryptarithms
+  OUTDIR=results-classified
+  rm -fr $OUTDIR
+  mkdir $OUTDIR
+  ## Classify
+  (
+      cd $OUTDIR
+      find ../$INDIR -name "*.db.txt" -exec awk -f ../classify-additions.awk {} \;
+
+  )
+  ## Sort cryptarithms
+  find $OUTDIR -name '*.db.txt' -exec sort -u -o {} {} \;
+
+#+END_SRC
+
+
 
 * Analysis

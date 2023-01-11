@@ -13,6 +13,7 @@ import java.util.Deque;
 import java.util.function.Function;
 
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.exception.SolverException;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
@@ -26,11 +27,16 @@ public class CryptaModeler implements ICryptaModeler {
 
     @Override
     public CryptaModel model(final ICryptaNode cryptarithm, final CryptaConfig config) throws CryptaModelException {
-        final Model model = new Model("Cryptarithm");
-        final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
-        TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
-        modelerNodeConsumer.postConstraints();
-        return modelerNodeConsumer.buildCryptaModel();
+        try {
+            final Model model = new Model("Cryptarithm");
+            final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
+            TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
+            modelerNodeConsumer.postConstraints();
+            modelerNodeConsumer.configureSearch();
+            return modelerNodeConsumer.buildCryptaModel();
+        } catch (SolverException e) {
+            throw new CryptaModelException("Internal choco exception");
+        }
     }
 
 }
