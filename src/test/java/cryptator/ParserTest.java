@@ -422,8 +422,14 @@ public class ParserTest {
     }
 
     @Test(expected = CryptaParserException.class)
-    public void invalidSpaceTest() {
+    public void invalidSpaceTest1() {
         ICryptaNode parsed = parser.parse("send more = money");
+        System.out.println(TreeUtils.writePreorder(parsed));
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void invalidSpaceTest2() {
+        ICryptaNode parsed = parser.parse("send+more='1000 1'");
         System.out.println(TreeUtils.writePreorder(parsed));
     }
 
