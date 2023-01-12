@@ -12,7 +12,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Before;
@@ -38,6 +40,10 @@ final class CryptaSolvingTester {
     protected final ICryptaSolver solver;
     protected final ICryptaEvaluation eval = new CryptaEvaluation();
     protected CryptaConfig config = new CryptaConfig();
+
+    CryptaSolvingTester(final boolean useBignum) {
+        this(new CryptaSolver(useBignum));
+    }
 
     CryptaSolvingTester(final ICryptaSolver solver) {
         super();
@@ -87,11 +93,28 @@ final class CryptaSolvingTester {
     public void testNotUNIQUE(final String cryptarithm) throws CryptaModelException, CryptaSolverException {
         assertTrue("solution count " + cryptarithm, testSolve(cryptarithm, true) > 1);
     }
+
+    public void testResource(String resourcePath)
+            throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        final InputStream in = getClass().getClassLoader().getResourceAsStream(resourcePath);
+        final Scanner s = new Scanner(in);
+        try {
+            // s.skip("\\s*#.*"); // not working
+            while (s.hasNextLine()) {
+                final String line = s.nextLine();
+                if (!line.matches("\\s*#.*")) {
+                    testUNIQUE(line);
+                }
+            }
+        } finally {
+            s.close();
+        }
+    }
 }
 
 public class SolverTest {
 
-    private CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(false));
+    private CryptaSolvingTester t = new CryptaSolvingTester(false);
 
     public SolverTest() {
     }
@@ -735,4 +758,10 @@ public class SolverTest {
         var cryptarithm = "W='4'";
         t.testUNIQUE(cryptarithm);
     }
+
+    @Test
+    public void testSillke() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testResource("crosswords-sillke.db.txt");
+    }
+
 }
