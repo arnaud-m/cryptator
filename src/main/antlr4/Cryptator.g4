@@ -60,7 +60,7 @@ sub : '-';
 
 // Lexer Rules
 
-ERROR : (SYMBOL|DIGIT)+ WHITESPACE (SYMBOL|DIGIT)+ {System.out.println("error");//throw new RecognitionException("error", null, null, null);
+ERROR : (SYMBOL|DIGIT)+ WHITESPACE (SYMBOL|DIGIT)+ { //System.out.println("error");//throw new RecognitionException("error", null, null, null);
 };
 
 COMPARATOR : '=' | '!=' | '<' | '>' | '<=' | '>=';
