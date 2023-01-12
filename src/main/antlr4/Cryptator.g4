@@ -43,6 +43,8 @@ expression returns [ICryptaNode node] //create recursively the tree of expressio
             | e1=expression divORmul e2=expression {$node=new CryptaNode($divORmul.text, $e1.node, $e2.node);}
             | e1=expression addORsub e2=expression {$node=new CryptaNode($addORsub.text, $e1.node, $e2.node);};
 
+
+
 word :  //additional token to simplify the passage in parameter
     (SYMBOL|DIGIT)+;
 
@@ -58,12 +60,16 @@ sub : '-';
 
 // Lexer Rules
 
+ERROR : (SYMBOL|DIGIT)+ WHITESPACE (SYMBOL|DIGIT)+ {System.out.println("error");//throw new RecognitionException("error", null, null, null);
+};
+
 COMPARATOR : '=' | '!=' | '<' | '>' | '<=' | '>=';
 
 SYMBOL : [a-zA-Z\u0080-\uFFFF] {};
 
 DIGIT : [0-9] {};
 
-WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
-
 AND : ';' | '&&';
+
+
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
