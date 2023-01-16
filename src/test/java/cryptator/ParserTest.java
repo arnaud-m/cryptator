@@ -8,15 +8,12 @@
  */
 package cryptator;
 
-import static cryptator.TreeTest.testInorder;
-import static cryptator.TreeTest.testPostorder;
-import static cryptator.TreeTest.testPreorder;
-
-import org.junit.Test;
-
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
+import org.junit.Test;
+
+import static cryptator.TreeTest.*;
 
 public class ParserTest {
 
@@ -123,6 +120,31 @@ public class ParserTest {
     @Test(expected = CryptaParserException.class)
     public void testParserError7() throws CryptaParserException {
         parser.parse("[send + more] >= money");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserError8() throws CryptaParserException {
+        parser.parse("  send more = money");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserError9() throws CryptaParserException {
+        parser.parse("  send     more = money");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserError10() {
+        parser.parse("send+more='1000 1'");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserError11() {
+        parser.parse("send+more=\"1000 1\"");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserError12() {
+        parser.parse("send + more = '1000' money");
     }
 
     @Test
@@ -244,6 +266,16 @@ public class ParserTest {
     @Test(expected = CryptaParserException.class)
     public void testParserIntegerError2() throws CryptaParserException {
         parser.parse("send + more >= money; 1 + '12a45' = 3");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError3() throws CryptaParserException {
+        parser.parse("1000 1=   2");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError4() throws CryptaParserException {
+        parser.parse("10aa00 1zx=   2");
     }
 
     @Test
