@@ -13,12 +13,11 @@ import org.junit.Test;
 
 import cryptator.parser.CryptaParserException;
 import cryptator.solver.CryptaModelException;
-import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
 
 public class BignumTest {
 
-    private final CryptaSolvingTester t = new CryptaSolvingTester(new CryptaSolver(true));
+    private final CryptaSolvingTester t = new CryptaSolvingTester(true);
 
     public BignumTest() {
     }
