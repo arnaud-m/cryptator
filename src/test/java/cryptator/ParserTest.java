@@ -142,6 +142,11 @@ public class ParserTest {
         parser.parse("send+more=\"1000 1\"");
     }
 
+    @Test(expected = CryptaParserException.class)
+    public void testParserError12() {
+        parser.parse("send + more = '1000' money");
+    }
+
     @Test
     public void testParserAND() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=money; d+e>=y");
