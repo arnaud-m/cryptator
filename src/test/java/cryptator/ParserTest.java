@@ -125,6 +125,16 @@ public class ParserTest {
         parser.parse("[send + more] >= money");
     }
 
+    @Test(expected = CryptaParserException.class)
+    public void testParserError8() throws CryptaParserException {
+        parser.parse("  send more = money");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserError9() throws CryptaParserException {
+        parser.parse("  send     more = money");
+    }
+
     @Test
     public void testParserAND() throws CryptaParserException {
         final ICryptaNode node = parser.parse("send+more=money; d+e>=y");
@@ -244,6 +254,16 @@ public class ParserTest {
     @Test(expected = CryptaParserException.class)
     public void testParserIntegerError2() throws CryptaParserException {
         parser.parse("send + more >= money; 1 + '12a45' = 3");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError3() throws CryptaParserException {
+        parser.parse("1000 1=   2");
+    }
+
+    @Test(expected = CryptaParserException.class)
+    public void testParserIntegerError4() throws CryptaParserException {
+        parser.parse("10aa00 1zx=   2");
     }
 
     @Test
