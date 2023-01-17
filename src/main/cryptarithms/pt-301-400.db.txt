@@ -1,0 +1,7 @@
+dois + seis + onze + doze + treze + dezoito + trezentosedezoito = trezentoseoitenta
+dois + sete + doze + treze + dezoito + trezentosedezoito = trezentosesetenta
+seis + sete + oito + dez + treze + dezoito + trezentosedezoito = trezentoseoitenta
+tres + seis + sete + oito + dez + dezoito + trezentosedezoito = trezentosesetenta
+zero + dois + sete + doze + treze + dezoito + trezentosedezoito = trezentosesetenta
+zero + dois + tres + sete + dez + doze + dezoito + trezentosedezoito = trezentosesetenta
+zero + tres + seis + trezentosedois = trezentoseonze

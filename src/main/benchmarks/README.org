@@ -114,6 +114,13 @@ exit $?
   generateDoublyTrue 401 500
  #+END_SRC
 
+
+Interrupted processes
+  - pt-301-400
+  - el-301-400
+  - ro-301-400
+  - el-401-500
+
 *** Enumerate all cryptarithms
 
 The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (around 110K candidates).
@@ -155,7 +162,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    (
        cd samples
        pwd
-       ../../R/sample-words.R -n 5 -w 75 --minlen 2 --maxlen 6  ../../words/liste.de.mots.francais.frgut.txt
+       ../../R/sample-words.R -n 2 -w 25 --minlen 12 --maxlen 16  ../../words/liste.de.mots.francais.frgut.txt
    )
  #+END_SRC
 
@@ -167,9 +174,9 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
         done
    }
 
-   min=21
-   step=5
-   max=40
+   min=4
+   step=2
+   max=17
    while [ $min -lt $max ] ; do
        generateMaxLong $min $((min+step-1))
        min=$((min+step))
@@ -327,7 +334,7 @@ Change the file extension accordingly.
 #+BEGIN_SRC sh
   OUTDIR=results-classified
   TEMPFILE=`mktemp`
-  wc -l $OUTDIR/* | while read LINECOUNT DBFILE ; do
+  wc -l $OUTDIR/* | head -n -1 | while read LINECOUNT DBFILE ; do
       if [ $LINECOUNT -gt 1000 ] ; then
       head -n 1000 $DBFILE > $TEMPFILE
       mv $TEMPFILE $DBFILE
@@ -342,7 +349,7 @@ Change the file extension accordingly.
 
 #+BEGIN_SRC R
 
-  dbfiles <- list.files("../cryptarithms/", full.names=TRUE)
+  dbfiles <- list.files(c("../cryptarithms", "results-classified"), full.names=TRUE)
   cryptarithms <- unlist(sapply(dbfiles, readLines))
   cryptarithms <- subset(cryptarithms, nchar(cryptarithms) > 0)
   operands <- strsplit(cryptarithms, "[ +=]+")
@@ -354,9 +361,11 @@ Change the file extension accordingly.
   }
 
   features <- as.data.frame(t(sapply(operands, ExtractFeatures)))
+  cat(nrow(features), "cryptarithms in database\n")
   summary(features)
 
-
+  library(dplyr)
+  library(ggplot2)
   x <- features %>% count(words, maxLen)
   x$n <- log10(x$n)
   ggplot(x, aes(words, maxLen, fill= n)) +
