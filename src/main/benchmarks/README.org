@@ -108,6 +108,12 @@ exit $?
 
 ** Configure instances
 
+*** Enumerate Doubly True
+
+#+BEGIN_SRC sh
+  generateDoublyTrue 401 500
+ #+END_SRC
+
 *** Enumerate all cryptarithms
 
 The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (around 110K candidates).
@@ -119,6 +125,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
       echo $PATHNAME > $INSTANCE
   done
  #+END_SRC
+
 
 *** Enumerate the longest cryptarithms
 
@@ -138,14 +145,57 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    generateLong 16 capitales.txt
  #+END_SRC
 
+
+
+*** Enumerate samples
+
+ #+BEGIN_SRC sh
+   rm -fr samples
+   mkdir samples
+   (
+       cd samples
+       pwd
+       ../../R/sample-words.R -n 5 -w 75 --minlen 2 --maxlen 6  ../../words/liste.de.mots.francais.frgut.txt
+   )
+ #+END_SRC
+
+ #+BEGIN_SRC sh
+   function generateMaxLong() {
+       find samples/ -type f -print | while read PATHNAME ; do
+           INSTANCE="instances/"`basename -s .txt $PATHNAME`-$1-$2.dat
+           echo -minop $1 -maxop $2 $PATHNAME > $INSTANCE
+        done
+   }
+
+   min=21
+   step=5
+   max=40
+   while [ $min -lt $max ] ; do
+       generateMaxLong $min $((min+step-1))
+       min=$((min+step))
+   done
+
+
+ #+END_SRC
+
 *** Generate languages
 
  #+BEGIN_SRC R :results output file :file "words-10-2.txt"
    base <- 10
    x <- head(letters, base)
-   xy <- expand.grid(x = x, y = x)
+   xy <- expand.grid(x = head(x, 2), y = x)
    cat(paste(x, '\n', collapse = ''))
    cat(paste(xy$x, xy$y, '\n', sep = "", collapse = ''))
+#+END_SRC
+
+ #+BEGIN_SRC R :results output file :file "words-10-2.txt"
+   base <- 10
+   x <- head(letters, base)
+   xy <-  expand.grid(x = x,  y = x)
+   xyz <- expand.grid(x = head(x, 1), y = tail(x, 2), z = x)
+   cat(paste(x, '\n', collapse = ''))
+   cat(paste(xy$x, xy$y, '\n', sep = "", collapse = ''))
+   cat(paste(xyz$x, xyz$y, xyz$z,'\n', sep = "", collapse = ''))
 #+END_SRC
 
 
@@ -194,7 +244,6 @@ Select instance files in the directory ~instances-solve~.
    echo $ARGS -l TRUE -search 1 > algorithms/BIGNUM-1.dat
    echo $ARGS -l FALSE -h FALSE -search 1 > algorithms/SCALAR-1.dat
    echo $ARGS -l FALSE -h TRUE -search 1 > algorithms/HORNER-1.dat
-
  #+END_SRC
 
 
@@ -260,8 +309,8 @@ Change the file extension accordingly.
 #+BEGIN_SRC sh
   INDIR=results-cryptarithms
   OUTDIR=results-classified
-  rm -fr $OUTDIR
-  mkdir $OUTDIR
+#  rm -fr $OUTDIR
+#  mkdir $OUTDIR
   ## Classify
   (
       cd $OUTDIR
@@ -275,4 +324,42 @@ Change the file extension accordingly.
 
 
 
+#+BEGIN_SRC sh
+  OUTDIR=results-classified
+  TEMPFILE=`mktemp`
+  wc -l $OUTDIR/* | while read LINECOUNT DBFILE ; do
+      if [ $LINECOUNT -gt 1000 ] ; then
+      head -n 1000 $DBFILE > $TEMPFILE
+      mv $TEMPFILE $DBFILE
+      fi
+    done
+
+#+END_SRC
+
+
+
 * Analysis
+
+#+BEGIN_SRC R
+
+  dbfiles <- list.files("../cryptarithms/", full.names=TRUE)
+  cryptarithms <- unlist(sapply(dbfiles, readLines))
+  cryptarithms <- subset(cryptarithms, nchar(cryptarithms) > 0)
+  operands <- strsplit(cryptarithms, "[ +=]+")
+
+  ExtractFeatures <- function(x) {
+    y <- nchar(x)
+    r <- range(y)
+    c( words = length(x), meanLen = mean(y), medianLen = median(y), minLen = r[1], maxLen = r[2])
+  }
+
+  features <- as.data.frame(t(sapply(operands, ExtractFeatures)))
+  summary(features)
+
+
+  x <- features %>% count(words, maxLen)
+  x$n <- log10(x$n)
+  ggplot(x, aes(words, maxLen, fill= n)) +
+  geom_tile()
+
+#+END_SRC
