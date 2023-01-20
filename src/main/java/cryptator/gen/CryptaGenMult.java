@@ -51,6 +51,9 @@ class CryptaMemberMult extends CryptaMemberPair {
         minL.le(sumR).post();
         minR.le(sumL).post();
 
+        // FIXME sumL.le(8).post();
+        // FIXME sumR.le(8).post();
+
     }
 
 }

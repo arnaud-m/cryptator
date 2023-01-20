@@ -24,20 +24,22 @@ public class MultTest {
         final CryptaGenMult m = new CryptaGenMult(words);
         m.buildModel();
         m.postMinLeftCountConstraints(10);
-        if (isDoublyTrue)
+        if (isDoublyTrue) {
             m.postDoublyTrueConstraint(0);
+        }
         // System.out.println(m.getModel());
         // assertEquals(expectedSolutionCount,
         // m.getModel().getSolver().streamSolutions().count());
         // Solution sol = new Solution(m.getModel());
-        m.getSolver().streamSolutions().forEach(s -> {
-            // System.out.println(m);
-            // sol.record();
-            // System.out.println(sol);
-        });
+//        m.getSolver().streamSolutions().forEach(s -> {
+//            System.out.println(m);
+//            // sol.record();
+//            // System.out.println(sol);
+//        });
         // m.getSolver().printStatistics();
-        assertEquals(expectedSolutionCount, m.getSolver().getSolutionCount());
-        // m.getModel().getSolver().streamSolutions().count());
+        // assertEquals(expectedSolutionCount, m.getSolver().getSolutionCount());
+        assertEquals(expectedSolutionCount, m.getSolver().streamSolutions().count());
+
     }
 
     @Test
