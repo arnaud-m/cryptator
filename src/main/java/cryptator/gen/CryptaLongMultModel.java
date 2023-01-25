@@ -8,6 +8,7 @@
  */
 package cryptator.gen;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.chocosolver.solver.Model;
@@ -49,10 +50,10 @@ public class CryptaLongMultModel implements IChocoModel {
 
     private int maxProductLength = 5;
 
-    public CryptaLongMultModel(Model model, final int[] lengths) {
+    public CryptaLongMultModel(Model model, final int[] lengths, final int[] cards) {
         this.model = model;
         this.lengths = lengths;
-        this.cards = lengths;
+        this.cards = cards;
         final int n = lengths.length;
         multiplicand = model.intVar("multiplicand", 0, n - 1);
         multiplier = model.intVar("multiplier", 0, n - 1);
@@ -142,16 +143,23 @@ public class CryptaLongMultModel implements IChocoModel {
     }
 
     private void toString(StringBuilder b, IntVar idx, IntVar len) {
-        b.append(idx.getValue()).append("(").append(len.getValue()).append(") ");
+        toString(b, idx, len, Optional.empty());
+    }
+
+    private void toString(StringBuilder b, IntVar idx, IntVar len, Optional<IntVar> card) {
+        b.append(idx.getValue()).append("(").append(len.getValue());
+        if (card.isPresent())
+            b.append("-").append(card.get().getValue());
+        b.append(") ");
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
         toString(b, multiplicand, mdLength);
-        toString(b, multiplier, mrLength);
+        toString(b, multiplier, mrLength, Optional.of(mrCard));
         b.append("| ");
-        int i = mrLength.getValue();
+        int i = mrCard.getValue();
         while (i > 0) {
             i--;
             toString(b, terms[i], termLengths[i]);

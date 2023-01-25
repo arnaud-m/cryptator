@@ -18,7 +18,11 @@ import cryptator.gen.CryptaLongMultModel;
 public class LongMultModelTest {
 
     public void testLongMultModel(int expectedSolutionCount, int[] lengths) {
-        CryptaLongMultModel m = new CryptaLongMultModel(new Model(), lengths);
+        testLongMultModel(expectedSolutionCount, lengths, lengths);
+    }
+
+    public void testLongMultModel(int expectedSolutionCount, int[] lengths, int[] cards) {
+        CryptaLongMultModel m = new CryptaLongMultModel(new Model(), lengths, cards);
         m.buildModel();
         Assert.assertEquals(expectedSolutionCount, m.getSolver().streamSolutions().count());
 //        m.getSolver().streamSolutions().forEach(s -> {
@@ -64,6 +68,11 @@ public class LongMultModelTest {
     @Test(expected = InvalidSolutionException.class)
     public void testLongMultModel7() {
         testLongMultModel(-1, new int[] {4, 3, 3, 4, 7});
+    }
+
+    @Test
+    public void testLongMultModel8() {
+        testLongMultModel(13, new int[] {2, 3, 3, 4}, new int[] {1, 2, 2, 1});
     }
 
 }
