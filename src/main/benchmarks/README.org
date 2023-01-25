@@ -349,7 +349,7 @@ Change the file extension accordingly.
 
 #+BEGIN_SRC R
 
-  dbfiles <- list.files(c("../cryptarithms", "results-classified"), full.names=TRUE)
+  dbfiles <- list.files(c("../cryptarithms", "results-classified"), pattern = "*.db.txt", full.names=TRUE)
   cryptarithms <- unlist(sapply(dbfiles, readLines))
   cryptarithms <- subset(cryptarithms, nchar(cryptarithms) > 0)
   operands <- strsplit(cryptarithms, "[ +=]+")
@@ -357,7 +357,8 @@ Change the file extension accordingly.
   ExtractFeatures <- function(x) {
     y <- nchar(x)
     r <- range(y)
-    c( words = length(x), meanLen = mean(y), medianLen = median(y), minLen = r[1], maxLen = r[2])
+    z <- length(unique(unlist(strsplit(x, ""))))
+    c( words = length(x), letters = sum(y), symbols = z, meanLen = mean(y), medianLen = median(y), minLen = r[1], maxLen = r[2], diffLen = r[2] - r[1])
   }
 
   features <- as.data.frame(t(sapply(operands, ExtractFeatures)))
