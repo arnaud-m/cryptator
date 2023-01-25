@@ -67,12 +67,44 @@ public class CryptaLongMultModel implements IChocoModel {
         prLength = model.intVar("prLen", 0, maxLength);
         termLengths = model.intVarArray("termLen", terms.length, 0, maxLength);
         mrCard = model.intVar("mrCard", 0, maxLength);
-
     }
 
     @Override
     public Model getModel() {
         return model;
+    }
+
+    public int getMultiplicandIndex() {
+        return multiplicand.getValue();
+    }
+
+    public int getMultiplierIndex() {
+        return multiplier.getValue();
+    }
+
+    public int getProductIndex() {
+        return product.getValue();
+    }
+
+    public IntVar getProductLength() {
+        return prLength;
+    }
+
+    public IntVar getProduct() {
+        return product;
+    }
+
+    public IntVar[] getWordIndices() {
+        return ArrayUtils.append(ArrayUtils.toArray(multiplicand, multiplier, product), terms);
+    }
+
+    public int[] getTermIndices() {
+        int n = mrCard.getValue();
+        int[] indices = new int[n];
+        for (int i = 0; i < indices.length; i++) {
+            indices[i] = terms[i].getValue();
+        }
+        return indices;
     }
 
     private static void ge1(ArExpression e1, ArExpression e2) {
