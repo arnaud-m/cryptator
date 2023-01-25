@@ -79,6 +79,23 @@ public class CryptaListGenerator implements ICryptaGenerator {
         return gen;
     }
 
+    ICryptaGenSolver buildMultiplicationSolver() {
+        final CryptaGenMult gen = new CryptaGenMult(words.getWords());
+        gen.buildModel();
+        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
+        gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
+        if (!config.isLightPropagation()) {
+            gen.postMinLeftCountConstraints(config.getArithmeticBase());
+        }
+        if (words.hasRightMember()) {
+            gen.postFixedRightMemberConstraint();
+        }
+        if (words.isDoublyTrue()) {
+            gen.postDoublyTrueConstraint(words.getLB());
+        }
+        return gen;
+    }
+
     ICryptaGenSolver buildCrosswordSolver() {
         final CryptaGenCrossword gen = new CryptaGenCrossword(config.getGridSize(), words.getWords(),
                 config.isLightModel());
@@ -92,7 +109,11 @@ public class CryptaListGenerator implements ICryptaGenerator {
     }
 
     private ICryptaGenSolver buildModel() {
-        return config.getGridSize() > 0 ? buildCrosswordSolver() : buildAdditionSolver();
+        if (config.getGridSize() > 0) {
+            return buildCrosswordSolver();
+        } else {
+            return config.isMultModel() ? buildMultiplicationSolver() : buildAdditionSolver();
+        }
     }
 
     private Consumer<ICryptaNode> buildConsumer(final IChocoModel gen,

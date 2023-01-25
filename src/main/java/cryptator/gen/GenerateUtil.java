@@ -63,4 +63,12 @@ public class GenerateUtil {
         return reduceOperation(CryptaOperator.EQ, recordAddition(left), recordAddition(right));
     }
 
+    public static ICryptaNode recordMultiplication(final ICryptaGenModel model) {
+        return reduceOperation(CryptaOperator.MUL, leafStream(model));
+    }
+
+    public static ICryptaNode recordMultiplication(final ICryptaGenModel left, final ICryptaGenModel right) {
+        return reduceOperation(CryptaOperator.EQ, recordMultiplication(left), recordMultiplication(right));
+    }
+
 }

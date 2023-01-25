@@ -20,7 +20,13 @@ class CryptaMemberPair implements ICryptaGenSolver {
 
     protected final CryptaMemberLen left;
 
-    protected final CryptaMemberElt right;
+    protected final AbstractCryptaGenModel right;
+
+    protected CryptaMemberPair(CryptaMemberLen left, CryptaMemberLen right) {
+        super();
+        this.left = left;
+        this.right = right;
+    }
 
     public CryptaMemberPair(final Model model, final String[] words, final String prefix, boolean useMemberLen) {
         super();
@@ -49,7 +55,7 @@ class CryptaMemberPair implements ICryptaGenSolver {
         return left;
     }
 
-    public final CryptaMemberElt getRight() {
+    public final AbstractCryptaGenModel getRight() {
         return right;
     }
 
@@ -59,8 +65,21 @@ class CryptaMemberPair implements ICryptaGenSolver {
         postSymBreakLengthConstraint();
     }
 
-    private void postSymBreakLengthConstraint() {
+    protected void postSymBreakLengthConstraint() {
         left.getMaxLength().le(right.getMaxLength()).post();
+    }
+
+    protected final void postDisjunctionConstraints(final BoolVar[] v) {
+        final BoolVar[] l = getLeft().getWordVars();
+        final BoolVar[] r = getRight().getWordVars();
+        for (int i = 0; i < v.length; i++) {
+            l[i].add(r[i]).eq(v[i]).post();
+        }
+    }
+
+    protected void postMaxLengthConstraint(final IntVar maxLen) {
+        getModel().max(maxLen, getLeft().getMaxLength(), getRight().getMaxLength()).post();
+
     }
 
     public final void postHeavyConstraints(final int base) {
@@ -68,7 +87,7 @@ class CryptaMemberPair implements ICryptaGenSolver {
     }
 
     @Override
-    public final ICryptaNode recordCryptarithm() {
+    public ICryptaNode recordCryptarithm() {
         return GenerateUtil.recordAddition(left, right);
     }
 
@@ -91,16 +110,12 @@ public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGe
 
     @Override
     protected void postMaxLengthConstraints() {
-        model.max(maxLength, addition.getLeft().getMaxLength(), addition.getRight().getMaxLength()).post();
+        addition.postMaxLengthConstraint(maxLength);
     }
 
     @Override
     protected void postWordConstraints() {
-        final BoolVar[] l = addition.getLeft().getWordVars();
-        final BoolVar[] r = addition.getRight().getWordVars();
-        for (int i = 0; i < vwords.length; i++) {
-            l[i].add(r[i]).eq(vwords[i]).post();
-        }
+        addition.postDisjunctionConstraints(vwords);
     }
 
     public void postMinLeftCountConstraints(final int base) {

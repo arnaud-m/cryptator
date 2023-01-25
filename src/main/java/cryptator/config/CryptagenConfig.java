@@ -19,6 +19,9 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "-grid", usage = "grid size for crossword cryptarithm)")
     private int gridSize = 0;
 
+    @Option(name = "-mult", handler = ExplicitBooleanOptionHandler.class, usage = "generate multiplication cryptarithms")
+    private boolean multModel = false;
+
     @Option(name = "-ctry", usage = "country code for doubly true cryptarithms)")
     private String countryCode = "EN";
 
@@ -86,6 +89,14 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
     public final void setLightPropagation(final boolean lightPropagation) {
         this.lightPropagation = lightPropagation;
+    }
+
+    public final boolean isMultModel() {
+        return multModel;
+    }
+
+    public final void setMultModel(boolean multModel) {
+        this.multModel = multModel;
     }
 
     @Override

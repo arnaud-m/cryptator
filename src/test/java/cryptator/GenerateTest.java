@@ -59,13 +59,13 @@ public class GenerateTest {
 
     private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
             final WordArray wordArray, int gridSize) throws CryptaModelException {
-        configure(0, false, false);
+        configure(gridSize, false, false);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
-        configure(0, false, true);
+        configure(gridSize, false, true);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
-        configure(0, true, false);
+        configure(gridSize, true, false);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
-        configure(0, false, true);
+        configure(gridSize, false, true);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
     }
 
@@ -75,6 +75,16 @@ public class GenerateTest {
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
         configure(gridSize, true, false);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
+    }
+
+    private void testMultGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
+        JULogUtil.configureSilentLoggers();
+        config.setMultModel(true);
+        configure(0, false, false);
+        testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
+        configure(0, false, true);
+        testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
+        config.setMultModel(false);
     }
 
     @Test
@@ -147,6 +157,39 @@ public class GenerateTest {
     public void testCrossword3() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("HJ", "AD", "DF", "BG", "EC", "DF", "AC", "GE", "HEK"), null);
         testHeavyGenerate(2, OptionalInt.empty(), words, 3);
+    }
+
+    @Test
+    public void testMult1() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("mad", "man", "asylum"), null);
+        testMultGenerate(0, words);
+    }
+
+    @Test
+    public void testMult2() throws CryptaModelException {
+        config.setArithmeticBase(9);
+        WordArray words = new WordArray(Arrays.asList("alfred", "e", "neuman"), null);
+        testMultGenerate(2, words);
+        config.setArithmeticBase(10);
+    }
+
+    @Test
+    public void testMult3() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("nora", "l", "aron"), null);
+        testMultGenerate(2, words);
+    }
+
+    @Test
+    public void testMult4() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("ba", "cba", "dcba"), null);
+        testMultGenerate(1, words);
+    }
+
+    @Test
+    public void testMult5() throws CryptaModelException {
+        // FIXME should be 2
+        WordArray words = new WordArray(Arrays.asList("north", "south", "east", "west"), null);
+        testMultGenerate(4, words);
     }
 
 }
