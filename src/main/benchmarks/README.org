@@ -162,7 +162,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    (
        cd samples
        pwd
-       ../../R/sample-words.R -n 2 -w 25 --minlen 12 --maxlen 16  ../../words/liste.de.mots.francais.frgut.txt
+       ../../R/sample-words.R -n 5 -w 80 --minlen 2 --maxlen 7  ../../words/liste.de.mots.francais.frgut.txt
    )
  #+END_SRC
 
@@ -174,15 +174,13 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
         done
    }
 
-   min=4
+   min=35
    step=2
-   max=17
+   max=46
    while [ $min -lt $max ] ; do
        generateMaxLong $min $((min+step-1))
        min=$((min+step))
    done
-
-
  #+END_SRC
 
 *** Generate languages
@@ -205,6 +203,28 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    cat(paste(xyz$x, xyz$y, xyz$z,'\n', sep = "", collapse = ''))
 #+END_SRC
 
+*** Crossword
+
+ #+BEGIN_SRC sh
+   rm -fr samples
+   mkdir samples
+   (
+       cd samples
+       pwd
+       ../../R/sample-words.R -n 60 -w 12 --minlen 2 --maxlen 3  ../../words/liste.de.mots.francais.frgut.txt
+   )
+ #+END_SRC
+
+ #+BEGIN_SRC sh
+   function generateCrossword() {
+       find samples/ -type f -print | while read PATHNAME ; do
+           INSTANCE="instances/"`basename -s .txt $PATHNAME`-$1.dat
+           echo -grid $1 $PATHNAME > $INSTANCE
+        done
+   }
+
+   generateCrossword 3
+ #+END_SRC
 
 ** Configure the algorithm
 
