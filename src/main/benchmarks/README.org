@@ -211,7 +211,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    (
        cd samples
        pwd
-       ../../R/sample-words.R -n 60 -w 12 --minlen 2 --maxlen 3  ../../words/liste.de.mots.francais.frgut.txt
+       ../../R/sample-words.R -n 60 -w 20 --minlen 2 --maxlen 3  ../../words/liste.de.mots.francais.frgut.txt
    )
  #+END_SRC
 
@@ -235,30 +235,60 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 * Solve
 ** Create the solver
+*** Compare Models
+
 
 #+BEGIN_SRC sh :tangle solver.sh
   JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
   MAINCLASS=cryptator.Cryptator
-
   MAINARGS=`cat $1 | xargs`
-
   ## exclude cryptarithm with long words
-  ## grep -wvE '\w{10,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+  grep -wvE '\w{9,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+  exit $?
+ #+END_SRC
 
-  ## exclude cryptarithm without long words
-  ## grep -wE '\w{10,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+*** Compare Solvers
 
+#+BEGIN_SRC sh :tangle solver.sh
+  JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
+  MAINCLASS=cryptator.Cryptator
+  MAINARGS=`cat $1 | xargs`
   ## Do not exclude anything
   sed 's/[[:space:]]//g'  $2 | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
+
   exit $?
+ #+END_SRC
+
+**** Crypt
+
+The very fast [[https://tamura70.gitlab.io/web-puzzle/cryptarithm/][crypt solver]] in C of Naoyuki Tamura.
+
+Postprocess the output of the crypt solver.
+#+BEGIN_SRC awk :tangle crypt.awk
+  #!/usr/bin/awk
+  {
+      if(NR % 3 == 2 && $_ !~ /Total time =/) {
+          printf "i%s\n",$_
+      } else if(NR % 3 == 1 && NR > 1) {
+          print "d NBSOLS",$1
+          print "d TIME",$3/1000
+      } else if(NR % 3 == 0) {
+          printf "s%s\n",$_
+      } else print $_
+  }
+ #+END_SRC
+
+ Encapsulate the solver for benchmarking
+#+BEGIN_SRC sh :tangle solver.sh
+  #!/bin/sh
+  ./crypt/crypt < $2 | awk -f crypt.awk
  #+END_SRC
 
 ** Configure instances
 
-Select instance files in the directory ~instances-solve~.
-
- - Filename prefixed by ~long~ requires the bignum model.
- - Filename prefixed by ~short~ are accepted by the scalar model.
+ #+BEGIN_SRC sh
+   ln -s ../cryptarithms instances
+ #+END_SRC
 
 ** Configure the algorithm
 
@@ -272,6 +302,7 @@ Select instance files in the directory ~instances-solve~.
    echo $ARGS -l FALSE -h FALSE -search 1 > algorithms/SCALAR-1.dat
    echo $ARGS -l FALSE -h TRUE -search 1 > algorithms/HORNER-1.dat
  #+END_SRC
+
 
 
 * Testing
