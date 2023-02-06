@@ -1,0 +1,11 @@
+ara + arasa + arisa + asse + cacher + cassa + cirer + cochez + cria + cric + essor + gags + garai + gazer + geais + grec + haro + race + raie + recez + saisi + sas + seoir + shah + sise + soi + sore + zoos = scorie
+ara + arasa + arisa + asse + cacher + cassa + cirer + cochez + cria + cric + essor + gags + garai + gazer + geais + grec + haro + race + recez + sacs + saisi + sas + seoir + shah + sise + soi + sore + zoos = scorie
+ara + arasa + arisa + asse + cacher + cassa + cirer + cria + cric + gags + garai + gazer + geais + gisiez + grec + haro + race + raie + recez + sacs + saisi + sas + seoir + shah + sise + soi + sore + zoos = serrez
+ara + arasa + arisa + asse + cacher + cassa + cria + cric + essor + gags + garai + gazer + geais + gisiez + grec + haro + race + raie + recez + sacs + saisi + sas + seoir + shah + sise + soi + sore + zoos = serrez
+ara + arasa + arisa + asse + cassa + cirer + cochez + cria + cric + essor + gags + garai + gazer + geais + gisiez + grec + haro + race + raie + recez + sacs + saisi + sas + shah + sise + soi + sore + zoos = scorie
+ara + arasa + arisa + asse + cassa + cirer + cochez + cria + cric + gags + garai + gazer + geais + gisiez + grec + haro + race + raie + recez + sacs + saisi + sas + seoir + shah + sise + soi + sore + zoos = scorie
+ara + arasa + arisa + asse + cassa + cirer + cria + cric + essor + essora + gags + garai + gazer + geais + grec + haro + race + raie + recez + sacs + saisi + sas + seoir + shah + sise + soi + sore + zoos = cacher
+ara + arasa + arisa + asse + cassa + cirer + cria + cric + essor + gags + garai + gazer + geais + gisiez + grec + haro + hoirie + race + raie + recez + sacs + sas + seoir + shah + sise + soi + sore + zoos = scorie
+ara + arasa + arisa + asse + cassa + cirer + cria + cric + essor + gags + garai + gazer + geais + gisiez + grec + haro + race + raie + recez + sacs + saisi + sas + seoir + shah + sise + soi + sore + zoos = cacher
+ara + arasa + arisa + asse + cassa + cirer + cria + cric + essor + gags + garai + gazer + geais + grec + haro + hoirie + race + raie + recez + sacs + saisi + sas + seoir + shah + sise + soi + sore + zoos = scorie
+ara + arisa + asse + cacher + cassa + cirer + cria + cric + essor + gags + garai + gazer + geais + gisiez + grec + haro + race + raie + recez + sacs + saisi + sas + seoir + shah + sise + soi + sore + zoos = scorie

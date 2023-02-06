@@ -1,0 +1,14 @@
+doler + drus + due + elle + eue + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + mordes + moule + rem + roide = essieu
+doler + drus + due + elle + eue + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + redis + rem + roide = rudoie
+doler + drus + due + elle + eue + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + redis + rem + rudoie = osides
+doler + drus + due + elle + eue + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + mordes + moule + redis + rem + roide = serres
+doler + drus + due + elle + eue + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moque + mordes + moule + redis + rem + roide = dilues
+doler + drus + due + elle + eue + iules + lemmes + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + mordes + moule + redis + rem + roide = dilues
+doler + drus + due + elle + eue + iules + lemmes + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + omises + redis + rem + roide = souris
+doler + drus + due + elle + eue + iules + lemmes + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + redis + rem + roide + rudoie = serres
+doler + drus + due + elle + eue + iules + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + omises + redis + rem + roide = serres
+doler + drus + due + elle + eue + iules + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + redis + rem + roide + rudoie = osides
+doler + drus + due + elle + eue + iules + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + mordes + moule + osides + redis + rem + roide = dilues
+doler + drus + due + elle + eue + iules + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + omises + osides + redis + rem + roide = rudoie
+doler + drus + due + elle + eue + iules + liure + lois + loure + lue + mess + mil + miles + moire + moque + mordes + moule + omises + osides + redis + rem + roide = essieu
+doler + drus + elle + eue + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + mordes + moule + redis + rem + roide = souris

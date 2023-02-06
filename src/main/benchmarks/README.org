@@ -366,14 +366,12 @@ Change the file extension accordingly.
 
 #+BEGIN_SRC sh
   INDIR=results-cryptarithms
-  OUTDIR=results-classified
-#  rm -fr $OUTDIR
-#  mkdir $OUTDIR
+  OUTDIR=../cryptarithms/samples
+
   ## Classify
   (
       cd $OUTDIR
       find ../$INDIR -name "*.db.txt" -exec awk -f ../classify-additions.awk {} \;
-
   )
   ## Sort cryptarithms
   find $OUTDIR -name '*.db.txt' -exec sort -u -o {} {} \;
@@ -383,7 +381,7 @@ Change the file extension accordingly.
 
 
 #+BEGIN_SRC sh
-  OUTDIR=results-classified
+  OUTDIR=../cryptarithms/samples
   TEMPFILE=`mktemp`
   wc -l $OUTDIR/* | head -n -1 | while read LINECOUNT DBFILE ; do
       if [ $LINECOUNT -gt 1000 ] ; then
@@ -399,8 +397,8 @@ Change the file extension accordingly.
 * Analysis
 
 #+BEGIN_SRC R
-
-  dbfiles <- list.files(c("../cryptarithms", "results-classified"), pattern = "*.db.txt", full.names=TRUE)
+  dbfiles <- list.files(c("../cryptarithms"), pattern = "*.db.txt", recursive = TRUE, full.names=TRUE)
+  dbfiles <- subset(dbfiles, !grepl("external-contributions", dbfiles))
   cryptarithms <- unlist(sapply(dbfiles, readLines))
   cryptarithms <- subset(cryptarithms, nchar(cryptarithms) > 0)
   operands <- strsplit(cryptarithms, "[ +=]+")

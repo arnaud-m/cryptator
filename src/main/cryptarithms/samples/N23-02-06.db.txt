@@ -1,0 +1,11 @@
+doler + drus + due + elle + eue + il + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + redis + rem + roide = mordes
+doler + drus + due + elle + eue + il + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + redis + rem + roide = osides
+doler + drus + due + elle + eue + il + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + redis + rem + roide = rudoie
+doler + drus + due + elle + eue + il + iules + lemmes + lisier + liure + lois + louer + lue + mess + mil + miles + moire + moque + mordes + moule + redis + rem + roide = serres
+doler + drus + due + elle + eue + il + iules + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + mordes + moule + redis + rem + roide = essieu
+doler + drus + due + elle + eue + il + iules + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + omises + osides + redis + rem = dilues
+doler + drus + due + elle + eue + il + iules + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + omises + redis + rem + roide = essieu
+doler + drus + due + elle + eue + il + iules + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + mordes + moule + redis + rem + roide + rudoie = lemmes
+doler + drus + due + elle + eue + il + iules + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + omises + redis + rem + roide + rudoie = serres
+doler + drus + due + elle + eue + il + iules + liure + lois + louer + loure + lue + mess + mil + miles + moire + mordes + moule + omises + osides + redis + rem + roide = essieu
+drus + due + elle + eue + il + iules + lemmes + lisier + liure + lois + louer + loure + lue + mess + mil + miles + moire + moque + moule + omises + redis + rem + roide = souris
