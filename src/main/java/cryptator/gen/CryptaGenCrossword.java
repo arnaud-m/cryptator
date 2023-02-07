@@ -105,15 +105,8 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
     }
 
     public void postSymbolSymmetryBreakingConstraints() {
-
         IntVar[] vars = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
-
-        for (int i = 1; i < vars.length; i++) {
-            vars[i - 1].ge(vars[i]).post();
-        }
-        // System.out.println(Arrays.toString(vars));
-        // FIXME model.decreasing(vars, 0).post(); // raise a choco internal error
-
+        model.decreasing(vars, 0).post();
     }
 
     @Override
