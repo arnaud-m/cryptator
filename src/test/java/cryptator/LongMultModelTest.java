@@ -9,7 +9,6 @@
 package cryptator;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.exception.InvalidSolutionException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,7 +47,7 @@ public class LongMultModelTest {
 
     // Choco exception fixed in the main branch.
     // Waiting for the next choco release ...
-    @Test(expected = InvalidSolutionException.class)
+    @Test // (expected = InvalidSolutionException.class)
     public void testLongMultModel4() {
         testLongMultModel(18, new int[] {2, 3, 3, 5});
     }
@@ -65,9 +64,9 @@ public class LongMultModelTest {
 
     // Choco exception fixed in the main branch.
     // Waiting for the next choco release ...
-    @Test(expected = InvalidSolutionException.class)
+    @Test // (expected = InvalidSolutionException.class)
     public void testLongMultModel7() {
-        testLongMultModel(-1, new int[] {4, 3, 3, 4, 7});
+        testLongMultModel(96, new int[] {4, 3, 3, 4, 7});
     }
 
     @Test

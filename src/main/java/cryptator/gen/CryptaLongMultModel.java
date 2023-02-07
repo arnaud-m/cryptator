@@ -22,6 +22,8 @@ import cryptator.specs.IChocoModel;
 
 public class CryptaLongMultModel implements IChocoModel {
 
+    private static final boolean USE_DECREASING = false;
+
     private final int[] cards;
 
     private final int[] lengths;
@@ -153,7 +155,15 @@ public class CryptaLongMultModel implements IChocoModel {
         for (int i = 0; i < terms.length; i++) {
             model.reifyXneC(terms[i], lengths.length, presences[i]);
         }
-        model.decreasing(presences, 0).post();
+
+        if (USE_DECREASING) {
+            // FIXME Waiting for Choco 4.10.11
+            model.decreasing(presences, 0).post();
+        } else {
+            for (int i = 1; i < presences.length; i++) {
+                presences[i - 1].ge(presences[i]).post();
+            }
+        }
     }
 
     private void postTermCountConstraints() {

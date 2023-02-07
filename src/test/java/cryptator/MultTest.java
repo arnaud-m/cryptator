@@ -10,7 +10,6 @@ package cryptator;
 
 import static org.junit.Assert.assertEquals;
 
-import org.chocosolver.solver.exception.InvalidSolutionException;
 import org.junit.Test;
 
 import cryptator.gen.CryptaGenLongMult;
@@ -93,10 +92,10 @@ public class MultTest {
         testGenLongMultModel(22, words);
     }
 
-    @Test(expected = InvalidSolutionException.class)
+    @Test // (expected = InvalidSolutionException.class)
     public void testLongMult2() {
         final String[] words = new String[] {"who", "is", "hobs", "hawi", "mosis"};
-        testGenLongMultModel(-1, words);
+        testGenLongMultModel(18, words);
     }
 
     @Test
