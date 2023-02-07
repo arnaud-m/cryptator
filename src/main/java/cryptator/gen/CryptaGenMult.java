@@ -10,7 +10,6 @@ package cryptator.gen;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
-import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.solver.AdaptiveSolver;
@@ -48,7 +47,6 @@ class CryptaMemberMult extends CryptaMemberPair {
         minL.le(sumR).post();
         minR.le(sumL).post();
 
-        // FIXME Should be posted in the light model too.
         final int thresh = AdaptiveSolver.computeThreshold(base) + 1;
         sumL.le(thresh).post();
         sumR.le(thresh).post();
@@ -74,6 +72,7 @@ public class CryptaGenMult extends AbstractCryptaListModel {
     @Override
     protected void postMaxLengthConstraints() {
         multiplication.postMaxLengthConstraint(maxLength);
+        // FIXME Remove: should not be stated like this and here
         maxLength.le(10).post();
     }
 
@@ -87,9 +86,7 @@ public class CryptaGenMult extends AbstractCryptaListModel {
     }
 
     public void postFixedRightMemberConstraints() {
-        final BoolVar[] vars = multiplication.getRight().getWordVars();
-        vars[vars.length - 1].eq(1).post();
-        multiplication.getRight().getWordCount().eq(1).post();
+        multiplication.postFixedRightMemberConstraints();
     }
 
     private int getDoublyCoeff(int i) {
@@ -126,8 +123,8 @@ public class CryptaGenMult extends AbstractCryptaListModel {
 
     @Override
     public void postPrecisionConstraints(int base) {
-        // TODO post precision constraints
-        System.err.println("Not yet implemented");
+        final int thresh = AdaptiveSolver.computeThreshold(base);
+        getMaxLength().le(thresh).post();
     }
 
     @Override

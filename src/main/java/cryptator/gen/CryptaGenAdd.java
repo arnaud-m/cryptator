@@ -86,6 +86,12 @@ class CryptaMemberPair implements ICryptaGenSolver {
         left.postLentghSumConstraints(right.getMaxLength(), base);
     }
 
+    public void postFixedRightMemberConstraints() {
+        final BoolVar[] vars = right.getWordVars();
+        vars[vars.length - 1].eq(1).post();
+        right.getWordCount().eq(1).post();
+    }
+
     @Override
     public ICryptaNode recordCryptarithm() {
         return GenerateUtil.recordAddition(left, right);
@@ -123,8 +129,7 @@ public class CryptaGenAdd extends AbstractCryptaListModel {
     }
 
     public void postFixedRightMemberConstraints() {
-        final BoolVar[] vars = addition.getRight().getWordVars();
-        vars[vars.length - 1].eq(1).post();
+        addition.postFixedRightMemberConstraints();
     }
 
     public void postDoublyTrueConstraints(final int lb) {
