@@ -82,13 +82,13 @@ public class CryptaListGenerator implements ICryptaGenerator {
         gen.postPrecisionConstraints(config.getArithmeticBase());
 
         if (!config.isLightPropagation()) {
-            gen.postMinLeftCountConstraints(config.getArithmeticBase());
+            gen.postHeavyConstraints(config.getArithmeticBase());
         }
         if (words.hasRightMember()) {
-            gen.postFixedRightMemberConstraint();
+            gen.postFixedRightMemberConstraints();
         }
         if (words.isDoublyTrue()) {
-            gen.postDoublyTrueConstraint(words.getLB());
+            gen.postDoublyTrueConstraints(words.getLB());
         }
         return gen;
     }

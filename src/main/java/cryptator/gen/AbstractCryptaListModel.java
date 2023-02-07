@@ -56,13 +56,13 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel imp
         postChannelingConstraints();
     }
 
-    public abstract void postFixedRightMemberConstraint();
+    public abstract void postFixedRightMemberConstraints();
 
-    public abstract void postDoublyTrueConstraint(final int lowerBound);
+    public abstract void postDoublyTrueConstraints(final int lowerBound);
 
     public abstract void postPrecisionConstraints(int base);
 
-    public abstract void postMinLeftCountConstraints(final int base);
+    public abstract void postHeavyConstraints(final int base);
 
     /**
      * Post a constraint over the maximum number of distinct symbols in the words.

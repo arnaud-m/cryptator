@@ -72,18 +72,18 @@ public class CryptaGenLongMult extends AbstractCryptaListModel implements ICrypt
         maxLength.eq(longMult.getProductLength()).post();
     }
 
-    public void postFixedRightMemberConstraint() {
+    public void postFixedRightMemberConstraints() {
         longMult.getProduct().eq(getN() - 1).post();
     }
 
     @Override
-    public void postDoublyTrueConstraint(int lowerBound) {
+    public void postDoublyTrueConstraints(int lowerBound) {
         // TODO post doubly true constraints for the long multiplication
         System.err.println("Not yet implemented");
     }
 
     @Override
-    public void postMinLeftCountConstraints(int base) {
+    public void postHeavyConstraints(int base) {
         // Nothing to do
     }
 

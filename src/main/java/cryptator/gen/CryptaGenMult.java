@@ -86,11 +86,11 @@ public class CryptaGenMult extends AbstractCryptaListModel implements ICryptaGen
         multiplication.postDisjunctionConstraints(vwords);
     }
 
-    public void postMinLeftCountConstraints(final int base) {
+    public void postHeavyConstraints(final int base) {
         multiplication.postMultHeavyConstraints(base);
     }
 
-    public void postFixedRightMemberConstraint() {
+    public void postFixedRightMemberConstraints() {
         final BoolVar[] vars = multiplication.getRight().getWordVars();
         vars[vars.length - 1].eq(1).post();
         multiplication.getRight().getWordCount().eq(1).post();
@@ -102,7 +102,7 @@ public class CryptaGenMult extends AbstractCryptaListModel implements ICryptaGen
 
     }
 
-    public void postDoublyTrueConstraint(final int lb) {
+    public void postDoublyTrueConstraints(final int lb) {
         final int n = getN();
         final IntVar sumL = model.intVar("L_SUMLOG", getDoublyCoeff(lb), getDoublyCoeff(n - 1));
         final IntVar sumR = model.intVar("R_SUMLOG", getDoublyCoeff(lb), getDoublyCoeff(n - 1));

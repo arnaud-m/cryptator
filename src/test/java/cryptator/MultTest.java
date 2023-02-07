@@ -24,9 +24,9 @@ public class MultTest {
     private void testMultModel(int expectedSolutionCount, String[] words, boolean isDoublyTrue) {
         final CryptaGenMult m = new CryptaGenMult(words);
         m.buildModel();
-        m.postMinLeftCountConstraints(10);
+        m.postHeavyConstraints(10);
         if (isDoublyTrue) {
-            m.postDoublyTrueConstraint(0);
+            m.postDoublyTrueConstraints(0);
         }
         // System.out.println(m.getModel());
         // Solution sol = new Solution(m.getModel());

@@ -118,16 +118,16 @@ public class CryptaGenAdd extends AbstractCryptaListModel implements ICryptaGenS
         addition.postDisjunctionConstraints(vwords);
     }
 
-    public void postMinLeftCountConstraints(final int base) {
+    public void postHeavyConstraints(final int base) {
         addition.postHeavyConstraints(base);
     }
 
-    public void postFixedRightMemberConstraint() {
+    public void postFixedRightMemberConstraints() {
         final BoolVar[] vars = addition.getRight().getWordVars();
         vars[vars.length - 1].eq(1).post();
     }
 
-    public void postDoublyTrueConstraint(final int lb) {
+    public void postDoublyTrueConstraints(final int lb) {
         final int n = getN();
         final IntVar sum = model.intVar("SUM", lb, n - 1);
 

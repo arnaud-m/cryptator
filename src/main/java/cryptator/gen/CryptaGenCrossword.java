@@ -95,19 +95,19 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
     }
 
     @Override
-    public void postFixedRightMemberConstraint() {
-        grid.getCell(n - 1, n - 1).eq(getN()).post();
+    public void postFixedRightMemberConstraints() {
+        grid.getCell(n - 1, n - 1).eq(getN() - 1).post();
     }
 
     @Override
-    public void postDoublyTrueConstraint(int lowerBound) {
+    public void postDoublyTrueConstraints(int lowerBound) {
         // TODO post doubly true constraints for the crossword
         System.err.println("Not yet implemented");
     }
 
     @Override
-    public void postMinLeftCountConstraints(int base) {
-        // Nothing to do
+    public void postHeavyConstraints(int base) {
+        Stream.of(additions).forEach(m -> m.postHeavyConstraints(base));
     }
 
     @Override
@@ -140,10 +140,6 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
     protected void postMaxLengthConstraints() {
         IntVar[] vars = Stream.of(additions).flatMap(CryptaCrossPair::maxLengthStream).toArray(i -> new IntVar[i]);
         model.max(getMaxLength(), vars).post();
-    }
-
-    public void postHeavyConstraints(final int base) {
-        Stream.of(additions).forEach(m -> m.postHeavyConstraints(base));
     }
 
     @Override
