@@ -30,6 +30,7 @@ public class CryptaGenLongMult extends AbstractCryptaListModel implements ICrypt
 
     public final CryptaLongMultModel longMult;
 
+    // FIXME Set value according to the config !
     private int arithmeticBase = 10;
 
     public CryptaGenLongMult(String[] words) {
