@@ -84,6 +84,8 @@ public class CryptaListGenerator implements ICryptaGenerator {
         gen.buildModel();
         gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
         gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
+        final int thresh = AdaptiveSolver.computeThreshold(config.getArithmeticBase());
+        gen.longMult.getProductLength().le(thresh).post();
 //        if (!config.isLightPropagation()) {
 //            gen.postMinLeftCountConstraints(config.getArithmeticBase());
 //        }

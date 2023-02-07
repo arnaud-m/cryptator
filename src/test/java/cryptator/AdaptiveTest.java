@@ -8,6 +8,7 @@
  */
 package cryptator;
 
+import static cryptator.solver.AdaptiveSolver.computeThreshold;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.BeforeClass;
@@ -32,11 +33,10 @@ public class AdaptiveTest {
 
     @Test
     public void testThreshold() {
-        assertEquals(25, AdaptiveSolver.computeThreshold(2));
-        assertEquals(9, AdaptiveSolver.computeThreshold(8));
-        assertEquals(8, AdaptiveSolver.computeThreshold(10));
-        assertEquals(7, AdaptiveSolver.computeThreshold(16));
-
+        assertEquals(25, computeThreshold(2));
+        assertEquals(9, computeThreshold(8));
+        assertEquals(8, computeThreshold(10));
+        assertEquals(7, computeThreshold(16));
     }
 
     @Test

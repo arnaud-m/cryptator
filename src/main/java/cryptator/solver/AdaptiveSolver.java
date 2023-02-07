@@ -28,12 +28,11 @@ public class AdaptiveSolver implements ICryptaSolver {
     }
 
     public static int computeThreshold(final int base) {
-        final int n = IntVar.MAX_INT_BOUND;
-        int prod = base;
+        int n = IntVar.MAX_INT_BOUND;
         int i = 1;
-        while (prod < n) {
+        while (n >= base) {
+            n /= base;
             i++;
-            prod *= base;
         }
         return i;
     }

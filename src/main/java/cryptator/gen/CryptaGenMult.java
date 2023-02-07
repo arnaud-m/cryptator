@@ -13,6 +13,7 @@ import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
+import cryptator.solver.AdaptiveSolver;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 
@@ -42,7 +43,7 @@ class CryptaMemberMult extends CryptaMemberPair {
         left.getMaxLength().eq(right.getMaxLength()).imp(left.getWordCount().ge(right.getWordCount())).post();
     }
 
-    public void postMultHeavyConstraints() {
+    public void postMultHeavyConstraints(int base) {
         final IntVar sumL = getModel().sum("L_sumLength", left.lengths);
         final IntVar sumR = getModel().sum("R_sumLength", ((CryptaMemberLen) right).lengths);
 
@@ -51,9 +52,10 @@ class CryptaMemberMult extends CryptaMemberPair {
         minL.le(sumR).post();
         minR.le(sumL).post();
 
-        // FIXME sumL.le(8).post();
-        // FIXME sumR.le(8).post();
-
+        // FIXME Should be posted in the light model too.
+        final int thresh = AdaptiveSolver.computeThreshold(base) + 1;
+        sumL.le(thresh).post();
+        sumR.le(thresh).post();
     }
 
 }
@@ -85,7 +87,7 @@ public class CryptaGenMult extends AbstractCryptaListModel implements ICryptaGen
     }
 
     public void postMinLeftCountConstraints(final int base) {
-        multiplication.postMultHeavyConstraints();
+        multiplication.postMultHeavyConstraints(base);
     }
 
     public void postFixedRightMemberConstraint() {

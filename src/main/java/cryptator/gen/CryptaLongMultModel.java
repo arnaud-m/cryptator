@@ -117,6 +117,8 @@ public class CryptaLongMultModel implements IChocoModel {
     private void postPRLenConstraints() {
         ge1(prLength, mdLength.add(mrLength).sub(1));
         prLength.ge(termLengths[0].add(mrLength).sub(1)).post();
+        // TODO Add a CLI option for changing the maximum length of the product
+        prLength.le(8).post();
     }
 
     private void postAllDifferent() {
