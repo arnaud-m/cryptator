@@ -42,7 +42,7 @@ public final class CryptaGridModel implements IChocoModel {
         if (n > 1) {
             // Transposition
             grid[1][0].le(grid[0][1]).post();
-            // Increasing first row and column with the execption of the last.
+            // Increasing first row and column with the exception of the last.
             for (int i = 1; i < n - 1; i++) {
                 grid[0][i - 1].le(grid[0][i]).post();
                 grid[i - 1][0].le(grid[i][0]).post();

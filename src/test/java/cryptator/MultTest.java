@@ -41,7 +41,7 @@ public class MultTest {
     }
 
     private void testGenLongMultModel(int expectedSolutionCount, String[] words) {
-        final CryptaGenLongMult m = new CryptaGenLongMult(words);
+        final CryptaGenLongMult m = new CryptaGenLongMult(words, 10);
         m.buildModel();
 //        System.out.println(m.getModel());
 //        Solution sol = new Solution(m.getModel());

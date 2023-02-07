@@ -68,7 +68,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         } else if (config.isMultModel()) {
             return new CryptaGenMult(words.getWords());
         } else if (config.isLongMultModel()) {
-            return new CryptaGenLongMult(words.getWords());
+            return new CryptaGenLongMult(words.getWords(), config.getArithmeticBase());
         } else {
             return new CryptaGenModel(words.getWords(), config.isLightModel());
         }

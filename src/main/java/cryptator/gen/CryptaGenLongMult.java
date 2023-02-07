@@ -31,14 +31,22 @@ public class CryptaGenLongMult extends AbstractCryptaListModel implements ICrypt
 
     public final CryptaLongMultModel longMult;
 
-    // FIXME Set value according to the config !
-    private int arithmeticBase = 10;
+    private int arithmeticBase;
 
-    public CryptaGenLongMult(String[] words) {
+    public CryptaGenLongMult(String[] words, int arithmeticBase) {
         super(new Model("Generate-Long-Multiplication"), words);
+        this.arithmeticBase = arithmeticBase;
         final int[] lengths = getLengths(words);
         final int[] cards = getCards(words);
         longMult = new CryptaLongMultModel(model, lengths, cards);
+    }
+
+    public final int getArithmeticBase() {
+        return arithmeticBase;
+    }
+
+    public final void setArithmeticBase(int arithmeticBase) {
+        this.arithmeticBase = arithmeticBase;
     }
 
     @Override
