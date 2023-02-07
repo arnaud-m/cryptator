@@ -9,6 +9,7 @@
 package cryptator.gen;
 
 import java.util.Arrays;
+import java.util.function.ToIntFunction;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
@@ -123,11 +124,17 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
         return GenerateUtil.recordString(this, " ");
     }
 
-    protected static int getMaxLength(final String[] words) {
+    protected static final int getMaxLength(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
     }
 
-    protected static int[] getLengths(final String[] words) {
+    protected static final int[] getLengths(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).toArray();
     }
+
+    protected static final int[] getCards(final String[] words) {
+        final ToIntFunction<String> distinctCharCount = s -> (int) s.chars().distinct().count();
+        return Arrays.stream(words).mapToInt(distinctCharCount).toArray();
+    }
+
 }

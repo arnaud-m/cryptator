@@ -79,6 +79,25 @@ public class CryptaListGenerator implements ICryptaGenerator {
         return gen;
     }
 
+    ICryptaGenSolver buildLongMultiplicationSolver() {
+        final CryptaGenLongMult gen = new CryptaGenLongMult(words.getWords());
+        gen.buildModel();
+        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
+        gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
+        final int thresh = AdaptiveSolver.computeThreshold(config.getArithmeticBase());
+        gen.longMult.getProductLength().le(thresh).post();
+//        if (!config.isLightPropagation()) {
+//            gen.postMinLeftCountConstraints(config.getArithmeticBase());
+//        }
+        if (words.hasRightMember()) {
+            gen.postFixedRightMemberConstraint();
+        }
+//        if (words.isDoublyTrue()) {
+//            gen.postDoublyTrueConstraint(words.getLB());
+//        }
+        return gen;
+    }
+
     ICryptaGenSolver buildMultiplicationSolver() {
         final CryptaGenMult gen = new CryptaGenMult(words.getWords());
         gen.buildModel();
@@ -108,11 +127,15 @@ public class CryptaListGenerator implements ICryptaGenerator {
         return gen;
     }
 
-    private ICryptaGenSolver buildModel() {
+    private ICryptaGenSolver buildGenSolver() {
         if (config.getGridSize() > 0) {
             return buildCrosswordSolver();
+        } else if (config.isMultModel()) {
+            return buildMultiplicationSolver();
+        } else if (config.isLongMultModel()) {
+            return buildLongMultiplicationSolver();
         } else {
-            return config.isMultModel() ? buildMultiplicationSolver() : buildAdditionSolver();
+            return buildAdditionSolver();
         }
     }
 
@@ -150,7 +173,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
     @Override
     public long generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
-        final ICryptaGenSolver gen = buildModel();
+        final ICryptaGenSolver gen = buildGenSolver();
         clog.logOnModel(gen);
 
         final Consumer<ICryptaNode> cons = buildConsumer(gen, consumer);

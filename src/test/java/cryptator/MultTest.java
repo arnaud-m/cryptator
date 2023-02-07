@@ -12,15 +12,16 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import cryptator.gen.CryptaGenLongMult;
 import cryptator.gen.CryptaGenMult;
 
 public class MultTest {
 
-    private void testMultModel(String[] words, int expectedSolutionCount) {
-        testMultModel(false, words, expectedSolutionCount);
+    private void testMultModel(int expectedSolutionCount, String[] words) {
+        testMultModel(expectedSolutionCount, words, false);
     }
 
-    private void testMultModel(boolean isDoublyTrue, String[] words, int expectedSolutionCount) {
+    private void testMultModel(int expectedSolutionCount, String[] words, boolean isDoublyTrue) {
         final CryptaGenMult m = new CryptaGenMult(words);
         m.buildModel();
         m.postMinLeftCountConstraints(10);
@@ -28,8 +29,6 @@ public class MultTest {
             m.postDoublyTrueConstraint(0);
         }
         // System.out.println(m.getModel());
-        // assertEquals(expectedSolutionCount,
-        // m.getModel().getSolver().streamSolutions().count());
         // Solution sol = new Solution(m.getModel());
 //        m.getSolver().streamSolutions().forEach(s -> {
 //            System.out.println(m);
@@ -37,7 +36,21 @@ public class MultTest {
 //            // System.out.println(sol);
 //        });
         // m.getSolver().printStatistics();
-        // assertEquals(expectedSolutionCount, m.getSolver().getSolutionCount());
+        assertEquals(expectedSolutionCount, m.getSolver().streamSolutions().count());
+
+    }
+
+    private void testGenLongMultModel(int expectedSolutionCount, String[] words) {
+        final CryptaGenLongMult m = new CryptaGenLongMult(words);
+        m.buildModel();
+//        System.out.println(m.getModel());
+//        Solution sol = new Solution(m.getModel());
+//        m.getSolver().streamSolutions().forEach(s -> {
+//            System.out.println(m);
+//            // sol.record();
+//            // System.out.println(sol);
+//        });
+//        m.getSolver().printStatistics();
         assertEquals(expectedSolutionCount, m.getSolver().streamSolutions().count());
 
     }
@@ -45,32 +58,50 @@ public class MultTest {
     @Test
     public void testMult1() {
         final String[] words = new String[] {"a", "bb", "ccc"};
-        testMultModel(words, 1);
+        testMultModel(1, words);
     }
 
     @Test
     public void testMult2() {
         final String[] words = new String[] {"a", "bbb", "ccc"};
-        testMultModel(words, 4);
+        testMultModel(4, words);
     }
 
     @Test
     public void testMult3() {
         final String[] words = new String[] {"a", "bb", "ccc", "dddd"};
-        testMultModel(words, 5);
+        testMultModel(5, words);
     }
 
     @Test
     public void testMult4() {
         final String[] words = new String[] {"a", "bb", "ccc", "dddd", "eeeee"};
-        testMultModel(words, 17);
+        testMultModel(17, words);
     }
 
     @Test
     public void testMultDoublyTrue1() {
         final String[] words = new String[] {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
                 "nine", "ten", "eleven", "twelve"};
-        testMultModel(true, words, 5);
+        testMultModel(5, words, true);
+    }
+
+    @Test
+    public void testLongMult1() {
+        final String[] words = new String[] {"see", "so", "emoo", "mess", "mimeo"};
+        testGenLongMultModel(22, words);
+    }
+
+    @Test // (expected = InvalidSolutionException.class)
+    public void testLongMult2() {
+        final String[] words = new String[] {"who", "is", "hobs", "hawi", "mosis"};
+        testGenLongMultModel(18, words);
+    }
+
+    @Test
+    public void testLongMult3() {
+        final String[] words = new String[] {"get", "by", "babe", "beare"};
+        testGenLongMultModel(4, words);
     }
 
 }

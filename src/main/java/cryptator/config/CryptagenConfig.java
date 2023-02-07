@@ -22,6 +22,9 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "-mult", handler = ExplicitBooleanOptionHandler.class, usage = "generate multiplication cryptarithms")
     private boolean multModel = false;
 
+    @Option(name = "-longMult", handler = ExplicitBooleanOptionHandler.class, usage = "generate long multiplication cryptarithms")
+    private boolean longMultModel = false;
+
     @Option(name = "-ctry", usage = "country code for doubly true cryptarithms)")
     private String countryCode = "EN";
 
@@ -97,6 +100,14 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
     public final void setMultModel(boolean multModel) {
         this.multModel = multModel;
+    }
+
+    public final boolean isLongMultModel() {
+        return longMultModel;
+    }
+
+    public final void setLongMultModel(boolean longMultModel) {
+        this.longMultModel = longMultModel;
     }
 
     @Override

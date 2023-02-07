@@ -71,4 +71,10 @@ public class GenerateUtil {
         return reduceOperation(CryptaOperator.EQ, recordMultiplication(left), recordMultiplication(right));
     }
 
+    public static ICryptaNode recordMultiplication(String multiplicand, String multiplier, String product) {
+        return new CryptaNode(CryptaOperator.EQ,
+                new CryptaNode(CryptaOperator.MUL, new CryptaLeaf(multiplicand), new CryptaLeaf(multiplier)),
+                new CryptaLeaf(product));
+    }
+
 }
