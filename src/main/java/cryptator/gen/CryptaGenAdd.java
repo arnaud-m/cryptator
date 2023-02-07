@@ -93,7 +93,7 @@ class CryptaMemberPair implements ICryptaGenSolver {
 
 }
 
-public class CryptaGenAdd extends AbstractCryptaListModel implements ICryptaGenSolver {
+public class CryptaGenAdd extends AbstractCryptaListModel {
 
     private final CryptaMemberPair addition;
 

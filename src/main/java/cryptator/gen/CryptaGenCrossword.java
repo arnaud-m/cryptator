@@ -46,7 +46,7 @@ class CryptaCrossPair extends CryptaMemberPair {
     }
 }
 
-public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryptaGenSolver {
+public class CryptaGenCrossword extends AbstractCryptaListModel {
 
     private final int n;
 

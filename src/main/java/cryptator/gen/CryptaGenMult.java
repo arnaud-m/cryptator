@@ -14,7 +14,6 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.solver.AdaptiveSolver;
-import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 
 class CryptaMemberMult extends CryptaMemberPair {
@@ -60,7 +59,7 @@ class CryptaMemberMult extends CryptaMemberPair {
 
 }
 
-public class CryptaGenMult extends AbstractCryptaListModel implements ICryptaGenSolver {
+public class CryptaGenMult extends AbstractCryptaListModel {
 
     private final CryptaMemberMult multiplication;
 

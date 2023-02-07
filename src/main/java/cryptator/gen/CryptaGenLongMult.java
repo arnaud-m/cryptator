@@ -21,13 +21,12 @@ import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
 import cryptator.solver.AdaptiveSolver;
-import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaConstant;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
-public class CryptaGenLongMult extends AbstractCryptaListModel implements ICryptaGenSolver {
+public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     public final CryptaLongMultModel longMult;
 
