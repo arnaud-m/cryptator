@@ -1,0 +1,13 @@
+aptes + casent + cens + cesse + codes + dent + nue + osa + oses + penaud + pestes + poupes + puons + putes + sas + stand + tondu + tops + unaus = dosent
+aptes + casent + cens + codes + dent + dune + nue + osa + oses + penaud + pestes + poupes + puons + putes + sas + stand + tondu + tops + unaus = nattes
+aptes + cens + cesse + codes + dent + dune + eus + nue + osa + oses + penaud + pestes + poupes + puons + putes + sas + stand + tondu + tops = nonces
+aptes + cens + cesse + codes + dent + dune + eus + nue + osa + oses + penaud + poupes + puons + putes + sas + stand + tondu + tops + tuante = dosent
+aptes + cens + cesse + codes + dent + dune + nue + osa + oses + penaud + pestes + poupes + puons + putes + sas + sonate + stand + tondu + unaus = nattes
+aptes + cens + cesse + codes + dent + dune + nue + osa + oses + penaud + pestes + poupes + puons + putes + sas + sonate + stand + tops + unaus = nattes
+aptes + cens + cesse + codes + dent + dune + nue + osa + oses + penaud + pestes + poupes + puons + putes + sas + stand + tondu + tops + unaus = annote
+aptes + cens + cesse + codes + dent + dune + nue + osa + oses + penaud + poupes + puons + putes + sas + sonate + stand + tondu + tops + unaus = nattes
+casent + cens + cesse + codes + dent + dune + eus + nue + osa + oses + penaud + poupes + puons + putes + sas + stand + tondu + tops + unaus = sonate
+casent + cens + cesse + codes + dent + dune + eus + nue + osa + oses + pestes + poupes + puons + putes + sas + stand + tondu + tops + unaus = dosent
+casent + cens + cesse + codes + dent + dune + eus + nue + osa + oses + pestes + poupes + puons + putes + sas + stand + tondu + tops + unaus = nattes
+cens + cesse + codes + dent + dune + eus + nue + osa + oses + penaud + pestes + poupes + puons + putes + sas + stand + tondu + tops + unaus = casent
+doler + drus + due + elle + eue + iules + lois + louer + loure + mess + mil + miles + moire + moque + mordes + moule + redis + rem + roide = omises

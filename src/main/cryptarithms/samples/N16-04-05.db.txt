@@ -1,0 +1,3 @@
+acte + canne + carra + coton + crado + darde + datte + erre + radar + roda + roua + ruent + tarot + tenu + tonte + tuant = annote
+acte + canne + carra + coton + crado + darde + datte + erre + radar + roda + roua + ruent + tarot + tenu + tonte + tuant = courte
+acte + canne + carra + coton + crado + darde + datte + erre + radar + roda + roua + ruent + tarot + tenu + tonte + tuant = tordue

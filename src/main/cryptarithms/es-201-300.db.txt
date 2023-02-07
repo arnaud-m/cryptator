@@ -1,6 +1,0 @@
-cero + dos + cinco + seis + doce + trece + dieciseis + diecisiete + veintidos + cientodos + cientocinco = trescientos 
-cero + tres + cinco + seis + siete + once + catorce + doscientoscatorce = doscientossesenta 
-dos + cinco + siete + doce + catorce + doscientostreinta = doscientossetenta 
-dos + cinco + siete + doce + treinta + doscientoscatorce = doscientossetenta 
-dos + once + trece + catorce + doscientostreinta = doscientossetenta 
-dos + once + trece + treinta + doscientoscatorce = doscientossetenta 

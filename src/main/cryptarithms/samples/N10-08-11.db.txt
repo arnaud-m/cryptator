@@ -1,0 +1,4 @@
+absorber + aplasies + ariseras + ballerai + palissade + parodieras + persiller + proposasse + repassas + replisseras = rassasieras 
+absorber + ballerai + darderais + palissade + parodieras + persiller + piaillerie + replisseras + roseraies + sabelles = rassasieras 
+absorber + ballerai + dribbler + papelards + persiller + piaillerie + repassais + repassas + replisseras + sabelles = rassasieras 
+diffuses + douillette + essouffle + fossoies + houleuses + lotisseuse + lotisseuses + siffleuses + soldeuses + studette = soufflettes 

@@ -1,0 +1,12 @@
+absorber + aplasies + ariseras + ballerai + dribbler + papelards + radierai + repassas + sabelles = roseraies 
+absorber + aplasies + ariseras + darderais + palissade + radierai + repassais + repassas + roseraies = parodieras 
+absorber + aplasies + ariseras + liarderas + palissade + papelards + persiller + repassas + sabelles = parodieras 
+absorber + aplasies + ballerai + darderais + dribbler + palissade + persiller + radierai + repassais = piaillerie 
+absorber + aplasies + ballerai + darderais + dribbler + papelards + radierai + repassais + roseraies = proposasse 
+aciselai + anisasses + assommas + coalisais + colossale + miliciens + mollisses + oenolisme + onciales = assaillais 
+adossais + alsacien + assommas + canasses + cassonade + miliciens + mollisses + oenolisme + semences = cannelions 
+alsacien + anisasses + assommas + canasses + cassonade + miliciens + mollisses + oenolisme + onciales = cannelions 
+aplasies + ariseras + palissade + papelards + persiller + radierai + repassais + repassas + roseraies = parodieras 
+ariseras + dribbler + liarderas + palissade + papelards + persiller + repassas + roseraies + sabelles = proposasse 
+bistorte + bosseuses + brouettes + buttoirs + isosistes + obusiers + osseuses + ouistitis + tousseur = rebrousses 
+bistorte + bosseuses + herborise + hotterets + osseuses + ouistitis + ressortir + terreurs + tousseur = huisseries 

@@ -6,8 +6,11 @@ src/main/benchmarks/results*/
 src/main/benchmarks/results*.tar.gz
 src/main/benchmarks/solver.sh
 src/main/benchmarks/words
+src/main/benchmarks/samples/
 src/main/benchmarks/oar-stderr.log
 src/main/benchmarks/nohup.out
+src/main/benchmarks/crypt/
+src/main/benchmarks/crypt.awk 
 src/main/benchmarks/classify-additions.awk 
 
 #### joe made this: http://goel.io/joe
