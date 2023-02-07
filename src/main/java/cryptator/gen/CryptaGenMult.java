@@ -36,10 +36,7 @@ class CryptaMemberMult extends CryptaMemberPair {
 
     @Override
     protected void postSymBreakLengthConstraint() {
-        super.postSymBreakLengthConstraint();
-//        getModel().ifThen(left.getMaxLength().eq(right.getMaxLength()).decompose(),
-//                getModel().lexChainLess(right.getWordVars(), left.getWordVars()));
-        left.getMaxLength().eq(right.getMaxLength()).imp(left.getWordCount().ge(right.getWordCount())).post();
+        getModel().lexLess(left.getWordVars(), right.getWordVars()).post();
     }
 
     public void postMultHeavyConstraints(int base) {

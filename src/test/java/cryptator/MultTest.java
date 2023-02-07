@@ -28,14 +28,14 @@ public class MultTest {
         if (isDoublyTrue) {
             m.postDoublyTrueConstraints(0);
         }
-        // System.out.println(m.getModel());
-        // Solution sol = new Solution(m.getModel());
+//        System.out.println(m.getModel());
+//        Solution sol = new Solution(m.getModel());
 //        m.getSolver().streamSolutions().forEach(s -> {
 //            System.out.println(m);
 //            // sol.record();
 //            // System.out.println(sol);
 //        });
-        // m.getSolver().printStatistics();
+//        m.getSolver().printStatistics();
         assertEquals(expectedSolutionCount, m.getSolver().streamSolutions().count());
 
     }
@@ -64,7 +64,7 @@ public class MultTest {
     @Test
     public void testMult2() {
         final String[] words = new String[] {"a", "bbb", "ccc"};
-        testMultModel(4, words);
+        testMultModel(3, words);
     }
 
     @Test
