@@ -93,11 +93,11 @@ class CryptaMemberPair implements ICryptaGenSolver {
 
 }
 
-public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGenSolver {
+public class CryptaGenAdd extends AbstractCryptaListModel implements ICryptaGenSolver {
 
     private final CryptaMemberPair addition;
 
-    public CryptaGenModel(final String[] words, final boolean useMemberLen) {
+    public CryptaGenAdd(final String[] words, final boolean useMemberLen) {
         super(new Model("Generate-Addition"), words);
         addition = new CryptaMemberPair(model, words, "", useMemberLen);
     }

@@ -70,7 +70,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         } else if (config.isLongMultModel()) {
             return new CryptaGenLongMult(words.getWords(), config.getArithmeticBase());
         } else {
-            return new CryptaGenModel(words.getWords(), config.isLightModel());
+            return new CryptaGenAdd(words.getWords(), config.isLightModel());
         }
     }
 
