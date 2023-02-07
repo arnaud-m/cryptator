@@ -147,6 +147,11 @@ public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGe
     }
 
     @Override
+    public void postPrecisionConstraints(int base) {
+        // Nothing to do.
+    }
+
+    @Override
     public final ICryptaNode recordCryptarithm() {
         return addition.recordCryptarithm();
     }

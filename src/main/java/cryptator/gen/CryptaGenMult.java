@@ -129,6 +129,12 @@ public class CryptaGenMult extends AbstractCryptaListModel implements ICryptaGen
     }
 
     @Override
+    public void postPrecisionConstraints(int base) {
+        // TODO post precision constraints
+        System.err.println("Not yet implemented");
+    }
+
+    @Override
     public final ICryptaNode recordCryptarithm() {
         return multiplication.recordCryptarithm();
     }

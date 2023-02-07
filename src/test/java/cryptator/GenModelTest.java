@@ -19,6 +19,7 @@ import cryptator.gen.CryptaMemberCard;
 import cryptator.gen.CryptaMemberElt;
 import cryptator.gen.CryptaMemberLen;
 import cryptator.specs.ICryptaGenModel;
+import cryptator.specs.ICryptaNode;
 
 class MockWordListModel extends AbstractCryptaListModel {
 
@@ -34,6 +35,31 @@ class MockWordListModel extends AbstractCryptaListModel {
     @Override
     protected void postMaxLengthConstraints() {
         maxLength.eq(0).decompose().post();
+    }
+
+    @Override
+    public void postFixedRightMemberConstraint() {
+        // Nothing to do.
+    }
+
+    @Override
+    public void postDoublyTrueConstraint(int lowerBound) {
+        // Nothing to do.
+    }
+
+    @Override
+    public void postPrecisionConstraints(int base) {
+        // Nothing to do.
+    }
+
+    @Override
+    public void postMinLeftCountConstraints(int base) {
+        // Nothing to do.
+    }
+
+    @Override
+    public ICryptaNode recordCryptarithm() {
+        return null;
     }
 
 }

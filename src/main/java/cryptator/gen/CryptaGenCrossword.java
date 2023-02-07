@@ -95,6 +95,27 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
     }
 
     @Override
+    public void postFixedRightMemberConstraint() {
+        grid.getCell(n - 1, n - 1).eq(getN()).post();
+    }
+
+    @Override
+    public void postDoublyTrueConstraint(int lowerBound) {
+        // TODO post doubly true constraints for the crossword
+        System.err.println("Not yet implemented");
+    }
+
+    @Override
+    public void postMinLeftCountConstraints(int base) {
+        // Nothing to do
+    }
+
+    @Override
+    public void postPrecisionConstraints(int base) {
+        // Nothing to do.
+    }
+
+    @Override
     protected void postWordConstraints() {
         final IntVar one = model.intVar(1);
         for (int i = 0; i < n; i++) {

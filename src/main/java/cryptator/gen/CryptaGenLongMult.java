@@ -20,6 +20,7 @@ import org.chocosolver.solver.variables.SetVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
+import cryptator.solver.AdaptiveSolver;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaConstant;
@@ -65,6 +66,23 @@ public class CryptaGenLongMult extends AbstractCryptaListModel implements ICrypt
 
     public void postFixedRightMemberConstraint() {
         longMult.getProduct().eq(getN() - 1).post();
+    }
+
+    @Override
+    public void postDoublyTrueConstraint(int lowerBound) {
+        // TODO post doubly true constraints for the long multiplication
+        System.err.println("Not yet implemented");
+    }
+
+    @Override
+    public void postMinLeftCountConstraints(int base) {
+        // Nothing to do
+    }
+
+    @Override
+    public void postPrecisionConstraints(int base) {
+        final int thresh = AdaptiveSolver.computeThreshold(base);
+        longMult.getProductLength().le(thresh).post();
     }
 
     private String[] getTermWords() {
