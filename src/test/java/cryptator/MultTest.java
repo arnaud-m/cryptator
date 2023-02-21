@@ -44,7 +44,8 @@ public class MultTest {
     private void testGenLongMultModel(final int expectedSolutionCount, final String[] words) {
         final CryptaGenLongMult m = new CryptaGenLongMult(words, 10);
         m.buildModel();
-
+        m.postPrecisionConstraints(10);
+        m.postHeavyConstraints(10);
 //        System.out.println(m.getModel());
 //        Solution sol = new Solution(m.getModel());
 //        m.getSolver().streamSolutions().forEach(s -> {
@@ -94,7 +95,7 @@ public class MultTest {
         testGenLongMultModel(22, words);
     }
 
-    @Test // (expected = InvalidSolutionException.class)
+    @Test
     public void testLongMult2() {
         final String[] words = new String[] {"who", "is", "hobs", "hawi", "mosis"};
         testGenLongMultModel(18, words);

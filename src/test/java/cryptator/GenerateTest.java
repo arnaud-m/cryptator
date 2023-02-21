@@ -87,6 +87,17 @@ public class GenerateTest {
         config.setMultModel(false);
     }
 
+    private void testLongMultGenerate(final int expectedSolCount, final WordArray wordArray)
+            throws CryptaModelException {
+        JULogUtil.configureSilentLoggers();
+        config.setLongMultModel(true);
+        configure(0, false, false);
+        testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
+        configure(0, false, true);
+        testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
+        config.setLongMultModel(false);
+    }
+
     @Test
     public void testSendMoreMoney() throws CryptaModelException {
         final WordArray words = new WordArray(Arrays.asList("send", "more", "money"), null);
@@ -189,6 +200,18 @@ public class GenerateTest {
     public void testMult5() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("north", "south", "east", "west"), null);
         testMultGenerate(2, words);
+    }
+
+    @Test
+    public void testLongMult1() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("who", "is", "hobs", "hawi", "mosis"), null);
+        testLongMultGenerate(1, words);
+    }
+
+    @Test
+    public void testLongMult3() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("get", "by", "babe", "beare"), null);
+        testLongMultGenerate(1, words);
     }
 
 }
