@@ -1,0 +1,15 @@
+bes * elliuc = iki * on * onuc
+bes * otuz = uc * elli
+besyuz = on * elli
+dort * bes = bir * iki * on
+dort * yedi = iki * ondort
+ikiyuz = on * yirmi
+on * elli = bes * yuz
+oniki * onuc = uc * elliiki
+oniki = uc * dort
+onuc * otuz = uc * yuzotuz
+sekiz * on = iki * kırk
+uc * kırkuc = bir * on * onuc
+ucyuz = on * otuz
+yedi * otuz = iki * yuzuc
+yetmis = yedi * on

@@ -1,0 +1,2 @@
+indigo = red * blue
+yellow = red * blue

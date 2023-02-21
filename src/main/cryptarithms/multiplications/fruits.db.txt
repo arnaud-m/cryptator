@@ -1,0 +1,5 @@
+grape * lime = apple * plum
+orange = fig * lime
+orange = fig * pear
+papaya = fig * plum
+pear * plum = fig * lime

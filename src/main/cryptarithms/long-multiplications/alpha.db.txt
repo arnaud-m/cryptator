@@ -1,0 +1,4 @@
+mu * mu = tau && nu * '1' + mu * '10' = tau && mu * m = mu && mu * u = nu
+nu * nu = tau && mu * '1' + nu * '10' = tau && nu * n = nu && nu * u = mu
+pi * pi = chi && xi * '1' + pi * '10' = chi && pi * p = pi && pi * i = xi
+xi * xi = chi && pi * '1' + xi * '10' = chi && xi * x = xi && xi * i = pi

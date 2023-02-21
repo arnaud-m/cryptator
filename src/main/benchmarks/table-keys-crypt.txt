@@ -1,0 +1,3 @@
+s
+d NBSOLS
+d TIME
