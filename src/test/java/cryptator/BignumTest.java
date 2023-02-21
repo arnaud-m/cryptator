@@ -199,31 +199,26 @@ public class BignumTest {
     // Tests from SolverTest class
     @Test
     public void testSendMoreMoneyList2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
         t.testNotUNIQUE("send+more=money; a+b=c");
     }
 
     @Test
     public void testSendMoreMoneyList3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
         t.testSAT("send+more=money; a+b=c");
     }
 
     @Test
     public void testSendMoreMoneyList4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
         t.testUNSAT("send+more=money; s+e=n");
     }
 
     @Test
     public void testSendMoreMoneyList5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
         t.testUNSAT("send+more=money;;; s+e=n");
     }
 
     @Test
     public void testSendMoreMoneyList6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
         t.testUNSAT("send+more=money; s+e=n;");
     }
 }
