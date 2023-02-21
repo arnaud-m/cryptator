@@ -1,0 +1,2 @@
+sechzehn = zwei * acht
+vier * funf = zwei * zehn
