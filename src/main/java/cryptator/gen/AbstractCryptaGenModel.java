@@ -37,6 +37,13 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
     /** The maximum length of a present word. */
     protected final IntVar maxLength;
 
+    /**
+     * Instantiates a new model for the generation.
+     *
+     * @param model  the model
+     * @param words  the words
+     * @param prefix the prefix for variable names
+     */
     protected AbstractCryptaGenModel(final Model model, final String[] words, final String prefix) {
         super();
         this.model = model;
@@ -46,6 +53,11 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
         this.maxLength = model.intVar(prefix + "maxLength", 0, AbstractCryptaGenModel.getMaxLength(words), false);
     }
 
+    /**
+     * Gets the model.
+     *
+     * @return the model
+     */
     @Override
     public final Model getModel() {
         return model;
@@ -87,14 +99,26 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
         return vars;
     }
 
+    /**
+     * Post constraints for the presence of words.
+     */
     protected abstract void postWordConstraints();
 
+    /**
+     * Post word count constraint.
+     */
     protected void postWordCountConstraint() {
         model.sum(vwords, "=", wordCount).post();
     }
 
+    /**
+     * Post the constraints that set the maximum length.
+     */
     protected abstract void postMaxLengthConstraints();
 
+    /**
+     * Builds the model.
+     */
     @Override
     public void buildModel() {
         postWordConstraints();
@@ -115,6 +139,11 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
         }
     }
 
+    /**
+     * Post a constraint that set the number of words.
+     *
+     * @param val the number of words
+     */
     public void postWordCountConstraints(final int val) {
         wordCount.eq(val).post();
     }
@@ -124,18 +153,44 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
         return GenerateUtil.recordString(this, " ");
     }
 
+    /**
+     * Gets the maximum length of the words.
+     *
+     * @param words the words
+     * @return the maximum length
+     */
     public static final int getMaxLength(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
     }
 
+    /**
+     * Gets the sum of the word lengths.
+     *
+     * @param words the words
+     * @return the sum of the lengths
+     */
     public static final int getSumLength(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).reduce(0, Integer::sum);
     }
 
+    /**
+     * Gets the array of word lengths.
+     *
+     * @param words the words
+     * @return the array of lengths
+     */
     public static final int[] getLengths(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).toArray();
     }
 
+    /**
+     * Gets the array of length cardinalities.
+     *
+     * The cardinality of a word is its number of distinct characters.
+     *
+     * @param words the words
+     * @return the array of cardinalities
+     */
     public static final int[] getCards(final String[] words) {
         final ToIntFunction<String> distinctCharCount = s -> (int) s.chars().distinct().count();
         return Arrays.stream(words).mapToInt(distinctCharCount).toArray();
