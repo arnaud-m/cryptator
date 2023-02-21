@@ -208,17 +208,7 @@ public class BignumTest {
     }
 
     @Test
-    public void testSendMoreMoneyList4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNSAT("send+more=money; s+e=n");
-    }
-
-    @Test
-    public void testSendMoreMoneyList5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNSAT("send+more=money;;; s+e=n");
-    }
-
-    @Test
-    public void testSendMoreMoneyList6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNSAT("send+more=money; s+e=n;");
+    public void testUnsatSendMoreMoneyList() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNSAT("send+more=money; s+e=n", "send+more=money;;; s+e=n", "send+more=money; s+e=n;");
     }
 }

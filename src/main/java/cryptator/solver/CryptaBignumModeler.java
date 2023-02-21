@@ -95,13 +95,6 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         } else {
             System.arraycopy(b, m, c, m, b.length - m);
         }
-        // Can only enter in one loop
-        // for (int i = m; i < a.length; i++) {
-        // c[i] = a[i];
-        // }
-        // for (int i = m; i < b.length; i++) {
-        // c[i] = b[i];
-        // }
         return c;
     }
 
