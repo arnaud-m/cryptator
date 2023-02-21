@@ -90,13 +90,18 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         for (int i = 0; i < m; i++) {
             c[i] = CryptaOperator.ADD.getExpression().apply(a[i], b[i]);
         }
+        if (a.length > m) {
+            System.arraycopy(a, m, c, m, a.length - m);
+        } else {
+            System.arraycopy(b, m, c, m, b.length - m);
+        }
         // Can only enter in one loop
-        for (int i = m; i < a.length; i++) {
-            c[i] = a[i];
-        }
-        for (int i = m; i < b.length; i++) {
-            c[i] = b[i];
-        }
+        // for (int i = m; i < a.length; i++) {
+        // c[i] = a[i];
+        // }
+        // for (int i = m; i < b.length; i++) {
+        // c[i] = b[i];
+        // }
         return c;
     }
 

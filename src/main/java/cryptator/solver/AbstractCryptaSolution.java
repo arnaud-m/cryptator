@@ -9,6 +9,7 @@
 package cryptator.solver;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 
@@ -53,11 +54,11 @@ public abstract class AbstractCryptaSolution<E> implements ICryptaSolution {
     public String toString() {
         final StringBuilder b1 = new StringBuilder();
         final StringBuilder b2 = new StringBuilder();
-        for (Character symbol : symbolsToDigits.keySet()) {
-            final String domain = getDomain(symbolsToDigits.get(symbol));
+        for (Entry<Character, E> e : symbolsToDigits.entrySet()) {
+            final String domain = getDomain(e.getValue());
             final int length = Math.max(1, domain.length());
             final String format = " %" + length + "s|";
-            b1.append(String.format(format, symbol));
+            b1.append(String.format(format, e.getKey()));
             b2.append(String.format(format, domain));
         }
         return b1.toString() + "\n" + b2.toString();

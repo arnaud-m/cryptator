@@ -76,24 +76,12 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
         }
     }
 
-    private void setSolution() {
-        int[][] solgrid = new int[][] {new int[] {0, 3, 4}, new int[] {1, 5, 7}, new int[] {2, 6, 8}};
-        for (int i = 0; i < solgrid.length; i++) {
-            for (int j = 0; j < solgrid[i].length; j++) {
-                grid.getCell(i, j).eq(solgrid[i][j]).post();
-            }
-        }
-    }
-
     @Override
     public void buildModel() {
         super.buildModel();
         grid.buildModel();
         Stream.of(additions).forEach(CryptaCrossPair::buildModel);
-        // setSolution();
-        // TODO Set search strategy ?
-        // getSolver().setSearch(Search.intVarSearch(ArrayUtils.flatten(grid.getMatrix())));
-
+        // TODO change search strategy ?
     }
 
     @Override

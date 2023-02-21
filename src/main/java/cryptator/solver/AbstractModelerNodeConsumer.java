@@ -101,7 +101,6 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
     }
 
     public void configureSearch() {
-        // model.getSolver().showDecisions();
         final int searchType = config.getSearchStrategy();
         if (searchType == 1) {
             IntVar[] vars = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
