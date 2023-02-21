@@ -128,6 +128,10 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
         return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
     }
 
+    protected static final int getSumLength(final String[] words) {
+        return Arrays.stream(words).mapToInt(String::length).reduce(0, Integer::sum);
+    }
+
     protected static final int[] getLengths(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).toArray();
     }

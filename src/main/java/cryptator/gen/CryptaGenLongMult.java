@@ -77,8 +77,7 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     @Override
     public void postDoublyTrueConstraints(int lowerBound) {
-        // TODO post doubly true constraints for the long multiplication
-        System.err.println("Not yet implemented");
+        throw new UnsupportedOperationException("Doubly true long multiplication is undefined.");
     }
 
     @Override

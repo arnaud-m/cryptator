@@ -101,8 +101,7 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
 
     @Override
     public void postDoublyTrueConstraints(int lowerBound) {
-        // TODO post doubly true constraints for the crossword
-        System.err.println("Not yet implemented");
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override

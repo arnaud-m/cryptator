@@ -24,6 +24,7 @@ public class MultTest {
     private void testMultModel(int expectedSolutionCount, String[] words, boolean isDoublyTrue) {
         final CryptaGenMult m = new CryptaGenMult(words);
         m.buildModel();
+        m.postPrecisionConstraints(10);
         m.postHeavyConstraints(10);
         if (isDoublyTrue) {
             m.postDoublyTrueConstraints(0);
@@ -43,6 +44,7 @@ public class MultTest {
     private void testGenLongMultModel(int expectedSolutionCount, String[] words) {
         final CryptaGenLongMult m = new CryptaGenLongMult(words, 10);
         m.buildModel();
+
 //        System.out.println(m.getModel());
 //        Solution sol = new Solution(m.getModel());
 //        m.getSolver().streamSolutions().forEach(s -> {
