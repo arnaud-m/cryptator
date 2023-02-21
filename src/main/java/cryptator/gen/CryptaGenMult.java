@@ -12,6 +12,8 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.variables.IntVar;
 
+import cryptator.gen.member.CryptaMemberLen;
+import cryptator.gen.member.CryptaMemberPair;
 import cryptator.solver.AdaptiveSolver;
 import cryptator.specs.ICryptaNode;
 

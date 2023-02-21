@@ -20,6 +20,7 @@ import org.chocosolver.solver.variables.SetVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
+import cryptator.gen.pattern.CryptaLongMultModel;
 import cryptator.solver.AdaptiveSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaConstant;

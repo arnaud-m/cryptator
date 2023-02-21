@@ -14,6 +14,8 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.CryptaOperator;
+import cryptator.gen.member.CryptaMemberPair;
+import cryptator.gen.pattern.CryptaGridModel;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 

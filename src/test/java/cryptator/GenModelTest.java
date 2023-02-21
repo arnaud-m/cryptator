@@ -15,9 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cryptator.gen.AbstractCryptaListModel;
-import cryptator.gen.CryptaMemberCard;
-import cryptator.gen.CryptaMemberElt;
-import cryptator.gen.CryptaMemberLen;
+import cryptator.gen.member.CryptaMemberCard;
+import cryptator.gen.member.CryptaMemberElt;
+import cryptator.gen.member.CryptaMemberLen;
 import cryptator.specs.ICryptaGenModel;
 import cryptator.specs.ICryptaNode;
 

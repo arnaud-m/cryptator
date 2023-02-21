@@ -124,19 +124,19 @@ public abstract class AbstractCryptaGenModel implements ICryptaGenModel {
         return GenerateUtil.recordString(this, " ");
     }
 
-    protected static final int getMaxLength(final String[] words) {
+    public static final int getMaxLength(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).max().orElse(0);
     }
 
-    protected static final int getSumLength(final String[] words) {
+    public static final int getSumLength(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).reduce(0, Integer::sum);
     }
 
-    protected static final int[] getLengths(final String[] words) {
+    public static final int[] getLengths(final String[] words) {
         return Arrays.stream(words).mapToInt(String::length).toArray();
     }
 
-    protected static final int[] getCards(final String[] words) {
+    public static final int[] getCards(final String[] words) {
         final ToIntFunction<String> distinctCharCount = s -> (int) s.chars().distinct().count();
         return Arrays.stream(words).mapToInt(distinctCharCount).toArray();
     }

@@ -6,12 +6,13 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.gen;
+package cryptator.gen.pattern;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
+import cryptator.gen.AbstractCryptaGenModel;
 import cryptator.specs.IChocoModel;
 
 public final class CryptaGridModel implements IChocoModel {
