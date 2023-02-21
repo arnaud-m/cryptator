@@ -6,17 +6,18 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.gen;
+package cryptator.gen.member;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
-import org.chocosolver.util.tools.ArrayUtils;
 
+import cryptator.gen.AbstractCryptaGenModel;
+import cryptator.gen.GenerateUtil;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 
-class CryptaMemberPair implements ICryptaGenSolver {
+public class CryptaMemberPair implements ICryptaGenSolver {
 
     protected final CryptaMemberLen left;
 
@@ -69,7 +70,7 @@ class CryptaMemberPair implements ICryptaGenSolver {
         left.getMaxLength().le(right.getMaxLength()).post();
     }
 
-    protected final void postDisjunctionConstraints(final BoolVar[] v) {
+    public final void postDisjunctionConstraints(final BoolVar[] v) {
         final BoolVar[] l = getLeft().getWordVars();
         final BoolVar[] r = getRight().getWordVars();
         for (int i = 0; i < v.length; i++) {
@@ -77,7 +78,7 @@ class CryptaMemberPair implements ICryptaGenSolver {
         }
     }
 
-    protected void postMaxLengthConstraint(final IntVar maxLen) {
+    public void postMaxLengthConstraint(final IntVar maxLen) {
         getModel().max(maxLen, getLeft().getMaxLength(), getRight().getMaxLength()).post();
 
     }
@@ -86,75 +87,15 @@ class CryptaMemberPair implements ICryptaGenSolver {
         left.postLentghSumConstraints(right.getMaxLength(), base);
     }
 
+    public void postFixedRightMemberConstraints() {
+        final BoolVar[] vars = right.getWordVars();
+        vars[vars.length - 1].eq(1).post();
+        right.getWordCount().eq(1).post();
+    }
+
     @Override
     public ICryptaNode recordCryptarithm() {
         return GenerateUtil.recordAddition(left, right);
-    }
-
-}
-
-public class CryptaGenModel extends AbstractCryptaListModel implements ICryptaGenSolver {
-
-    private final CryptaMemberPair addition;
-
-    public CryptaGenModel(final String[] words, final boolean useMemberLen) {
-        super(new Model("Generate-Addition"), words);
-        addition = new CryptaMemberPair(model, words, "", useMemberLen);
-    }
-
-    @Override
-    public void buildModel() {
-        super.buildModel();
-        addition.buildModel();
-    }
-
-    @Override
-    protected void postMaxLengthConstraints() {
-        addition.postMaxLengthConstraint(maxLength);
-    }
-
-    @Override
-    protected void postWordConstraints() {
-        addition.postDisjunctionConstraints(vwords);
-    }
-
-    public void postMinLeftCountConstraints(final int base) {
-        addition.postHeavyConstraints(base);
-    }
-
-    public void postFixedRightMemberConstraint() {
-        final BoolVar[] vars = addition.getRight().getWordVars();
-        vars[vars.length - 1].eq(1).post();
-    }
-
-    public void postDoublyTrueConstraint(final int lb) {
-        final int n = getN();
-        final IntVar sum = model.intVar("SUM", lb, n - 1);
-
-        final IntVar[] lvars = new IntVar[n + 1];
-        System.arraycopy(addition.getLeft().getWordVars(), 0, lvars, 0, n);
-        lvars[n] = sum;
-
-        final IntVar[] rvars = new IntVar[n + 1];
-        System.arraycopy(addition.getRight().getWordVars(), 0, rvars, 0, n);
-        rvars[n] = sum;
-
-        final int[] coeffs = ArrayUtils.array(0, n);
-        coeffs[n] = -1;
-
-        model.scalar(lvars, coeffs, "=", 0).post();
-        model.scalar(rvars, coeffs, "=", 0).post();
-    }
-
-    @Override
-    public final ICryptaNode recordCryptarithm() {
-        return addition.recordCryptarithm();
-    }
-
-    @Override
-    public String toString() {
-        return GenerateUtil.recordString(addition.getLeft(), " + ") + " = "
-                + GenerateUtil.recordString(addition.getRight(), " + ");
     }
 
 }

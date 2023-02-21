@@ -14,6 +14,8 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.CryptaOperator;
+import cryptator.gen.member.CryptaMemberPair;
+import cryptator.gen.pattern.CryptaGridModel;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 
@@ -46,7 +48,7 @@ class CryptaCrossPair extends CryptaMemberPair {
     }
 }
 
-public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryptaGenSolver {
+public class CryptaGenCrossword extends AbstractCryptaListModel {
 
     private final int n;
 
@@ -95,6 +97,26 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
     }
 
     @Override
+    public void postFixedRightMemberConstraints() {
+        grid.getCell(n - 1, n - 1).eq(getN() - 1).post();
+    }
+
+    @Override
+    public void postDoublyTrueConstraints(int lowerBound) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    public void postHeavyConstraints(int base) {
+        Stream.of(additions).forEach(m -> m.postHeavyConstraints(base));
+    }
+
+    @Override
+    public void postPrecisionConstraints(int base) {
+        // Nothing to do.
+    }
+
+    @Override
     protected void postWordConstraints() {
         final IntVar one = model.intVar(1);
         for (int i = 0; i < n; i++) {
@@ -105,15 +127,8 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
     }
 
     public void postSymbolSymmetryBreakingConstraints() {
-
         IntVar[] vars = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
-
-        for (int i = 1; i < vars.length; i++) {
-            vars[i - 1].ge(vars[i]).post();
-        }
-        // System.out.println(Arrays.toString(vars));
-        // FIXME model.decreasing(vars, 0).post(); // raise a choco internal error
-
+        model.decreasing(vars, 0).post();
     }
 
     @Override
@@ -126,10 +141,6 @@ public class CryptaGenCrossword extends AbstractCryptaListModel implements ICryp
     protected void postMaxLengthConstraints() {
         IntVar[] vars = Stream.of(additions).flatMap(CryptaCrossPair::maxLengthStream).toArray(i -> new IntVar[i]);
         model.max(getMaxLength(), vars).post();
-    }
-
-    public void postHeavyConstraints(final int base) {
-        Stream.of(additions).forEach(m -> m.postHeavyConstraints(base));
     }
 
     @Override

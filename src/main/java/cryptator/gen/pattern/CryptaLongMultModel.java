@@ -6,7 +6,7 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.gen;
+package cryptator.gen.pattern;
 
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -115,8 +115,6 @@ public class CryptaLongMultModel implements IChocoModel {
     private void postPRLenConstraints() {
         ge1(prLength, mdLength.add(mrLength).sub(1));
         prLength.ge(termLengths[0].add(mrLength).sub(1)).post();
-        // TODO Add a CLI option for changing the maximum length of the product
-        prLength.le(8).post();
     }
 
     private void postAllDifferent() {

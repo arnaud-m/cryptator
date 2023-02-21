@@ -24,25 +24,27 @@ public class MultTest {
     private void testMultModel(int expectedSolutionCount, String[] words, boolean isDoublyTrue) {
         final CryptaGenMult m = new CryptaGenMult(words);
         m.buildModel();
-        m.postMinLeftCountConstraints(10);
+        m.postPrecisionConstraints(10);
+        m.postHeavyConstraints(10);
         if (isDoublyTrue) {
-            m.postDoublyTrueConstraint(0);
+            m.postDoublyTrueConstraints(0);
         }
-        // System.out.println(m.getModel());
-        // Solution sol = new Solution(m.getModel());
+//        System.out.println(m.getModel());
+//        Solution sol = new Solution(m.getModel());
 //        m.getSolver().streamSolutions().forEach(s -> {
 //            System.out.println(m);
 //            // sol.record();
 //            // System.out.println(sol);
 //        });
-        // m.getSolver().printStatistics();
+//        m.getSolver().printStatistics();
         assertEquals(expectedSolutionCount, m.getSolver().streamSolutions().count());
 
     }
 
     private void testGenLongMultModel(int expectedSolutionCount, String[] words) {
-        final CryptaGenLongMult m = new CryptaGenLongMult(words);
+        final CryptaGenLongMult m = new CryptaGenLongMult(words, 10);
         m.buildModel();
+
 //        System.out.println(m.getModel());
 //        Solution sol = new Solution(m.getModel());
 //        m.getSolver().streamSolutions().forEach(s -> {
@@ -64,7 +66,7 @@ public class MultTest {
     @Test
     public void testMult2() {
         final String[] words = new String[] {"a", "bbb", "ccc"};
-        testMultModel(4, words);
+        testMultModel(3, words);
     }
 
     @Test

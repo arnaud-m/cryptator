@@ -15,10 +15,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cryptator.gen.AbstractCryptaListModel;
-import cryptator.gen.CryptaMemberCard;
-import cryptator.gen.CryptaMemberElt;
-import cryptator.gen.CryptaMemberLen;
+import cryptator.gen.member.CryptaMemberCard;
+import cryptator.gen.member.CryptaMemberElt;
+import cryptator.gen.member.CryptaMemberLen;
 import cryptator.specs.ICryptaGenModel;
+import cryptator.specs.ICryptaNode;
 
 class MockWordListModel extends AbstractCryptaListModel {
 
@@ -34,6 +35,31 @@ class MockWordListModel extends AbstractCryptaListModel {
     @Override
     protected void postMaxLengthConstraints() {
         maxLength.eq(0).decompose().post();
+    }
+
+    @Override
+    public void postFixedRightMemberConstraints() {
+        // Nothing to do.
+    }
+
+    @Override
+    public void postDoublyTrueConstraints(int lowerBound) {
+        // Nothing to do.
+    }
+
+    @Override
+    public void postPrecisionConstraints(int base) {
+        // Nothing to do.
+    }
+
+    @Override
+    public void postHeavyConstraints(int base) {
+        // Nothing to do.
+    }
+
+    @Override
+    public ICryptaNode recordCryptarithm() {
+        return null;
     }
 
 }

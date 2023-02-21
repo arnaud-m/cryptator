@@ -6,12 +6,13 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.gen;
+package cryptator.gen.pattern;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
+import cryptator.gen.AbstractCryptaGenModel;
 import cryptator.specs.IChocoModel;
 
 public final class CryptaGridModel implements IChocoModel {
@@ -42,7 +43,7 @@ public final class CryptaGridModel implements IChocoModel {
         if (n > 1) {
             // Transposition
             grid[1][0].le(grid[0][1]).post();
-            // Increasing first row and column with the execption of the last.
+            // Increasing first row and column with the exception of the last.
             for (int i = 1; i < n - 1; i++) {
                 grid[0][i - 1].le(grid[0][i]).post();
                 grid[i - 1][0].le(grid[i][0]).post();

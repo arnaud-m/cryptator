@@ -62,81 +62,35 @@ public class CryptaListGenerator implements ICryptaGenerator {
         return errorCount.intValue();
     }
 
-    ICryptaGenSolver buildAdditionSolver() {
-        final CryptaGenModel gen = new CryptaGenModel(words.getWords(), config.isLightModel());
-        gen.buildModel();
-        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
-        gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
-        if (!config.isLightPropagation()) {
-            gen.postMinLeftCountConstraints(config.getArithmeticBase());
+    private AbstractCryptaListModel createGenModel() {
+        if (config.getGridSize() > 0) {
+            return new CryptaGenCrossword(config.getGridSize(), words.getWords(), config.isLightModel());
+        } else if (config.isMultModel()) {
+            return new CryptaGenMult(words.getWords());
+        } else if (config.isLongMultModel()) {
+            return new CryptaGenLongMult(words.getWords(), config.getArithmeticBase());
+        } else {
+            return new CryptaGenAdd(words.getWords(), config.isLightModel());
         }
-        if (words.hasRightMember()) {
-            gen.postFixedRightMemberConstraint();
-        }
-        if (words.isDoublyTrue()) {
-            gen.postDoublyTrueConstraint(words.getLB());
-        }
-        return gen;
-    }
-
-    ICryptaGenSolver buildLongMultiplicationSolver() {
-        final CryptaGenLongMult gen = new CryptaGenLongMult(words.getWords());
-        gen.buildModel();
-        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
-        gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
-        final int thresh = AdaptiveSolver.computeThreshold(config.getArithmeticBase());
-        gen.longMult.getProductLength().le(thresh).post();
-//        if (!config.isLightPropagation()) {
-//            gen.postMinLeftCountConstraints(config.getArithmeticBase());
-//        }
-        if (words.hasRightMember()) {
-            gen.postFixedRightMemberConstraint();
-        }
-//        if (words.isDoublyTrue()) {
-//            gen.postDoublyTrueConstraint(words.getLB());
-//        }
-        return gen;
-    }
-
-    ICryptaGenSolver buildMultiplicationSolver() {
-        final CryptaGenMult gen = new CryptaGenMult(words.getWords());
-        gen.buildModel();
-        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
-        gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
-        if (!config.isLightPropagation()) {
-            gen.postMinLeftCountConstraints(config.getArithmeticBase());
-        }
-        if (words.hasRightMember()) {
-            gen.postFixedRightMemberConstraint();
-        }
-        if (words.isDoublyTrue()) {
-            gen.postDoublyTrueConstraint(words.getLB());
-        }
-        return gen;
-    }
-
-    ICryptaGenSolver buildCrosswordSolver() {
-        final CryptaGenCrossword gen = new CryptaGenCrossword(config.getGridSize(), words.getWords(),
-                config.isLightModel());
-        gen.buildModel();
-        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
-        gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
-        if (!config.isLightPropagation()) {
-            gen.postHeavyConstraints(config.getArithmeticBase());
-        }
-        return gen;
     }
 
     private ICryptaGenSolver buildGenSolver() {
-        if (config.getGridSize() > 0) {
-            return buildCrosswordSolver();
-        } else if (config.isMultModel()) {
-            return buildMultiplicationSolver();
-        } else if (config.isLongMultModel()) {
-            return buildLongMultiplicationSolver();
-        } else {
-            return buildAdditionSolver();
+        final AbstractCryptaListModel gen = createGenModel();
+        gen.buildModel();
+        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
+        gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
+        gen.postPrecisionConstraints(config.getArithmeticBase());
+
+        if (!config.isLightPropagation()) {
+            gen.postHeavyConstraints(config.getArithmeticBase());
         }
+        if (words.hasRightMember()) {
+            gen.postFixedRightMemberConstraints();
+        }
+        if (words.isDoublyTrue()) {
+            gen.postDoublyTrueConstraints(words.getLB());
+        }
+        return gen;
     }
 
     private Consumer<ICryptaNode> buildConsumer(final IChocoModel gen,

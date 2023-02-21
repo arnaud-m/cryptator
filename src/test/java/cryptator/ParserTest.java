@@ -8,12 +8,15 @@
  */
 package cryptator;
 
+import static cryptator.TreeTest.testInorder;
+import static cryptator.TreeTest.testPostorder;
+import static cryptator.TreeTest.testPreorder;
+
+import org.junit.Test;
+
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
-import org.junit.Test;
-
-import static cryptator.TreeTest.*;
 
 public class ParserTest {
 
@@ -564,12 +567,12 @@ public class ParserTest {
 
     @Test(expected = CryptaParserException.class)
     public void testParserIntegerError3symboldoubleticks() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("send+more=\"1234' && && d+e>=y");
+        parser.parse("send+more=\"1234' && && d+e>=y");
     }
 
     @Test(expected = CryptaParserException.class)
     public void testParserIntegerError4symboldoubleticks() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("send+more='1234\" && && d+e>=y");
+        parser.parse("send+more='1234\" && && d+e>=y");
     }
 
 }

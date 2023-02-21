@@ -20,24 +20,33 @@ import org.chocosolver.solver.variables.SetVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
-import cryptator.specs.ICryptaGenSolver;
+import cryptator.gen.pattern.CryptaLongMultModel;
+import cryptator.solver.AdaptiveSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaConstant;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
-public class CryptaGenLongMult extends AbstractCryptaListModel implements ICryptaGenSolver {
+public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     public final CryptaLongMultModel longMult;
 
-    // FIXME Set value according to the config !
-    private int arithmeticBase = 10;
+    private int arithmeticBase;
 
-    public CryptaGenLongMult(String[] words) {
+    public CryptaGenLongMult(String[] words, int arithmeticBase) {
         super(new Model("Generate-Long-Multiplication"), words);
+        this.arithmeticBase = arithmeticBase;
         final int[] lengths = getLengths(words);
         final int[] cards = getCards(words);
         longMult = new CryptaLongMultModel(model, lengths, cards);
+    }
+
+    public final int getArithmeticBase() {
+        return arithmeticBase;
+    }
+
+    public final void setArithmeticBase(int arithmeticBase) {
+        this.arithmeticBase = arithmeticBase;
     }
 
     @Override
@@ -63,8 +72,24 @@ public class CryptaGenLongMult extends AbstractCryptaListModel implements ICrypt
         maxLength.eq(longMult.getProductLength()).post();
     }
 
-    public void postFixedRightMemberConstraint() {
+    public void postFixedRightMemberConstraints() {
         longMult.getProduct().eq(getN() - 1).post();
+    }
+
+    @Override
+    public void postDoublyTrueConstraints(int lowerBound) {
+        throw new UnsupportedOperationException("Doubly true long multiplication is undefined.");
+    }
+
+    @Override
+    public void postHeavyConstraints(int base) {
+        // Nothing to do
+    }
+
+    @Override
+    public void postPrecisionConstraints(int base) {
+        final int thresh = AdaptiveSolver.computeThreshold(base);
+        longMult.getProductLength().le(thresh).post();
     }
 
     private String[] getTermWords() {

@@ -6,10 +6,12 @@
  * Licensed under the BSD 3-clause license.
  * See LICENSE file in the project root for full license information.
  */
-package cryptator.gen;
+package cryptator.gen.member;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
+
+import cryptator.gen.AbstractCryptaGenModel;
 
 public class CryptaMemberLen extends AbstractCryptaGenModel {
 

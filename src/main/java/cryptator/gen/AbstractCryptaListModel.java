@@ -18,12 +18,14 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
+import cryptator.specs.ICryptaGenSolver;
+
 /**
  * The Class WordsListModel defines a CP model for mapping words to symbols. A
  * symbol is present if and only if at least one word that contains the symbol
  * is present.
  */
-public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel {
+public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel implements ICryptaGenSolver {
 
     /** The map that associates a variable to each symbol of the words. */
     protected final Map<Character, BoolVar> symbolsToVariables;
@@ -52,6 +54,23 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel {
         super.buildModel();
         postSymbolCountConstraint();
         postChannelingConstraints();
+    }
+
+    public abstract void postFixedRightMemberConstraints();
+
+    public abstract void postDoublyTrueConstraints(final int lowerBound);
+
+    public abstract void postPrecisionConstraints(int base);
+
+    public abstract void postHeavyConstraints(final int base);
+
+    /**
+     * Post a constraint over the maximum number of distinct symbols in the words.
+     *
+     * @param max the maximum number of symbols
+     */
+    public void postMaxSymbolCountConstraint(final int max) {
+        symbolCount.le(max).post();
     }
 
     private void postSymbolCountConstraint() {
@@ -104,15 +123,6 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel {
             final BoolVar[] vars = AbstractCryptaListModel.toArray(entry.getValue());
             model.max(max, vars).post();
         }
-    }
-
-    /**
-     * Post a constraint over the maximum number of distinct symbols in the words.
-     *
-     * @param max the maximum number of symbols
-     */
-    public void postMaxSymbolCountConstraint(final int max) {
-        symbolCount.le(max).post();
     }
 
     private static BoolVar[] toArray(final Collection<BoolVar> vars) {

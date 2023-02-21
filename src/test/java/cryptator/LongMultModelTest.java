@@ -12,7 +12,7 @@ import org.chocosolver.solver.Model;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cryptator.gen.CryptaLongMultModel;
+import cryptator.gen.pattern.CryptaLongMultModel;
 
 public class LongMultModelTest {
 

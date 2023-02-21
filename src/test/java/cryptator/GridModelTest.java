@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 import org.chocosolver.solver.Model;
 import org.junit.Test;
 
-import cryptator.gen.CryptaGridModel;
+import cryptator.gen.pattern.CryptaGridModel;
 
 public class GridModelTest {
 

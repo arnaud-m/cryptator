@@ -187,9 +187,8 @@ public class GenerateTest {
 
     @Test
     public void testMult5() throws CryptaModelException {
-        // FIXME should be 2
         WordArray words = new WordArray(Arrays.asList("north", "south", "east", "west"), null);
-        testMultGenerate(4, words);
+        testMultGenerate(2, words);
     }
 
 }
