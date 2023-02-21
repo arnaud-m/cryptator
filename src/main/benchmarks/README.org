@@ -49,7 +49,6 @@
    }
  #+END_SRC
 
-
 * Generate
 
 ** Create the solver
@@ -92,7 +91,6 @@ exit $?
 
 
 
-
 * Generate and Solve
 ** Create the solver
 
@@ -102,7 +100,7 @@ MAINCLASS=cryptator.Cryptagen
 
 MAINARGS=`cat $1 $2 | xargs`
 
-java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS | head -n -10
+java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
 exit $?
  #+END_SRC
 
@@ -111,11 +109,11 @@ exit $?
 *** Enumerate Doubly True
 
 #+BEGIN_SRC sh
-  generateDoublyTrue 401 500
+  generateDoublyTrue 1 500
  #+END_SRC
 
 
-Interrupted processes
+Interrupted addition processes
   - pt-301-400
   - el-301-400
   - ro-301-400
@@ -228,38 +226,41 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 ** Configure the algorithm
 
+*** Addition
  #+BEGIN_SRC sh
    echo -v quiet -d FALSE -l TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
  #+END_SRC
 
 
+*** Multiplication
+ #+BEGIN_SRC sh
+   echo -v quiet -d FALSE -mult TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
+ #+END_SRC
+
+*** Long Multiplication
+ #+BEGIN_SRC sh
+   echo -v quiet -d FALSE -longMult TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
+ #+END_SRC
+
 * Solve
 ** Create the solver
-*** Compare Models
-
-
-#+BEGIN_SRC sh :tangle solver.sh
-  JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
-  MAINCLASS=cryptator.Cryptator
-  MAINARGS=`cat $1 | xargs`
-  ## exclude cryptarithm with long words
-  grep -wvE '\w{9,}' $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
-  exit $?
- #+END_SRC
-
-*** Compare Solvers
+*** Cryptator
+**** Simple Precision
 
 #+BEGIN_SRC sh :tangle solver.sh
   JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
   MAINCLASS=cryptator.Cryptator
   MAINARGS=`cat $1 | xargs`
-  ## Do not exclude anything
-  sed 's/[[:space:]]//g'  $2 | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
-
+    ## exclude cryptarithm with long words
+  #GREP="grep -wvE '\w{9,}'"
+  ## exclude cryptarithm with short words
+  #GREP="grep -wE '\w{9,}'"
+  GREP=cat
+  $GREP $2 | sed 's/[[:space:]]//g'  | xargs java -server  -Xms512m -Xmx8192m -cp $JAR $MAINCLASS $MAINARGS
   exit $?
  #+END_SRC
 
-**** Crypt
+*** Crypt
 
 The very fast [[https://tamura70.gitlab.io/web-puzzle/cryptarithm/][crypt solver]] in C of Naoyuki Tamura.
 
@@ -267,42 +268,47 @@ Postprocess the output of the crypt solver.
 #+BEGIN_SRC awk :tangle crypt.awk
   #!/usr/bin/awk
   {
-      if(NR % 3 == 2 && $_ !~ /Total time =/) {
-          printf "i%s\n",$_
-      } else if(NR % 3 == 1 && NR > 1) {
-          print "d NBSOLS",$1
-          print "d TIME",$3/1000
-      } else if(NR % 3 == 0) {
-          printf "s%s\n",$_
-      } else print $_
+    if($_ $_ ~ /^[a-zA-z\+=[:space:]]*$/) {
+        printf "i%s\ns UNKNOWN\n",$_
+    } else if($_ ~ /^[0-9\+=[:space:]]*$/) {
+        printf "s%s\n",$_
+    } else if($_ ~ /solution\(s\)/) {
+         print "d NBSOLS",$1
+         printf("d TIME %.3f\n", $3/1000)
+         print "s TERMINATED"
+    } else print $_
   }
  #+END_SRC
 
- Encapsulate the solver for benchmarking
+ Encapsulate the solver for benchmarking.
+ - Do not handle long words
+ - Do not handle digits as symbols (they are treated like fixed digits)
 #+BEGIN_SRC sh :tangle solver.sh
   #!/bin/sh
-  ./crypt/crypt < $2 | awk -f crypt.awk
+  ## exclude cryptarithm with long words that raise an error.
+  grep -wvE '\w{9,}' $2 | ./crypt/crypt | awk -f crypt.awk
  #+END_SRC
 
 ** Configure instances
 
+
  #+BEGIN_SRC sh
    ln -s ../cryptarithms instances
  #+END_SRC
+Do not remove the content of the directory!
 
 ** Configure the algorithm
 
  #+BEGIN_SRC sh
-   ARGS=" -v verbose -t 10"
+   ARGS=" -v verbose -t 100"
    echo $ARGS -l TRUE > algorithms/BIGNUM.dat
    echo $ARGS -l FALSE -h FALSE > algorithms/SCALAR.dat
    echo $ARGS -l FALSE -h TRUE > algorithms/HORNER.dat
 
-   echo $ARGS -l TRUE -search 1 > algorithms/BIGNUM-1.dat
-   echo $ARGS -l FALSE -h FALSE -search 1 > algorithms/SCALAR-1.dat
-   echo $ARGS -l FALSE -h TRUE -search 1 > algorithms/HORNER-1.dat
+#   echo $ARGS -l TRUE -search 1 > algorithms/BIGNUM-1.dat
+#   echo $ARGS -l FALSE -h FALSE -search 1 > algorithms/SCALAR-1.dat
+#   echo $ARGS -l FALSE -h TRUE -search 1 > algorithms/HORNER-1.dat
  #+END_SRC
-
 
 
 * Testing
@@ -391,34 +397,260 @@ Change the file extension accordingly.
     done
 
 #+END_SRC
-
-
-
 * Analysis
+** Generate
+
 
 #+BEGIN_SRC R
-  dbfiles <- list.files(c("../cryptarithms"), pattern = "*.db.txt", recursive = TRUE, full.names=TRUE)
-  dbfiles <- subset(dbfiles, !grepl("external-contributions", dbfiles))
-  cryptarithms <- unlist(sapply(dbfiles, readLines))
-  cryptarithms <- subset(cryptarithms, nchar(cryptarithms) > 0)
-  operands <- strsplit(cryptarithms, "[ +=]+")
-
-  ExtractFeatures <- function(x) {
-    y <- nchar(x)
-    r <- range(y)
-    z <- length(unique(unlist(strsplit(x, ""))))
-    c( words = length(x), letters = sum(y), symbols = z, meanLen = mean(y), medianLen = median(y), minLen = r[1], maxLen = r[2], diffLen = r[2] - r[1])
+  library(dplyr)
+  ReadCryptarithms <- function(excluded = "external-contributions|multiplications|crosswords") {
+    dbfiles <- list.files(c("../cryptarithms"), pattern = "*.db.txt", recursive = TRUE, full.names=TRUE)
+    dbfiles <- subset(dbfiles, !grepl(excluded, dbfiles))
+    print(dbfiles)
+    cryptarithms <- unlist(sapply(dbfiles, readLines))
+    return(subset(cryptarithms, nchar(cryptarithms) > 0))
   }
 
-  features <- as.data.frame(t(sapply(operands, ExtractFeatures)))
-  cat(nrow(features), "cryptarithms in database\n")
-  summary(features)
+  ComputeFeatures <- function(cryptarithms) {
+    ExtractFeatures <- function(x) {
+        y <- nchar(x)
+        r <- range(y)
+        z <- length(unique(unlist(strsplit(x, ""))))
+        c(words = length(x), letters = sum(y), symbols = z, meanLen = mean(y), medianLen = median(y), minLen = r[1], maxLen = r[2], diffLen = r[2] - r[1])
+      }
+      operands <- strsplit(cryptarithms, "[ *+=]+")
+      return(as.data.frame(t(sapply(operands, ExtractFeatures))))
+  }
+
+#+END_SRC
+
+#+BEGIN_SRC R
+  cryptarithms <- ReadCryptarithms()
+  features <- ComputeFeatures(cryptarithms)
 
   library(dplyr)
   library(ggplot2)
-  x <- features %>% count(words, maxLen)
+  x <- features %>% count(words, minLen)
   x$n <- log10(x$n)
-  ggplot(x, aes(words, maxLen, fill= n)) +
+  ggplot(x, aes(words, minLen, fill= n)) +
   geom_tile()
+#+END_SRC
 
+
+
+*** CANCELED Sample cryptarithms from the database for benchmarking
+
+#+BEGIN_SRC R
+  SampleCryptarithms <- function(cryptarithms, n = 10, wods = 5) {
+    x <- ComputeFeatures(cryptarithms)
+    x$idx <- seq(nrow(x))
+    x <- subset(x, x$words >= words)
+    y <- x %>%
+      group_by(words, maxLen) %>%
+      slice(sample(n(), min(n, n()))) %>% ungroup()
+    return(cryptarithms[ y$idx ])
+  }
+
+  ExportCryptarithms <- function(cryptarithms, m = 10) {
+    n <- length(cryptarithms)
+    ind <- rep(seq(m), each = ceiling(n/m), length.out = n)
+    z <- split(cryptarithms, ind)
+
+    for(i in seq_along(z)) {
+      filename <- file.path("instances", sprintf("cryptarithms-%02d.db.txt", i))
+      sink(filename)
+      cat(z[[i]], sep = "\n")
+      sink()
+    }
+  }
+
+#+END_SRC
+
+#+BEGIN_SRC R
+  excluded <- "(external-contributions|el-1-200|hi-1-500)"
+  cryptarithms <- ReadCryptarithms(excluded)
+  instances <- SampleCryptarithms(cryptarithms)
+  ExportCryptarithms(instances)
+#+END_SRC
+
+** Solve
+*** Load packages
+
+
+#+BEGIN_SRC R :results silent
+  ## Load the local package optiplot
+  dirname <- getwd()
+  setwd("~/www-git/optiplot")
+  devtools::load_all()
+  setwd(dirname)
+  ## library(optiplot)
+
+  library(dplyr)
+  library(ggplot2)
+#+END_SRC
+
+
+   ~tbl_df~ objects come with their own print/show method. And it does things like add color and text formats. This is nice in a terminal, but not when you want to display them in org.
+   Turning off the color might be enough to give you a usable result.
+#+BEGIN_SRC R :results silent
+  options(cli.num_colors=1 )
+#+END_SRC
+
+*** Load results
+
+
+#+BEGIN_SRC R :results silent
+  dirname <- "results"
+  data <- ReadGrigrid(dirname)
+#+END_SRC
+
+
+*** Status
+
+
+   #+BEGIN_SRC R :results output replace
+     table( data[ c("a", "s")])
+  #+END_SRC
+
+  #+RESULTS:
+  :         s
+  : a        STOPPED TERMINATED UNKNOWN
+  :   BIGNUM       0      35800       0
+  :   CRYPT        0      35104      18
+  :   HORNER    4146      31654       0
+  :   SCALAR       0      35800       0
+
+
+*** Solving Times
+**** Statistics
+   #+BEGIN_SRC R :results output replace
+     gmean <- function(x) exp(mean(log(x)))
+     data  %>% filter( s == "TERMINATED") %>%
+         group_by(a) %>%
+         summarise(
+             n = n(), median = median(TIME),
+             mean = mean(TIME), sd = sd(TIME),
+             gmean = gmean(TIME)
+         )
+   #+END_SRC
+
+   #+RESULTS:
+   : # A tibble: 4 × 6
+   :   a          n median    mean      sd gmean
+   :   <chr>  <int>  <dbl>   <dbl>   <dbl> <dbl>
+   : 1 BIGNUM 35800  0.133  1.56    4.67   0
+   : 2 CRYPT  35104  0.01   0.0273  0.0513 0
+   : 3 HORNER 31654  8.02  16.6    20.6    7.15
+   : 4 SCALAR 35800  0.115  0.355   0.858  0.115
+
+   #+BEGIN_SRC R :results output replace
+     gmean <- function(x) exp(mean(log(x)))
+     x <- data  %>% filter( s == "TERMINATED") %>%
+         group_by(a, WORD_COUNT) %>%
+         summarise(
+             n = n(), median = median(TIME),
+             mean = mean(TIME), sd = sd(TIME),
+             gmean = gmean(TIME)
+         )
+    group_split(x)
+   #+END_SRC
+
+   #+RESULTS:
+   #+begin_example
+   `summarise()` has grouped output by 'a'. You can override using the `.groups` argument.
+   <list_of<
+     tbl_df<
+       a         : character
+       WORD_COUNT: integer
+       n         : integer
+       median    : double
+       mean      : double
+       sd        : double
+       gmean     : double
+     >
+   >[3]>
+   [[1]]
+   # A tibble: 35 × 7
+      a      WORD_COUNT     n median    mean     sd  gmean
+      <chr>       <int> <int>  <dbl>   <dbl>  <dbl>  <dbl>
+    1 BIGNUM          3   728  0.004 0.00686 0.0135 0
+    2 BIGNUM          4  3696  0.012 0.0177  0.0344 0
+    3 BIGNUM          5  5933  0.033 0.0451  0.0486 0
+    4 BIGNUM          6  5273  0.072 0.0991  0.0937 0.0636
+    5 BIGNUM          7  2774  0.128 0.184   0.190  0.109
+    6 BIGNUM          8   944  0.206 0.304   0.330  0.172
+    7 BIGNUM          9   203  0.171 0.352   0.454  0.170
+    8 BIGNUM         10    29  0.111 0.193   0.222  0.114
+    9 BIGNUM         11     4  0.166 0.208   0.126  0.185
+   10 BIGNUM         12   137  0.492 0.727   0.715  0.428
+   # … with 25 more rows
+   # ℹ Use `print(n = ...)` to see more rows
+
+   [[2]]
+   # A tibble: 35 × 7
+      a      WORD_COUNT     n median  mean    sd gmean
+      <chr>       <int> <int>  <dbl> <dbl> <dbl> <dbl>
+    1 HORNER          3   713   1.96  5.40  11.2  1.34
+    2 HORNER          4  3563   3.70  8.81  14.5  3.09
+    3 HORNER          5  5546   6.63 14.1   18.7  6.00
+    4 HORNER          6  4760  10.0  17.6   20.1  8.75
+    5 HORNER          7  2403  13.0  20.9   21.5 11.3
+    6 HORNER          8   806  12.6  20.8   21.5 11.1
+    7 HORNER          9   164  10.8  18.6   21.4  9.62
+    8 HORNER         10    26   8.72 17.1   19.6  8.60
+    9 HORNER         11     3   8.47 20.6   22.8 13.6
+   10 HORNER         12   118  14.0  23.6   25.4 11.3
+   # … with 25 more rows
+   # ℹ Use `print(n = ...)` to see more rows
+
+   [[3]]
+   # A tibble: 35 × 7
+      a      WORD_COUNT     n median   mean    sd   gmean
+      <chr>       <int> <int>  <dbl>  <dbl> <dbl>   <dbl>
+    1 SCALAR          3   728  0.01  0.0227 0.106 0.00948
+    2 SCALAR          4  3696  0.028 0.0552 0.174 0.0267
+    3 SCALAR          5  5933  0.062 0.109  0.164 0.0577
+    4 SCALAR          6  5273  0.108 0.177  0.272 0.0978
+    5 SCALAR          7  2774  0.154 0.255  0.807 0.143
+    6 SCALAR          8   944  0.170 0.281  0.357 0.158
+    7 SCALAR          9   203  0.169 0.263  0.283 0.154
+    8 SCALAR         10    29  0.082 0.204  0.354 0.106
+    9 SCALAR         11     4  0.274 0.263  0.181 0.202
+   10 SCALAR         12   137  0.273 0.330  0.289 0.216
+   # … with 25 more rows
+   # ℹ Use `print(n = ...)` to see more rows
+   #+end_example
+
+
+
+   #+BEGIN_SRC R :results output :session sched
+     gmean <- function(x) exp(mean(log(x)))
+     data  %>% filter( s == "OPTIMUM") %>%
+         group_by(a) %>%
+         summarise(
+             n = n(), median = median(RUNTIME),
+             mean = mean(RUNTIME), sd = sd(RUNTIME),
+             gmean = gmean(RUNTIME)
+         )
+   #+END_SRC
+
+**** Plots
+
+#+BEGIN_SRC R :results silent
+  PlotSurvival(data, "a", "TIME")
+
+  cdata <- ReadGrigrid("results")
+  cdata <- subset(cdata, cdata$s == "TERMINATED")
+  cdata <- bind_rows(data, cdata)
+  PlotSurvival(cdata, "a", "TIME")
+  ## PlotSurvival(data, "a", "BRANCHES")
+  ggplot2::ggsave("survival-solvers.pdf", width = 12, height = 12)
+#+END_SRC
+
+*** Compare solvers
+
+
+#+BEGIN_SRC R :results silent
+  PlotScatterRatios(data, "SCALAR", y = "BIGNUM", colX = "TIME", colY = "NODES", minX = 0.001)
+  ggplot2::ggsave("compare-solvers.pdf", width = 12, height = 12)
 #+END_SRC
