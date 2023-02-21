@@ -68,7 +68,7 @@ public class CryptaGenAdd extends AbstractCryptaListModel {
     }
 
     @Override
-    public void postPrecisionConstraints(int base) {
+    public void postPrecisionConstraints(final int base) {
         // Nothing to do.
     }
 

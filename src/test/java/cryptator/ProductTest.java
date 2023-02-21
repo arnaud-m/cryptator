@@ -19,11 +19,14 @@ import org.junit.Test;
 public class ProductTest {
 
     private Model model;
-    private IntVar copper, neon, iron, silver, result;
+    private IntVar copper;
+    private IntVar neon;
+    private IntVar iron;
+    private IntVar silver;
+    private IntVar result;
 
     /***
-     * Tests if choco can solve "copper*neon=iron*silver" via various way of writing
-     * constraints
+     * Tests "copper*neon=iron*silver" with different models.
      */
     @Before
     public void setup() {
@@ -89,7 +92,7 @@ public class ProductTest {
     }
 
     /***
-     * Creating a model using the operators function given by IntVar
+     * Create a model using the operators function given by IntVar.
      */
     @Test
     @Ignore("It is a choco issue")
@@ -101,8 +104,9 @@ public class ProductTest {
     }
 
     /***
-     * Creating a model using the operators function given by IntVar without using
-     * result as an intermediary
+     * Create a model using the operators function given by the IntVar.
+     * 
+     * It does not use result as an intermediary
      */
     @Test
     @Ignore("It is a choco issue")

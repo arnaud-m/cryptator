@@ -17,11 +17,11 @@ import cryptator.gen.CryptaGenMult;
 
 public class MultTest {
 
-    private void testMultModel(int expectedSolutionCount, String[] words) {
+    private void testMultModel(final int expectedSolutionCount, final String[] words) {
         testMultModel(expectedSolutionCount, words, false);
     }
 
-    private void testMultModel(int expectedSolutionCount, String[] words, boolean isDoublyTrue) {
+    private void testMultModel(final int expectedSolutionCount, final String[] words, final boolean isDoublyTrue) {
         final CryptaGenMult m = new CryptaGenMult(words);
         m.buildModel();
         m.postPrecisionConstraints(10);
@@ -41,7 +41,7 @@ public class MultTest {
 
     }
 
-    private void testGenLongMultModel(int expectedSolutionCount, String[] words) {
+    private void testGenLongMultModel(final int expectedSolutionCount, final String[] words) {
         final CryptaGenLongMult m = new CryptaGenLongMult(words, 10);
         m.buildModel();
 

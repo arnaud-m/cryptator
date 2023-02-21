@@ -33,7 +33,7 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     private int arithmeticBase;
 
-    public CryptaGenLongMult(String[] words, int arithmeticBase) {
+    public CryptaGenLongMult(final String[] words, final int arithmeticBase) {
         super(new Model("Generate-Long-Multiplication"), words);
         this.arithmeticBase = arithmeticBase;
         final int[] lengths = getLengths(words);
@@ -45,7 +45,7 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
         return arithmeticBase;
     }
 
-    public final void setArithmeticBase(int arithmeticBase) {
+    public final void setArithmeticBase(final int arithmeticBase) {
         this.arithmeticBase = arithmeticBase;
     }
 
@@ -77,17 +77,17 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
     }
 
     @Override
-    public void postDoublyTrueConstraints(int lowerBound) {
+    public void postDoublyTrueConstraints(final int lowerBound) {
         throw new UnsupportedOperationException("Doubly true long multiplication is undefined.");
     }
 
     @Override
-    public void postHeavyConstraints(int base) {
+    public void postHeavyConstraints(final int base) {
         // Nothing to do
     }
 
     @Override
-    public void postPrecisionConstraints(int base) {
+    public void postPrecisionConstraints(final int base) {
         final int thresh = AdaptiveSolver.computeThreshold(base);
         longMult.getProductLength().le(thresh).post();
     }
@@ -107,7 +107,7 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
         return twords;
     }
 
-    private static ICryptaNode recordTermAddition(final String[] terms, String product, int base) {
+    private static ICryptaNode recordTermAddition(final String[] terms, final String product, final int base) {
         ArrayList<ICryptaNode> nodes = new ArrayList<>();
         int exponent = 1;
         for (int i = terms.length - 1; i >= 0; i--) {
@@ -119,7 +119,8 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
         return new CryptaNode(CryptaOperator.EQ, addition, new CryptaLeaf(product));
     }
 
-    private static ICryptaNode recordTermMultiplications(String[] terms, String multiplicand, String multiplier) {
+    private static ICryptaNode recordTermMultiplications(final String[] terms, final String multiplicand,
+            final String multiplier) {
         final char[] multipliers = multiplier.toCharArray();
         final ArrayList<ICryptaNode> nodes = new ArrayList<>();
         for (int i = 0; i < terms.length; i++) {

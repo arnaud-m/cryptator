@@ -17,25 +17,27 @@ import cryptator.gen.CryptaGenCrossword;
 
 public class CrossModelTest {
 
-    private void testCrosswordModel(int size, String[] words, int expectedSolutionCount) {
+    private void testCrosswordModel(final int size, final String[] words, final int expectedSolutionCount) {
         testCrosswordModel(size, words, true, expectedSolutionCount);
         testCrosswordModel(size, words, false, expectedSolutionCount);
     }
 
-    private void testCrosswordModel(int size, String[] words, boolean useLenModel, int expectedSolutionCount) {
+    private void testCrosswordModel(final int size, final String[] words, final boolean useLenModel,
+            final int expectedSolutionCount) {
         final CryptaGenCrossword m = new CryptaGenCrossword(size, words, useLenModel);
         m.buildModel();
         // System.out.println(m.getModel());
         assertEquals(expectedSolutionCount, m.getModel().getSolver().streamSolutions().count());
     }
 
-    private void testHeavyCrosswordModel(int size, String[] words, int expectedSolutionCount) {
+    private void testHeavyCrosswordModel(final int size, final String[] words, final int expectedSolutionCount) {
         testHeavyCrosswordModel(size, words, true, expectedSolutionCount);
         testHeavyCrosswordModel(size, words, false, expectedSolutionCount);
 
     }
 
-    private void testHeavyCrosswordModel(int size, String[] words, boolean useLenModel, int expectedSolutionCount) {
+    private void testHeavyCrosswordModel(final int size, final String[] words, final boolean useLenModel,
+            final int expectedSolutionCount) {
         final CryptaGenCrossword m = new CryptaGenCrossword(size, words, useLenModel);
         m.buildModel();
         m.postHeavyConstraints(10);

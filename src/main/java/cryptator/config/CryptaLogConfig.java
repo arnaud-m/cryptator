@@ -21,7 +21,7 @@ public class CryptaLogConfig extends CryptaConfig {
         return verbosity;
     }
 
-    public final void setVerbosity(Verbosity verbosity) {
+    public final void setVerbosity(final Verbosity verbosity) {
         this.verbosity = verbosity;
     }
 

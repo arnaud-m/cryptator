@@ -17,7 +17,7 @@ import cryptator.gen.pattern.CryptaGridModel;
 
 public class GridModelTest {
 
-    private void testGridModel(int size, int words, int expectedSolutionCount) {
+    private void testGridModel(final int size, final int words, final int expectedSolutionCount) {
         CryptaGridModel m = new CryptaGridModel(new Model(), size, words);
         m.buildModel();
         assertEquals(expectedSolutionCount, m.getModel().getSolver().streamSolutions().count());

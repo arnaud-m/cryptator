@@ -100,7 +100,7 @@ final class CryptaSolvingTester {
         }
     }
 
-    public void testResource(String resourcePath)
+    public void testResource(final String resourcePath)
             throws CryptaParserException, CryptaModelException, CryptaSolverException {
         final InputStream in = getClass().getClassLoader().getResourceAsStream(resourcePath);
         final Scanner s = new Scanner(in);

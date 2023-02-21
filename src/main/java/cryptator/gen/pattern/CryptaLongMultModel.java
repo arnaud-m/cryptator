@@ -48,9 +48,10 @@ public class CryptaLongMultModel implements IChocoModel {
 
     private final IntVar mrCard;
 
-    private int maxProductLength = 5;
+    // TODO Define properly
+    private static final int maxProductLength = 5;
 
-    public CryptaLongMultModel(Model model, final int[] lengths, final int[] cards) {
+    public CryptaLongMultModel(final Model model, final int[] lengths, final int[] cards) {
         this.model = model;
         this.lengths = lengths;
         this.cards = cards;
@@ -107,7 +108,7 @@ public class CryptaLongMultModel implements IChocoModel {
         return indices;
     }
 
-    private static void ge1(ArExpression e1, ArExpression e2) {
+    private static void ge1(final ArExpression e1, final ArExpression e2) {
         e1.ge(e2).post();
         e1.le(e2.add(1)).post();
     }
@@ -174,14 +175,15 @@ public class CryptaLongMultModel implements IChocoModel {
         postTermOrderingConstraints();
     }
 
-    private void toString(StringBuilder b, IntVar idx, IntVar len) {
+    private void toString(final StringBuilder b, final IntVar idx, final IntVar len) {
         toString(b, idx, len, Optional.empty());
     }
 
-    private void toString(StringBuilder b, IntVar idx, IntVar len, Optional<IntVar> card) {
+    private void toString(final StringBuilder b, final IntVar idx, final IntVar len, final Optional<IntVar> card) {
         b.append(idx.getValue()).append("(").append(len.getValue());
-        if (card.isPresent())
+        if (card.isPresent()) {
             b.append("-").append(card.get().getValue());
+        }
         b.append(") ");
     }
 
@@ -206,13 +208,13 @@ public class CryptaLongMultModel implements IChocoModel {
 
         private final int n;
 
-        protected ExceptN(int n) {
+        protected ExceptN(final int n) {
             super();
             this.n = n;
         }
 
         @Override
-        public boolean holdOnVar(IntVar x) {
+        public boolean holdOnVar(final IntVar x) {
             return !x.contains(n);
         }
 

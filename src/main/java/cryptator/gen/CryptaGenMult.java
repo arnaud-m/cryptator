@@ -23,7 +23,7 @@ class CryptaMemberMult extends CryptaMemberPair {
 
     private final IntVar sumR;
 
-    public CryptaMemberMult(Model model, String[] words, String prefix) {
+    public CryptaMemberMult(final Model model, final String[] words, final String prefix) {
         super(new CryptaMemberLen(model, words, prefix + "L_"), new CryptaMemberLen(model, words, prefix + "R_"));
         final int ub = AbstractCryptaGenModel.getSumLength(words);
         this.sumL = model.intVar("L_sumLength", 0, ub);
@@ -48,7 +48,7 @@ class CryptaMemberMult extends CryptaMemberPair {
         getModel().lexLess(left.getWordVars(), right.getWordVars()).post();
     }
 
-    public void postMultPrecisionConstraints(int base) {
+    public void postMultPrecisionConstraints(final int base) {
         getModel().sum(left.lengths, "=", sumL).post();
         getModel().sum(((CryptaMemberLen) right).lengths, "=", sumR).post();
         final int thresh = AdaptiveSolver.computeThreshold(base) + 1;
@@ -56,7 +56,7 @@ class CryptaMemberMult extends CryptaMemberPair {
         sumR.le(thresh).post();
     }
 
-    public void postMultHeavyConstraints(int base) {
+    public void postMultHeavyConstraints(final int base) {
         final ArExpression minL = sumL.sub(left.getWordCount()).add(1);
         final ArExpression minR = sumR.sub(right.getWordCount()).add(1);
         minL.le(sumR).post();
@@ -66,6 +66,8 @@ class CryptaMemberMult extends CryptaMemberPair {
 }
 
 public class CryptaGenMult extends AbstractCryptaListModel {
+
+    private final int PRECISION = 1000;
 
     private final CryptaMemberMult multiplication;
 
@@ -98,9 +100,9 @@ public class CryptaGenMult extends AbstractCryptaListModel {
         multiplication.postFixedRightMemberConstraints();
     }
 
-    private int getDoublyCoeff(int i) {
+    private int getDoublyCoeff(final int i) {
         double coeff = Math.log(i) / Math.log((getN() - 1));
-        return (int) Math.round(1000 * coeff);
+        return (int) Math.round(PRECISION * coeff);
 
     }
 
@@ -131,7 +133,7 @@ public class CryptaGenMult extends AbstractCryptaListModel {
     }
 
     @Override
-    public void postPrecisionConstraints(int base) {
+    public void postPrecisionConstraints(final int base) {
         final int thresh = AdaptiveSolver.computeThreshold(base);
         getMaxLength().le(thresh).post();
         multiplication.postMultPrecisionConstraints(base);

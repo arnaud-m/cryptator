@@ -65,15 +65,15 @@ public final class CryptaGridModel implements IChocoModel {
         return grid.length;
     }
 
-    public IntVar getCell(int i, int j) {
+    public IntVar getCell(final int i, final int j) {
         return grid[i][j];
     }
 
-    public IntVar[] getRow(int i) {
+    public IntVar[] getRow(final int i) {
         return grid[i];
     }
 
-    public IntVar[] getCol(int i) {
+    public IntVar[] getCol(final int i) {
         return tgrid[i];
     }
 
@@ -85,7 +85,7 @@ public final class CryptaGridModel implements IChocoModel {
         return tgrid;
     }
 
-    public String toString(String[] words) {
+    public String toString(final String[] words) {
         final int n = size();
         final StringBuilder b = new StringBuilder();
         final int maxlen = AbstractCryptaGenModel.getMaxLength(words);

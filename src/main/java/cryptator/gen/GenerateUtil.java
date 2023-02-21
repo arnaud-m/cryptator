@@ -21,7 +21,7 @@ import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaLeaf;
 import cryptator.tree.CryptaNode;
 
-public class GenerateUtil {
+public final class GenerateUtil {
 
     private GenerateUtil() {
         super();
@@ -71,7 +71,8 @@ public class GenerateUtil {
         return reduceOperation(CryptaOperator.EQ, recordMultiplication(left), recordMultiplication(right));
     }
 
-    public static ICryptaNode recordMultiplication(String multiplicand, String multiplier, String product) {
+    public static ICryptaNode recordMultiplication(final String multiplicand, final String multiplier,
+            final String product) {
         return new CryptaNode(CryptaOperator.EQ,
                 new CryptaNode(CryptaOperator.MUL, new CryptaLeaf(multiplicand), new CryptaLeaf(multiplier)),
                 new CryptaLeaf(product));

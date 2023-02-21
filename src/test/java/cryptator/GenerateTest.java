@@ -52,13 +52,13 @@ public class GenerateTest {
         assertEquals(expectedSolCount, cons.getSolutionCount());
     }
 
-    private void testGenerate(final int expectedSolCount, final WordArray wordArray, int gridSize)
+    private void testGenerate(final int expectedSolCount, final WordArray wordArray, final int gridSize)
             throws CryptaModelException {
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray, 0);
     }
 
     private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
-            final WordArray wordArray, int gridSize) throws CryptaModelException {
+            final WordArray wordArray, final int gridSize) throws CryptaModelException {
         configure(gridSize, false, false);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
         configure(gridSize, false, true);
@@ -70,7 +70,7 @@ public class GenerateTest {
     }
 
     private void testHeavyGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
-            final WordArray wordArray, int gridSize) throws CryptaModelException {
+            final WordArray wordArray, final int gridSize) throws CryptaModelException {
         configure(gridSize, false, false);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
         configure(gridSize, true, false);
