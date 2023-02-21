@@ -1,0 +1,8 @@
+beet * corn = onion * mint
+beet * mint = pumpkin
+corn * mint = bean * beet
+lettuce = corn * mint
+mint * sage = eggplant
+okra * beet = bean * sage
+parsley = bean * beet
+rosemary = corn * sage

@@ -1,0 +1,4 @@
+judo * luge = golf * polo
+judo * polo = golf * luge
+lacrosse = golf * luge
+parkour = judo * polo

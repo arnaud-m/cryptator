@@ -1,0 +1,5 @@
+damysos = antee * les
+damysos = argos * les
+les * otos = aloades
+les * talos = damysos
+otos * talos = agrios * les

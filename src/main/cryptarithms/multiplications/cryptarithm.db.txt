@@ -1,0 +1,6 @@
+letters = games * np
+puzzle = np * word
+puzzles = games * np
+reverse = np * words
+values = games * np
+verbal = game * np
