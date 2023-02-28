@@ -43,17 +43,17 @@ class MockWordListModel extends AbstractCryptaListModel {
     }
 
     @Override
-    public void postDoublyTrueConstraints(int lowerBound) {
+    public void postDoublyTrueConstraints(final int lowerBound) {
         // Nothing to do.
     }
 
     @Override
-    public void postPrecisionConstraints(int base) {
+    public void postPrecisionConstraints(final int base) {
         // Nothing to do.
     }
 
     @Override
-    public void postHeavyConstraints(int base) {
+    public void postHeavyConstraints(final int base) {
         // Nothing to do.
     }
 

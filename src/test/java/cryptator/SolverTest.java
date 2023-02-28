@@ -82,19 +82,25 @@ final class CryptaSolvingTester {
         assertEquals("solution count " + cryptarithm, solutionCount, testSolve(cryptarithm, true));
     }
 
-    public void testUNSAT(final String cryptarithm) throws CryptaModelException, CryptaSolverException {
-        assertEquals("solution count " + cryptarithm, 0, testSolve(cryptarithm, false));
+    public void testUNSAT(final String... cryptarithms) throws CryptaModelException, CryptaSolverException {
+        for (String cryptarithm : cryptarithms) {
+            assertEquals("solution count " + cryptarithm, 0, testSolve(cryptarithm, false));
+        }
     }
 
-    public void testUNIQUE(final String cryptarithm) throws CryptaModelException, CryptaSolverException {
-        testSAT(cryptarithm, 1);
+    public void testUNIQUE(final String... cryptarithms) throws CryptaModelException, CryptaSolverException {
+        for (String cryptarithm : cryptarithms) {
+            testSAT(cryptarithm, 1);
+        }
     }
 
-    public void testNotUNIQUE(final String cryptarithm) throws CryptaModelException, CryptaSolverException {
-        assertTrue("solution count " + cryptarithm, testSolve(cryptarithm, true) > 1);
+    public void testNotUNIQUE(final String... cryptarithms) throws CryptaModelException, CryptaSolverException {
+        for (String cryptarithm : cryptarithms) {
+            assertTrue("solution count " + cryptarithm, testSolve(cryptarithm, true) > 1);
+        }
     }
 
-    public void testResource(String resourcePath)
+    public void testResource(final String resourcePath)
             throws CryptaParserException, CryptaModelException, CryptaSolverException {
         final InputStream in = getClass().getClassLoader().getResourceAsStream(resourcePath);
         final Scanner s = new Scanner(in);
@@ -178,38 +184,11 @@ public class SolverTest {
     }
 
     @Test
-    public void testSendMoreMoney4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE(" -send -more= -money");
-    }
-
-    @Test
-    public void testSendMoreMoney5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE(" (-send) + (-more) = (-money)");
-    }
-
-    @Test
-    public void testSendMoreMoney6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("(-(-send)) + (-(-more)) = (-(-money))");
-    }
-
-    @Test
-    public void testSendMoreMoney7() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("(-send) - more = -money");
-    }
-
-    @Test
-    public void testSendMoreMoney8() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("(-(-send)) - (-more) = money");
-    }
-
-    @Test
-    public void testSendMoreMoney9() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("(send+more=money)");
-    }
-
-    @Test
-    public void testSendMoreMoney10() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("(((send+more)=(money)))");
+    public void testSendMoreMoneyParenthesis()
+            throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE(" -send -more= -money", " (-send) + (-more) = (-money)", "(-(-send)) + (-(-more)) = (-(-money))",
+                "(-send) - more = -money", "(-(-send)) - (-more) = money", "(send+more=money)",
+                "(((send+more)=(money)))");
     }
 
     @Test
@@ -510,21 +489,10 @@ public class SolverTest {
     }
 
     @Test
-    public void testSendMoreMoneyList4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+    public void testUnsatSendMoreMoneyList() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.config.setHornerScheme(true);
-        t.testUNSAT("send+more=money; s+e=n");
-    }
-
-    @Test
-    public void testSendMoreMoneyList5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
-        t.testUNSAT("send+more=money;;; s+e=n");
-    }
-
-    @Test
-    public void testSendMoreMoneyList6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
-        t.testUNSAT("send+more=money; s+e=n;");
+        t.testUNSAT("send+more=money; s+e=n", "send+more=money;;; s+e=n", "send+more=money; s+e=n;",
+                "send+more=money&& s+e=n", "send+more=money&&&&&& s+e=n", "send+more=money&& s+e=n&&");
     }
 
     // Long multiplication with integer
@@ -532,37 +500,19 @@ public class SolverTest {
      * SEE * SO = MIMEO MIMEO = EMOO + 10*MESS SEE * O = EMOO SEE * S = MESS
      */
     @Test
-    public void testEvaluationLongMultiplication1()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "SEE * SO = MIMEO; MIMEO = EMOO + '10'*MESS;SEE * O = EMOO;SEE * S = MESS";
-        t.testUNIQUE(cryptarithm);
-    }
+    public void testUniqueLongMultiplications() throws CryptaModelException, CryptaSolverException {
+        String[] cryptarithms = {"SEE * SO = MIMEO; MIMEO = EMOO + '10'*MESS;SEE * O = EMOO;SEE * S = MESS",
+                "SEE * SO = MIMEO; MIMEO = EMOO + \"10\"*MESS;SEE * O = EMOO;SEE * S = MESS",
+                "CUT * T = BUST; CUT * I = TNNT; TNNT * '10' + BUST = TENET; TENET = CUT * IT",
+                "RED * S = ARCS; RED * A = RED; RED * '10' + ARCS = CDTS; CDTS = RED * AS",
+                "HOW * E = HAIL; HOW * W = PAL; HAIL + PAL * '10' = LHAL; HOW * WE = LHAL",
+                "SEE * SO = MIMEO&& MIMEO = EMOO + '10'*MESS&&SEE * O = EMOO&&SEE * S = MESS",
+                "CUT * T = BUST&& CUT * I = TNNT&& TNNT * '10' + BUST = TENET&& TENET = CUT * IT",
+                "RED * S = ARCS&& RED * A = RED&& RED * '10' + ARCS = CDTS&& CDTS = RED * AS",
+                "HOW * E = HAIL&& HOW * W = PAL&& HAIL + PAL * '10' = LHAL&& HOW * WE = LHAL"
 
-    @Test
-    public void testEvaluationLongMultiplication1doubleticks()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "SEE * SO = MIMEO; MIMEO = EMOO + \"10\"*MESS;SEE * O = EMOO;SEE * S = MESS";
-        t.testUNIQUE(cryptarithm);
-    }
-
-    /*
-     * C U T I T --------- B U S T T N N T ----------- T E N E T
-     */
-    @Test
-    public void testEvaluationLongMultiplication2()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "CUT * T = BUST; CUT * I = TNNT; TNNT * '10' + BUST = TENET; TENET = CUT * IT";
-        t.testUNIQUE(cryptarithm);
-    }
-
-    /*
-     * R E D A S --------- A R C S R E D --------- C D T S
-     */
-    @Test
-    public void testEvaluationLongMultiplication3()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "RED * S = ARCS; RED * A = RED; RED * '10' + ARCS = CDTS; CDTS = RED * AS";
-        t.testUNIQUE(cryptarithm);
+        };
+        t.testUNIQUE(cryptarithms);
     }
 
     @Test
@@ -570,16 +520,6 @@ public class SolverTest {
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "RED * S = ARCS; RED * A = RED; RED * '10' + ARCS = CDTS; CDTS = RED * AS + '1'";
         t.testUNSAT(cryptarithm);
-    }
-
-    /*
-     * H O W W E --------- H A I L P A L --------- L H A L
-     */
-    @Test
-    public void testEvaluationLongMultiplication4()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "HOW * E = HAIL; HOW * W = PAL; HAIL + PAL * '10' = LHAL; HOW * WE = LHAL";
-        t.testUNIQUE(cryptarithm);
     }
 
     // LONG DIVISION
@@ -670,62 +610,13 @@ public class SolverTest {
         t.testSAT("send+more=money&& a+b=c");
     }
 
-    @Test
-    public void testSendMoreMoneyList4symbol()
-            throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
-        t.testUNSAT("send+more=money&& s+e=n");
-    }
-
-    @Test
-    public void testSendMoreMoneyList5symbol()
-            throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
-        t.testUNSAT("send+more=money&&&&&& s+e=n");
-    }
-
-    @Test
-    public void testSendMoreMoneyList6symbol()
-            throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setHornerScheme(true);
-        t.testUNSAT("send+more=money&& s+e=n&&");
-    }
-
     // Long multiplication with integer
-
-    @Test
-    public void testEvaluationLongMultiplication1symbol()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "SEE * SO = MIMEO&& MIMEO = EMOO + '10'*MESS&&SEE * O = EMOO&&SEE * S = MESS";
-        t.testUNIQUE(cryptarithm);
-    }
-
-    @Test
-    public void testEvaluationLongMultiplication2symbol()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "CUT * T = BUST&& CUT * I = TNNT&& TNNT * '10' + BUST = TENET&& TENET = CUT * IT";
-        t.testUNIQUE(cryptarithm);
-    }
-
-    @Test
-    public void testEvaluationLongMultiplication3symbol()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "RED * S = ARCS&& RED * A = RED&& RED * '10' + ARCS = CDTS&& CDTS = RED * AS";
-        t.testUNIQUE(cryptarithm);
-    }
 
     @Test
     public void testEvaluationLongMultiplicationFail3symbol()
             throws CryptaParserException, CryptaSolverException, CryptaModelException {
         var cryptarithm = "RED * S = ARCS&& RED * A = RED&& RED * '10' + ARCS = CDTS&& CDTS = RED * AS + '1'";
         t.testUNSAT(cryptarithm);
-    }
-
-    @Test
-    public void testEvaluationLongMultiplication4symbol()
-            throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        var cryptarithm = "HOW * E = HAIL&& HOW * W = PAL&& HAIL + PAL * '10' = LHAL&& HOW * WE = LHAL";
-        t.testUNIQUE(cryptarithm);
     }
 
     // LONG DIVISION

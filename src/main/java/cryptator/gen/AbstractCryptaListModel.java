@@ -45,10 +45,18 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel imp
         symbolCount = model.intVar("symbCount", 0, symbolsToVariables.size());
     }
 
+    /**
+     * Gets the symbol count.
+     *
+     * @return the symbol count
+     */
     public final IntVar getSymbolCount() {
         return symbolCount;
     }
 
+    /**
+     * Builds the model.
+     */
     @Override
     public void buildModel() {
         super.buildModel();
@@ -56,13 +64,31 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel imp
         postChannelingConstraints();
     }
 
+    /**
+     * Post the constraint for the fixed right member.
+     */
     public abstract void postFixedRightMemberConstraints();
 
-    public abstract void postDoublyTrueConstraints(final int lowerBound);
+    /**
+     * Post constraints for doubly true cryptarithms.
+     *
+     * @param lowerBound the lower bound for the sum
+     */
+    public abstract void postDoublyTrueConstraints(int lowerBound);
 
+    /**
+     * Post optional constraints for the numerical precision.
+     *
+     * @param base the arithmetic base
+     */
     public abstract void postPrecisionConstraints(int base);
 
-    public abstract void postHeavyConstraints(final int base);
+    /**
+     * Post heavy constraints for filtering more candidates.
+     *
+     * @param base the arithmetic base
+     */
+    public abstract void postHeavyConstraints(int base);
 
     /**
      * Post a constraint over the maximum number of distinct symbols in the words.
@@ -73,6 +99,9 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel imp
         symbolCount.le(max).post();
     }
 
+    /**
+     * Post symbol count constraint.
+     */
     private void postSymbolCountConstraint() {
         final BoolVar[] symbols = AbstractCryptaListModel.toArray(symbolsToVariables.values());
         model.sum(symbols, "=", symbolCount).post();
@@ -125,6 +154,12 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel imp
         }
     }
 
+    /**
+     * Transform a collection of boolean variables into an array.
+     *
+     * @param vars the boolean variable collection
+     * @return the array
+     */
     private static BoolVar[] toArray(final Collection<BoolVar> vars) {
         return vars.toArray(new BoolVar[vars.size()]);
     }

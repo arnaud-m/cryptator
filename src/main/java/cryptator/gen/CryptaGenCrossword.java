@@ -23,7 +23,8 @@ class CryptaCrossPair extends CryptaMemberPair {
 
     private final IntVar[] indices;
 
-    public CryptaCrossPair(final IntVar[] indices, final String[] words, final String prefix, boolean useLenModel) {
+    public CryptaCrossPair(final IntVar[] indices, final String[] words, final String prefix,
+            final boolean useLenModel) {
         super(indices[indices.length - 1], words, prefix, useLenModel);
         this.indices = indices;
     }
@@ -56,7 +57,7 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
 
     private final CryptaCrossPair[] additions;
 
-    public CryptaGenCrossword(int n, String[] words, boolean useLenModel) {
+    public CryptaGenCrossword(final int n, final String[] words, final boolean useLenModel) {
         super(new Model("Generate-Crossword"), words);
         this.n = n;
         this.grid = new CryptaGridModel(model, n, words.length);
@@ -64,7 +65,7 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
         createMembers(useLenModel);
     }
 
-    private void createMembers(boolean useLenModel) {
+    private void createMembers(final boolean useLenModel) {
         for (int i = 0; i < n; i++) {
             final String prefix = "R" + (i + 1) + "_";
             additions[i] = new CryptaCrossPair(grid.getRow(i), words, prefix, useLenModel);
@@ -76,24 +77,12 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
         }
     }
 
-    private void setSolution() {
-        int[][] solgrid = new int[][] {new int[] {0, 3, 4}, new int[] {1, 5, 7}, new int[] {2, 6, 8}};
-        for (int i = 0; i < solgrid.length; i++) {
-            for (int j = 0; j < solgrid[i].length; j++) {
-                grid.getCell(i, j).eq(solgrid[i][j]).post();
-            }
-        }
-    }
-
     @Override
     public void buildModel() {
         super.buildModel();
         grid.buildModel();
         Stream.of(additions).forEach(CryptaCrossPair::buildModel);
-        // setSolution();
-        // TODO Set search strategy ?
-        // getSolver().setSearch(Search.intVarSearch(ArrayUtils.flatten(grid.getMatrix())));
-
+        // TODO change search strategy ?
     }
 
     @Override
@@ -102,17 +91,17 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
     }
 
     @Override
-    public void postDoublyTrueConstraints(int lowerBound) {
+    public void postDoublyTrueConstraints(final int lowerBound) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
-    public void postHeavyConstraints(int base) {
+    public void postHeavyConstraints(final int base) {
         Stream.of(additions).forEach(m -> m.postHeavyConstraints(base));
     }
 
     @Override
-    public void postPrecisionConstraints(int base) {
+    public void postPrecisionConstraints(final int base) {
         // Nothing to do.
     }
 

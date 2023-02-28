@@ -23,26 +23,26 @@ public class CryptaMemberPair implements ICryptaGenSolver {
 
     protected final AbstractCryptaGenModel right;
 
-    protected CryptaMemberPair(CryptaMemberLen left, CryptaMemberLen right) {
+    protected CryptaMemberPair(final CryptaMemberLen left, final CryptaMemberLen right) {
         super();
         this.left = left;
         this.right = right;
     }
 
-    public CryptaMemberPair(final Model model, final String[] words, final String prefix, boolean useMemberLen) {
+    public CryptaMemberPair(final Model model, final String[] words, final String prefix, final boolean useMemberLen) {
         super();
         left = buildLeftMember(model, words, prefix, useMemberLen);
         right = new CryptaMemberElt(model, words, prefix + "R_");
     }
 
-    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix, boolean useMemberLen) {
+    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix, final boolean useMemberLen) {
         super();
         left = buildLeftMember(index.getModel(), words, prefix, useMemberLen);
         right = new CryptaMemberElt(index, words, prefix + "R_");
     }
 
     private static final CryptaMemberLen buildLeftMember(final Model model, final String[] words, final String prefix,
-            boolean useMemberLen) {
+            final boolean useMemberLen) {
         return useMemberLen ? new CryptaMemberLen(model, words, prefix + "L_")
                 : new CryptaMemberCard(model, words, prefix + "L_");
     }

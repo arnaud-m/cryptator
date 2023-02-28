@@ -54,7 +54,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return gridSize;
     }
 
-    public final void setGridSize(int gridSize) {
+    public final void setGridSize(final int gridSize) {
         this.gridSize = gridSize;
     }
 
@@ -98,7 +98,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return multModel;
     }
 
-    public final void setMultModel(boolean multModel) {
+    public final void setMultModel(final boolean multModel) {
         this.multModel = multModel;
     }
 
@@ -106,7 +106,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return longMultModel;
     }
 
-    public final void setLongMultModel(boolean longMultModel) {
+    public final void setLongMultModel(final boolean longMultModel) {
         this.longMultModel = longMultModel;
     }
 

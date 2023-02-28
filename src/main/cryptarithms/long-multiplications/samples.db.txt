@@ -1,0 +1,6 @@
+in * gag = vain && in * '1' + kan * '10' + in * '100' = vain && in * g = in && in * a = kan && in * g = in
+in * gag = vain && in * '1' + km * '10' + in * '100' = vain && in * g = in && in * a = km && in * g = in
+in * go = kan && in * '1' + km * '10' = kan && in * g = km && in * o = in
+in * ive = olim && km * '1' + go * '10' + in * '100' = olim && in * i = in && in * v = go && in * e = km
+km * km = kan && in * '1' + km * '10' = kan && km * k = km && km * m = in
+surs * cc = relus && surs * '1' + surs * '10' = relus && surs * c = surs && surs * c = surs

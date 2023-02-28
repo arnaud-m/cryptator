@@ -16,11 +16,11 @@ import cryptator.gen.pattern.CryptaLongMultModel;
 
 public class LongMultModelTest {
 
-    public void testLongMultModel(int expectedSolutionCount, int[] lengths) {
+    public void testLongMultModel(final int expectedSolutionCount, final int[] lengths) {
         testLongMultModel(expectedSolutionCount, lengths, lengths);
     }
 
-    public void testLongMultModel(int expectedSolutionCount, int[] lengths, int[] cards) {
+    public void testLongMultModel(final int expectedSolutionCount, final int[] lengths, final int[] cards) {
         CryptaLongMultModel m = new CryptaLongMultModel(new Model(), lengths, cards);
         m.buildModel();
         Assert.assertEquals(expectedSolutionCount, m.getSolver().streamSolutions().count());

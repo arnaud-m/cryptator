@@ -224,6 +224,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    generateCrossword 3
  #+END_SRC
 
+
 ** Configure the algorithm
 
 *** Addition
@@ -245,7 +246,6 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 * Solve
 ** Create the solver
 *** Cryptator
-**** Simple Precision
 
 #+BEGIN_SRC sh :tangle solver.sh
   JAR=cryptator-0.6.0-SNAPSHOT-with-dependencies.jar
