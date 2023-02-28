@@ -18,7 +18,7 @@ MAX=100
 ## Execute the command.
 ## Filter the output: print only the cryptarithm.
 function solve() {
-    java -cp $JAR cryptator.Cryptagen -c TRUE $* | sed -n 's/\(.*+.*=.*\)/  - \1/p'
+    java -cp $JAR cryptator.Cryptagen -c TRUE -v quiet $* | sed -n 's/\(.*+.*=.*\)/  - \1/p'
 }
 
 echo "# Doubly true cryptarithms between $MIN and $MAX"
