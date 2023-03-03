@@ -32,22 +32,16 @@ public class CryptaMemberPair implements ICryptaGenSolver {
         this.right = right;
     }
 
-    public CryptaMemberPair(final Model model, final String[] words, final String prefix, final boolean useMemberLen) {
+    public CryptaMemberPair(final Model model, final String[] words, final String prefix) {
         super();
-        left = buildLeftMember(model, words, prefix, useMemberLen);
+        left = new CryptaMemberLen(model, words, prefix + "L_");
         right = new CryptaMemberElt(model, words, prefix + "R_");
     }
 
-    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix, final boolean useMemberLen) {
+    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix) {
         super();
-        left = buildLeftMember(index.getModel(), words, prefix, useMemberLen);
+        left = new CryptaMemberLen(index.getModel(), words, prefix + "L_");
         right = new CryptaMemberElt(index, words, prefix + "R_");
-    }
-
-    private static final CryptaMemberLen buildLeftMember(final Model model, final String[] words, final String prefix,
-            final boolean useMemberLen) {
-        return useMemberLen ? new CryptaMemberLen(model, words, prefix + "L_")
-                : new CryptaMemberCard(model, words, prefix + "L_");
     }
 
     @Override

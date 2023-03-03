@@ -32,9 +32,8 @@ public class GenerateTest {
         JULogUtil.configureTestLoggers();
     }
 
-    private void configure(final int gridSize, final boolean lightModel, final boolean lightPropagation) {
+    private void configure(final int gridSize, final boolean lightPropagation) {
         config.setGridSize(gridSize);
-        config.setLightModel(lightModel);
         config.setLightPropagation(lightPropagation);
     }
 
@@ -59,30 +58,24 @@ public class GenerateTest {
 
     private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
             final WordArray wordArray, final int gridSize) throws CryptaModelException {
-        configure(gridSize, false, false);
+        configure(gridSize, false);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
-        configure(gridSize, false, true);
-        testGenerate(expectedSolCount, expectedCandCount, wordArray);
-        configure(gridSize, true, false);
-        testGenerate(expectedSolCount, expectedCandCount, wordArray);
-        configure(gridSize, false, true);
+        configure(gridSize, true);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
     }
 
     private void testHeavyGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
             final WordArray wordArray, final int gridSize) throws CryptaModelException {
-        configure(gridSize, false, false);
-        testGenerate(expectedSolCount, expectedCandCount, wordArray);
-        configure(gridSize, true, false);
+        configure(gridSize, false);
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
     }
 
     private void testMultGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
         JULogUtil.configureSilentLoggers();
         config.setMultModel(true);
-        configure(0, false, false);
+        configure(0, false);
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
-        configure(0, false, true);
+        configure(0, true);
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
         config.setMultModel(false);
     }
@@ -91,9 +84,9 @@ public class GenerateTest {
             throws CryptaModelException {
         JULogUtil.configureSilentLoggers();
         config.setLongMultModel(true);
-        configure(0, false, false);
+        configure(0, false);
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
-        configure(0, false, true);
+        configure(0, true);
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
         config.setLongMultModel(false);
     }
@@ -107,7 +100,7 @@ public class GenerateTest {
     @Test
     public void testSendMuchMoreMoney() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("send", "much", "more", "money"), null);
-        configure(0, false, true);
+        configure(0, true);
         testGenerate(1, OptionalInt.of(6), words);
 
     }

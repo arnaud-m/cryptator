@@ -40,9 +40,6 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "-maxop", usage = "maximum number of left operands")
     private int maxLeftOperands = -1;
 
-    @Option(name = "-lightM", handler = ExplicitBooleanOptionHandler.class, usage = "use less auxiliary variables")
-    private boolean lightModel = true;
-
     @Option(name = "-lightP", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
     private boolean lightPropagation;
 
@@ -81,14 +78,6 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return maxLeftOperands;
     }
 
-    public final boolean isLightModel() {
-        return lightModel;
-    }
-
-    public final void setLightModel(final boolean lightModel) {
-        this.lightModel = lightModel;
-    }
-
     public final boolean isLightPropagation() {
         return lightPropagation;
     }
@@ -115,8 +104,8 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
     @Override
     public String toString() {
-        return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_MOD " + lightModel
-                + "\nc LIGHT_PROPAG " + lightPropagation;
+        return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_PROPAG "
+                + lightPropagation;
     }
 
 }

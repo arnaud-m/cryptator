@@ -91,13 +91,13 @@ public class CryptaListGenerator implements ICryptaGenerator {
      */
     private AbstractCryptaListModel createGenModel() {
         if (config.getGridSize() > 0) {
-            return new CryptaGenCrossword(config.getGridSize(), words.getWords(), config.isLightModel());
+            return new CryptaGenCrossword(config.getGridSize(), words.getWords());
         } else if (config.isMultModel()) {
             return new CryptaGenMult(words.getWords());
         } else if (config.isLongMultModel()) {
             return new CryptaGenLongMult(words.getWords(), config.getArithmeticBase());
         } else {
-            return new CryptaGenAdd(words.getWords(), config.isLightModel());
+            return new CryptaGenAdd(words.getWords());
         }
     }
 

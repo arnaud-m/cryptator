@@ -23,9 +23,8 @@ class CryptaCrossPair extends CryptaMemberPair {
 
     private final IntVar[] indices;
 
-    public CryptaCrossPair(final IntVar[] indices, final String[] words, final String prefix,
-            final boolean useLenModel) {
-        super(indices[indices.length - 1], words, prefix, useLenModel);
+    public CryptaCrossPair(final IntVar[] indices, final String[] words, final String prefix) {
+        super(indices[indices.length - 1], words, prefix);
         this.indices = indices;
     }
 
@@ -57,23 +56,23 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
 
     private final CryptaCrossPair[] additions;
 
-    public CryptaGenCrossword(final int n, final String[] words, final boolean useLenModel) {
+    public CryptaGenCrossword(final int n, final String[] words) {
         super(new Model("Generate-Crossword"), words);
         this.n = n;
         this.grid = new CryptaGridModel(model, n, words.length);
         this.additions = new CryptaCrossPair[2 * n];
-        createMembers(useLenModel);
+        createMembers();
     }
 
-    private void createMembers(final boolean useLenModel) {
+    private void createMembers() {
         for (int i = 0; i < n; i++) {
             final String prefix = "R" + (i + 1) + "_";
-            additions[i] = new CryptaCrossPair(grid.getRow(i), words, prefix, useLenModel);
+            additions[i] = new CryptaCrossPair(grid.getRow(i), words, prefix);
         }
 
         for (int i = 0; i < n; i++) {
             final String prefix = "C" + (i + 1) + "_";
-            additions[n + i] = new CryptaCrossPair(grid.getCol(i), words, prefix, useLenModel);
+            additions[n + i] = new CryptaCrossPair(grid.getCol(i), words, prefix);
         }
     }
 
