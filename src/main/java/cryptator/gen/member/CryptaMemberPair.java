@@ -16,7 +16,7 @@ import org.chocosolver.util.tools.ArrayUtils;
 import cryptator.config.CryptagenConfig;
 import cryptator.gen.AbstractCryptaGenModel;
 import cryptator.gen.GenerateUtil;
-import cryptator.gen.WordSumTuplesBuilder2;
+import cryptator.gen.WordSumTuplesBuilder;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 
@@ -84,7 +84,7 @@ public class CryptaMemberPair implements ICryptaGenSolver {
         // left.postLentghSumConstraints(right.getMaxLength(), base);
         if (CryptagenConfig.newLightPropagation) {
             int[] lengths = AbstractCryptaGenModel.getLengths(left.getWords());
-            WordSumTuplesBuilder2 builder = new WordSumTuplesBuilder2(base, lengths);
+            WordSumTuplesBuilder builder = new WordSumTuplesBuilder(base, lengths);
             IntVar[] vars = ArrayUtils.toArray(left.getMaxLength(), left.getWordCount(), right.getMaxLength(),
                     right.getWordCount());
             getModel().table(vars, builder.buildTuples()).post();
