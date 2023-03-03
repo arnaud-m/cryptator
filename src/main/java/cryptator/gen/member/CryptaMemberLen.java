@@ -44,17 +44,4 @@ public class CryptaMemberLen extends AbstractCryptaGenModel {
         model.max(maxLength, lengths).post();
     }
 
-    public void postLentghSumConstraints(final IntVar sumLength, final int base) {
-        IntVar diff = sumLength.sub(maxLength).intVar();
-        final int n = getN();
-        int prod = base;
-        int i = 2;
-        while (prod <= n) {
-            diff.ge(i).imp(wordCount.ge(prod + 1)).post();
-            prod *= base;
-            i++;
-        }
-        diff.lt(i).post();
-    }
-
 }

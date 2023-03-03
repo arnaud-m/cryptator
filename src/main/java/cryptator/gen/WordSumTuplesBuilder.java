@@ -337,7 +337,7 @@ public class WordSumTuplesBuilder {
      * @param ts     the active tuples
      */
     private void addTuples(Tuples tuples, HalfTuple t, Set<HalfTuple> ts) {
-        System.out.println(t + " X " + ts);
+        // System.out.println(t + " X " + ts);
         if (isValid(t, t)) {
             addTuple(tuples, t, t);
         }
@@ -357,7 +357,7 @@ public class WordSumTuplesBuilder {
      */
     private Tuples processEvents(List<HTEvent> events) {
         events.sort(new EventComparator());
-        System.out.println(events);
+        // System.out.println(events);
         final Set<HalfTuple> actives = new HashSet<>();
         final Tuples tuples = new Tuples();
         for (HTEvent evt : events) {
@@ -369,7 +369,7 @@ public class WordSumTuplesBuilder {
                 addTuples(tuples, t, actives);
             }
         }
-        System.out.println(tuples);
+        // System.out.println(tuples);
         return tuples;
     }
 

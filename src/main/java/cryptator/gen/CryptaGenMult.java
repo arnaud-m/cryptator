@@ -67,7 +67,7 @@ class CryptaMemberMult extends CryptaMemberPair {
 
 public class CryptaGenMult extends AbstractCryptaListModel {
 
-    private final int PRECISION = 1000;
+    private static final int PRECISION = 1000;
 
     private final CryptaMemberMult multiplication;
 

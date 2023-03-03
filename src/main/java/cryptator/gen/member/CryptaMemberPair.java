@@ -13,7 +13,6 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
-import cryptator.config.CryptagenConfig;
 import cryptator.gen.AbstractCryptaGenModel;
 import cryptator.gen.GenerateUtil;
 import cryptator.gen.WordSumTuplesBuilder;
@@ -77,20 +76,14 @@ public class CryptaMemberPair implements ICryptaGenSolver {
 
     public void postMaxLengthConstraint(final IntVar maxLen) {
         getModel().max(maxLen, getLeft().getMaxLength(), getRight().getMaxLength()).post();
-
     }
 
     public final void postHeavyConstraints(final int base) {
-        // left.postLentghSumConstraints(right.getMaxLength(), base);
-        if (CryptagenConfig.newLightPropagation) {
-            int[] lengths = AbstractCryptaGenModel.getLengths(left.getWords());
-            WordSumTuplesBuilder builder = new WordSumTuplesBuilder(base, lengths);
-            IntVar[] vars = ArrayUtils.toArray(left.getMaxLength(), left.getWordCount(), right.getMaxLength(),
-                    right.getWordCount());
-            getModel().table(vars, builder.buildTuples()).post();
-        } else {
-            left.postLentghSumConstraints(right.getMaxLength(), base);
-        }
+        int[] lengths = AbstractCryptaGenModel.getLengths(left.getWords());
+        WordSumTuplesBuilder builder = new WordSumTuplesBuilder(base, lengths);
+        IntVar[] vars = ArrayUtils.toArray(left.getMaxLength(), left.getWordCount(), right.getMaxLength(),
+                right.getWordCount());
+        getModel().table(vars, builder.buildTuples()).post();
     }
 
     public void postFixedRightMemberConstraints() {
