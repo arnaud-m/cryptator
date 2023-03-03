@@ -83,9 +83,10 @@ exit $?
 *** All algorithms
 
  #+BEGIN_SRC sh
-   echo -v normal -d TRUE -lightM FALSE -lightP FALSE > algorithms/FF.dat
+   echo -v normal -d TRUE -lightM FALSE -lightP FALSE  > algorithms/FF.dat
    echo -v normal -d TRUE -lightM FALSE -lightP TRUE > algorithms/FT.dat
-   echo -v normal -d TRUE -lightM TRUE -lightP FALSE > algorithms/TF.dat
+   echo -v normal -d TRUE -lightM TRUE -lightP FALSE -newHeavyP FALSE > algorithms/TF.dat
+   echo -v normal -d TRUE -lightM TRUE -lightP FALSE -newHeavyP TRUE > algorithms/TF_NEW.dat
    echo -v normal -d TRUE -lightM TRUE -lightP TRUE > algorithms/TT.dat
  #+END_SRC
 
@@ -398,7 +399,7 @@ Change the file extension accordingly.
 
 #+END_SRC
 * Analysis
-** Generate
+** Collection
 
 
 #+BEGIN_SRC R

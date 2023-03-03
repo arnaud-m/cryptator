@@ -46,6 +46,9 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "-lightP", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
     private boolean lightPropagation;
 
+    @Option(name = "-newHeavyP", handler = ExplicitBooleanOptionHandler.class, usage = "use new heavy constraints")
+    public static boolean newLightPropagation = false;
+
     public final boolean isDryRun() {
         return dryRun;
     }

@@ -14,10 +14,11 @@ import org.chocosolver.solver.constraints.extension.Tuples;
 import org.junit.Test;
 
 import cryptator.gen.WordSumTuplesBuilder;
+import cryptator.gen.WordSumTuplesBuilder2;
 
 public class WSTuplesTest {
 
-    private final int[] b = {2, 4, 8, 10, 12, 16};
+    private final int[] bases = {2, 4, 8, 10, 12, 16};
 
     private final WordSumTuplesBuilder builder = new WordSumTuplesBuilder();
 
@@ -56,6 +57,19 @@ public class WSTuplesTest {
         testMaxZ(6, v2, 4);
     }
 
+    public void testTuples2(final int expected, final int[] values, final int base) {
+        testTuples2(expected, base, values);
+    }
+
+    protected void testTuples2(final int expected, final int base, final int[] values) {
+        WordSumTuplesBuilder2 builder2 = new WordSumTuplesBuilder2(base, values);
+        System.out.println(builder2);
+        final Tuples tuples = builder2.buildTuples();
+        // System.out.println(tuples);
+        assertEquals(expected, tuples.nbTuples());
+
+    }
+
     public void testTuples(final int expected, final int[] values, final int base) {
         builder.setBase(base);
         final Tuples tuples = builder.buildTuples(values);
@@ -67,16 +81,56 @@ public class WSTuplesTest {
     @Test
     public void testTuples1() {
         int[] values = {0, 1, 1};
-        for (int element : b) {
-            testTuples(4, values, element);
+        for (int b : bases) {
+            testTuples(4, values, b);
+        }
+    }
+
+    @Test
+    public void testTuples1_2() {
+        int[] values = {1, 2, 2};
+        for (int b : bases) {
+            testTuples2(3, b, values);
         }
     }
 
     @Test
     public void testTuples2() {
         int[] values = {0, 1, 1, 1};
-        for (int element : b) {
-            testTuples(11, values, element);
+        for (int base : bases) {
+            testTuples(11, values, base);
+        }
+    }
+
+    @Test
+    public void testTuples2_2() {
+        int[] values = {1, 2, 3};
+        for (int base : bases) {
+            testTuples2(2, values, base);
+        }
+    }
+
+    @Test
+    public void testTuples2_3() {
+        int[] values = {1, 2, 3, 4};
+        for (int base : bases) {
+            testTuples2(8, values, base);
+        }
+    }
+
+    @Test
+    public void testTuples2_4() {
+        int[] values = {1, 8, 9, 16};
+        for (int base : bases) {
+            testTuples2(2, values, base);
+        }
+    }
+
+    @Test
+    public void testTuples2_5() {
+        int[] values = {1, 2, 8, 9, 10, 16};
+        for (int base : bases) {
+            testTuples2(18, values, base);
         }
     }
 
