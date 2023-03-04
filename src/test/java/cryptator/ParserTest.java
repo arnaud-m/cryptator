@@ -8,15 +8,12 @@
  */
 package cryptator;
 
-import static cryptator.TreeTest.testInorder;
-import static cryptator.TreeTest.testPostorder;
-import static cryptator.TreeTest.testPreorder;
-
-import org.junit.Test;
-
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
+import org.junit.Test;
+
+import static cryptator.TreeTest.*;
 
 public class ParserTest {
 
@@ -331,20 +328,9 @@ public class ParserTest {
         testInorder("A = B && A = B", node);
     }
 
-    @Test
+    @Test(expected = CryptaParserException.class)
     public void testParserAND6symbol() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("A = B&&&& A = B&&&&&&&&&&");
-        testPreorder("&& = A B = A B ", node);
-        testPostorder("A B = A B = && ", node);
-        testInorder("A = B && A = B", node);
-    }
-
-    @Test
-    public void testParserAND7symbol() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("a=b&&");
-        testPreorder("= a b ", node);
-        testPostorder("a b = ", node);
-        testInorder("a = b", node);
+        parser.parse("A = B&&&& A = B&&&&&&&&&&");
     }
 
     @Test
