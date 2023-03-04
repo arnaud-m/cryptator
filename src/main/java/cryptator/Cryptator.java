@@ -19,6 +19,7 @@ import cryptator.parser.CryptaParserWrapper;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
+import cryptator.solver.crypt.CryptSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 
@@ -64,7 +65,7 @@ public final class Cryptator {
     }
 
     private static ICryptaSolver buildSolver(final CryptatorConfig config) {
-        final CryptaSolver solver = new CryptaSolver(config.useBignum());
+        final ICryptaSolver solver = config.useCrypt() ? new CryptSolver() : new CryptaSolver(config.useBignum());
         solver.limitSolution(config.getSolutionLimit());
         solver.limitTime(config.getTimeLimit());
         return solver;

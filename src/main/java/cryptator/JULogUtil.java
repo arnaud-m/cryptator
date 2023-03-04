@@ -17,7 +17,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import cryptator.game.CryptaGameEngine;
-import cryptator.solver.CryptaSolver;
+import cryptator.solver.AbstractCryptaSolver;
 import cryptator.specs.ICryptaLogManager;
 
 public final class JULogUtil {
@@ -52,7 +52,7 @@ public final class JULogUtil {
     }
 
     public static void configureLoggers(final Level level) {
-        setLevel(level, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, CryptaSolver.LOGGER,
+        setLevel(level, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, AbstractCryptaSolver.LOGGER,
                 CryptaGameEngine.LOGGER);
     }
 

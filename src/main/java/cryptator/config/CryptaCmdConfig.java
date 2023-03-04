@@ -22,6 +22,9 @@ public class CryptaCmdConfig extends CryptaLogConfig {
     @Option(name = "-l", handler = ExplicitBooleanOptionHandler.class, usage = "use the bignum model (only + and =)")
     private boolean useBigNum;
 
+    @Option(name = "-crypt", handler = ExplicitBooleanOptionHandler.class, usage = "use the crypt solver (only + and =)")
+    private boolean useCrypt;
+
     public final boolean isExportGraphiz() {
         return exportGraphiz;
     }
@@ -32,6 +35,14 @@ public class CryptaCmdConfig extends CryptaLogConfig {
 
     public final boolean useBignum() {
         return useBigNum;
+    }
+
+    public final boolean useCrypt() {
+        return useCrypt;
+    }
+
+    public final void setUseCrypt(boolean useCrypt) {
+        this.useCrypt = useCrypt;
     }
 
     @Override
