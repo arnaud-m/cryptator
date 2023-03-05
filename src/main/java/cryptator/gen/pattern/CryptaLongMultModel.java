@@ -22,7 +22,7 @@ import cryptator.specs.IChocoModel;
 
 /**
  * The Class builds a generation model for long multiplication.
- * 
+ *
  * It does not inherit nor use members because of the strength of the
  * constraints over the operands.
  */
@@ -68,8 +68,7 @@ public class CryptaLongMultModel implements IChocoModel {
     private final IntVar mrCard;
 
     /** The Constant maxProductLength. */
-    // TODO Define properly
-    private static final int maxProductLength = 5;
+    private static final int MAX_PARTIAL_PRODUCTS_LENGTH = 5;
 
     /**
      * Instantiates a new model for the long multiplication.
@@ -86,7 +85,7 @@ public class CryptaLongMultModel implements IChocoModel {
         multiplicand = model.intVar("multiplicand", 0, n - 1);
         multiplier = model.intVar("multiplier", 0, n - 1);
         product = model.intVar("product", 0, n - 1);
-        terms = model.intVarArray("terms", maxProductLength + 1, 0, n);
+        terms = model.intVarArray("terms", MAX_PARTIAL_PRODUCTS_LENGTH + 1, 0, n);
         presences = model.boolVarArray("presences", terms.length);
 
         final int maxLength = IntStream.of(lengths).max().orElse(0);
@@ -149,7 +148,7 @@ public class CryptaLongMultModel implements IChocoModel {
 
     /**
      * Gets the word indices.
-     * 
+     *
      * @return the word indices
      */
     public IntVar[] getWordIndices() {
@@ -190,7 +189,7 @@ public class CryptaLongMultModel implements IChocoModel {
         final int n = lengths.length;
         model.allDifferentUnderCondition(ArrayUtils.concat(terms, product), new ExceptN(n), true).post();
         // the last term is inactive.
-        terms[maxProductLength].eq(n).post();
+        terms[MAX_PARTIAL_PRODUCTS_LENGTH].eq(n).post();
     }
 
     /**
@@ -297,7 +296,7 @@ public class CryptaLongMultModel implements IChocoModel {
     }
 
     /**
-     * The Class ExceptN for the all different constraint
+     * The Class ExceptN for the all different constraint.
      */
     private static class ExceptN implements Condition {
 

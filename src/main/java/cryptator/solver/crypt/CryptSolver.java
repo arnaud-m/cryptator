@@ -30,8 +30,8 @@ import cryptator.tree.TreeUtils;
 public class CryptSolver extends AbstractCryptaSolver {
 
     @Override
-    public boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> consumer)
-            throws CryptaModelException, CryptaSolverException {
+    public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
+            final Consumer<ICryptaSolution> consumer) throws CryptaModelException, CryptaSolverException {
         logOnCryptarithm(cryptarithm);
         logOnConfiguration(config);
         StringBuilder b = new StringBuilder();
@@ -86,7 +86,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          *
          * @param consumer the internal solution consumer
          */
-        public CryptConsumer(Consumer<ICryptaSolution> consumer) {
+        public CryptConsumer(final Consumer<ICryptaSolution> consumer) {
             super();
             this.consumer = consumer;
         }
@@ -105,7 +105,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          *
          * @param str the cryptarithm line
          */
-        private void acceptCryptarithm(String str) {
+        private void acceptCryptarithm(final String str) {
             current = str.trim();
             LOGGER.finer(current);
         }
@@ -115,7 +115,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          *
          * @param str the solution line
          */
-        private void acceptSolution(String str) {
+        private void acceptSolution(final String str) {
             final String solution = str.trim();
             LOGGER.finer(solution);
             final Map<Character, Integer> map = new TreeMap<>();
@@ -135,7 +135,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          *
          * @param str the statistics line
          */
-        private void acceptStatistics(String str) {
+        private void acceptStatistics(final String str) {
             if (LOGGER.isLoggable(Level.INFO)) {
                 final String stats = str.trim();
                 LOGGER.finer(stats);
@@ -153,7 +153,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          *
          * @param str the other line
          */
-        private void acceptOther(String str) {
+        private void acceptOther(final String str) {
             LOGGER.finer(str::trim);
         }
 
@@ -163,7 +163,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          * @param str the output line
          */
         @Override
-        public void accept(String str) {
+        public void accept(final String str) {
             if (str.matches(PCRYPT)) {
                 acceptCryptarithm(str);
             } else if (str.matches(PSOL)) {

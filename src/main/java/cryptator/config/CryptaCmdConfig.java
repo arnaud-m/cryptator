@@ -45,7 +45,7 @@ public class CryptaCmdConfig extends CryptaLogConfig {
         return useCrypt;
     }
 
-    public final void setUseCrypt(boolean useCrypt) {
+    public final void setUseCrypt(final boolean useCrypt) {
         this.useCrypt = useCrypt;
     }
 

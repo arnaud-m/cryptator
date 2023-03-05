@@ -54,7 +54,7 @@ public class AdaptiveSolver implements ICryptaSolver {
 
     }
 
-    public final static boolean useCrypt(CryptaConfig config) {
+    public static final boolean useCrypt(final CryptaConfig config) {
         if (config instanceof CryptaCmdConfig) {
             return ((CryptaCmdConfig) config).useCrypt();
         } else {
@@ -87,7 +87,7 @@ public class AdaptiveSolver implements ICryptaSolver {
         private boolean cryptAddition = true;
 
         @Override
-        public void accept(ICryptaNode node, int numNode) {
+        public void accept(final ICryptaNode node, final int numNode) {
             if (node.isWord()) {
                 maxWordLength = Math.max(maxWordLength, node.getWord().length);
             } else if (node.isInternalNode()) {

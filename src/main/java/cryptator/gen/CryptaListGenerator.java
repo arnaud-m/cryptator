@@ -39,7 +39,7 @@ import cryptator.tree.TreeUtils;
 
 /**
  * The Class CryptaListGenerator is the root class for generation.
- * 
+ *
  * It builds and solves a generation model for cryptarithms.
  */
 public class CryptaListGenerator implements ICryptaGenerator {
@@ -103,7 +103,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 
     /**
      * Builds the generation solver.
-     * 
+     *
      * It creates, builds and configures the generation model.
      *
      * @return the generation solver

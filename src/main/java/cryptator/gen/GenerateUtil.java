@@ -23,7 +23,7 @@ import cryptator.tree.CryptaNode;
 
 /**
  * The Class GenerateUtil provides utilities for building cryptarithm tree.
- * 
+ *
  * It is used by generation models for recording their solutions.
  */
 public final class GenerateUtil {
@@ -49,9 +49,9 @@ public final class GenerateUtil {
 
     /**
      * The stream of present word leaves.
-     * 
+     *
      * A leaf is created for each present word of the model.
-     * 
+     *
      * @param model the generation model
      * @return the stream of present leaves
      */

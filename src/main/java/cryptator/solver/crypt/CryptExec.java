@@ -28,14 +28,14 @@ public final class CryptExec {
     private static final byte[] QBYTES = QUIT.getBytes();
 
     /** The process builder. */
-    final ProcessBuilder processBuilder;
+    private final ProcessBuilder processBuilder;
 
     /**
      * Instantiates a new crypt executor.
      *
      * @param command the crypt command
      */
-    public CryptExec(String command) {
+    public CryptExec(final String command) {
         super();
         this.processBuilder = new ProcessBuilder(command);
         processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
@@ -50,7 +50,7 @@ public final class CryptExec {
      * @throws IOException          Signals that an I/O exception has occurred.
      * @throws InterruptedException the interrupted exception
      */
-    public void exec(String filename, Consumer<String> consumer) throws IOException, InterruptedException {
+    public void exec(final String filename, final Consumer<String> consumer) throws IOException, InterruptedException {
         try (DataInputStream din = new DataInputStream(new FileInputStream(filename))) {
             byte[] bytes = new byte[din.available()];
             din.readFully(bytes);
@@ -66,7 +66,7 @@ public final class CryptExec {
      * @throws IOException          Signals that an I/O exception has occurred.
      * @throws InterruptedException the interrupted exception
      */
-    public void exec(byte[] bytes, Consumer<String> consumer) throws IOException, InterruptedException {
+    public void exec(final byte[] bytes, final Consumer<String> consumer) throws IOException, InterruptedException {
         final Process proc = processBuilder.start();
         final BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         // Pipe input to the command
