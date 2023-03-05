@@ -105,7 +105,7 @@ public class ProductTest {
 
     /***
      * Create a model using the operators function given by the IntVar.
-     * 
+     *
      * It does not use result as an intermediary
      */
     @Test

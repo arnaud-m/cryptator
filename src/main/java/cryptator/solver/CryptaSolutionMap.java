@@ -15,7 +15,7 @@ import cryptator.specs.ICryptaSolution;
 
 public class CryptaSolutionMap extends AbstractCryptaSolution<Integer> {
 
-    protected CryptaSolutionMap(final Map<Character, Integer> symbolsToDigits) {
+    public CryptaSolutionMap(final Map<Character, Integer> symbolsToDigits) {
         super(symbolsToDigits);
     }
 

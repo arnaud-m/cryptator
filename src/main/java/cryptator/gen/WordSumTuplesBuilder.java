@@ -32,10 +32,10 @@ import org.chocosolver.solver.constraints.extension.Tuples;
  * <li>l2: the maximum word length of the right member</li>
  * <li>n2: the number of words of the right member</li>
  * </ul>
- * 
+ *
  * A tuple represents the sum of words of the left member that must be equal to
  * the sum of words of the right member.
- * 
+ *
  * The tuples represents the sum of n1 words
  */
 public class WordSumTuplesBuilder {
@@ -58,7 +58,7 @@ public class WordSumTuplesBuilder {
          * @param maxLength the maximum length
          * @param wordCount the word count
          */
-        public HalfTuple(int maxLength, int wordCount) {
+        public HalfTuple(final int maxLength, final int wordCount) {
             super();
             this.maxLength = maxLength;
             this.wordCount = wordCount;
@@ -115,7 +115,7 @@ public class WordSumTuplesBuilder {
          * @param eventType  the event type
          * @param eventValue the event value
          */
-        public HTEvent(HalfTuple tuple, int eventType, BigInteger eventValue) {
+        public HTEvent(final HalfTuple tuple, final int eventType, final BigInteger eventValue) {
             super();
             this.halfTuple = tuple;
             this.eventType = eventType;
@@ -180,33 +180,33 @@ public class WordSumTuplesBuilder {
          *         is less than, equal to, or greater than the second.
          */
         @Override
-        public int compare(HTEvent evt1, HTEvent evt2) {
+        public int compare(final HTEvent evt1, final HTEvent evt2) {
             final int cmp = evt1.eventValue.compareTo(evt2.eventValue);
             return cmp == 0 ? Integer.compare(evt1.eventType, evt2.eventType) : cmp;
         }
     }
 
     /** The base of the word sum. */
-    public final BigInteger base;
+    private final BigInteger base;
 
     /** The sorted word lengths. */
-    public final int[] lengths;
+    private final int[] lengths;
 
     /** The indices of the last word of each length. */
-    public final int[] indices;
+    private final int[] indices;
 
     /**
      * Instantiates a new builder of Word Sum Tuples.
-     * 
+     *
      * The lengths are those of the words that may appear without repetition in the
      * sum.
-     * 
+     *
      * Beware that the lengths given as parameters are sorted (without copy).
      *
      * @param base    the base of the word sum
      * @param lengths the lengths of the words.
      */
-    public WordSumTuplesBuilder(int base, int[] lengths) {
+    public WordSumTuplesBuilder(final int base, final int[] lengths) {
         super();
         this.base = BigInteger.valueOf(base);
         this.lengths = lengths;
@@ -220,7 +220,7 @@ public class WordSumTuplesBuilder {
      * @param lengths the sorted lengths
      * @return the indices
      */
-    private static int[] buildIndices(int[] lengths) {
+    private static int[] buildIndices(final int[] lengths) {
         final int maxLen = IntStream.of(lengths).max().orElse(0);
         final int[] indices = new int[maxLen + 1];
         Arrays.fill(indices, -1);
@@ -241,7 +241,7 @@ public class WordSumTuplesBuilder {
      * @param i the word length
      * @return the lower bound on its value
      */
-    private BigInteger getLB(int i) {
+    private BigInteger getLB(final int i) {
         return base.pow(i - 1);
     }
 
@@ -251,7 +251,7 @@ public class WordSumTuplesBuilder {
      * @param i the word length
      * @return the upper bound on its value
      */
-    private BigInteger getUB(int i) {
+    private BigInteger getUB(final int i) {
         return base.pow(i).subtract(BigInteger.ONE);
     }
 
@@ -264,8 +264,8 @@ public class WordSumTuplesBuilder {
      * @param lb        the lower bound for a word sum (value of the start event)
      * @param ub        the upper bound for a word sum (value of the end event)
      */
-    private static void addEvents(Collection<HTEvent> events, int maxLength, int wordCount, BigInteger lb,
-            BigInteger ub) {
+    private static void addEvents(final Collection<HTEvent> events, final int maxLength, final int wordCount,
+            final BigInteger lb, final BigInteger ub) {
         final HalfTuple t = new HalfTuple(maxLength, wordCount);
         events.add(new HTEvent(t, 0, lb));
         events.add(new HTEvent(t, 1, ub));
@@ -297,12 +297,12 @@ public class WordSumTuplesBuilder {
      * Checks if a tuple is valid.
      *
      * It is valid if there are enough words to build the left and right members.
-     * 
+     *
      * @param t1 the left half tuple
      * @param t2 the the right half tuple
      * @return true, if the tuple is valid
      */
-    private boolean isValid(HalfTuple t1, HalfTuple t2) {
+    private boolean isValid(final HalfTuple t1, final HalfTuple t2) {
         // Total number of words
         final int n = t1.getWordCount() + t2.getWordCount();
         // Maximum length of a word
@@ -312,10 +312,7 @@ public class WordSumTuplesBuilder {
             return false;
         }
         // Is there enough words with length m ?
-        if (t1.getMaxLength() == t2.getMaxLength() && indices[m] - indices[m - 1] < 2) {
-            return false;
-        }
-        return true;
+        return (t1.getMaxLength() != t2.getMaxLength()) || (indices[m] - indices[m - 1] >= 2);
     }
 
     /**
@@ -325,7 +322,7 @@ public class WordSumTuplesBuilder {
      * @param ht1    the left half tuple
      * @param ht2    the right half tuple
      */
-    private static void addTuple(Tuples tuples, HalfTuple ht1, HalfTuple ht2) {
+    private static void addTuple(final Tuples tuples, final HalfTuple ht1, final HalfTuple ht2) {
         tuples.add(ht1.getMaxLength(), ht1.getWordCount(), ht2.getMaxLength(), ht2.getWordCount());
     }
 
@@ -336,7 +333,7 @@ public class WordSumTuplesBuilder {
      * @param t      the ending tuple
      * @param ts     the active tuples
      */
-    private void addTuples(Tuples tuples, HalfTuple t, Set<HalfTuple> ts) {
+    private void addTuples(final Tuples tuples, final HalfTuple t, final Set<HalfTuple> ts) {
         // System.out.println(t + " X " + ts);
         if (isValid(t, t)) {
             addTuple(tuples, t, t);
@@ -355,7 +352,7 @@ public class WordSumTuplesBuilder {
      * @param events the events of the sweep line
      * @return the valid tuples
      */
-    private Tuples processEvents(List<HTEvent> events) {
+    private Tuples processEvents(final List<HTEvent> events) {
         events.sort(new EventComparator());
         // System.out.println(events);
         final Set<HalfTuple> actives = new HashSet<>();

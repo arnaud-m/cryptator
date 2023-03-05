@@ -85,8 +85,8 @@ public final class CryptaGridModel implements IChocoModel {
     }
 
     /**
-     * Gets the grid size
-     * 
+     * Gets the grid size.
+     *
      * @return the grid size
      */
     public int size() {

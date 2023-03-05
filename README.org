@@ -41,7 +41,7 @@ It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which
 
    The jar file contains all required dependencies.
    The next step is simply to run the console application.
-   : java -cp target/cryptator-0.6.1-SNAPSHOT-with-dependencies.jar cryptator.Cryptator send+more=money
+   : java -cp target/cryptator-*-with-dependencies.jar cryptator.Cryptator send+more=money
 
    There are three console applications and the links below point to demonstration scripts.
 
