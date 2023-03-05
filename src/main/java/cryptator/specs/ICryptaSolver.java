@@ -40,7 +40,7 @@ public interface ICryptaSolver {
      * @param cryptarithm the cryptarithm
      * @param config      the configuration
      * @param consumer    the solution consumer
-     * @return true, if successful
+     * @return true, if it is feasible.
      * @throws CryptaModelException  if there is a modeling exception
      * @throws CryptaSolverException if there is a solving exception.
      */
@@ -54,7 +54,7 @@ public interface ICryptaSolver {
      * @param cryptarithm the cryptarithm
      * @param config      the configuration
      * @param consumer    the solution consumer
-     * @return true, if successful
+     * @return true, if it is feasible.
      * @throws CryptaModelException  if there is a modeling exception
      * @throws CryptaSolverException if there is a solving exception.
      */

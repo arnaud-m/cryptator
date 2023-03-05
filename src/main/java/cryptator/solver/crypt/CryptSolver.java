@@ -24,6 +24,9 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.tree.TreeUtils;
 
+/**
+ * The Class CryptSolver is a wrapper for the crypt solver in C.
+ */
 public class CryptSolver extends AbstractCryptaSolver {
 
     @Override
@@ -46,41 +49,72 @@ public class CryptSolver extends AbstractCryptaSolver {
             final CryptConsumer cryptConsumer = new CryptConsumer(consumer);
             crypt.exec(b.toString().getBytes(), cryptConsumer);
             return cryptConsumer.getSolutionCount() > 0;
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Crypt solver error", e);
+        } catch (InterruptedException e) {
+            LOGGER.log(Level.SEVERE, "Crypt solver interruption", e);
             Thread.currentThread().interrupt();
         }
         return false;
     }
 
-    static class CryptConsumer implements Consumer<String> {
+    /**
+     * The Class CryptConsumer.
+     */
+    private static class CryptConsumer implements Consumer<String> {
 
+        /** The constant pattern PCRYPT that matches a cryptarithm. */
         private static final String PCRYPT = "[\\sa-zA-Z\\+=]*";
 
+        /** The constant pattern PSOL that matches a cryptarithm solution. */
         private static final String PSOL = "[\\s0-9\\+=]*";
 
+        /** The constant pattern PSTATS that matches solution statistics. */
         private static final String PSTATS = "\\s*[0-9]+ solution\\(s\\),\\s[0-9]+\\smsec.";
 
+        /** The consumer for the solution. */
         private final Consumer<ICryptaSolution> consumer;
 
+        /** The solution count. */
         private int solutionCount;
 
+        /** The current cryptarithm. */
         private String current;
 
+        /**
+         * Instantiates a new crypt output consumer.
+         *
+         * @param consumer the internal solution consumer
+         */
         public CryptConsumer(Consumer<ICryptaSolution> consumer) {
             super();
             this.consumer = consumer;
         }
 
+        /**
+         * Gets the solution count.
+         *
+         * @return the solution count
+         */
         public final int getSolutionCount() {
             return solutionCount;
         }
 
+        /**
+         * Accept a cryptarithm.
+         *
+         * @param str the cryptarithm line
+         */
         private void acceptCryptarithm(String str) {
             current = str.trim();
             LOGGER.finer(current);
         }
 
+        /**
+         * Accept a solution.
+         *
+         * @param str the solution line
+         */
         private void acceptSolution(String str) {
             final String solution = str.trim();
             LOGGER.finer(solution);
@@ -96,6 +130,11 @@ public class CryptSolver extends AbstractCryptaSolver {
             consumer.accept(new CryptaSolutionMap(map));
         }
 
+        /**
+         * Accept solution statistics.
+         *
+         * @param str the statistics line
+         */
         private void acceptStatistics(String str) {
             if (LOGGER.isLoggable(Level.INFO)) {
                 final String stats = str.trim();
@@ -109,10 +148,20 @@ public class CryptSolver extends AbstractCryptaSolver {
             }
         }
 
+        /**
+         * Accept other line.
+         *
+         * @param str the other line
+         */
         private void acceptOther(String str) {
             LOGGER.finer(str::trim);
         }
 
+        /**
+         * Accept a line of crypt output.
+         *
+         * @param str the output line
+         */
         @Override
         public void accept(String str) {
             if (str.matches(PCRYPT)) {
