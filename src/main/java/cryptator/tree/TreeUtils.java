@@ -141,7 +141,7 @@ public final class TreeUtils {
 
     public static CryptaOperatorDetection computeUnsupportedBignumOperator(final ICryptaNode cryptarithm) {
         final CryptaOperatorDetection detect = new CryptaOperatorDetection(CryptaOperator.ID, CryptaOperator.ADD,
-                CryptaOperator.EQ, CryptaOperator.AND);
+                CryptaOperator.MUL, CryptaOperator.EQ, CryptaOperator.AND);
         TreeTraversals.preorderTraversal(cryptarithm, detect);
         return detect;
     }

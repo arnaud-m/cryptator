@@ -83,6 +83,19 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         return vars.toArray(res);
     }
 
+    private ArExpression[] applyMUL(final ArExpression[] a, final ArExpression[] b) {
+        final int n = a.length + b.length - 1;
+        final ArExpression[] c = new ArExpression[n];
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < b.length; j++) {
+                final int k = i + j;
+                final ArExpression prod = a[i].mul(b[j]);
+                c[k] = c[k] == null ? prod : c[k].add(prod);
+            }
+        }
+        return c;
+    }
+
     private ArExpression[] applyADD(final ArExpression[] a, final ArExpression[] b) {
         final int m = Math.min(a.length, b.length);
         final int n = Math.max(a.length, b.length);
@@ -112,6 +125,10 @@ final class ModelerBignumConsumer extends AbstractModelerNodeConsumer {
         switch (op) {
         case ADD: {
             stack.push(applyADD(a, b));
+            break;
+        }
+        case MUL: {
+            stack.push(applyMUL(a, b));
             break;
         }
         case EQ: {
