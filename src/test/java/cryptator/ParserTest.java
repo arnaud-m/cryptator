@@ -8,15 +8,12 @@
  */
 package cryptator;
 
-import static cryptator.TreeTest.testInorder;
-import static cryptator.TreeTest.testPostorder;
-import static cryptator.TreeTest.testPreorder;
-
-import org.junit.Test;
-
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
+import org.junit.Test;
+
+import static cryptator.TreeTest.*;
 
 public class ParserTest {
 
@@ -314,37 +311,19 @@ public class ParserTest {
         testInorder(str + " && " + str, node);
     }
 
-    @Test
+    @Test(expected = CryptaParserException.class)
     public void testParserAND4symbol() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("send+more=money&&&& d+e>=y");
-
-        testPreorder("&& = + send more money >= + d e y ", node);
-        testPostorder("send more + money = d e + y >= && ", node);
-        testInorder("send + more = money && d + e >= y", node);
+        parser.parse("send+more=money&& && d+e>=y");
     }
 
-    @Test
+    @Test(expected = CryptaParserException.class)
     public void testParserAND5symbol() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("A = B&&&& A = B");
-        testPreorder("&& = A B = A B ", node);
-        testPostorder("A B = A B = && ", node);
-        testInorder("A = B && A = B", node);
+        parser.parse("A = B&& && A = B");
     }
 
-    @Test
+    @Test(expected = CryptaParserException.class)
     public void testParserAND6symbol() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("A = B&&&& A = B&&&&&&&&&&");
-        testPreorder("&& = A B = A B ", node);
-        testPostorder("A B = A B = && ", node);
-        testInorder("A = B && A = B", node);
-    }
-
-    @Test
-    public void testParserAND7symbol() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("a=b&&");
-        testPreorder("= a b ", node);
-        testPostorder("a b = ", node);
-        testInorder("a = b", node);
+        parser.parse("A = B&&&& A = B&&&&&&&&&&");
     }
 
     @Test
@@ -509,7 +488,7 @@ public class ParserTest {
     // Test on parse integers
     @Test
     public void testParserInteger1symbol() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("send+more='1234' && && d+e>=y");
+        final ICryptaNode node = parser.parse("send+more='1234' && d+e>=y");
 
         testPreorder("&& = + send more '1234' >= + d e y ", node);
         testPostorder("send more + '1234' = d e + y >= && ", node);
@@ -548,7 +527,7 @@ public class ParserTest {
 
     @Test
     public void testParserInteger1symboldoubleticks() throws CryptaParserException {
-        final ICryptaNode node = parser.parse("send+more=\"1234\" && && d+e>=y");
+        final ICryptaNode node = parser.parse("send+more=\"1234\" && d+e>=y");
 
         testPreorder("&& = + send more '1234' >= + d e y ", node);
         testPostorder("send more + '1234' = d e + y >= && ", node);

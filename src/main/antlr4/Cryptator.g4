@@ -10,65 +10,60 @@
 grammar Cryptator;
 
 @header{
-package cryptator.parser;
+    package cryptator.parser;
 
-import cryptator.specs.ICryptaNode;
-import cryptator.tree.CryptaNode;
-import cryptator.tree.CryptaLeaf;
-import cryptator.tree.CryptaConstant;
-
+    import cryptator.specs.ICryptaNode;
+    import cryptator.tree.CryptaNode;
+    import cryptator.tree.CryptaLeaf;
+    import cryptator.tree.CryptaConstant;
 }
 
 
 // Parser Rules
 
-program : equations EOF{}; //additional token to simplify the passage in parameter
+program : equations EOF{}; // additional token to simplify the passage in parameter
 
-equations returns [ICryptaNode node]  //create a node of conjuncts
-        : equation (AND*) {$node=$equation.node;}
-        |  e1=equation (AND+) e2=equations (AND*) {$node=new CryptaNode("&&", $e1.node, $e2.node);};
+equations returns [ICryptaNode node]  // create a list of equations
+    : equation SC? {$node=$equation.node;}
+    |  e1=equation (SC | AND) e2=equations {$node=new CryptaNode("&&", $e1.node, $e2.node);};
 
-equation returns [ICryptaNode node]  //create a node of the tree corresponding to an equation and return this node
-        : '(' equation ')' {$node=$equation.node;}
-        | left=expression COMPARATOR right=expression {$node=new CryptaNode($COMPARATOR.getText(), $left.node, $right.node);};
-                 
+equation returns [ICryptaNode node]  // create an equation
+    : '(' equation ')' {$node=$equation.node;}
+    | left=expression COMPARATOR right=expression {$node=new CryptaNode($COMPARATOR.text, $left.node, $right.node);};
 
-expression returns [ICryptaNode node] //create recursively the tree of expressions with priority and return the root of the tree
-            : word {$node=new CryptaLeaf($word.text);} //create a node of the tree corresponding to a leaf and return this node
-            | '\'' number '\'' {$node=new CryptaConstant($number.text);}
-            | '"' number '"' {$node=new CryptaConstant($number.text);}
-            | '(' expression ')' {$node=$expression.node;}
-            | e1=expression modORpow e2=expression {$node=new CryptaNode($modORpow.text, $e1.node, $e2.node);} //create a node of the tree corresponding to an operation and return this node
-            | sub expression {$node=new CryptaNode($sub.text, new CryptaConstant("0"), $expression.node);}
-            | e1=expression divORmul e2=expression {$node=new CryptaNode($divORmul.text, $e1.node, $e2.node);}
-            | e1=expression addORsub e2=expression {$node=new CryptaNode($addORsub.text, $e1.node, $e2.node);};
+expression returns [ICryptaNode node] // create the tree of expressions
+    : word {$node=new CryptaLeaf($word.text);}
+    | '\'' NUMBER '\'' {$node=new CryptaConstant($NUMBER.text);}
+    | '"' NUMBER '"' {$node=new CryptaConstant($NUMBER.text);}
+    | '(' expression ')' {$node=$expression.node;}
+    | e1=expression MOD_OR_POW e2=expression {$node=new CryptaNode($MOD_OR_POW.text, $e1.node, $e2.node);}
+    | SUB expression {$node=new CryptaNode("-", new CryptaConstant("0"), $expression.node);}
+    | e1=expression DIV_OR_MUL e2=expression {$node=new CryptaNode($DIV_OR_MUL.text, $e1.node, $e2.node);}
+    | e1=expression op=(ADD | SUB) e2=expression {$node=new CryptaNode($op.text, $e1.node, $e2.node);};
 
-
-
-word :  //additional token to simplify the passage in parameter
-    (SYMBOL|DIGIT)+;
-
-number : (DIGIT)+;
-    
-modORpow : '%' | '^';
-
-divORmul : '/' | '//' | '*';
-
-addORsub : '+' | sub;
-
-sub : '-';
+word : (SYMBOL|NUMBER)+;
 
 // Lexer Rules
 
-ERROR : (SYMBOL|DIGIT)+ WHITESPACE (SYMBOL|DIGIT)+;
+// OPERATORS
+MOD_OR_POW : '%' | '^';
+DIV_OR_MUL : '/' | '//' | '*';
+SUB: '-';
+ADD: '+';
 
+// COMPARATORS
 COMPARATOR : '=' | '!=' | '<' | '>' | '<=' | '>=';
 
+// SYMBOLS
 SYMBOL : [a-zA-Z\u0080-\uFFFF] {};
+NUMBER : [0-9]+ {};
 
-DIGIT : [0-9] {};
+// CONJUNCTIONS
+SC : ';'+;   // Statement separator
+AND : '&&';  // Logical conjunction
 
-AND : ';' | '&&';
-
-
+// IGNORE
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
+
+// ERROR
+ERROR : (SYMBOL|NUMBER)+ WHITESPACE (SYMBOL|NUMBER)+;
