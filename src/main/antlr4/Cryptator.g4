@@ -24,8 +24,8 @@ grammar Cryptator;
 program : equations EOF{}; // additional token to simplify the passage in parameter
 
 equations returns [ICryptaNode node]  // create a list of equations
-    : equation (AND*) {$node=$equation.node;}
-    |  e1=equation (AND | AND_INFIX)+ e2=equations {$node=new CryptaNode("&&", $e1.node, $e2.node);};
+    : equation SC? {$node=$equation.node;}
+    |  e1=equation (SC | AND) e2=equations {$node=new CryptaNode("&&", $e1.node, $e2.node);};
 
 equation returns [ICryptaNode node]  // create an equation
     : '(' equation ')' {$node=$equation.node;}
@@ -59,8 +59,8 @@ SYMBOL : [a-zA-Z\u0080-\uFFFF] {};
 NUMBER : [0-9]+ {};
 
 // CONJUNCTIONS
-AND : ';';
-AND_INFIX : '&&';
+SC : ';'+;   // Statement separator
+AND : '&&';  // Logical conjunction
 
 // IGNORE
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;

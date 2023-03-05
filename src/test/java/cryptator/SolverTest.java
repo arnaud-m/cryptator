@@ -489,7 +489,7 @@ public class SolverTest {
     public void testUnsatSendMoreMoneyList() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.config.setHornerScheme(true);
         t.testUNSAT("send+more=money; s+e=n", "send+more=money;;; s+e=n", "send+more=money; s+e=n;",
-                "send+more=money&& s+e=n", "send+more=money&&&&&& s+e=n");
+                "send+more=money&& s+e=n");
     }
 
     // Long multiplication with integer
