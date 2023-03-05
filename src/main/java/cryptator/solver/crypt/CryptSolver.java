@@ -1,3 +1,11 @@
+/*
+ * This file is part of cryptator, https://github.com/arnaud-m/cryptator
+ *
+ * Copyright (c) 2023, Université Côte d'Azur. All rights reserved.
+ *
+ * Licensed under the BSD 3-clause license.
+ * See LICENSE file in the project root for full license information.
+ */
 package cryptator.solver.crypt;
 
 import java.io.IOException;
@@ -6,6 +14,7 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
+import cryptator.config.CryptaCmdConfig;
 import cryptator.config.CryptaConfig;
 import cryptator.solver.AbstractCryptaSolver;
 import cryptator.solver.CryptaModelException;
@@ -33,8 +42,8 @@ public class CryptSolver extends AbstractCryptaSolver {
         b.append(TreeUtils.writeInorder(cryptarithm)).append("\n");
         // Solve the cryptarithm with the crypt solver
         try {
-            CryptExec crypt = new CryptExec("/home/nono/workspace/cryptator/src/main/benchmarks/crypt/crypt");
-            CryptConsumer cryptConsumer = new CryptConsumer(consumer);
+            final CryptExec crypt = new CryptExec(((CryptaCmdConfig) config).getCryptCommand());
+            final CryptConsumer cryptConsumer = new CryptConsumer(consumer);
             crypt.exec(b.toString().getBytes(), cryptConsumer);
             return cryptConsumer.getSolutionCount() > 0;
         } catch (IOException | InterruptedException e) {
@@ -44,7 +53,7 @@ public class CryptSolver extends AbstractCryptaSolver {
         return false;
     }
 
-    class CryptConsumer implements Consumer<String> {
+    static class CryptConsumer implements Consumer<String> {
 
         private static final String PCRYPT = "[\\sa-zA-Z\\+=]*";
 
@@ -98,13 +107,6 @@ public class CryptSolver extends AbstractCryptaSolver {
                 final String diagnostics = String.format(format, runtime, split[0]);
                 LOGGER.info(diagnostics);
             }
-            // // System.out.println(Arrays.toString(split));
-            // StringBuilder b = new StringBuilder();
-            // double runtime = Double.parseDouble(split[2]) / MS;
-            // b.append(String.format("d TIME %.3f%n", runtime));
-            // b.append("d NBSOLS ").append(split[0]).append("\n");
-            //
-            // System.out.println(b.toString());
         }
 
         private void acceptOther(String str) {

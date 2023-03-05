@@ -12,7 +12,10 @@ import java.util.function.Consumer;
 
 import org.chocosolver.solver.variables.IntVar;
 
+import cryptator.CryptaOperator;
+import cryptator.config.CryptaCmdConfig;
 import cryptator.config.CryptaConfig;
+import cryptator.solver.crypt.CryptSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
@@ -22,6 +25,7 @@ import cryptator.tree.TreeTraversals;
 public class AdaptiveSolver implements ICryptaSolver {
 
     private final CryptaSolver solver = new CryptaSolver();
+    private final CryptSolver crypt = new CryptSolver();
 
     public AdaptiveSolver() {
         super();
@@ -40,43 +44,69 @@ public class AdaptiveSolver implements ICryptaSolver {
     @Override
     public void limitTime(final long limit) {
         solver.limitTime(limit);
+        crypt.limitTime(limit);
     }
 
     @Override
     public void limitSolution(final long limit) {
         solver.limitSolution(limit);
+        crypt.limitSolution(limit);
+
+    }
+
+    public final static boolean useCrypt(CryptaConfig config) {
+        if (config instanceof CryptaCmdConfig) {
+            return ((CryptaCmdConfig) config).useCrypt();
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
             final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException, CryptaSolverException {
-        MaxLenConsumer cons = new MaxLenConsumer();
+        final AdaptiveConsumer cons = new AdaptiveConsumer();
         TreeTraversals.preorderTraversal(cryptarithm, cons);
         final int threshold = computeThreshold(config.getArithmeticBase());
-        if (cons.getMaxLength() > threshold) {
+        ICryptaSolver s = solver;
+        if (cons.getMaxWordLength() > threshold) {
             solver.setBignum();
         } else {
             solver.unsetBignum();
+            if (useCrypt(config) && cons.isCryptAddition()) {
+                s = crypt;
+            }
         }
-        return solver.solve(cryptarithm, config, solutionConsumer);
+        return s.solve(cryptarithm, config, solutionConsumer);
     }
 
-    private static class MaxLenConsumer implements ITraversalNodeConsumer {
+    private static class AdaptiveConsumer implements ITraversalNodeConsumer {
 
-        private int maxLen;
+        private int maxWordLength = 0;
 
-        public final int getMaxLength() {
-            return maxLen;
-        }
+        private boolean cryptAddition = true;
 
         @Override
-        public void accept(final ICryptaNode node, final int numNode) {
+        public void accept(ICryptaNode node, int numNode) {
             if (node.isWord()) {
-                final int len = node.getWord().length;
-                if (len > maxLen) {
-                    maxLen = len;
+                maxWordLength = Math.max(maxWordLength, node.getWord().length);
+            } else if (node.isInternalNode()) {
+                if (node.getOperator() == CryptaOperator.EQ) {
+                    cryptAddition &= (!node.getLeftChild().isInternalNode() || !node.getRightChild().isInternalNode());
+                } else if (node.getOperator() != CryptaOperator.ADD) {
+                    cryptAddition = false;
                 }
             }
         }
+
+        public final int getMaxWordLength() {
+            return maxWordLength;
+        }
+
+        public final boolean isCryptAddition() {
+            return cryptAddition;
+        }
+
     }
+
 }
