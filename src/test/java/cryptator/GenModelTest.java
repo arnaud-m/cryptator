@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cryptator.gen.AbstractCryptaListModel;
-import cryptator.gen.member.CryptaMemberCard;
 import cryptator.gen.member.CryptaMemberElt;
 import cryptator.gen.member.CryptaMemberLen;
 import cryptator.specs.ICryptaGenModel;
@@ -73,7 +72,7 @@ public class GenModelTest {
     @Before
     public void buildGenModels() {
         models = new ICryptaGenModel[] {new CryptaMemberLen(new Model(), words, ""),
-                new CryptaMemberCard(new Model(), words, ""), new MockWordListModel(new Model(), words)};
+                new MockWordListModel(new Model(), words)};
         for (ICryptaGenModel m : models) {
             m.buildModel();
         }

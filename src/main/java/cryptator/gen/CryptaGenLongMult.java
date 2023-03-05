@@ -31,7 +31,7 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     public final CryptaLongMultModel longMult;
 
-    private int arithmeticBase;
+    private final int arithmeticBase;
 
     public CryptaGenLongMult(final String[] words, final int arithmeticBase) {
         super(new Model("Generate-Long-Multiplication"), words);
@@ -43,10 +43,6 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     public final int getArithmeticBase() {
         return arithmeticBase;
-    }
-
-    public final void setArithmeticBase(final int arithmeticBase) {
-        this.arithmeticBase = arithmeticBase;
     }
 
     @Override

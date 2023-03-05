@@ -13,10 +13,9 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
-import cryptator.config.CryptagenConfig;
 import cryptator.gen.AbstractCryptaGenModel;
 import cryptator.gen.GenerateUtil;
-import cryptator.gen.WordSumTuplesBuilder2;
+import cryptator.gen.WordSumTuplesBuilder;
 import cryptator.specs.ICryptaGenSolver;
 import cryptator.specs.ICryptaNode;
 
@@ -32,22 +31,16 @@ public class CryptaMemberPair implements ICryptaGenSolver {
         this.right = right;
     }
 
-    public CryptaMemberPair(final Model model, final String[] words, final String prefix, final boolean useMemberLen) {
+    public CryptaMemberPair(final Model model, final String[] words, final String prefix) {
         super();
-        left = buildLeftMember(model, words, prefix, useMemberLen);
+        left = new CryptaMemberLen(model, words, prefix + "L_");
         right = new CryptaMemberElt(model, words, prefix + "R_");
     }
 
-    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix, final boolean useMemberLen) {
+    public CryptaMemberPair(final IntVar index, final String[] words, final String prefix) {
         super();
-        left = buildLeftMember(index.getModel(), words, prefix, useMemberLen);
+        left = new CryptaMemberLen(index.getModel(), words, prefix + "L_");
         right = new CryptaMemberElt(index, words, prefix + "R_");
-    }
-
-    private static final CryptaMemberLen buildLeftMember(final Model model, final String[] words, final String prefix,
-            final boolean useMemberLen) {
-        return useMemberLen ? new CryptaMemberLen(model, words, prefix + "L_")
-                : new CryptaMemberCard(model, words, prefix + "L_");
     }
 
     @Override
@@ -83,20 +76,14 @@ public class CryptaMemberPair implements ICryptaGenSolver {
 
     public void postMaxLengthConstraint(final IntVar maxLen) {
         getModel().max(maxLen, getLeft().getMaxLength(), getRight().getMaxLength()).post();
-
     }
 
     public final void postHeavyConstraints(final int base) {
-        // left.postLentghSumConstraints(right.getMaxLength(), base);
-        if (CryptagenConfig.newLightPropagation) {
-            int[] lengths = AbstractCryptaGenModel.getLengths(left.getWords());
-            WordSumTuplesBuilder2 builder = new WordSumTuplesBuilder2(base, lengths);
-            IntVar[] vars = ArrayUtils.toArray(left.getMaxLength(), left.getWordCount(), right.getMaxLength(),
-                    right.getWordCount());
-            getModel().table(vars, builder.buildTuples()).post();
-        } else {
-            left.postLentghSumConstraints(right.getMaxLength(), base);
-        }
+        int[] lengths = AbstractCryptaGenModel.getLengths(left.getWords());
+        WordSumTuplesBuilder builder = new WordSumTuplesBuilder(base, lengths);
+        IntVar[] vars = ArrayUtils.toArray(left.getMaxLength(), left.getWordCount(), right.getMaxLength(),
+                right.getWordCount());
+        getModel().table(vars, builder.buildTuples()).post();
     }
 
     public void postFixedRightMemberConstraints() {
