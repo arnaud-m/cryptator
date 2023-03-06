@@ -70,7 +70,7 @@ public class GenerateTest {
         testGenerate(expectedSolCount, expectedCandCount, wordArray);
     }
 
-    private void testMultGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
+    private void testMultGenerateLH(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
         JULogUtil.configureSilentLoggers();
         config.setMultModel(true);
         configure(0, false);
@@ -80,7 +80,15 @@ public class GenerateTest {
         config.setMultModel(false);
     }
 
-    private void testLongMultGenerate(final int expectedSolCount, final WordArray wordArray)
+    private void testMultGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
+        config.setUseBigNum(false);
+        testMultGenerateLH(expectedSolCount, wordArray);
+        config.setUseBigNum(true);
+        testMultGenerateLH(expectedSolCount, wordArray);
+        config.setUseBigNum(false);
+    }
+
+    private void testLongMultGenerateLH(final int expectedSolCount, final WordArray wordArray)
             throws CryptaModelException {
         JULogUtil.configureSilentLoggers();
         config.setLongMultModel(true);
@@ -89,6 +97,15 @@ public class GenerateTest {
         configure(0, true);
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
         config.setLongMultModel(false);
+    }
+
+    private void testLongMultGenerate(final int expectedSolCount, final WordArray wordArray)
+            throws CryptaModelException {
+        config.setUseBigNum(false);
+        testLongMultGenerateLH(expectedSolCount, wordArray);
+        config.setUseBigNum(true);
+        testLongMultGenerateLH(expectedSolCount, wordArray);
+        config.setUseBigNum(false);
     }
 
     @Test
@@ -192,7 +209,8 @@ public class GenerateTest {
     @Test
     public void testMult5() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("north", "south", "east", "west"), null);
-        testMultGenerate(2, words);
+        testMultGenerateLH(2, words);
+        // Takes too long with the bignum model
     }
 
     @Test
@@ -202,7 +220,7 @@ public class GenerateTest {
     }
 
     @Test
-    public void testLongMult3() throws CryptaModelException {
+    public void testLongMult2() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("get", "by", "babe", "beare"), null);
         testLongMultGenerate(1, words);
     }

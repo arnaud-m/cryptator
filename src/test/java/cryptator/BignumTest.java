@@ -211,4 +211,41 @@ public class BignumTest {
     public void testUnsatSendMoreMoneyList() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.testUNSAT("send+more=money; s+e=n", "send+more=money;;; s+e=n", "send+more=money; s+e=n;");
     }
+
+    @Test
+    public void testBarker5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("cinq*six=trente");
+    }
+
+    @Test
+    public void testUniqueLongMultiplications() throws CryptaModelException, CryptaSolverException {
+        String[] cryptarithms = {"SEE * SO = MIMEO; MIMEO = EMOO + '10'*MESS;SEE * O = EMOO;SEE * S = MESS",
+                "SEE * SO = MIMEO; MIMEO = EMOO + \"10\"*MESS;SEE * O = EMOO;SEE * S = MESS",
+                "CUT * T = BUST; CUT * I = TNNT; TNNT * '10' + BUST = TENET; TENET = CUT * IT",
+                "RED * S = ARCS; RED * A = RED; RED * '10' + ARCS = CDTS; CDTS = RED * AS",
+                "HOW * E = HAIL; HOW * W = PAL; HAIL + PAL * '10' = LHAL; HOW * WE = LHAL",
+                "SEE * SO = MIMEO&& MIMEO = EMOO + '10'*MESS&&SEE * O = EMOO&&SEE * S = MESS",
+                "CUT * T = BUST&& CUT * I = TNNT&& TNNT * '10' + BUST = TENET&& TENET = CUT * IT",
+                "RED * S = ARCS&& RED * A = RED&& RED * '10' + ARCS = CDTS&& CDTS = RED * AS",
+                "HOW * E = HAIL&& HOW * W = PAL&& HAIL + PAL * '10' = LHAL&& HOW * WE = LHAL"
+
+        };
+
+        t.testUNIQUE(cryptarithms);
+    }
+
+    @Test
+    public void testPrimeBignumMultiplications() throws CryptaModelException, CryptaSolverException {
+        String[] cryptarithms = {"7901*999999983491=7900999869562391", "8467*999999983491=8466999860218297"};
+        t.testUNIQUE(cryptarithms);
+    }
+
+    @Test
+    public void testPrimeBignumLongMultiplications() throws CryptaModelException, CryptaSolverException {
+        String[] cryptarithms = {
+                "8467*999999983491=8466999860218297&&8467*1+76203*10+33868*100+25401*1000+67736*10000+76203*100000+76203*1000000+76203*10000000+76203*100000000+76203*1000000000+76203*10000000000+76203*100000000000=8466999860218297&&8467*8=67736&&8467*3=25401&&8467*4=33868&&8467*9=76203&&8467*1=8467",
+                "999999983491*8467=8466999860218297&&6999999884437*'1'+5999999900946*'10'+3999999933964*'100'+7999999867928*'1000'=8466999860218297&&999999983491*8=7999999867928&&999999983491*4=3999999933964&&999999983491*6=5999999900946&&999999983491*7=6999999884437"};
+        t.testUNIQUE(cryptarithms);
+    }
+
 }
