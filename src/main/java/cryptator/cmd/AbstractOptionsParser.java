@@ -8,7 +8,10 @@
  */
 package cryptator.cmd;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -110,14 +113,36 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         return printExample(parser.printExample(filter));
     }
 
+    private void appendHeader(final StringBuilder b) {
+        b.append("Help of ").append(getCommandName()).append("\n\n");
+        b.append(printExample("[options...]")).append("\n\n");
+    }
+
+    private void appendMessage(final StringBuilder b) {
+        appendResource(b, "help/" + getCommandName() + ".txt");
+    }
+
+    private void appendResource(final StringBuilder b, final String resourceName) {
+        final InputStream in = getClass().getClassLoader().getResourceAsStream(resourceName);
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        reader.lines().forEach(x -> b.append(x).append('\n'));
+    }
+
+    private void appendFooter(final StringBuilder b) {
+        b.append("\n\nReport bugs: <https://github.com/arnaud-m/cryptator/issues>\n");
+        b.append("Cryptator home page: <https://github.com/arnaud-m/cryptator>\n");
+    }
+
     private String buildHelpMessage(final CmdLineParser parser, final OptionHandlerFilter filter) {
-        StringBuilder b = new StringBuilder();
-        b.append(" Help message:\n");
-        b.append(printExample("[options...]")).append("\n");
+        final StringBuilder b = new StringBuilder();
+        appendHeader(b);
+        appendMessage(b);
+        b.append("\nUsage:\n");
         b.append(printUsage(parser, filter));
         b.append("\nExamples:");
         b.append("\n").append(printExample(parser, OptionHandlerFilter.REQUIRED));
         b.append("\n").append(printExample(parser, filter));
+        appendFooter(b);
         return b.toString();
     }
 
