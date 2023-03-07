@@ -12,7 +12,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
@@ -112,11 +114,14 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     private static ICryptaNode recordTermMultiplications(final String[] terms, final String multiplicand,
             final String multiplier) {
-        // FIXME Identical term multiplications are recorded.
         final char[] multipliers = multiplier.toCharArray();
         final ArrayList<ICryptaNode> nodes = new ArrayList<>();
+        final Set<Character> letters = new HashSet<>();
         for (int i = 0; i < terms.length; i++) {
-            nodes.add(GenerateUtil.recordMultiplication(multiplicand, Character.toString(multipliers[i]), terms[i]));
+            Character letter = Character.valueOf(multipliers[i]);
+            if (letters.add(letter)) {
+                nodes.add(GenerateUtil.recordMultiplication(multiplicand, letter.toString(), terms[i]));
+            }
         }
         return GenerateUtil.reduceOperation(CryptaOperator.AND, nodes.stream());
     }
