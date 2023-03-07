@@ -133,42 +133,45 @@
                     <target>11</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>4.1</version>
-                <configuration>
-                    <header>src/etc/header.txt</header>
-                    <properties>
-                        <year>${maven.build.timestamp}</year>
-                        <owner>Université Côte d'Azur</owner>
-                        <project>
-                            ${project.name}
-                        </project>
-                        <prurl>${project.url}</prurl>
-                    </properties>
-                    <mapping>
-                        <R>SCRIPT_STYLE</R>
-                        <g4>DOUBLESLASH_STYLE</g4>
-                        <template>JAVADOC_STYLE</template>
-                    </mapping>
-                    <includes>
-                        <include>src/*/java/**/*.java</include>
-                        <include>src/*/antlr4/**/*.g4</include>
-                        <include>src/*/shell/**/*.sh</include>
-                        <include>src/*/R/**/*.R</include>
-                        <include>**/pom.xml</include>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+	<plugin>
+		<groupId>com.mycila</groupId>
+		<artifactId>license-maven-plugin</artifactId>
+		<version>4.1</version>
+		<configuration>
+			<mapping>
+				<R>SCRIPT_STYLE</R>
+				<g4>DOUBLESLASH_STYLE</g4>
+				<template>JAVADOC_STYLE</template>
+			</mapping>
+			<licenseSets>
+				<licenseSet>
+					<properties>
+						<year>${maven.build.timestamp}</year>
+						<owner>Université Côte d'Azur</owner>
+						<project>${project.name}</project>
+						<prurl>${project.url}</prurl>
+					</properties>
+					<header>src/etc/header.txt</header>
+					<includes>
+						<include>src/*/java/**/*.java</include>
+						<include>src/*/antlr4/**/*.g4</include>
+						<include>src/*/shell/**/*.sh</include>
+						<include>src/*/R/**/*.R</include>
+						<include>**/pom.xml</include>
+					</includes>
+				</licenseSet>
+			</licenseSets>
+
+		</configuration>
+		<executions>
+			<execution>
+				<phase>compile</phase>
+				<goals>
+					<goal>format</goal>
+				</goals>
+			</execution>
+		</executions>
+	</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
