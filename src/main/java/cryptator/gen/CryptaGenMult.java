@@ -119,13 +119,6 @@ public class CryptaGenMult extends AbstractCryptaListModel {
     }
 
     @Override
-    public void postPrecisionConstraints(final int base) {
-//        final int thresh = AdaptiveSolver.computeThreshold(base);
-//        getMaxLength().le(thresh).post();
-//        multiplication.postMultPrecisionConstraints(base);
-    }
-
-    @Override
     public final ICryptaNode recordCryptarithm() {
         return multiplication.recordCryptarithm();
     }

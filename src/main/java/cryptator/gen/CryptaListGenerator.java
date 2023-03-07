@@ -113,8 +113,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
         gen.buildModel();
         gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
         gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
-        gen.postPrecisionConstraints(config.getArithmeticBase());
-
         if (!config.isLightPropagation()) {
             gen.postHeavyConstraints(config.getArithmeticBase());
         }

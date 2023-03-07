@@ -82,12 +82,6 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
         // Nothing to do
     }
 
-    @Override
-    public void postPrecisionConstraints(final int base) {
-//        final int thresh = AdaptiveSolver.computeThreshold(base);
-//        longMult.getProductLength().le(thresh).post();
-    }
-
     private String[] getTermWords() {
         final int[] terms = longMult.getTermIndices();
         final char[] mult = words[longMult.getMultiplierIndex()].toCharArray();
