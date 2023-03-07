@@ -236,7 +236,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 *** Multiplication
  #+BEGIN_SRC sh
-   echo -v quiet -d FALSE -mult TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
+   echo -v quiet -d FALSE -mult TRUE -multUnique TRUE -lightP FALSE > algorithms/ALL.dat
  #+END_SRC
 
 *** Long Multiplication

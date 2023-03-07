@@ -25,7 +25,7 @@ public class CryptaMemberPair implements ICryptaGenSolver {
 
     protected final AbstractCryptaGenModel right;
 
-    public CryptaMemberPair(final Model model, final String[] words, final String prefix, boolean isRightUnique) {
+    public CryptaMemberPair(final Model model, final String[] words, final String prefix, final boolean isRightUnique) {
         super();
         left = new CryptaMemberLen(model, words, prefix + "L_");
         right = isRightUnique ? new CryptaMemberElt(model, words, prefix + "R_")

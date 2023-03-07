@@ -41,7 +41,7 @@ public class CryptaCmdConfig extends CryptaLogConfig {
         return useBigNum;
     }
 
-    public final void setUseBigNum(boolean useBigNum) {
+    public final void setUseBigNum(final boolean useBigNum) {
         this.useBigNum = useBigNum;
     }
 

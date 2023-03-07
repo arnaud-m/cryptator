@@ -93,7 +93,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         if (config.getGridSize() > 0) {
             return new CryptaGenCrossword(config.getGridSize(), words.getWords());
         } else if (config.isMultModel()) {
-            return new CryptaGenMult(words.getWords());
+            return new CryptaGenMult(words.getWords(), config.isMultUnique());
         } else if (config.isLongMultModel()) {
             return new CryptaGenLongMult(words.getWords(), config.getArithmeticBase());
         } else {

@@ -22,7 +22,7 @@ public class MultTest {
     }
 
     private void testMultModel(final int expectedSolutionCount, final String[] words, final boolean isDoublyTrue) {
-        final CryptaGenMult m = new CryptaGenMult(words);
+        final CryptaGenMult m = new CryptaGenMult(words, false);
         m.buildModel();
         m.postHeavyConstraints(10);
         if (isDoublyTrue) {

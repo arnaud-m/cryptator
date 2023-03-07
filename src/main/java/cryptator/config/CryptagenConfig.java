@@ -43,6 +43,9 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "-lightP", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
     private boolean lightPropagation;
 
+    @Option(name = "-multUnique", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
+    private boolean multUnique;
+
     public final boolean isDryRun() {
         return dryRun;
     }
@@ -77,6 +80,10 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
     public final boolean isLightPropagation() {
         return lightPropagation;
+    }
+
+    public final boolean isMultUnique() {
+        return multUnique;
     }
 
     public final void setLightPropagation(final boolean lightPropagation) {
