@@ -87,10 +87,10 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
             parser.parseArgument(args);
             configureLoggers();
             if (config.isHelpMessage()) {
-                logHelp(parser);
+                logManual(parser);
                 return EXIT_CODE;
             } else if (config.getArguments().isEmpty()) {
-                logConciseHelp(parser);
+                logHelp(parser);
                 return EXIT_CODE;
             } else if (checkConfiguration()) {
                 if (checkArguments()) {
@@ -107,21 +107,8 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         } catch (CmdLineException e) {
             getLogger().log(Level.SEVERE, "Parse options [FAIL]", e);
         }
-        logConciseHelp(parser);
+        logHelp(parser);
         return ERROR_CODE;
-    }
-
-    private final void logConciseHelp(CmdLineParser parser) {
-        if (getLogger().isLoggable(Level.INFO)) {
-            getLogger().info(buildHelpMessage(parser, OptionHandlerFilter.PUBLIC));
-        }
-
-    }
-
-    private final void logHelp(CmdLineParser parser) {
-        if (getLogger().isLoggable(Level.INFO)) {
-            getLogger().info(buildHelpMessage(parser, OptionHandlerFilter.PUBLIC));
-        }
     }
 
     private String printUsage(final CmdLineParser parser, final OptionHandlerFilter filter) {
@@ -130,17 +117,19 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         return os.toString();
     }
 
-    private String printExample(final String options) {
-        return "java " + getCommandName() + " " + options + " " + getArgumentName();
-    }
-
-    private String printExample(final CmdLineParser parser, final OptionHandlerFilter filter) {
-        return printExample(parser.printExample(filter));
+    private void appendExample(final StringBuilder b, final CmdLineParser parser, final OptionHandlerFilter filter) {
+        b.append("java").append(getCommandName()).append(' ');
+        final String opts = parser.printExample(filter);
+        if (opts.length() > 0)
+            b.append(opts).append(" ");
+        if (filter == OptionHandlerFilter.REQUIRED) {
+            b.append("[options...] ");
+        }
+        b.append(getArgumentName()).append('\n');
     }
 
     private void appendHeader(final StringBuilder b) {
-        b.append("Help of ").append(getCommandName()).append("\n\n");
-        b.append(printExample("[options...]")).append("\n\n");
+        b.append("Help of ").append(getCommandName()).append("\n");
     }
 
     private void appendMessage(final StringBuilder b) {
@@ -154,21 +143,44 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     }
 
     private void appendFooter(final StringBuilder b) {
-        b.append("\n\nReport bugs: <https://github.com/arnaud-m/cryptator/issues>\n");
+        b.append("\nReport bugs: <https://github.com/arnaud-m/cryptator/issues>\n");
         b.append("Cryptator home page: <https://github.com/arnaud-m/cryptator>\n");
     }
 
-    private String buildHelpMessage(final CmdLineParser parser, final OptionHandlerFilter filter) {
-        final StringBuilder b = new StringBuilder();
-        appendHeader(b);
-        appendMessage(b);
-        b.append("\nUsage:\n");
-        b.append(printUsage(parser, filter));
-        b.append("\nExamples:");
-        b.append("\n").append(printExample(parser, OptionHandlerFilter.REQUIRED));
-        b.append("\n").append(printExample(parser, filter));
-        appendFooter(b);
-        return b.toString();
+    private void appendShortFooter(final StringBuilder b) {
+        b.append("\nTry the option '--help' for more information.\n");
     }
 
+    private void logHelp(final CmdLineParser parser) {
+        if (getLogger().isLoggable(Level.INFO)) {
+            final StringBuilder b = new StringBuilder();
+            appendHeader(b);
+            appendExample(b, parser, OptionHandlerFilter.REQUIRED);
+            b.append("\n");
+            appendMessage(b);
+            b.append("\nPublic options:\n");
+            b.append(printUsage(parser, OptionHandlerFilter.PUBLIC));
+            appendShortFooter(b);
+            getLogger().info(b.toString());
+        }
+    }
+
+    private void logManual(final CmdLineParser parser) {
+        if (getLogger().isLoggable(Level.INFO)) {
+            final StringBuilder b = new StringBuilder();
+            appendHeader(b);
+            b.append("SYNOPSIS\n");
+            appendExample(b, parser, OptionHandlerFilter.REQUIRED);
+            appendExample(b, parser, OptionHandlerFilter.PUBLIC);
+            appendExample(b, parser, OptionHandlerFilter.ALL);
+            b.append("\nDESCRIPTION\n");
+            appendMessage(b);
+            b.append("\nOPTIONS\n");
+            b.append(printUsage(parser, OptionHandlerFilter.ALL));
+            b.append("\nEXAMPLE\n");
+            appendFooter(b);
+            getLogger().info(b.toString());
+        }
+
+    }
 }
