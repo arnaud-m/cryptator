@@ -13,19 +13,23 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptaCmdConfig extends CryptaLogConfig {
 
-    @Option(name = "-c", handler = ExplicitBooleanOptionHandler.class, usage = "check solutions by evaluation")
+    @Option(name = "-c", aliases = {
+            "--check"}, handler = ExplicitBooleanOptionHandler.class, usage = "Check solutions by evaluation,")
     private boolean checkSolution;
 
-    @Option(name = "-g", handler = ExplicitBooleanOptionHandler.class, usage = "export solutions to graphviz format")
+    @Option(name = "-g", aliases = {
+            "--graphviz"}, handler = ExplicitBooleanOptionHandler.class, usage = "Export solutions to graphviz format.")
     private boolean exportGraphiz;
 
-    @Option(name = "-l", handler = ExplicitBooleanOptionHandler.class, usage = "use the bignum model (only +, *, and =)")
+    @Option(name = "-l", aliases = {"-B",
+            "--bignum"}, handler = ExplicitBooleanOptionHandler.class, usage = "Use the bignum model (only + and =).")
     private boolean useBigNum;
 
     @Option(name = "--crypt-command", usage = "the crypt command")
     private String cryptCommand = "crypt";
 
-    @Option(name = "-crypt", handler = ExplicitBooleanOptionHandler.class, usage = "use the crypt solver (only + and =)")
+    @Option(name = "-crypt", aliases = {
+            "--crypt"}, handler = ExplicitBooleanOptionHandler.class, usage = "Use the crypt solver (only + and =).")
     private boolean useCrypt;
 
     public final boolean isExportGraphiz() {

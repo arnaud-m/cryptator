@@ -31,19 +31,19 @@ public class CryptaConfig {
             "--leading-zeros"}, hidden = true, handler = ExplicitBooleanOptionHandler.class, usage = "Allow leading zeros in the cryptarithm solution")
     private boolean allowLeadingZeros;
 
-    @Option(name = "--horner", hidden = true, handler = ExplicitBooleanOptionHandler.class, usage = "use the horner scheme to model the numbers repsented by the cryptarithm words")
+    @Option(name = "--horner", hidden = true, handler = ExplicitBooleanOptionHandler.class, usage = "Use the horner scheme to model     simple precision words.")
     private boolean hornerScheme;
 
     @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")
     private boolean helpMessage;
 
-    @Option(name = "-min", hidden = true, usage = "relaxation of the minimum number of occurences of a digit (>=0)")
+    @Option(name = "-min", hidden = true, usage = "Relaxation of the minimum number of occurences of a digit (>=0).")
     private int relaxMinDigitOccurence = 0;
 
-    @Option(name = "-max", hidden = true, usage = "relaxation of the maximum number of occurences of a digit (>=0)")
+    @Option(name = "-max", hidden = true, usage = "Relaxation of the maximum number of occurences of a digit (>=0).")
     private int relaxMaxDigitOccurence = 0;
 
-    @Option(name = "-search", aliases = {"--search"}, hidden = true, usage = "identifier of the search strategy")
+    @Option(name = "-search", aliases = {"--search"}, hidden = true, usage = "Set the search strategy.")
     private int searchStrategy = 0;
 
     /**

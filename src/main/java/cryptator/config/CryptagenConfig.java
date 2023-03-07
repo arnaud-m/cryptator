@@ -13,37 +13,38 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptagenConfig extends CryptaCmdConfig {
 
-    @Option(name = "-d", handler = ExplicitBooleanOptionHandler.class, usage = "dry run (generate but do not solve candidate cryptarithms)")
+    @Option(name = "-d", aliases = {
+            "--dry-run"}, handler = ExplicitBooleanOptionHandler.class, usage = "Dry run (generate but do not solve candidate cryptarithms).")
     private boolean dryRun;
 
-    @Option(name = "-grid", usage = "grid size for crossword cryptarithm)")
+    @Option(name = "-grid", usage = "Grid size for crossword cryptarithm.")
     private int gridSize = 0;
 
-    @Option(name = "-mult", handler = ExplicitBooleanOptionHandler.class, usage = "generate multiplication cryptarithms")
+    @Option(name = "-mult", handler = ExplicitBooleanOptionHandler.class, usage = "Generate multiplications.")
     private boolean multModel = false;
 
-    @Option(name = "-longMult", handler = ExplicitBooleanOptionHandler.class, usage = "generate long multiplication cryptarithms")
+    @Option(name = "-longMult", handler = ExplicitBooleanOptionHandler.class, usage = "Generate long multiplications")
     private boolean longMultModel = false;
 
-    @Option(name = "-ctry", usage = "country code for doubly true cryptarithms)")
+    @Option(name = "-ctry", usage = "Country code for doubly true cryptarithms.)")
     private String countryCode = "EN";
 
-    @Option(name = "-lang", usage = "language code for doubly true cryptarithms)")
+    @Option(name = "-lang", usage = "Language code for doubly true cryptarithms.)")
     private String langCode = "en";
 
-    @Option(name = "-t", usage = "number of threads (experimental)")
+    @Option(name = "-t", usage = "Number of threads (experimental).")
     private int nthreads = 1;
 
-    @Option(name = "-minop", usage = "minimum number of left operands")
+    @Option(name = "-minop", usage = "Minimum number of left operands.")
     private int minLeftOperands = 2;
 
-    @Option(name = "-maxop", usage = "maximum number of left operands")
+    @Option(name = "-maxop", usage = "Maximum number of left operands.")
     private int maxLeftOperands = -1;
 
-    @Option(name = "-lightP", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
+    @Option(name = "-lightP", handler = ExplicitBooleanOptionHandler.class, usage = "Use weak consistency.")
     private boolean lightPropagation;
 
-    @Option(name = "-multUnique", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
+    @Option(name = "-multUnique", handler = ExplicitBooleanOptionHandler.class, usage = "Set unique right term for multiplication.")
     private boolean multUnique;
 
     public final boolean isDryRun() {

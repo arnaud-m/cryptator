@@ -14,7 +14,7 @@ import cryptator.cmd.Verbosity;
 
 public class CryptaLogConfig extends CryptaConfig {
 
-    @Option(name = "-v", usage = "increase the verbosity of the program")
+    @Option(name = "-v", aliases = {"--verbose"}, usage = "Increase the verbosity of the program.")
     private Verbosity verbosity = Verbosity.NORMAL;
 
     public final Verbosity getVerbosity() {
