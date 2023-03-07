@@ -8,6 +8,7 @@
  */
 package cryptator.gen;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,7 +22,6 @@ import org.chocosolver.util.tools.ArrayUtils;
 
 import cryptator.CryptaOperator;
 import cryptator.gen.pattern.CryptaLongMultModel;
-import cryptator.solver.AdaptiveSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.tree.CryptaConstant;
 import cryptator.tree.CryptaLeaf;
@@ -84,8 +84,8 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     @Override
     public void postPrecisionConstraints(final int base) {
-        final int thresh = AdaptiveSolver.computeThreshold(base);
-        longMult.getProductLength().le(thresh).post();
+//        final int thresh = AdaptiveSolver.computeThreshold(base);
+//        longMult.getProductLength().le(thresh).post();
     }
 
     private String[] getTermWords() {
@@ -104,12 +104,13 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
     }
 
     private static ICryptaNode recordTermAddition(final String[] terms, final String product, final int base) {
+
         ArrayList<ICryptaNode> nodes = new ArrayList<>();
-        int exponent = 1;
+        BigInteger exponent = BigInteger.valueOf(1);
         for (int i = terms.length - 1; i >= 0; i--) {
             nodes.add(new CryptaNode(CryptaOperator.MUL, new CryptaLeaf(terms[i]),
-                    new CryptaConstant(Integer.toString(exponent))));
-            exponent *= base;
+                    new CryptaConstant(exponent.toString())));
+            exponent = exponent.multiply(BigInteger.valueOf(base));
         }
         ICryptaNode addition = GenerateUtil.reduceOperation(CryptaOperator.ADD, nodes.stream());
         return new CryptaNode(CryptaOperator.EQ, addition, new CryptaLeaf(product));
@@ -117,6 +118,7 @@ public class CryptaGenLongMult extends AbstractCryptaListModel {
 
     private static ICryptaNode recordTermMultiplications(final String[] terms, final String multiplicand,
             final String multiplier) {
+        // FIXME Identical term multiplications are recorded.
         final char[] multipliers = multiplier.toCharArray();
         final ArrayList<ICryptaNode> nodes = new ArrayList<>();
         for (int i = 0; i < terms.length; i++) {

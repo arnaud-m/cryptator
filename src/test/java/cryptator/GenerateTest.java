@@ -225,4 +225,22 @@ public class GenerateTest {
         testLongMultGenerate(1, words);
     }
 
+    @Test
+    public void testBignumLongMult1() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("8467", "999999983491", "8466999860218297", "7999999867928",
+                "3999999933964", "5999999900946", "6999999884437"), null);
+        config.setUseBigNum(true);
+        testLongMultGenerate(1, words);
+        config.setUseBigNum(false);
+    }
+
+    @Test
+    public void testBignumLongMult2() throws CryptaModelException {
+        WordArray words = new WordArray(
+                Arrays.asList("8467", "999999983491", "8466999860218297", "25401", "33868", "67736", "76203"), null);
+        config.setUseBigNum(true);
+        testLongMultGenerate(1, words);
+        config.setUseBigNum(false);
+    }
+
 }

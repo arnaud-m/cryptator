@@ -85,7 +85,7 @@ public class CryptaLongMultModel implements IChocoModel {
         multiplicand = model.intVar("multiplicand", 0, n - 1);
         multiplier = model.intVar("multiplier", 0, n - 1);
         product = model.intVar("product", 0, n - 1);
-        terms = model.intVarArray("terms", MAX_PARTIAL_PRODUCTS_LENGTH + 1, 0, n);
+        terms = model.intVarArray("terms", IntStream.of(lengths).max().orElse(0), 0, n);
         presences = model.boolVarArray("presences", terms.length);
 
         final int maxLength = IntStream.of(lengths).max().orElse(0);
@@ -189,7 +189,7 @@ public class CryptaLongMultModel implements IChocoModel {
         final int n = lengths.length;
         model.allDifferentUnderCondition(ArrayUtils.concat(terms, product), new ExceptN(n), true).post();
         // the last term is inactive.
-        terms[MAX_PARTIAL_PRODUCTS_LENGTH].eq(n).post();
+        terms[terms.length - 1].eq(n).post();
     }
 
     /**
@@ -222,6 +222,7 @@ public class CryptaLongMultModel implements IChocoModel {
      * Post the constraint on the term lengths.
      */
     private void postTermLenConstraints() {
+        // FIXME Can be equal to one if the multiplier digit is 0
         for (int i = 0; i < termLengths.length; i++) {
             ge1(termLengths[i], mdLength);
         }
