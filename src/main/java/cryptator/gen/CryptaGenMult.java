@@ -18,9 +18,8 @@ import cryptator.specs.ICryptaNode;
 
 class CryptaMemberMult extends CryptaMemberPair {
 
-    public CryptaMemberMult(final Model model, final String[] words, final String prefix) {
-        super(new CryptaMemberLen(model, words, prefix + "L_"), new CryptaMemberLen(model, words, prefix + "R_"));
-        final int ub = AbstractCryptaGenModel.getSumLength(words);
+    public CryptaMemberMult(Model model, String[] words, String prefix, boolean isRightUnique) {
+        super(model, words, prefix, isRightUnique);
     }
 
     @Override
@@ -42,7 +41,9 @@ class CryptaMemberMult extends CryptaMemberPair {
 
     public void postMultHeavyConstraints(final int base) {
         final IntVar sumL = getModel().sum("L_sumLength", left.lengths);
-        final IntVar sumR = getModel().sum("R_sumLength", ((CryptaMemberLen) right).lengths);
+        final IntVar sumR = (right instanceof CryptaMemberLen)
+                ? getModel().sum("R_sumLength", ((CryptaMemberLen) right).lengths)
+                : right.getMaxLength();
         final ArExpression minL = sumL.sub(left.getWordCount()).add(1);
         final ArExpression minR = sumR.sub(right.getWordCount()).add(1);
         minL.le(sumR).post();
@@ -59,7 +60,7 @@ public class CryptaGenMult extends AbstractCryptaListModel {
 
     public CryptaGenMult(final String[] words) {
         super(new Model("Generate-Multiplication"), words);
-        multiplication = new CryptaMemberMult(model, words, "");
+        multiplication = new CryptaMemberMult(model, words, "", false);
     }
 
     @Override

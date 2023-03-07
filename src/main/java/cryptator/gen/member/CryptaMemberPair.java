@@ -25,16 +25,15 @@ public class CryptaMemberPair implements ICryptaGenSolver {
 
     protected final AbstractCryptaGenModel right;
 
-    protected CryptaMemberPair(final CryptaMemberLen left, final CryptaMemberLen right) {
+    public CryptaMemberPair(final Model model, final String[] words, final String prefix, boolean isRightUnique) {
         super();
-        this.left = left;
-        this.right = right;
+        left = new CryptaMemberLen(model, words, prefix + "L_");
+        right = isRightUnique ? new CryptaMemberElt(model, words, prefix + "R_")
+                : new CryptaMemberLen(model, words, prefix + "R_");
     }
 
     public CryptaMemberPair(final Model model, final String[] words, final String prefix) {
-        super();
-        left = new CryptaMemberLen(model, words, prefix + "L_");
-        right = new CryptaMemberElt(model, words, prefix + "R_");
+        this(model, words, prefix, true);
     }
 
     public CryptaMemberPair(final IntVar index, final String[] words, final String prefix) {
