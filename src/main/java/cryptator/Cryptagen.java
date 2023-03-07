@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,8 +38,12 @@ public final class Cryptagen {
     }
 
     public static int doMain(final String[] args) {
-        CryptagenOptionsParser optparser = new CryptagenOptionsParser();
-        if (optparser.parseOptions(args)) {
+        try {
+            CryptagenOptionsParser optparser = new CryptagenOptionsParser();
+            final OptionalInt parserExitCode = optparser.parseOptions(args);
+            if (parserExitCode.isPresent()) {
+                return parserExitCode.getAsInt();
+            }
             final CryptagenConfig config = optparser.getConfig();
             final WordArray words = buildWords(config.getArguments(), config);
             if (words != null) {
@@ -46,9 +51,10 @@ public final class Cryptagen {
             } else {
                 LOGGER.log(Level.WARNING, "Empty word list.");
             }
+            return -1;
+        } finally {
+            JULogUtil.flushLogs();
         }
-        JULogUtil.flushLogs();
-        return -1;
     }
 
     private static List<String> readWords(final String filename) {

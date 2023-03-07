@@ -8,6 +8,7 @@
  */
 package cryptator;
 
+import java.util.OptionalInt;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,7 +99,8 @@ public final class Cryptamancer {
         JULogUtil.configureDefaultLoggers();
 
         CryptamancerOptionsParser optparser = new CryptamancerOptionsParser();
-        if (!optparser.parseOptions(args)) {
+        final OptionalInt parserExitCode = optparser.parseOptions(args);
+        if (parserExitCode.isPresent()) {
             return;
         }
         final CryptaLogConfig config = optparser.getConfig();

@@ -29,8 +29,11 @@ public class CryptaConfig {
     @Option(name = "-z", handler = ExplicitBooleanOptionHandler.class, usage = "allow leading zeros in the cryptarithm solution")
     private boolean allowLeadingZeros;
 
-    @Option(name = "-h", handler = ExplicitBooleanOptionHandler.class, usage = "use the horner scheme to model the numbers repsented by the cryptarithm words")
+    @Option(name = "--horner", handler = ExplicitBooleanOptionHandler.class, usage = "use the horner scheme to model the numbers repsented by the cryptarithm words")
     private boolean hornerScheme;
+
+    @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")
+    private boolean helpMessage;
 
     @Option(name = "-min", usage = "relaxation of the minimum number of occurences of a digit (>=0)")
     private int relaxMinDigitOccurence = 0;
@@ -93,6 +96,10 @@ public class CryptaConfig {
 
     public final void setSearchStrategy(final int searchStrategy) {
         this.searchStrategy = searchStrategy;
+    }
+
+    public final boolean isHelpMessage() {
+        return helpMessage;
     }
 
     public final int getMinDigitOccurence(final int n) {

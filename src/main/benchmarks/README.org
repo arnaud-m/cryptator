@@ -303,12 +303,12 @@ Do not remove the content of the directory!
  #+BEGIN_SRC sh
    ARGS=" -v verbose -t 100"
    echo $ARGS -l TRUE > algorithms/BIGNUM.dat
-   echo $ARGS -l FALSE -h FALSE > algorithms/SCALAR.dat
-   echo $ARGS -l FALSE -h TRUE > algorithms/HORNER.dat
+   echo $ARGS -l FALSE --horner FALSE > algorithms/SCALAR.dat
+   echo $ARGS -l FALSE --horner TRUE > algorithms/HORNER.dat
 
 #   echo $ARGS -l TRUE -search 1 > algorithms/BIGNUM-1.dat
-#   echo $ARGS -l FALSE -h FALSE -search 1 > algorithms/SCALAR-1.dat
-#   echo $ARGS -l FALSE -h TRUE -search 1 > algorithms/HORNER-1.dat
+#   echo $ARGS -l FALSE --horner FALSE -search 1 > algorithms/SCALAR-1.dat
+#   echo $ARGS -l FALSE --horner TRUE -search 1 > algorithms/HORNER-1.dat
  #+END_SRC
 
 

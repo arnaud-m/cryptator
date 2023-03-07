@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.OptionalInt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +24,10 @@ import org.kohsuke.args4j.OptionHandlerFilter;
 import cryptator.config.CryptaConfig;
 
 public abstract class AbstractOptionsParser<E extends CryptaConfig> {
+
+    private static final OptionalInt ERROR_CODE = OptionalInt.of(64);
+    private static final OptionalInt EXIT_CODE = OptionalInt.of(0);
+    private static final OptionalInt EMPTY_CODE = OptionalInt.empty();
 
     private final Class<?> mainClass;
 
@@ -70,17 +75,28 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         return config;
     }
 
-    public final boolean parseOptions(final String[] args) {
+    public enum CmdLineParserStatus {
+        ERROR, EXIT, CONTINUE
+    }
+
+    public final OptionalInt parseOptions(final String[] args) {
+
         final CmdLineParser parser = new CmdLineParser(config);
         try {
             // parse the arguments.
             parser.parseArgument(args);
             configureLoggers();
-            if (checkConfiguration()) {
+            if (config.isHelpMessage()) {
+                logHelp(parser);
+                return EXIT_CODE;
+            } else if (config.getArguments().isEmpty()) {
+                logConciseHelp(parser);
+                return EXIT_CODE;
+            } else if (checkConfiguration()) {
                 if (checkArguments()) {
                     getLogger().log(Level.CONFIG, "Parse options [OK]");
-                    getLogger().log(Level.FINE, "Configuration:\n{0}", config);
-                    return true;
+                    getLogger().log(Level.FINE, "Parse configuration [OK]\n{0}", config);
+                    return EMPTY_CODE;
                 } else {
                     getLogger().log(Level.SEVERE, "Parse arguments [FAIL]\n{0}", config.getArguments());
                 }
@@ -91,12 +107,21 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         } catch (CmdLineException e) {
             getLogger().log(Level.SEVERE, "Parse options [FAIL]", e);
         }
+        logConciseHelp(parser);
+        return ERROR_CODE;
+    }
 
+    private final void logConciseHelp(CmdLineParser parser) {
         if (getLogger().isLoggable(Level.INFO)) {
             getLogger().info(buildHelpMessage(parser, OptionHandlerFilter.PUBLIC));
         }
-        return false;
 
+    }
+
+    private final void logHelp(CmdLineParser parser) {
+        if (getLogger().isLoggable(Level.INFO)) {
+            getLogger().info(buildHelpMessage(parser, OptionHandlerFilter.PUBLIC));
+        }
     }
 
     private String printUsage(final CmdLineParser parser, final OptionHandlerFilter filter) {
@@ -123,7 +148,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     }
 
     private void appendResource(final StringBuilder b, final String resourceName) {
-        final InputStream in = getClass().getClassLoader().getResourceAsStream(resourceName);
+        final InputStream in = mainClass.getClassLoader().getResourceAsStream(resourceName);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         reader.lines().forEach(x -> b.append(x).append('\n'));
     }
