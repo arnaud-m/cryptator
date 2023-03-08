@@ -19,10 +19,9 @@ public class CryptaCmdConfig extends CryptaLogConfig {
     @Option(name = "-g", handler = ExplicitBooleanOptionHandler.class, usage = "export solutions to graphviz format")
     private boolean exportGraphiz;
 
-    @Option(name = "-l", handler = ExplicitBooleanOptionHandler.class, usage = "use the bignum model (only + and =)")
+    @Option(name = "-l", handler = ExplicitBooleanOptionHandler.class, usage = "use the bignum model (only +, *, and =)")
     private boolean useBigNum;
 
-    // TODO Check the argument
     @Option(name = "--crypt-command", usage = "the crypt command")
     private String cryptCommand = "crypt";
 
