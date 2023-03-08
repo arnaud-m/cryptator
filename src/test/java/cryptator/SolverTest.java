@@ -8,6 +8,20 @@
  */
 package cryptator;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import cryptator.config.CryptaConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
@@ -19,17 +33,6 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 import cryptator.tree.CryptaEvaluation;
 import cryptator.tree.CryptaEvaluationException;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.junit.Assert.*;
 
 final class CryptaSolvingTester {
 
@@ -247,23 +250,6 @@ public class SolverTest {
     public void testDonaldGeraldRobert3() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.config.setArithmeticBase(2);
         t.config.setHornerScheme(true);
-        t.testUNSAT("donald + gerald = robert");
-    }
-
-    @Test
-    public void testDonaldGeraldRobert4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setArithmeticBase(2);
-        t.config.getAllowLeadingZeros();
-        t.config.setRelaxMinDigitOccurence(1);
-        t.testUNSAT("donald + gerald = robert");
-    }
-
-    @Test
-    public void testDonaldGeraldRobert5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.config.setArithmeticBase(2);
-        t.config.getAllowLeadingZeros();
-        t.config.setRelaxMinDigitOccurence(1);
-        t.config.setRelaxMaxDigitOccurence(1);
         t.testUNSAT("donald + gerald = robert");
     }
 

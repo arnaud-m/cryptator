@@ -37,12 +37,6 @@ public class CryptaConfig {
     @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")
     private boolean helpMessage;
 
-    @Option(name = "-min", hidden = true, usage = "Relaxation of the minimum number of occurences of a digit (>=0).")
-    private int relaxMinDigitOccurence = 0;
-
-    @Option(name = "-max", hidden = true, usage = "Relaxation of the maximum number of occurences of a digit (>=0).")
-    private int relaxMaxDigitOccurence = 0;
-
     @Option(name = "-search", aliases = {"--search"}, hidden = true, usage = "Set the search strategy.")
     private int searchStrategy = 0;
 
@@ -76,22 +70,6 @@ public class CryptaConfig {
         this.hornerScheme = useHornerScheme;
     }
 
-    public final int getRelaxMinDigitOccurence() {
-        return relaxMinDigitOccurence;
-    }
-
-    public final void setRelaxMinDigitOccurence(final int relaxMinDigitOccurence) {
-        this.relaxMinDigitOccurence = relaxMinDigitOccurence;
-    }
-
-    public final int getRelaxMaxDigitOccurence() {
-        return relaxMaxDigitOccurence;
-    }
-
-    public final void setRelaxMaxDigitOccurence(final int relaxMaxDigitOccurence) {
-        this.relaxMaxDigitOccurence = relaxMaxDigitOccurence;
-    }
-
     public final int getSearchStrategy() {
         return searchStrategy;
     }
@@ -105,21 +83,11 @@ public class CryptaConfig {
     }
 
     public final int getMinDigitOccurence(final int n) {
-        int minOcc = n / getArithmeticBase();
-        final int deltaMin = getRelaxMinDigitOccurence();
-        if (deltaMin > 0) {
-            minOcc = Math.max(0, minOcc - deltaMin);
-        }
-        return minOcc;
+        return n / getArithmeticBase();
     }
 
     public final int getMaxDigitOccurence(final int n) {
-        int maxOcc = ((n + getArithmeticBase()) - 1) / getArithmeticBase();
-        final int deltaMax = getRelaxMaxDigitOccurence();
-        if (deltaMax > 0) {
-            maxOcc = Math.min(n, maxOcc + deltaMax);
-        }
-        return maxOcc;
+        return ((n + getArithmeticBase()) - 1) / getArithmeticBase();
     }
 
     public final List<String> getArguments() {
@@ -129,8 +97,7 @@ public class CryptaConfig {
     @Override
     public String toString() {
         return "c BASE " + arithmeticBase + "\nc ALLOW_LEADING_0 " + allowLeadingZeros + "\nc HORNER_SCHEME "
-                + hornerScheme + "\nc RELAX_MIN_DIGIT_OCC " + relaxMinDigitOccurence + "\nc RELAX_MAX_DIGIT_OCC "
-                + relaxMaxDigitOccurence;
+                + hornerScheme;
     }
 
 }

@@ -61,9 +61,6 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
             getLogger().severe("The Arithmetic base must be greater than 1.");
             return false;
         }
-        if ((config.getRelaxMinDigitOccurence() < 0) || (config.getRelaxMaxDigitOccurence() < 0)) {
-            getLogger().severe("Min/Max digit occurence is ignored because it cannot be negative.");
-        }
         return true;
     }
 

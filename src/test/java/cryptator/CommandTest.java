@@ -37,8 +37,8 @@ public class CommandTest {
 
     @Test
     public void testCryptator() throws FileNotFoundException {
-        String[] args = {"-b", "10", "-c", "TRUE", "-g", "FALSE", "-h", "TRUE", "-l", "FALSE", "-max", "0", "-min", "0",
-                "-s", "1", "-t", "5", "-v", "SILENT", "-z", "FALSE", "www+imac=crash "};
+        String[] args = {"-b", "10", "-c", "TRUE", "-g", "FALSE", "-h", "TRUE", "-l", "FALSE", "-s", "1", "-t", "5",
+                "-v", "SILENT", "-z", "FALSE", "www+imac=crash "};
         assertEquals(0, Cryptator.doMain(args));
     }
 
