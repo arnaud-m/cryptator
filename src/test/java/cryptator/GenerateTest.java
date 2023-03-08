@@ -94,8 +94,9 @@ public class GenerateTest {
         config.setLongMultModel(true);
         configure(0, false);
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
-        configure(0, true);
-        testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
+        // No heavy model
+        // configure(0, true);
+        // testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
         config.setLongMultModel(false);
     }
 
@@ -214,6 +215,32 @@ public class GenerateTest {
     }
 
     @Test
+    public void testBignumMult1() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("1002527", "1002553", "1005086451431"), null);
+        config.setUseBigNum(true);
+        testMultGenerate(1, words);
+        config.setUseBigNum(true);
+    }
+
+    @Test
+    public void testBignumMult2() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("1000721", "1000541", "1001262390061"), null);
+        config.setUseBigNum(true);
+        testMultGenerate(1, words);
+        config.setUseBigNum(true);
+    }
+
+    @Ignore("Takes too long.")
+    @Test
+    public void testBignumMult3() throws CryptaModelException {
+        WordArray words = new WordArray(
+                Arrays.asList("1002527", "1002553", "1005086451431", "1000721", "1000541", "1001262390061"), null);
+        config.setUseBigNum(true);
+        testMultGenerate(4, words);
+        config.setUseBigNum(true);
+    }
+
+    @Test
     public void testLongMult1() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("who", "is", "hobs", "hawi", "mosis"), null);
         testLongMultGenerate(1, words);
@@ -223,6 +250,24 @@ public class GenerateTest {
     public void testLongMult2() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("get", "by", "babe", "beare"), null);
         testLongMultGenerate(1, words);
+    }
+
+    @Test
+    public void testBignumLongMult1() throws CryptaModelException {
+        WordArray words = new WordArray(Arrays.asList("8467", "999999983491", "8466999860218297", "7999999867928",
+                "3999999933964", "5999999900946", "6999999884437"), null);
+        config.setUseBigNum(true);
+        testLongMultGenerate(1, words);
+        config.setUseBigNum(false);
+    }
+
+    @Test
+    public void testBignumLongMult2() throws CryptaModelException {
+        WordArray words = new WordArray(
+                Arrays.asList("8467", "999999983491", "8466999860218297", "25401", "33868", "67736", "76203"), null);
+        config.setUseBigNum(true);
+        testLongMultGenerate(1, words);
+        config.setUseBigNum(false);
     }
 
 }

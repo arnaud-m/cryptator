@@ -14,21 +14,12 @@ import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.gen.member.CryptaMemberLen;
 import cryptator.gen.member.CryptaMemberPair;
-import cryptator.solver.AdaptiveSolver;
 import cryptator.specs.ICryptaNode;
 
 class CryptaMemberMult extends CryptaMemberPair {
 
-    private final IntVar sumL;
-
-    private final IntVar sumR;
-
-    public CryptaMemberMult(final Model model, final String[] words, final String prefix) {
-        super(new CryptaMemberLen(model, words, prefix + "L_"), new CryptaMemberLen(model, words, prefix + "R_"));
-        final int ub = AbstractCryptaGenModel.getSumLength(words);
-        this.sumL = model.intVar("L_sumLength", 0, ub);
-        this.sumR = model.intVar("R_sumLength", 0, ub);
-
+    public CryptaMemberMult(final Model model, final String[] words, final String prefix, final boolean isRightUnique) {
+        super(model, words, prefix, isRightUnique);
     }
 
     @Override
@@ -45,18 +36,18 @@ class CryptaMemberMult extends CryptaMemberPair {
 
     @Override
     protected void postSymBreakLengthConstraint() {
-        getModel().lexLess(left.getWordVars(), right.getWordVars()).post();
-    }
-
-    public void postMultPrecisionConstraints(final int base) {
-        getModel().sum(left.lengths, "=", sumL).post();
-        getModel().sum(((CryptaMemberLen) right).lengths, "=", sumR).post();
-        final int thresh = AdaptiveSolver.computeThreshold(base) + 1;
-        sumL.le(thresh).post();
-        sumR.le(thresh).post();
+        if (right instanceof CryptaMemberLen) {
+            getModel().lexLess(left.getWordVars(), right.getWordVars()).post();
+        } else {
+            left.getMaxLength().le(right.getMaxLength()).post();
+        }
     }
 
     public void postMultHeavyConstraints(final int base) {
+        final IntVar sumL = getModel().sum("L_sumLength", left.lengths);
+        final IntVar sumR = (right instanceof CryptaMemberLen)
+                ? getModel().sum("R_sumLength", ((CryptaMemberLen) right).lengths)
+                : right.getMaxLength();
         final ArExpression minL = sumL.sub(left.getWordCount()).add(1);
         final ArExpression minR = sumR.sub(right.getWordCount()).add(1);
         minL.le(sumR).post();
@@ -71,9 +62,9 @@ public class CryptaGenMult extends AbstractCryptaListModel {
 
     private final CryptaMemberMult multiplication;
 
-    public CryptaGenMult(final String[] words) {
+    public CryptaGenMult(final String[] words, final boolean isRightUnique) {
         super(new Model("Generate-Multiplication"), words);
-        multiplication = new CryptaMemberMult(model, words, "");
+        multiplication = new CryptaMemberMult(model, words, "", isRightUnique);
     }
 
     @Override
@@ -130,13 +121,6 @@ public class CryptaGenMult extends AbstractCryptaListModel {
         model.scalar(rvars, coeffs, "=", 0).post();
 
         sumL.sub(sumR).abs().mul(2).le(wordCount).post();
-    }
-
-    @Override
-    public void postPrecisionConstraints(final int base) {
-        final int thresh = AdaptiveSolver.computeThreshold(base);
-        getMaxLength().le(thresh).post();
-        multiplication.postMultPrecisionConstraints(base);
     }
 
     @Override

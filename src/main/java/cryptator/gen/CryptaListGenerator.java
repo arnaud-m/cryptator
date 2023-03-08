@@ -93,7 +93,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         if (config.getGridSize() > 0) {
             return new CryptaGenCrossword(config.getGridSize(), words.getWords());
         } else if (config.isMultModel()) {
-            return new CryptaGenMult(words.getWords());
+            return new CryptaGenMult(words.getWords(), config.isMultUnique());
         } else if (config.isLongMultModel()) {
             return new CryptaGenLongMult(words.getWords(), config.getArithmeticBase());
         } else {
@@ -113,8 +113,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
         gen.buildModel();
         gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
         gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
-        gen.postPrecisionConstraints(config.getArithmeticBase());
-
         if (!config.isLightPropagation()) {
             gen.postHeavyConstraints(config.getArithmeticBase());
         }

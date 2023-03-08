@@ -100,11 +100,6 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
     }
 
     @Override
-    public void postPrecisionConstraints(final int base) {
-        // Nothing to do.
-    }
-
-    @Override
     protected void postWordConstraints() {
         final IntVar one = model.intVar(1);
         for (int i = 0; i < n; i++) {

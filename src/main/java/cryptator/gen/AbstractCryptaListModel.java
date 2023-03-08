@@ -77,13 +77,6 @@ public abstract class AbstractCryptaListModel extends AbstractCryptaGenModel imp
     public abstract void postDoublyTrueConstraints(int lowerBound);
 
     /**
-     * Post optional constraints for the numerical precision.
-     *
-     * @param base the arithmetic base
-     */
-    public abstract void postPrecisionConstraints(int base);
-
-    /**
      * Post heavy constraints for filtering more candidates.
      *
      * @param base the arithmetic base
