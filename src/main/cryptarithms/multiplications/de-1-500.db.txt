@@ -1,2 +1,4 @@
 sechzehn = zwei * acht
 vier * funf = zwei * zehn
+funf * dreißig = drei * funfzig
+neun * dreißig = drei * neunzig
