@@ -83,7 +83,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
             // parse the arguments.
             parser.parseArgument(args);
             configureLoggers();
-            if (config.isHelpMessage()) {
+            if (config.isDisplayHelp()) {
                 logManual(parser);
                 return EXIT_CODE;
             } else if (config.getArguments().isEmpty()) {

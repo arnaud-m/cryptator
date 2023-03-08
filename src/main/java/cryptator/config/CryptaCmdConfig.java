@@ -13,19 +13,17 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptaCmdConfig extends CryptaLogConfig {
 
-    @Option(name = "-c", aliases = {
-            "--check"}, handler = ExplicitBooleanOptionHandler.class, usage = "Check solutions by evaluation,")
+    @Option(name = "-c", aliases = {"--check"}, usage = "Check solutions by evaluation,")
     private boolean checkSolution;
 
-    @Option(name = "-g", aliases = {
-            "--graphviz"}, handler = ExplicitBooleanOptionHandler.class, usage = "Export solutions to graphviz format.")
+    @Option(name = "-g", aliases = {"--graphviz"}, usage = "Export solutions to graphviz format.")
     private boolean exportGraphiz;
 
     @Option(name = "-l", aliases = {"-B",
             "--bignum"}, handler = ExplicitBooleanOptionHandler.class, usage = "Use the bignum model (only + and =).")
     private boolean useBigNum;
 
-    @Option(name = "--crypt-command", usage = "the crypt command")
+    @Option(name = "--crypt-command", usage = "Set the crypt command.")
     private String cryptCommand = "crypt";
 
     @Option(name = "-crypt", aliases = {

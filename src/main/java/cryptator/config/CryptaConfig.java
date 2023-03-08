@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
-import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 /**
  * A bean object that stores the common configuration. This is designed for
@@ -27,17 +26,16 @@ public class CryptaConfig {
             "--radix"}, usage = "Base (or radix) of the positional numeral system (> 1).")
     private int arithmeticBase = BigInteger.TEN.intValue();
 
-    @Option(name = "-z", aliases = {
-            "--leading-zeros"}, hidden = true, handler = ExplicitBooleanOptionHandler.class, usage = "Allow leading zeros in the cryptarithm solution")
+    @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")
+    private boolean displayHelp;
+
+    @Option(name = "--leading-zeros", hidden = true, usage = "Allow leading zeros in the cryptarithm solution")
     private boolean allowLeadingZeros;
 
-    @Option(name = "--horner", hidden = true, handler = ExplicitBooleanOptionHandler.class, usage = "Use the horner scheme to model     simple precision words.")
+    @Option(name = "--horner", hidden = true, usage = "Use the horner scheme to model finite precision words.")
     private boolean hornerScheme;
 
-    @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")
-    private boolean helpMessage;
-
-    @Option(name = "-search", aliases = {"--search"}, hidden = true, usage = "Set the search strategy.")
+    @Option(name = "--search", hidden = true, usage = "Set the search strategy.")
     private int searchStrategy = 0;
 
     /**
@@ -78,8 +76,8 @@ public class CryptaConfig {
         this.searchStrategy = searchStrategy;
     }
 
-    public final boolean isHelpMessage() {
-        return helpMessage;
+    public final boolean isDisplayHelp() {
+        return displayHelp;
     }
 
     public final int getMinDigitOccurence(final int n) {

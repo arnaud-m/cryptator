@@ -17,14 +17,14 @@ public class CryptagenConfig extends CryptaCmdConfig {
             "--dry-run"}, handler = ExplicitBooleanOptionHandler.class, usage = "Dry run (generate but do not solve candidate cryptarithms).")
     private boolean dryRun;
 
-    @Option(name = "-grid", usage = "Grid size for crossword cryptarithm.")
-    private int gridSize = 0;
+    @Option(name = "--cross", usage = "Generate crosswords with the given size")
+    private int gridSize;
 
-    @Option(name = "-mult", handler = ExplicitBooleanOptionHandler.class, usage = "Generate multiplications.")
-    private boolean multModel = false;
+    @Option(name = "--mult", usage = "Generate multiplications.")
+    private boolean multModel;
 
-    @Option(name = "-longMult", handler = ExplicitBooleanOptionHandler.class, usage = "Generate long multiplications")
-    private boolean longMultModel = false;
+    @Option(name = "--long", usage = "Generate long multiplications")
+    private boolean longMultModel;
 
     @Option(name = "-ctry", usage = "Country code for doubly true cryptarithms.)")
     private String countryCode = "EN";
@@ -32,20 +32,20 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "-lang", usage = "Language code for doubly true cryptarithms.)")
     private String langCode = "en";
 
-    @Option(name = "-t", usage = "Number of threads (experimental).")
-    private int nthreads = 1;
-
-    @Option(name = "-minop", usage = "Minimum number of left operands.")
+    @Option(name = "--min", usage = "Minimum number of left operands.")
     private int minLeftOperands = 2;
 
-    @Option(name = "-maxop", usage = "Maximum number of left operands.")
+    @Option(name = "--max", usage = "Maximum number of left operands.")
     private int maxLeftOperands = -1;
-
-    @Option(name = "-lightP", handler = ExplicitBooleanOptionHandler.class, usage = "Use weak consistency.")
-    private boolean lightPropagation;
 
     @Option(name = "-multUnique", handler = ExplicitBooleanOptionHandler.class, usage = "Set unique right term for multiplication.")
     private boolean multUnique;
+
+    @Option(name = "--light", hidden = true, handler = ExplicitBooleanOptionHandler.class, usage = "Use a light CP model.")
+    private boolean lightModel;
+
+    @Option(name = "--threads", hidden = true, usage = "Number of threads (experimental).")
+    private int nthreads = 1;
 
     public final boolean isDryRun() {
         return dryRun;
@@ -79,16 +79,16 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return maxLeftOperands;
     }
 
-    public final boolean isLightPropagation() {
-        return lightPropagation;
+    public final boolean isLightModel() {
+        return lightModel;
     }
 
     public final boolean isMultUnique() {
         return multUnique;
     }
 
-    public final void setLightPropagation(final boolean lightPropagation) {
-        this.lightPropagation = lightPropagation;
+    public final void setLightModel(final boolean lightModel) {
+        this.lightModel = lightModel;
     }
 
     public final boolean isMultModel() {
@@ -110,7 +110,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Override
     public String toString() {
         return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_PROPAG "
-                + lightPropagation;
+                + lightModel;
     }
 
 }

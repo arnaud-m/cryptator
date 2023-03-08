@@ -34,7 +34,7 @@ public class GenerateTest {
 
     private void configure(final int gridSize, final boolean lightPropagation) {
         config.setGridSize(gridSize);
-        config.setLightPropagation(lightPropagation);
+        config.setLightModel(lightPropagation);
     }
 
     private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,

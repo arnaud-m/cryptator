@@ -15,7 +15,7 @@ DIR="../words"
 ## Execute the command.
 ## Filter the output: print only the cryptarithm.
 function solve() {
-    java -cp $JAR cryptator.Cryptagen -c TRUE -v quiet $* | sed -n 's/\(.*+.*=.*\)/  - \1/p'
+    java -cp $JAR cryptator.Cryptagen -v quiet $* | sed -n 's/\(.*+.*=.*\)/  - \1/p'
 }
 
 echo "# Search cryptarithms with a UNIQUE solution"
@@ -36,7 +36,7 @@ echo -e "\n## Generate from a list with a fixed right member\n"
 echo "- Planets"
 solve $DIR/planets.txt planets
 echo "- Greek alphabet"
-solve  -minop 6 $DIR/alpha.txt greeks
+solve  --min 6 $DIR/alpha.txt greeks
 
 ######
 echo -e "\n## Generate doubly true cryptarithms\n\nEach number in [0, 100] appears at most once.\n"
