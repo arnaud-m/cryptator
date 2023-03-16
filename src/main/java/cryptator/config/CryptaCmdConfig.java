@@ -9,26 +9,32 @@
 package cryptator.config;
 
 import org.kohsuke.args4j.Option;
-import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptaCmdConfig extends CryptaLogConfig {
 
-    @Option(name = "-c", aliases = {"--check"}, usage = "Check solutions by evaluation,")
+    public enum SolverType {
+        SCALAR, BIGNUM, CRYPT, ADAPT, ADPATC
+    }
+
+    @Option(name = "-a", aliases = {"--solver"}, usage = "Select the type of solver.")
+    private SolverType solverType = SolverType.ADAPT;
+
+    @Option(name = "-c", aliases = {"--check"}, usage = "Check solutions by evaluation.")
     private boolean checkSolution;
 
     @Option(name = "-g", aliases = {"--graphviz"}, usage = "Export solutions to graphviz format.")
     private boolean exportGraphiz;
 
-    @Option(name = "-l", aliases = {"-B",
-            "--bignum"}, handler = ExplicitBooleanOptionHandler.class, usage = "Use the bignum model (only + and =).")
-    private boolean useBigNum;
-
-    @Option(name = "--crypt-command", usage = "Set the crypt command.")
+    @Option(name = "--crypt-command", hidden = true, usage = "Set the crypt command.")
     private String cryptCommand = "crypt";
 
-    @Option(name = "-crypt", aliases = {
-            "--crypt"}, handler = ExplicitBooleanOptionHandler.class, usage = "Use the crypt solver (only + and =).")
-    private boolean useCrypt;
+    public final SolverType getSolverType() {
+        return solverType;
+    }
+
+    public final void setSolverType(SolverType solverType) {
+        this.solverType = solverType;
+    }
 
     public final boolean isExportGraphiz() {
         return exportGraphiz;
@@ -38,20 +44,19 @@ public class CryptaCmdConfig extends CryptaLogConfig {
         return checkSolution;
     }
 
+    @Deprecated(forRemoval = true)
     public final boolean useBignum() {
-        return useBigNum;
+        return solverType == SolverType.BIGNUM;
     }
 
+    @Deprecated(forRemoval = true)
     public final void setUseBigNum(final boolean useBigNum) {
-        this.useBigNum = useBigNum;
+        this.solverType = useBigNum ? SolverType.BIGNUM : SolverType.SCALAR;
     }
 
+    @Deprecated(forRemoval = true)
     public final boolean useCrypt() {
-        return useCrypt;
-    }
-
-    public final void setUseCrypt(final boolean useCrypt) {
-        this.useCrypt = useCrypt;
+        return solverType == SolverType.CRYPT;
     }
 
     public final String getCryptCommand() {
@@ -60,6 +65,6 @@ public class CryptaCmdConfig extends CryptaLogConfig {
 
     @Override
     public String toString() {
-        return super.toString() + "\nc BIGNUM " + useBignum();
+        return super.toString() + "\nc SOLVER " + getSolverType();
     }
 }

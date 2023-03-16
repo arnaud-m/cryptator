@@ -22,8 +22,7 @@ import org.kohsuke.args4j.Option;
  */
 public class CryptaConfig {
 
-    @Option(name = "-b", aliases = {"--base",
-            "--radix"}, usage = "Base (or radix) of the positional numeral system (> 1).")
+    @Option(name = "-b", aliases = {"--base", "--radix"}, usage = "Base of the positional numeral system (> 1).")
     private int arithmeticBase = BigInteger.TEN.intValue();
 
     @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")

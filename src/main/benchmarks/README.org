@@ -226,7 +226,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 *** Addition
  #+BEGIN_SRC sh
-   echo -v quiet -d FALSE -l TRUE > algorithms/ALL.dat
+   echo -v quiet -d FALSE -a BIGNUM > algorithms/ALL.dat
  #+END_SRC
 
 
@@ -298,13 +298,9 @@ Do not remove the content of the directory!
 
  #+BEGIN_SRC sh
    ARGS=" -v verbose -t 100"
-   echo $ARGS -l TRUE > algorithms/BIGNUM.dat
-   echo $ARGS -l FALSE  > algorithms/SCALAR.dat
-   echo $ARGS -l FALSE --horner > algorithms/HORNER.dat
-
-#   echo $ARGS -l TRUE --search 1 > algorithms/BIGNUM-1.dat
-#   echo $ARGS -l FALSE  --search 1 > algorithms/SCALAR-1.dat
-#   echo $ARGS -l FALSE --horner --search 1 > algorithms/HORNER-1.dat
+   echo $ARGS -a BIGNUM > algorithms/BIGNUM.dat
+   echo $ARGS -a SCALAR  > algorithms/SCALAR.dat
+   echo $ARGS --a SCALAR --horner > algorithms/HORNER.dat
  #+END_SRC
 
 

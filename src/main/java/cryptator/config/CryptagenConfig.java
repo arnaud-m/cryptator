@@ -13,6 +13,14 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptagenConfig extends CryptaCmdConfig {
 
+//    public enum GenerateType {
+//        ADD, MUL, LMUL, CROSS,
+//    }
+//
+//    public enum RightMemberType {
+//        FREE, UNIQUE, FIXED
+//    }
+
     @Option(name = "-d", aliases = {
             "--dry-run"}, handler = ExplicitBooleanOptionHandler.class, usage = "Dry run (generate but do not solve candidate cryptarithms).")
     private boolean dryRun;
@@ -109,8 +117,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
     @Override
     public String toString() {
-        return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_PROPAG "
-                + lightModel;
+        return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_PROPAG " + lightModel;
     }
 
 }
