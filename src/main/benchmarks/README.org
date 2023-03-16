@@ -77,13 +77,13 @@ exit $?
 
 *** Best algorithm
  #+BEGIN_SRC sh
-   echo -v normal -d TRUE > algorithms/HEAVY.dat
+   echo -v normal --dry-run > algorithms/HEAVY.dat
  #+END_SRC
 
 *** All algorithms
 
  #+BEGIN_SRC sh
-   echo -v normal -d TRUE --light > algorithms/LIGHT.dat
+   echo -v normal --dry-run --light > algorithms/LIGHT.dat
  #+END_SRC
 
 
@@ -214,7 +214,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    function generateCrossword() {
        find samples/ -type f -print | while read PATHNAME ; do
            INSTANCE="instances/"`basename -s .txt $PATHNAME`-$1.dat
-           echo --cross $1 $PATHNAME > $INSTANCE
+           echo --generate CROSS --cross $1 $PATHNAME > $INSTANCE
         done
    }
 
@@ -226,18 +226,18 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 *** Addition
  #+BEGIN_SRC sh
-   echo -v quiet -d FALSE -a BIGNUM > algorithms/ALL.dat
+   echo -v quiet -a BIGNUM > algorithms/ALL.dat
  #+END_SRC
 
 
 *** Multiplication
  #+BEGIN_SRC sh
-   echo -v quiet -d FALSE --mult -multUnique TRUE > algorithms/ALL.dat
+   echo -v quiet  --generate MUL --right UNIQUE > algorithms/ALL.dat
  #+END_SRC
 
 *** Long Multiplication
  #+BEGIN_SRC sh
-   echo -v quiet -d FALSE --long > algorithms/ALL.dat
+   echo -v quiet --generate LMUL > algorithms/ALL.dat
  #+END_SRC
 
 * Solve

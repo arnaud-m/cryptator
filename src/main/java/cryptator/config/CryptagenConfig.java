@@ -13,26 +13,25 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptagenConfig extends CryptaCmdConfig {
 
-//    public enum GenerateType {
-//        ADD, MUL, LMUL, CROSS,
-//    }
-//
-//    public enum RightMemberType {
-//        FREE, UNIQUE, FIXED
-//    }
+    public enum GenerateType {
+        ADD, MUL, LMUL, CROSS,
+    }
 
-    @Option(name = "-d", aliases = {
-            "--dry-run"}, handler = ExplicitBooleanOptionHandler.class, usage = "Dry run (generate but do not solve candidate cryptarithms).")
+    @Option(name = "-gen", aliases = {"--generate"}, usage = "Select the type of generator.")
+    private GenerateType generateType;
+
+    public enum RightMemberType {
+        FREE, UNIQUE, FIXED
+    }
+
+    @Option(name = "-r", aliases = {"--right"}, usage = "Select the right member type.")
+    private RightMemberType rightMemberType = RightMemberType.UNIQUE;
+
+    @Option(name = "-d", aliases = {"--dry-run"}, usage = "Dry run (generate but do not solve candidate cryptarithms).")
     private boolean dryRun;
 
     @Option(name = "--cross", usage = "Generate crosswords with the given size")
     private int gridSize;
-
-    @Option(name = "--mult", usage = "Generate multiplications.")
-    private boolean multModel;
-
-    @Option(name = "--long", usage = "Generate long multiplications")
-    private boolean longMultModel;
 
     @Option(name = "-ctry", usage = "Country code for doubly true cryptarithms.)")
     private String countryCode = "EN";
@@ -46,14 +45,27 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "--max", usage = "Maximum number of left operands.")
     private int maxLeftOperands = -1;
 
-    @Option(name = "-multUnique", handler = ExplicitBooleanOptionHandler.class, usage = "Set unique right term for multiplication.")
-    private boolean multUnique;
-
     @Option(name = "--light", hidden = true, handler = ExplicitBooleanOptionHandler.class, usage = "Use a light CP model.")
     private boolean lightModel;
 
     @Option(name = "--threads", hidden = true, usage = "Number of threads (experimental).")
     private int nthreads = 1;
+
+    public final GenerateType getGenerateType() {
+        return generateType;
+    }
+
+    public final void setGenerateType(GenerateType generateType) {
+        this.generateType = generateType;
+    }
+
+    public final RightMemberType getRightMemberType() {
+        return rightMemberType;
+    }
+
+    public final void setRightMemberType(RightMemberType rightMemberType) {
+        this.rightMemberType = rightMemberType;
+    }
 
     public final boolean isDryRun() {
         return dryRun;
@@ -91,33 +103,39 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return lightModel;
     }
 
+    @Deprecated(forRemoval = true)
     public final boolean isMultUnique() {
-        return multUnique;
+        return rightMemberType == RightMemberType.UNIQUE;
     }
 
     public final void setLightModel(final boolean lightModel) {
         this.lightModel = lightModel;
     }
 
+    @Deprecated(forRemoval = true)
     public final boolean isMultModel() {
-        return multModel;
+        return generateType == GenerateType.MUL;
     }
 
+    @Deprecated(forRemoval = true)
     public final void setMultModel(final boolean multModel) {
-        this.multModel = multModel;
+        this.generateType = multModel ? GenerateType.MUL : GenerateType.ADD;
     }
 
+    @Deprecated(forRemoval = true)
     public final boolean isLongMultModel() {
-        return longMultModel;
+        return generateType == GenerateType.LMUL;
     }
 
+    @Deprecated(forRemoval = true)
     public final void setLongMultModel(final boolean longMultModel) {
-        this.longMultModel = longMultModel;
+        this.generateType = longMultModel ? GenerateType.LMUL : GenerateType.ADD;
     }
 
     @Override
     public String toString() {
-        return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_PROPAG " + lightModel;
+        return super.toString() + "\nc GENERATE " + generateType + "\nc LANG " + langCode + "\nc THREADS " + nthreads
+                + "\nc LIGHT_PROPAG " + lightModel;
     }
 
 }
