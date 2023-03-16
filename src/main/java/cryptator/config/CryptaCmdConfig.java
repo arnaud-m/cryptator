@@ -13,11 +13,11 @@ import org.kohsuke.args4j.Option;
 public class CryptaCmdConfig extends CryptaLogConfig {
 
     public enum SolverType {
-        SCALAR, BIGNUM, CRYPT, ADAPT, ADPATC
+        SCALAR, BIGNUM, CRYPT, ADAPT, ADAPTC
     }
 
     @Option(name = "-s", aliases = {"--solver"}, usage = "Select the type of solver.")
-    private SolverType solverType = SolverType.ADAPT;
+    private SolverType solverType = SolverType.SCALAR;
 
     @Option(name = "--check", usage = "Check solutions by evaluation.")
     private boolean checkSolution;
