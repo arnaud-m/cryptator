@@ -119,7 +119,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     }
 
     private void appendExample(final StringBuilder b, final CmdLineParser parser, final OptionHandlerFilter filter) {
-        b.append("java").append(getCommandName()).append(' ');
+        b.append("java ").append(getCommandName()).append(' ');
         final String opts = parser.printExample(filter);
         if (opts.length() > 0)
             b.append(opts).append(" ");

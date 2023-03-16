@@ -9,7 +9,6 @@
 package cryptator.config;
 
 import org.kohsuke.args4j.Option;
-import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptagenConfig extends CryptaCmdConfig {
 
@@ -17,26 +16,26 @@ public class CryptagenConfig extends CryptaCmdConfig {
         ADD, MUL, LMUL, CROSS,
     }
 
-    @Option(name = "-gen", aliases = {"--generate"}, usage = "Select the type of generator.")
+    @Option(name = "-g", aliases = {"--generate"}, usage = "Select the type of generator.")
     private GenerateType generateType;
 
     public enum RightMemberType {
         FREE, UNIQUE, FIXED
     }
 
-    @Option(name = "-r", aliases = {"--right"}, usage = "Select the right member type.")
+    @Option(name = "--right", usage = "Select the right member type.")
     private RightMemberType rightMemberType = RightMemberType.UNIQUE;
 
     @Option(name = "-d", aliases = {"--dry-run"}, usage = "Dry run (generate but do not solve candidate cryptarithms).")
     private boolean dryRun;
 
-    @Option(name = "--cross", usage = "Generate crosswords with the given size")
-    private int gridSize;
+    @Option(name = "--cross", usage = "Set the grid size of a crossword.")
+    private int gridSize = 0;
 
-    @Option(name = "-ctry", usage = "Country code for doubly true cryptarithms.)")
+    @Option(name = "--ctry", usage = "Country code for doubly true cryptarithms.")
     private String countryCode = "EN";
 
-    @Option(name = "-lang", usage = "Language code for doubly true cryptarithms.)")
+    @Option(name = "--lang", usage = "Language code for doubly true cryptarithms.")
     private String langCode = "en";
 
     @Option(name = "--min", usage = "Minimum number of left operands.")
@@ -45,7 +44,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "--max", usage = "Maximum number of left operands.")
     private int maxLeftOperands = -1;
 
-    @Option(name = "--light", hidden = true, handler = ExplicitBooleanOptionHandler.class, usage = "Use a light CP model.")
+    @Option(name = "--light", hidden = true, usage = "Use a light CP model.")
     private boolean lightModel;
 
     @Option(name = "--threads", hidden = true, usage = "Number of threads (experimental).")

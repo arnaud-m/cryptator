@@ -16,16 +16,16 @@ public class CryptaCmdConfig extends CryptaLogConfig {
         SCALAR, BIGNUM, CRYPT, ADAPT, ADPATC
     }
 
-    @Option(name = "-a", aliases = {"--solver"}, usage = "Select the type of solver.")
+    @Option(name = "-s", aliases = {"--solver"}, usage = "Select the type of solver.")
     private SolverType solverType = SolverType.ADAPT;
 
-    @Option(name = "-c", aliases = {"--check"}, usage = "Check solutions by evaluation.")
+    @Option(name = "--check", usage = "Check solutions by evaluation.")
     private boolean checkSolution;
 
-    @Option(name = "-g", aliases = {"--graphviz"}, usage = "Export solutions to graphviz format.")
+    @Option(name = "--graphviz", usage = "Export solutions to graphviz format.")
     private boolean exportGraphiz;
 
-    @Option(name = "--crypt-command", hidden = true, usage = "Set the crypt command.")
+    @Option(name = "--crypt", hidden = true, usage = "Set the crypt command.")
     private String cryptCommand = "crypt";
 
     public final SolverType getSolverType() {

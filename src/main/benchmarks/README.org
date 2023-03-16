@@ -44,7 +44,7 @@
        # Read the csf files with a list of country codes, and languages codes
        while IFS="," read ctry lang ; do
            INSTANCE="instances/$lang-$1-$2.dat"
-           echo -ctry $ctry -lang $lang $1 $2 > $INSTANCE
+           echo --ctry $ctry --lang $lang $1 $2 > $INSTANCE
        done < <(grep -v "^#\|^$" $LANGUAGES)
    }
  #+END_SRC
@@ -135,7 +135,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
  #+BEGIN_SRC sh
    function generateLong() {
-       echo -minop $1 -maxop $1 words/$2 > instances/`basename -s .txt $2`-$1.dat
+       echo --min $1 --max $1 words/$2 > instances/`basename -s .txt $2`-$1.dat
    }
 
    # generateLong 9 9 monsters.txt
@@ -226,7 +226,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 *** Addition
  #+BEGIN_SRC sh
-   echo -v quiet -a BIGNUM > algorithms/ALL.dat
+   echo -v quiet --generate ADD -s BIGNUM > algorithms/ALL.dat
  #+END_SRC
 
 
@@ -297,10 +297,10 @@ Do not remove the content of the directory!
 ** Configure the algorithm
 
  #+BEGIN_SRC sh
-   ARGS=" -v verbose -t 100"
-   echo $ARGS -a BIGNUM > algorithms/BIGNUM.dat
-   echo $ARGS -a SCALAR  > algorithms/SCALAR.dat
-   echo $ARGS --a SCALAR --horner > algorithms/HORNER.dat
+   ARGS=" -v verbose"
+   echo $ARGS -s BIGNUM > algorithms/BIGNUM.dat
+   echo $ARGS -s SCALAR  > algorithms/SCALAR.dat
+   echo $ARGS -s SCALAR --horner > algorithms/HORNER.dat
  #+END_SRC
 
 

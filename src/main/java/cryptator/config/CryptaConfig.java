@@ -28,7 +28,7 @@ public class CryptaConfig {
     @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")
     private boolean displayHelp;
 
-    @Option(name = "--leading-zeros", hidden = true, usage = "Allow leading zeros in the cryptarithm solution")
+    @Option(name = "--zeros", hidden = true, usage = "Allow leading zeros in the cryptarithm solution")
     private boolean allowLeadingZeros;
 
     @Option(name = "--horner", hidden = true, usage = "Use the horner scheme to model finite precision words.")
