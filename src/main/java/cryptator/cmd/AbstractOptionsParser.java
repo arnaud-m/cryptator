@@ -187,26 +187,29 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
     private static class CryptaOptionSorter implements Comparator<OptionHandler> {
 
+        private final boolean longOption(OptionDef x) {
+            return x.toString().charAt(1) == '-';
+        }
+
         @Override
         public int compare(OptionHandler arg0, OptionHandler arg1) {
             final OptionDef x = arg0.option;
             final OptionDef y = arg1.option;
-            if (x.required() == y.required()) {
-                if (x.hidden() == y.hidden()) {
-                    final boolean lx = x.toString().charAt(1) == '-';
-                    final boolean ly = y.toString().charAt(1) == '-';
-                    if (lx == ly) {
-                        return x.toString().compareTo(y.toString());
-                    } else {
-                        return Boolean.compare(lx, ly);
+            // Required option
+            int comp = Boolean.compare(x.required(), y.required());
+            if (comp == 0) {
+                // Hidden options
+                comp = Boolean.compare(x.hidden(), y.hidden());
+                if (comp == 0) {
+                    // Long options
+                    comp = Boolean.compare(longOption(x), longOption(y));
+                    if (comp == 0) {
+                        // Option strings
+                        comp = x.toString().compareTo(y.toString());
                     }
-                } else {
-                    return Boolean.compare(x.hidden(), y.hidden());
                 }
-            } else {
-                return Boolean.compare(x.required(), y.required());
             }
-
+            return comp;
         }
     }
 
