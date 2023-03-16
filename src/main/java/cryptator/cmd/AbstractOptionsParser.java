@@ -13,13 +13,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Comparator;
 import java.util.OptionalInt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.OptionDef;
 import org.kohsuke.args4j.OptionHandlerFilter;
+import org.kohsuke.args4j.ParserProperties;
+import org.kohsuke.args4j.spi.OptionHandler;
 
 import cryptator.config.CryptaConfig;
 
@@ -77,8 +81,8 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     }
 
     public final OptionalInt parseOptions(final String[] args) {
-
-        final CmdLineParser parser = new CmdLineParser(config);
+        final ParserProperties properties = ParserProperties.defaults().withOptionSorter(new CryptaOptionSorter());
+        final CmdLineParser parser = new CmdLineParser(config, properties);
         try {
             // parse the arguments.
             parser.parseArgument(args);
@@ -180,4 +184,30 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         }
 
     }
+
+    private static class CryptaOptionSorter implements Comparator<OptionHandler> {
+
+        @Override
+        public int compare(OptionHandler arg0, OptionHandler arg1) {
+            final OptionDef x = arg0.option;
+            final OptionDef y = arg1.option;
+            if (x.required() == y.required()) {
+                if (x.hidden() == y.hidden()) {
+                    final boolean lx = x.toString().charAt(1) == '-';
+                    final boolean ly = y.toString().charAt(1) == '-';
+                    if (lx == ly) {
+                        return x.toString().compareTo(y.toString());
+                    } else {
+                        return Boolean.compare(lx, ly);
+                    }
+                } else {
+                    return Boolean.compare(x.hidden(), y.hidden());
+                }
+            } else {
+                return Boolean.compare(x.required(), y.required());
+            }
+
+        }
+    }
+
 }
