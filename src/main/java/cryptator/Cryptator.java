@@ -8,6 +8,7 @@
  */
 package cryptator;
 
+import java.util.OptionalInt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,22 +38,26 @@ public final class Cryptator {
     }
 
     public static int doMain(final String[] args) {
-        CryptatorOptionsParser optparser = new CryptatorOptionsParser();
-        if (!optparser.parseOptions(args)) {
-            return -1;
+        try {
+            final CryptatorOptionsParser optparser = new CryptatorOptionsParser();
+            final OptionalInt parserExitCode = optparser.parseOptions(args);
+            if (parserExitCode.isPresent()) {
+                return parserExitCode.getAsInt();
+            }
+            final CryptatorConfig config = optparser.getConfig();
+
+            final ICryptaSolver solver = buildSolver(config);
+
+            final CryptaParserWrapper parser = new CryptaParserWrapper();
+
+            int exitCode = 0;
+            for (String cryptarithm : config.getArguments()) {
+                exitCode += solve(cryptarithm, parser, solver, config);
+            }
+            return exitCode;
+        } finally {
+            JULogUtil.flushLogs();
         }
-        final CryptatorConfig config = optparser.getConfig();
-
-        final ICryptaSolver solver = buildSolver(config);
-
-        final CryptaParserWrapper parser = new CryptaParserWrapper();
-
-        int exitCode = 0;
-        for (String cryptarithm : config.getArguments()) {
-            exitCode += solve(cryptarithm, parser, solver, config);
-        }
-        JULogUtil.flushLogs();
-        return exitCode;
     }
 
     private static class CryptatorOptionsParser extends OptionsParserWithLog<CryptatorConfig> {

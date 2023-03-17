@@ -9,42 +9,62 @@
 package cryptator.config;
 
 import org.kohsuke.args4j.Option;
-import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 public class CryptagenConfig extends CryptaCmdConfig {
 
-    @Option(name = "-d", handler = ExplicitBooleanOptionHandler.class, usage = "dry run (generate but do not solve candidate cryptarithms)")
+    public enum GenerateType {
+        ADD, MUL, LMUL, CROSS,
+    }
+
+    @Option(name = "-g", aliases = {"--generate"}, usage = "Select the type of generator.")
+    private GenerateType generateType;
+
+    public enum RightMemberType {
+        FREE, UNIQUE, FIXED
+    }
+
+    @Option(name = "--right", usage = "Select the right member type.")
+    private RightMemberType rightMemberType = RightMemberType.UNIQUE;
+
+    @Option(name = "-d", aliases = {"--dry-run"}, usage = "Dry run (generate but do not solve candidate cryptarithms).")
     private boolean dryRun;
 
-    @Option(name = "-grid", usage = "grid size for crossword cryptarithm)")
+    @Option(name = "--cross", usage = "Set the grid size of a crossword.")
     private int gridSize = 0;
 
-    @Option(name = "-mult", handler = ExplicitBooleanOptionHandler.class, usage = "generate multiplication cryptarithms")
-    private boolean multModel = false;
-
-    @Option(name = "-longMult", handler = ExplicitBooleanOptionHandler.class, usage = "generate long multiplication cryptarithms")
-    private boolean longMultModel = false;
-
-    @Option(name = "-ctry", usage = "country code for doubly true cryptarithms)")
+    @Option(name = "--ctry", usage = "Country code for doubly true cryptarithms.")
     private String countryCode = "EN";
 
-    @Option(name = "-lang", usage = "language code for doubly true cryptarithms)")
+    @Option(name = "--lang", usage = "Language code for doubly true cryptarithms.")
     private String langCode = "en";
 
-    @Option(name = "-t", usage = "number of threads (experimental)")
-    private int nthreads = 1;
-
-    @Option(name = "-minop", usage = "minimum number of left operands")
+    @Option(name = "--min", usage = "Minimum number of left operands.")
     private int minLeftOperands = 2;
 
-    @Option(name = "-maxop", usage = "maximum number of left operands")
+    @Option(name = "--max", usage = "Maximum number of left operands.")
     private int maxLeftOperands = -1;
 
-    @Option(name = "-lightP", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
-    private boolean lightPropagation;
+    @Option(name = "--light", hidden = true, usage = "Use a light CP model.")
+    private boolean lightModel;
 
-    @Option(name = "-multUnique", handler = ExplicitBooleanOptionHandler.class, usage = "use weak consistency")
-    private boolean multUnique;
+    @Option(name = "--threads", hidden = true, usage = "Number of threads (experimental).")
+    private int nthreads = 1;
+
+    public final GenerateType getGenerateType() {
+        return generateType;
+    }
+
+    public final void setGenerateType(GenerateType generateType) {
+        this.generateType = generateType;
+    }
+
+    public final RightMemberType getRightMemberType() {
+        return rightMemberType;
+    }
+
+    public final void setRightMemberType(RightMemberType rightMemberType) {
+        this.rightMemberType = rightMemberType;
+    }
 
     public final boolean isDryRun() {
         return dryRun;
@@ -78,38 +98,43 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return maxLeftOperands;
     }
 
-    public final boolean isLightPropagation() {
-        return lightPropagation;
+    public final boolean isLightModel() {
+        return lightModel;
     }
 
+    @Deprecated(forRemoval = true)
     public final boolean isMultUnique() {
-        return multUnique;
+        return rightMemberType == RightMemberType.UNIQUE;
     }
 
-    public final void setLightPropagation(final boolean lightPropagation) {
-        this.lightPropagation = lightPropagation;
+    public final void setLightModel(final boolean lightModel) {
+        this.lightModel = lightModel;
     }
 
+    @Deprecated(forRemoval = true)
     public final boolean isMultModel() {
-        return multModel;
+        return generateType == GenerateType.MUL;
     }
 
+    @Deprecated(forRemoval = true)
     public final void setMultModel(final boolean multModel) {
-        this.multModel = multModel;
+        this.generateType = multModel ? GenerateType.MUL : GenerateType.ADD;
     }
 
+    @Deprecated(forRemoval = true)
     public final boolean isLongMultModel() {
-        return longMultModel;
+        return generateType == GenerateType.LMUL;
     }
 
+    @Deprecated(forRemoval = true)
     public final void setLongMultModel(final boolean longMultModel) {
-        this.longMultModel = longMultModel;
+        this.generateType = longMultModel ? GenerateType.LMUL : GenerateType.ADD;
     }
 
     @Override
     public String toString() {
-        return super.toString() + "\nc LANG " + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_PROPAG "
-                + lightPropagation;
+        return super.toString() + "\nc GENERATE " + generateType + "\nc LANG " + langCode + "\nc THREADS " + nthreads
+                + "\nc LIGHT_PROPAG " + lightModel;
     }
 
 }

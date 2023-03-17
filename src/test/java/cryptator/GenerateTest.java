@@ -20,6 +20,7 @@ import org.junit.Test;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
+import cryptator.config.CryptagenConfig.RightMemberType;
 import cryptator.gen.CryptaListGenerator;
 import cryptator.solver.CryptaModelException;
 
@@ -34,7 +35,7 @@ public class GenerateTest {
 
     private void configure(final int gridSize, final boolean lightPropagation) {
         config.setGridSize(gridSize);
-        config.setLightPropagation(lightPropagation);
+        config.setLightModel(lightPropagation);
     }
 
     private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
@@ -72,12 +73,14 @@ public class GenerateTest {
 
     private void testMultGenerateLH(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {
         JULogUtil.configureSilentLoggers();
+        config.setRightMemberType(RightMemberType.FREE);
         config.setMultModel(true);
         configure(0, false);
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
         configure(0, true);
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
         config.setMultModel(false);
+        config.setRightMemberType(RightMemberType.UNIQUE);
     }
 
     private void testMultGenerate(final int expectedSolCount, final WordArray wordArray) throws CryptaModelException {

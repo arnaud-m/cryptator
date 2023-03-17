@@ -12,10 +12,10 @@ import org.kohsuke.args4j.Option;
 
 public class CryptatorConfig extends CryptaCmdConfig {
 
-    @Option(name = "-s", usage = "limit the number of solutions returned by the solver")
+    @Option(name = "--solution", usage = "Limit the number of solutions returned by the solver.")
     private int solutionLimit;
 
-    @Option(name = "-t", usage = "limit the time taken by a solver (in seconds)")
+    @Option(name = "--time", usage = "Limit the time taken by the solver (in seconds)")
     private int timeLimit;
 
     public final int getSolutionLimit() {

@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
-import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
 
 /**
  * A bean object that stores the common configuration. This is designed for
@@ -23,22 +22,19 @@ import org.kohsuke.args4j.spi.ExplicitBooleanOptionHandler;
  */
 public class CryptaConfig {
 
-    @Option(name = "-b", usage = "Base (or radix) of the positional numeral system used for the cryptarithm (> 1)")
+    @Option(name = "-b", aliases = {"--base", "--radix"}, usage = "Base of the positional numeral system (> 1).")
     private int arithmeticBase = BigInteger.TEN.intValue();
 
-    @Option(name = "-z", handler = ExplicitBooleanOptionHandler.class, usage = "allow leading zeros in the cryptarithm solution")
+    @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")
+    private boolean displayHelp;
+
+    @Option(name = "--zeros", hidden = true, usage = "Allow leading zeros in the cryptarithm solution")
     private boolean allowLeadingZeros;
 
-    @Option(name = "-h", handler = ExplicitBooleanOptionHandler.class, usage = "use the horner scheme to model the numbers repsented by the cryptarithm words")
+    @Option(name = "--horner", hidden = true, usage = "Use the horner scheme to model finite precision words.")
     private boolean hornerScheme;
 
-    @Option(name = "-min", usage = "relaxation of the minimum number of occurences of a digit (>=0)")
-    private int relaxMinDigitOccurence = 0;
-
-    @Option(name = "-max", usage = "relaxation of the maximum number of occurences of a digit (>=0)")
-    private int relaxMaxDigitOccurence = 0;
-
-    @Option(name = "-search", usage = "identifier of the search strategy")
+    @Option(name = "--search", hidden = true, usage = "Set the search strategy.")
     private int searchStrategy = 0;
 
     /**
@@ -71,22 +67,6 @@ public class CryptaConfig {
         this.hornerScheme = useHornerScheme;
     }
 
-    public final int getRelaxMinDigitOccurence() {
-        return relaxMinDigitOccurence;
-    }
-
-    public final void setRelaxMinDigitOccurence(final int relaxMinDigitOccurence) {
-        this.relaxMinDigitOccurence = relaxMinDigitOccurence;
-    }
-
-    public final int getRelaxMaxDigitOccurence() {
-        return relaxMaxDigitOccurence;
-    }
-
-    public final void setRelaxMaxDigitOccurence(final int relaxMaxDigitOccurence) {
-        this.relaxMaxDigitOccurence = relaxMaxDigitOccurence;
-    }
-
     public final int getSearchStrategy() {
         return searchStrategy;
     }
@@ -95,22 +75,16 @@ public class CryptaConfig {
         this.searchStrategy = searchStrategy;
     }
 
+    public final boolean isDisplayHelp() {
+        return displayHelp;
+    }
+
     public final int getMinDigitOccurence(final int n) {
-        int minOcc = n / getArithmeticBase();
-        final int deltaMin = getRelaxMinDigitOccurence();
-        if (deltaMin > 0) {
-            minOcc = Math.max(0, minOcc - deltaMin);
-        }
-        return minOcc;
+        return n / getArithmeticBase();
     }
 
     public final int getMaxDigitOccurence(final int n) {
-        int maxOcc = ((n + getArithmeticBase()) - 1) / getArithmeticBase();
-        final int deltaMax = getRelaxMaxDigitOccurence();
-        if (deltaMax > 0) {
-            maxOcc = Math.min(n, maxOcc + deltaMax);
-        }
-        return maxOcc;
+        return ((n + getArithmeticBase()) - 1) / getArithmeticBase();
     }
 
     public final List<String> getArguments() {
@@ -120,8 +94,7 @@ public class CryptaConfig {
     @Override
     public String toString() {
         return "c BASE " + arithmeticBase + "\nc ALLOW_LEADING_0 " + allowLeadingZeros + "\nc HORNER_SCHEME "
-                + hornerScheme + "\nc RELAX_MIN_DIGIT_OCC " + relaxMinDigitOccurence + "\nc RELAX_MAX_DIGIT_OCC "
-                + relaxMaxDigitOccurence;
+                + hornerScheme;
     }
 
 }

@@ -44,7 +44,7 @@
        # Read the csf files with a list of country codes, and languages codes
        while IFS="," read ctry lang ; do
            INSTANCE="instances/$lang-$1-$2.dat"
-           echo -ctry $ctry -lang $lang $1 $2 > $INSTANCE
+           echo --ctry $ctry --lang $lang $1 $2 > $INSTANCE
        done < <(grep -v "^#\|^$" $LANGUAGES)
    }
  #+END_SRC
@@ -77,17 +77,13 @@ exit $?
 
 *** Best algorithm
  #+BEGIN_SRC sh
-   echo -v normal -d TRUE -lightM FALSE -lightP FALSE > algorithms/FF.dat
+   echo -v normal --dry-run > algorithms/HEAVY.dat
  #+END_SRC
 
 *** All algorithms
 
  #+BEGIN_SRC sh
-   echo -v normal -d TRUE -lightM FALSE -lightP FALSE  > algorithms/FF.dat
-   echo -v normal -d TRUE -lightM FALSE -lightP TRUE > algorithms/FT.dat
-   echo -v normal -d TRUE -lightM TRUE -lightP FALSE -newHeavyP FALSE > algorithms/TF.dat
-   echo -v normal -d TRUE -lightM TRUE -lightP FALSE -newHeavyP TRUE > algorithms/TF_NEW.dat
-   echo -v normal -d TRUE -lightM TRUE -lightP TRUE > algorithms/TT.dat
+   echo -v normal --dry-run --light > algorithms/LIGHT.dat
  #+END_SRC
 
 
@@ -139,7 +135,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
  #+BEGIN_SRC sh
    function generateLong() {
-       echo -minop $1 -maxop $1 words/$2 > instances/`basename -s .txt $2`-$1.dat
+       echo --min $1 --max $1 words/$2 > instances/`basename -s .txt $2`-$1.dat
    }
 
    # generateLong 9 9 monsters.txt
@@ -169,7 +165,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    function generateMaxLong() {
        find samples/ -type f -print | while read PATHNAME ; do
            INSTANCE="instances/"`basename -s .txt $PATHNAME`-$1-$2.dat
-           echo -minop $1 -maxop $2 $PATHNAME > $INSTANCE
+           echo --min $1 --max $2 $PATHNAME > $INSTANCE
         done
    }
 
@@ -218,7 +214,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
    function generateCrossword() {
        find samples/ -type f -print | while read PATHNAME ; do
            INSTANCE="instances/"`basename -s .txt $PATHNAME`-$1.dat
-           echo -grid $1 $PATHNAME > $INSTANCE
+           echo --generate CROSS --cross $1 $PATHNAME > $INSTANCE
         done
    }
 
@@ -230,18 +226,18 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
 
 *** Addition
  #+BEGIN_SRC sh
-   echo -v quiet -d FALSE -l TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
+   echo -v quiet --generate ADD -s BIGNUM > algorithms/ALL.dat
  #+END_SRC
 
 
 *** Multiplication
  #+BEGIN_SRC sh
-   echo -v quiet -d FALSE -mult TRUE -multUnique TRUE -lightP FALSE > algorithms/ALL.dat
+   echo -v quiet  --generate MUL --right UNIQUE > algorithms/ALL.dat
  #+END_SRC
 
 *** Long Multiplication
  #+BEGIN_SRC sh
-   echo -v quiet -d FALSE -longMult TRUE -lightM FALSE -lightP FALSE > algorithms/ALL.dat
+   echo -v quiet --generate LMUL > algorithms/ALL.dat
  #+END_SRC
 
 * Solve
@@ -301,14 +297,10 @@ Do not remove the content of the directory!
 ** Configure the algorithm
 
  #+BEGIN_SRC sh
-   ARGS=" -v verbose -t 100"
-   echo $ARGS -l TRUE > algorithms/BIGNUM.dat
-   echo $ARGS -l FALSE -h FALSE > algorithms/SCALAR.dat
-   echo $ARGS -l FALSE -h TRUE > algorithms/HORNER.dat
-
-#   echo $ARGS -l TRUE -search 1 > algorithms/BIGNUM-1.dat
-#   echo $ARGS -l FALSE -h FALSE -search 1 > algorithms/SCALAR-1.dat
-#   echo $ARGS -l FALSE -h TRUE -search 1 > algorithms/HORNER-1.dat
+   ARGS=" -v verbose"
+   echo $ARGS -s BIGNUM > algorithms/BIGNUM.dat
+   echo $ARGS -s SCALAR  > algorithms/SCALAR.dat
+   echo $ARGS -s SCALAR --horner > algorithms/HORNER.dat
  #+END_SRC
 
 
