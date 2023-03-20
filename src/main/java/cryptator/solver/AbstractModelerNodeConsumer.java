@@ -8,11 +8,7 @@
  */
 package cryptator.solver;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
@@ -31,6 +27,10 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
     protected final Map<Character, IntVar> symbolsToVariables;
     protected final Set<Character> firstSymbols;
 
+    protected IntVar sommeNeuf;
+
+    ModelerConsumerPreuveParNeuf modelerNodeConsumerPreuveParNeuf;
+
     protected AbstractModelerNodeConsumer(final Model model, final CryptaConfig config) {
         super();
         this.model = model;
@@ -47,9 +47,26 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         return symbolsToVariables.computeIfAbsent(symbol, this::createSymbolVar);
     }
 
+    public IntVar createPreuveParNeufVar(){
+        sommeNeuf=model.intVar("sommeNeuf", 0, (config.getArithmeticBase() - 1)*symbolsToVariables.size(), false);
+        return sommeNeuf;
+    }
+
     private IntVar[] getGCCVars() {
         final Collection<IntVar> vars = symbolsToVariables.values();
         return vars.toArray(new IntVar[vars.size()]);
+    }
+
+    private int[] getNeufCoeffVars() {
+        final Collection<Integer> vars = modelerNodeConsumerPreuveParNeuf.getCountVar().values();
+        Integer[] varList=vars.toArray(new Integer[vars.size()]);
+        int[] res=new int[varList.length];
+
+        for(int i=0; i<vars.size(); i++){
+            res[i]= varList[i];
+        }
+
+        return res;
     }
 
     private IntVar[] getGCCOccs(final int lb, final int ub) {
@@ -73,6 +90,8 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
             }
         }
     }
+
+
 
     private Constraint globalCardinalityConstraint() {
         final IntVar[] vars = getGCCVars();
@@ -98,6 +117,24 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         postFirstSymbolConstraints();
         globalCardinalityConstraint().post();
         postCryptarithmEquationConstraint();
+    }
+
+    public void postPreuveParNeufConstraints() throws CryptaModelException {
+//        IntVar[] NEUF = new IntVar[]{
+//                a, b, d, e, i, l, m, n, o, x};
+//        int[] COEFFNEUF = new int[]{
+//                2, 1, 1, -1, 0, 1, 1, -2, 1, 2};
+//
+////        model.scalar(ALL, COEFFS, "=", 0).post();
+//
+//        modelAvecPreuveParNeuf.scalar(NEUF, COEFFNEUF, "=", sommeneuf).post();
+//        modelAvecPreuveParNeuf.mod(sommeneuf, 9, 0).post();
+
+        IntVar[] NEUF=getGCCVars();
+        int[] COEFFNEUF=getNeufCoeffVars();
+
+        model.scalar(NEUF, COEFFNEUF, "=", sommeNeuf).post();
+        model.mod(sommeNeuf, config.getArithmeticBase()-1, 0).post();
     }
 
     public void configureSearch() {

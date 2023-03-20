@@ -55,6 +55,13 @@ public interface ICryptaNode {
     boolean isInternalNode();
 
     /**
+     * Checks if the node is an comparator node of the tree.
+     *
+     * @return true, if it is comparator node, otherwise false
+     */
+    boolean isComparatorNode();
+
+    /**
      * Checks if the subtree is a constant of the tree.
      *
      * @return true, if it is constant, otherwise false.

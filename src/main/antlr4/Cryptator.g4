@@ -29,7 +29,7 @@ equations returns [ICryptaNode node]  // create a list of equations
 
 equation returns [ICryptaNode node]  // create an equation
     : '(' equation ')' {$node=$equation.node;}
-    | left=expression COMPARATOR right=expression {$node=new CryptaNode($COMPARATOR.text, $left.node, $right.node);};
+    | left=expression COMPARATOR right=expression {$node=new CryptaNode($COMPARATOR.text, $left.node, $right.node, true);};
 
 expression returns [ICryptaNode node] // create the tree of expressions
     : word {$node=new CryptaLeaf($word.text);}

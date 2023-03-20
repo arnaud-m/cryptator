@@ -49,6 +49,11 @@ public class CryptaLeaf implements ICryptaNode {
     }
 
     @Override
+    public boolean isComparatorNode() {
+        return false;
+    }
+
+    @Override
     public boolean isConstant() {
         return false;
     }

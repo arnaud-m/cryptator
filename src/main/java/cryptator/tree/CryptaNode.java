@@ -18,15 +18,27 @@ public class CryptaNode implements ICryptaNode {
     private final ICryptaNode leftChild;
 
     private final ICryptaNode rightChild;
+    private boolean isComparator=false;
 
     public CryptaNode(final String operator, final ICryptaNode leftChild, final ICryptaNode rightChild) {
         this(CryptaOperator.valueOfToken(operator), leftChild, rightChild);
+    }
+
+    public CryptaNode(final String operator, final ICryptaNode leftChild, final ICryptaNode rightChild, boolean isComparator) {
+        this(CryptaOperator.valueOfToken(operator), leftChild, rightChild, isComparator);
     }
 
     public CryptaNode(final CryptaOperator operator, final ICryptaNode leftChild, final ICryptaNode rightChild) {
         this.operator = operator;
         this.leftChild = leftChild;
         this.rightChild = rightChild;
+    }
+
+    public CryptaNode(final CryptaOperator operator, final ICryptaNode leftChild, final ICryptaNode rightChild, boolean isComparator) {
+        this.operator = operator;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
+        this.isComparator=isComparator;
     }
 
     @Override
@@ -52,6 +64,11 @@ public class CryptaNode implements ICryptaNode {
     @Override
     public boolean isInternalNode() {
         return true;
+    }
+
+    @Override
+    public boolean isComparatorNode() {
+        return isComparator;
     }
 
     @Override

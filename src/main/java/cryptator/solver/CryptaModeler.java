@@ -30,7 +30,12 @@ public class CryptaModeler implements ICryptaModeler {
         try {
             final Model model = new Model("Cryptarithm");
             final ModelerConsumer modelerNodeConsumer = new ModelerConsumer(model, config);
+
             TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
+
+//            modelerNodeConsumer.createPreuveParNeufVar();
+
+//            modelerNodeConsumer.postPreuveParNeufConstraints();
             modelerNodeConsumer.postConstraints();
             modelerNodeConsumer.configureSearch();
             return modelerNodeConsumer.buildCryptaModel();
@@ -47,9 +52,12 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
 
     private final Function<char[], IntVar> wordVarBuilder;
 
+
+
     ModelerConsumer(final Model model, final CryptaConfig config) {
         super(model, config);
         wordVarBuilder = config.getHornerScheme() ? new HornerVarBuilder() : new ExponentiationVarBuilder();
+        super.modelerNodeConsumerPreuveParNeuf = new ModelerConsumerPreuveParNeuf(model, config);
     }
 
     private IntVar makeWordVar(final ICryptaNode node) {
@@ -63,6 +71,12 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
     @Override
     public void accept(final ICryptaNode node, final int numNode) {
         super.accept(node, numNode);
+        if(node.isComparatorNode()){
+            modelerNodeConsumerPreuveParNeuf.incrIteration();
+            TreeTraversals.postorderTraversal(node.getLeftChild(), modelerNodeConsumerPreuveParNeuf);
+            modelerNodeConsumerPreuveParNeuf.incrIteration();
+            TreeTraversals.postorderTraversal(node.getRightChild(), modelerNodeConsumerPreuveParNeuf);
+        }
         if (node.isInternalNode()) {
             final ArExpression b = stack.pop();
             final ArExpression a = stack.pop();
@@ -74,6 +88,7 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
                 stack.push(makeWordVar(node));
             }
         }
+        System.out.println(modelerNodeConsumerPreuveParNeuf.getCountVar());
     }
 
     @Override
