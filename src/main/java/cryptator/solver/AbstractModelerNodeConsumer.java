@@ -9,6 +9,8 @@
 package cryptator.solver;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
@@ -27,7 +29,7 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
     protected final Map<Character, IntVar> symbolsToVariables;
     protected final Set<Character> firstSymbols;
 
-    protected IntVar sommeNeuf;
+    protected List<IntVar> sommeNeuf;
 
     ModelerConsumerPreuveParNeuf modelerNodeConsumerPreuveParNeuf;
 
@@ -37,6 +39,7 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         this.config = config;
         symbolsToVariables = new HashMap<>();
         firstSymbols = new HashSet<>();
+        sommeNeuf=new ArrayList<>();
     }
 
     private IntVar createSymbolVar(final char symbol) {
@@ -47,23 +50,50 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
         return symbolsToVariables.computeIfAbsent(symbol, this::createSymbolVar);
     }
 
-    public IntVar createPreuveParNeufVar(){
-        sommeNeuf=model.intVar("sommeNeuf", 0, (config.getArithmeticBase() - 1)*symbolsToVariables.size(), false);
-        return sommeNeuf;
-    }
+
 
     private IntVar[] getGCCVars() {
         final Collection<IntVar> vars = symbolsToVariables.values();
         return vars.toArray(new IntVar[vars.size()]);
     }
 
-    private int[] getNeufCoeffVars() {
-        final Collection<Integer> vars = modelerNodeConsumerPreuveParNeuf.getCountVar().values();
-        Integer[] varList=vars.toArray(new Integer[vars.size()]);
-        int[] res=new int[varList.length];
+    private List<int[]> getNeufCoeff() {
+        List<Collection<Integer>> vars = modelerNodeConsumerPreuveParNeuf.getCountVar().stream().map(Map::values).collect(Collectors.toList());
+        List<Integer[]> varList= new ArrayList<>();
 
-        for(int i=0; i<vars.size(); i++){
-            res[i]= varList[i];
+        for(int i=0; i< vars.size(); i++){
+            varList.add(vars.get(i).toArray(new Integer[vars.size()]));
+        }
+
+
+        List<int[]> res=new ArrayList<>();
+
+        for(int j=0; j< varList.size(); j++) {
+            res.add(new int[varList.get(j).length]);
+            for (int i = 0; i < varList.get(j).length; i++) {
+                res.get(j)[i] = varList.get(j)[i];
+            }
+        }
+
+        return res;
+    }
+
+    private List<IntVar[]> getNeufVars() {
+        List<Collection<Character>> vars = modelerNodeConsumerPreuveParNeuf.getCountVar().stream().map(Map::keySet).collect(Collectors.toList());
+        List<Character[]> varList= new ArrayList<>();
+
+        for(int i=0; i< vars.size(); i++){
+            varList.add(vars.get(i).toArray(new Character[vars.size()]));
+        }
+
+
+        List<IntVar[]> res=new ArrayList<>();
+
+        for(int j=0; j< varList.size(); j++) {
+            res.add(new IntVar[varList.get(j).length]);
+            for (int i = 0; i < varList.get(j).length; i++) {
+                res.get(j)[i] = symbolsToVariables.get(varList.get(j)[i]);
+            }
         }
 
         return res;
@@ -130,11 +160,13 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 //        modelAvecPreuveParNeuf.scalar(NEUF, COEFFNEUF, "=", sommeneuf).post();
 //        modelAvecPreuveParNeuf.mod(sommeneuf, 9, 0).post();
 
-        IntVar[] NEUF=getGCCVars();
-        int[] COEFFNEUF=getNeufCoeffVars();
+        List<IntVar[]> NEUF=getNeufVars();
+        List<int[]> COEFFNEUF=getNeufCoeff();
 
-        model.scalar(NEUF, COEFFNEUF, "=", sommeNeuf).post();
-        model.mod(sommeNeuf, config.getArithmeticBase()-1, 0).post();
+        for(int i=0; i< NEUF.size(); i++) {
+            model.scalar(NEUF.get(i), COEFFNEUF.get(i), "=", sommeNeuf.get(i)).post();
+            model.mod(sommeNeuf.get(i), config.getArithmeticBase() - 1, 0).post();
+        }
     }
 
     public void configureSearch() {

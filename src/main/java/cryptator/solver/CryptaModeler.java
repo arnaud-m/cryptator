@@ -35,7 +35,7 @@ public class CryptaModeler implements ICryptaModeler {
 
 //            modelerNodeConsumer.createPreuveParNeufVar();
 
-//            modelerNodeConsumer.postPreuveParNeufConstraints();
+            modelerNodeConsumer.postPreuveParNeufConstraints();
             modelerNodeConsumer.postConstraints();
             modelerNodeConsumer.configureSearch();
             return modelerNodeConsumer.buildCryptaModel();
@@ -72,6 +72,10 @@ final class ModelerConsumer extends AbstractModelerNodeConsumer {
     public void accept(final ICryptaNode node, final int numNode) {
         super.accept(node, numNode);
         if(node.isComparatorNode()){
+
+            sommeNeuf.add(model.intVar("sommeNeuf"+sommeNeuf.size(), 0, (config.getArithmeticBase() - 1)*symbolsToVariables.size(), false));
+
+            modelerNodeConsumerPreuveParNeuf.incrNbCryptarithme();
             modelerNodeConsumerPreuveParNeuf.incrIteration();
             TreeTraversals.postorderTraversal(node.getLeftChild(), modelerNodeConsumerPreuveParNeuf);
             modelerNodeConsumerPreuveParNeuf.incrIteration();

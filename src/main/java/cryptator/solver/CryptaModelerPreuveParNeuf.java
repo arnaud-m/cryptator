@@ -18,10 +18,7 @@ import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public class CryptaModelerPreuveParNeuf implements ICryptaModeler {
@@ -31,7 +28,7 @@ public class CryptaModelerPreuveParNeuf implements ICryptaModeler {
         try {
             final Model model = new Model("Cryptarithm");
             final ModelerConsumerPreuveParNeuf modelerNodeConsumer = new ModelerConsumerPreuveParNeuf(model, config);
-            TreeTraversals.inorderTraversal(cryptarithm, modelerNodeConsumer);
+//            TreeTraversals.inorderTraversal(cryptarithm, modelerNodeConsumer);
             TreeTraversals.postorderTraversal(cryptarithm, modelerNodeConsumer);
             modelerNodeConsumer.postConstraints();
             modelerNodeConsumer.configureSearch();
@@ -48,8 +45,9 @@ final class ModelerConsumerPreuveParNeuf extends AbstractModelerNodeConsumer {
     private final Deque<ArExpression> stack = new ArrayDeque<>();
 
     private final Function<char[], IntVar> wordVarBuilder;
-    private Map<Character, Integer> countVar=new HashMap<>();
+    private List<Map<Character, Integer>> countVar=new ArrayList<>();
     private int iteration=-1;
+    private int nbCryptarithme=-1;
 
     ModelerConsumerPreuveParNeuf(final Model model, final CryptaConfig config) {
         super(model, config);
@@ -66,16 +64,16 @@ final class ModelerConsumerPreuveParNeuf extends AbstractModelerNodeConsumer {
 
     @Override
     public void accept(final ICryptaNode node, final int numNode) {
-        int acc=1;
+        int acc=-1;
 
-        if(iteration%2!=0){
-            acc=-1;
+        if(iteration%2==0){
+            acc=1;
         }
 
         if (!node.isInternalNode()) {
             for (int i=0; i<node.getWord().length; i++){
-                countVar.putIfAbsent(node.getWord()[i], 0);
-                countVar.put(node.getWord()[i], countVar.get(node.getWord()[i])+acc);
+                countVar.get(nbCryptarithme).putIfAbsent(node.getWord()[i], 0);
+                countVar.get(nbCryptarithme).put(node.getWord()[i], countVar.get(nbCryptarithme).get(node.getWord()[i])+acc);
             }
         }
     }
@@ -143,7 +141,12 @@ final class ModelerConsumerPreuveParNeuf extends AbstractModelerNodeConsumer {
         iteration+=1;
     }
 
-    public Map<Character, Integer> getCountVar() {
+    public void incrNbCryptarithme(){
+        nbCryptarithme+=1;
+        countVar.add(new HashMap<>());
+    }
+
+    public List<Map<Character, Integer>> getCountVar() {
         return countVar;
     }
 }
