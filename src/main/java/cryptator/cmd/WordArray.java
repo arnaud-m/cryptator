@@ -17,8 +17,6 @@ public class WordArray {
 
     private final String[] words;
 
-    private String rightMember;
-
     private final int lb;
 
     private final int ub;
@@ -26,7 +24,6 @@ public class WordArray {
     public WordArray(final List<String> words, final String rightMember) {
         super();
         final int n = words.size();
-        this.rightMember = rightMember;
         if (rightMember == null) {
             this.words = new String[n];
             words.toArray(this.words);
@@ -47,15 +44,10 @@ public class WordArray {
         for (int i = 0; i <= ub; i++) {
             words[i] = translateAndNormalize(countryCode, lang, i);
         }
-        this.rightMember = null;
     }
 
     public final String[] getWords() {
         return words;
-    }
-
-    public boolean hasRightMember() {
-        return rightMember != null;
     }
 
     public boolean isDoublyTrue() {
@@ -71,13 +63,11 @@ public class WordArray {
     }
 
     public String toDimacs() {
-        return "c WORDS " + words.length + "\nc RIGHT_MEMBER " + (hasRightMember() ? "FIXED" : "FREE")
-                + "\nc DOUBLY_TRUE " + (isDoublyTrue() ? lb + "-" + ub : "NO");
+        return "c WORDS " + words.length + "\nc DOUBLY_TRUE " + (isDoublyTrue() ? lb + "-" + ub : "NO");
     }
 
     @Override
     public String toString() {
-        return "WordArray [words=" + Arrays.toString(words) + ", rightMember=" + rightMember + ", lb=" + lb + ", ub="
-                + ub + "]";
+        return "WordArray [words=" + Arrays.toString(words) + ", lb=" + lb + ", ub=" + ub + "]";
     }
 }

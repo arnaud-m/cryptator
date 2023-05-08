@@ -32,10 +32,6 @@ public class CryptaMemberPair implements ICryptaGenSolver {
                 : new CryptaMemberLen(model, words, prefix + "R_");
     }
 
-    public CryptaMemberPair(final Model model, final String[] words, final String prefix) {
-        this(model, words, prefix, true);
-    }
-
     public CryptaMemberPair(final IntVar index, final String[] words, final String prefix) {
         super();
         left = new CryptaMemberLen(index.getModel(), words, prefix + "L_");
@@ -61,8 +57,12 @@ public class CryptaMemberPair implements ICryptaGenSolver {
         postSymBreakLengthConstraint();
     }
 
-    protected void postSymBreakLengthConstraint() {
-        left.getMaxLength().le(right.getMaxLength()).post();
+    private final void postSymBreakLengthConstraint() {
+        if (right instanceof CryptaMemberLen) {
+            getModel().lexLess(left.getWordVars(), right.getWordVars()).post();
+        } else {
+            left.getMaxLength().le(right.getMaxLength()).post();
+        }
     }
 
     public final void postDisjunctionConstraints(final BoolVar[] v) {

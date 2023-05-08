@@ -19,9 +19,9 @@ public class CryptaGenAdd extends AbstractCryptaListModel {
 
     private final CryptaMemberPair addition;
 
-    public CryptaGenAdd(final String[] words) {
+    public CryptaGenAdd(final String[] words, final boolean isRightUnique) {
         super(new Model("Generate-Addition"), words);
-        addition = new CryptaMemberPair(model, words, "");
+        addition = new CryptaMemberPair(model, words, "", isRightUnique);
     }
 
     @Override

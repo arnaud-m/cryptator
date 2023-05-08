@@ -120,6 +120,7 @@ public class GenerateTest {
     @Test
     public void testPlanets2() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("venus", "earth", "uranus", "saturn"), "planets");
+        config.setRightMemberType(RightMemberType.FIXED);
         testGenerate(1, words, 0);
     }
 
@@ -132,6 +133,7 @@ public class GenerateTest {
     @Test
     public void testAbcdef() throws CryptaModelException {
         WordArray words = new WordArray(Arrays.asList("a", "bb", "ccc", "dddd", "eeeee"), "ffffff");
+        config.setRightMemberType(RightMemberType.FIXED);
         testGenerate(0, OptionalInt.of(15), words);
     }
 

@@ -19,15 +19,15 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "-g", aliases = {"--generate"}, usage = "Select the type of generator.")
     private GenerateType generateType = GenerateType.ADD;
 
+    @Option(name = "-d", aliases = {"--dry-run"}, usage = "Dry run (generate but do not solve candidate cryptarithms).")
+    private boolean dryRun;
+
     public enum RightMemberType {
         FREE, UNIQUE, FIXED
     }
 
     @Option(name = "--right", usage = "Select the right member type.")
     private RightMemberType rightMemberType = RightMemberType.UNIQUE;
-
-    @Option(name = "-d", aliases = {"--dry-run"}, usage = "Dry run (generate but do not solve candidate cryptarithms).")
-    private boolean dryRun;
 
     @Option(name = "--cross", usage = "Set the grid size of a crossword.")
     private int gridSize = 0;
@@ -108,8 +108,8 @@ public class CryptagenConfig extends CryptaCmdConfig {
 
     @Override
     public String toString() {
-        return super.toString() + "\nc GENERATE " + generateType + "\nc LANG " + langCode + "\nc THREADS " + nthreads
-                + "\nc LIGHT_PROPAG " + lightModel;
+        return super.toString() + "\nc GENERATE " + generateType + "\nc RIGHT_MEMBER " + rightMemberType + "\nc LANG "
+                + langCode + "\nc THREADS " + nthreads + "\nc LIGHT_PROPAG " + lightModel;
     }
 
 }

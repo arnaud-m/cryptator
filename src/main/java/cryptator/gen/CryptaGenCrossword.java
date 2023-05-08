@@ -81,7 +81,6 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
         super.buildModel();
         grid.buildModel();
         Stream.of(additions).forEach(CryptaCrossPair::buildModel);
-        // TODO change search strategy ?
     }
 
     @Override

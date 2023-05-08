@@ -100,7 +100,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         case CROSS:
             return new CryptaGenCrossword(config.getGridSize(), words.getWords());
         default:
-            return new CryptaGenAdd(words.getWords());
+            return new CryptaGenAdd(words.getWords(), config.getRightMemberType() != RightMemberType.FREE);
         }
     }
 
@@ -119,7 +119,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
         if (!config.isLightModel()) {
             gen.postHeavyConstraints(config.getArithmeticBase());
         }
-        if (words.hasRightMember()) {
+        if (config.getRightMemberType() == RightMemberType.FIXED) {
             gen.postFixedRightMemberConstraints();
         }
         if (words.isDoublyTrue()) {
