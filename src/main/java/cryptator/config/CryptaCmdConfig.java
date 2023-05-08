@@ -45,16 +45,6 @@ public class CryptaCmdConfig extends CryptaLogConfig {
     }
 
     @Deprecated(forRemoval = true)
-    public final boolean useBignum() {
-        return solverType == SolverType.BIGNUM;
-    }
-
-    @Deprecated(forRemoval = true)
-    public final void setUseBigNum(final boolean useBigNum) {
-        this.solverType = useBigNum ? SolverType.BIGNUM : SolverType.SCALAR;
-    }
-
-    @Deprecated(forRemoval = true)
     public final boolean useCrypt() {
         return solverType == SolverType.CRYPT;
     }

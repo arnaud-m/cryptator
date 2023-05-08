@@ -24,7 +24,9 @@ import org.chocosolver.solver.Solver;
 import cryptator.choco.ChocoLogger;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
+import cryptator.config.CryptaCmdConfig.SolverType;
 import cryptator.config.CryptagenConfig;
+import cryptator.config.CryptagenConfig.RightMemberType;
 import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
@@ -90,13 +92,14 @@ public class CryptaListGenerator implements ICryptaGenerator {
      * @return the generation model
      */
     private AbstractCryptaListModel createGenModel() {
-        if (config.getGridSize() > 0) {
-            return new CryptaGenCrossword(config.getGridSize(), words.getWords());
-        } else if (config.isMultModel()) {
-            return new CryptaGenMult(words.getWords(), config.isMultUnique());
-        } else if (config.isLongMultModel()) {
+        switch (config.getGenerateType()) {
+        case MUL:
+            return new CryptaGenMult(words.getWords(), config.getRightMemberType() != RightMemberType.FREE);
+        case LMUL:
             return new CryptaGenLongMult(words.getWords(), config.getArithmeticBase());
-        } else {
+        case CROSS:
+            return new CryptaGenCrossword(config.getGridSize(), words.getWords());
+        default:
             return new CryptaGenAdd(words.getWords());
         }
     }
@@ -135,7 +138,8 @@ public class CryptaListGenerator implements ICryptaGenerator {
     private Consumer<ICryptaNode> buildConsumer(final IChocoModel gen,
             final BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
         final Consumer<ICryptaNode> cons = new LogConsumer(gen);
-        final ICryptaSolver solver = config.useBignum() ? new CryptaSolver(true) : new AdaptiveSolver();
+        final ICryptaSolver solver = config.getSolverType() == SolverType.BIGNUM ? new CryptaSolver(true)
+                : new AdaptiveSolver();
         return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(solver, consumer));
     }
 

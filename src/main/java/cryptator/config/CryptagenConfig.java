@@ -17,7 +17,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
     }
 
     @Option(name = "-g", aliases = {"--generate"}, usage = "Select the type of generator.")
-    private GenerateType generateType;
+    private GenerateType generateType = GenerateType.ADD;
 
     public enum RightMemberType {
         FREE, UNIQUE, FIXED
@@ -102,33 +102,8 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return lightModel;
     }
 
-    @Deprecated(forRemoval = true)
-    public final boolean isMultUnique() {
-        return rightMemberType == RightMemberType.UNIQUE;
-    }
-
     public final void setLightModel(final boolean lightModel) {
         this.lightModel = lightModel;
-    }
-
-    @Deprecated(forRemoval = true)
-    public final boolean isMultModel() {
-        return generateType == GenerateType.MUL;
-    }
-
-    @Deprecated(forRemoval = true)
-    public final void setMultModel(final boolean multModel) {
-        this.generateType = multModel ? GenerateType.MUL : GenerateType.ADD;
-    }
-
-    @Deprecated(forRemoval = true)
-    public final boolean isLongMultModel() {
-        return generateType == GenerateType.LMUL;
-    }
-
-    @Deprecated(forRemoval = true)
-    public final void setLongMultModel(final boolean longMultModel) {
-        this.generateType = longMultModel ? GenerateType.LMUL : GenerateType.ADD;
     }
 
     @Override
