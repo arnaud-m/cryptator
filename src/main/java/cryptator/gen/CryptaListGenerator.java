@@ -21,15 +21,13 @@ import java.util.logging.Logger;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
+import cryptator.Cryptator;
 import cryptator.choco.ChocoLogger;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
-import cryptator.config.CryptaCmdConfig.SolverType;
 import cryptator.config.CryptagenConfig;
 import cryptator.config.CryptagenConfig.RightMemberType;
-import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
-import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
 import cryptator.specs.IChocoModel;
 import cryptator.specs.ICryptaGenSolver;
@@ -140,8 +138,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     private Consumer<ICryptaNode> buildConsumer(final IChocoModel gen,
             final BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
         final Consumer<ICryptaNode> cons = new LogConsumer(gen);
-        final ICryptaSolver solver = config.getSolverType() == SolverType.BIGNUM ? new CryptaSolver(true)
-                : new AdaptiveSolver();
+        final ICryptaSolver solver = Cryptator.createSolver(config);
         return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(solver, consumer));
     }
 
