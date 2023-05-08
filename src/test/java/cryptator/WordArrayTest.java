@@ -20,11 +20,10 @@ import cryptator.cmd.WordArray;
 
 public class WordArrayTest {
 
-    private final String[] words = {"a", "bb", "ccc"};
-
     @Test
     public void testWordArray1() {
-        final WordArray w = new WordArray(Arrays.asList(words), null);
+        final String[] words = {"a", "bb", "ccc"};
+        final WordArray w = new WordArray("a", "bb", "ccc");
         assertArrayEquals(words, w.getWords());
         assertTrue(w.getLB() < 0);
         assertTrue(w.getUB() < 0);
@@ -32,7 +31,7 @@ public class WordArrayTest {
 
     @Test
     public void testWordArray2() {
-        final WordArray w = new WordArray(Arrays.asList(words), "dddd");
+        final WordArray w = new WordArray(Arrays.asList("a", "bb", "ccc", "dddd"));
         assertEquals(4, w.getWords().length);
         assertTrue(w.getLB() < 0);
         assertTrue(w.getUB() < 0);

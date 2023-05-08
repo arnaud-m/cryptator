@@ -21,19 +21,18 @@ public class WordArray {
 
     private final int ub;
 
-    public WordArray(final List<String> words, final String rightMember) {
-        super();
-        final int n = words.size();
-        if (rightMember == null) {
-            this.words = new String[n];
-            words.toArray(this.words);
-        } else {
-            this.words = new String[n + 1];
-            words.toArray(this.words);
-            this.words[n] = rightMember;
-        }
+    public WordArray(final String... words) {
         lb = -1;
         ub = -1;
+        this.words = words;
+    }
+
+    public WordArray(final List<String> words) {
+        super();
+        lb = -1;
+        ub = -1;
+        this.words = new String[words.size()];
+        words.toArray(this.words);
     }
 
     public WordArray(final String countryCode, final String lang, final int lb, final int ub) {

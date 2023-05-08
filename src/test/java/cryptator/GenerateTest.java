@@ -10,7 +10,6 @@ package cryptator;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
 import java.util.OptionalInt;
 
 import org.junit.Before;
@@ -99,13 +98,13 @@ public class GenerateTest {
 
     @Test
     public void testSendMoreMoney() throws CryptaModelException {
-        final WordArray words = new WordArray(Arrays.asList("send", "more", "money"), null);
+        final WordArray words = new WordArray("send", "more", "money");
         testGenerate(1, OptionalInt.of(1), words);
     }
 
     @Test
     public void testSendMuchMoreMoney() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("send", "much", "more", "money"), null);
+        WordArray words = new WordArray("send", "much", "more", "money");
         config.setLightModel(true);
         testGenerate(1, OptionalInt.of(6), words);
 
@@ -113,26 +112,26 @@ public class GenerateTest {
 
     @Test
     public void testPlanets1() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("venus", "earth", "uranus", "saturn"), null);
+        WordArray words = new WordArray("venus", "earth", "uranus", "saturn");
         testGenerate(2, words, 0);
     }
 
     @Test
     public void testPlanets2() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("venus", "earth", "uranus", "saturn"), "planets");
+        WordArray words = new WordArray("venus", "earth", "uranus", "saturn", "planets");
         config.setRightMemberType(RightMemberType.FIXED);
         testGenerate(1, words, 0);
     }
 
     @Test
     public void testAbcde() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("a", "bb", "ccc", "dddd", "eeeee"), null);
+        WordArray words = new WordArray("a", "bb", "ccc", "dddd", "eeeee");
         testGenerate(0, OptionalInt.of(11), words);
     }
 
     @Test
     public void testAbcdef() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("a", "bb", "ccc", "dddd", "eeeee"), "ffffff");
+        WordArray words = new WordArray("a", "bb", "ccc", "dddd", "eeeee", "ffffff");
         config.setRightMemberType(RightMemberType.FIXED);
         testGenerate(0, OptionalInt.of(15), words);
     }
@@ -154,14 +153,14 @@ public class GenerateTest {
 
     @Test
     public void testCrossword1() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("AB", "C", "AC", "AD", "E", "FB", "FD", "G", "EC"), null);
+        WordArray words = new WordArray("AB", "C", "AC", "AD", "E", "FB", "FD", "G", "EC");
         config.setGenerateType(GenerateType.CROSS);
         testGenerate(0, OptionalInt.empty(), words);
     }
 
     @Test
     public void testCrossword2() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("A", "B", "CD", "CE", "F", "CF", "CA", "CC", "DE"), null);
+        WordArray words = new WordArray("A", "B", "CD", "CE", "F", "CF", "CA", "CC", "DE");
         config.setGenerateType(GenerateType.CROSS);
         testGenerate(2, OptionalInt.empty(), words);
     }
@@ -169,39 +168,39 @@ public class GenerateTest {
     @Ignore("Take too long")
     @Test
     public void testCrossword3() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("HJ", "AD", "DF", "BG", "EC", "DF", "AC", "GE", "HEK"), null);
+        WordArray words = new WordArray("HJ", "AD", "DF", "BG", "EC", "DF", "AC", "GE", "HEK");
         config.setGenerateType(GenerateType.CROSS);
         testGenerate(2, OptionalInt.empty(), words);
     }
 
     @Test
     public void testMult1() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("mad", "man", "asylum"), null);
+        WordArray words = new WordArray("mad", "man", "asylum");
         testMultGenerateBLH(0, words);
     }
 
     @Test
     public void testMult2() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("alfred", "e", "neuman"), null);
+        WordArray words = new WordArray("alfred", "e", "neuman");
         config.setArithmeticBase(9);
         testMultGenerateBLH(2, words);
     }
 
     @Test
     public void testMult3() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("nora", "l", "aron"), null);
+        WordArray words = new WordArray("nora", "l", "aron");
         testMultGenerateBLH(2, words);
     }
 
     @Test
     public void testMult4() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("ba", "cba", "dcba"), null);
+        WordArray words = new WordArray("ba", "cba", "dcba");
         testMultGenerateBLH(1, words);
     }
 
     @Test
     public void testMult5() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("north", "south", "east", "west"), null);
+        WordArray words = new WordArray("north", "south", "east", "west");
         config.setRightMemberType(RightMemberType.FREE);
         config.setGenerateType(GenerateType.MUL);
         testGenerateLH(2, words);
@@ -210,7 +209,7 @@ public class GenerateTest {
 
     @Test
     public void testBignumMult1() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("1002527", "1002553", "1005086451431"), null);
+        WordArray words = new WordArray("1002527", "1002553", "1005086451431");
         config.setRightMemberType(RightMemberType.FREE);
         config.setGenerateType(GenerateType.MUL);
         config.setSolverType(SolverType.BIGNUM);
@@ -219,7 +218,7 @@ public class GenerateTest {
 
     @Test
     public void testBignumMult2() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("1000721", "1000541", "1001262390061"), null);
+        WordArray words = new WordArray("1000721", "1000541", "1001262390061");
         config.setRightMemberType(RightMemberType.FREE);
         config.setGenerateType(GenerateType.MUL);
         config.setSolverType(SolverType.BIGNUM);
@@ -229,8 +228,7 @@ public class GenerateTest {
     @Ignore("Takes too long.")
     @Test
     public void testBignumMult3() throws CryptaModelException {
-        WordArray words = new WordArray(
-                Arrays.asList("1002527", "1002553", "1005086451431", "1000721", "1000541", "1001262390061"), null);
+        WordArray words = new WordArray("1002527", "1002553", "1005086451431", "1000721", "1000541", "1001262390061");
         config.setRightMemberType(RightMemberType.FREE);
         config.setGenerateType(GenerateType.MUL);
         config.setSolverType(SolverType.BIGNUM);
@@ -239,22 +237,22 @@ public class GenerateTest {
 
     @Test
     public void testLongMult1() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("who", "is", "hobs", "hawi", "mosis"), null);
+        WordArray words = new WordArray("who", "is", "hobs", "hawi", "mosis");
         config.setGenerateType(GenerateType.LMUL);
         testGenerateBLH(1, words);
     }
 
     @Test
     public void testLongMult2() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("get", "by", "babe", "beare"), null);
+        WordArray words = new WordArray("get", "by", "babe", "beare");
         config.setGenerateType(GenerateType.LMUL);
         testGenerateBLH(1, words);
     }
 
     @Test
     public void testBignumLongMult1() throws CryptaModelException {
-        WordArray words = new WordArray(Arrays.asList("8467", "999999983491", "8466999860218297", "7999999867928",
-                "3999999933964", "5999999900946", "6999999884437"), null);
+        WordArray words = new WordArray("8467", "999999983491", "8466999860218297", "7999999867928", "3999999933964",
+                "5999999900946", "6999999884437");
         config.setGenerateType(GenerateType.LMUL);
         config.setSolverType(SolverType.BIGNUM);
         testGenerateLH(1, words);
@@ -262,8 +260,7 @@ public class GenerateTest {
 
     @Test
     public void testBignumLongMult2() throws CryptaModelException {
-        WordArray words = new WordArray(
-                Arrays.asList("8467", "999999983491", "8466999860218297", "25401", "33868", "67736", "76203"), null);
+        WordArray words = new WordArray("8467", "999999983491", "8466999860218297", "25401", "33868", "67736", "76203");
         config.setGenerateType(GenerateType.LMUL);
         config.setSolverType(SolverType.BIGNUM);
         testGenerateLH(1, words);
