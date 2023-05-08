@@ -30,7 +30,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
     private RightMemberType rightMemberType = RightMemberType.UNIQUE;
 
     @Option(name = "--cross", usage = "Set the grid size of a crossword.")
-    private int gridSize = 0;
+    private int gridSize = 3;
 
     @Option(name = "--ctry", usage = "Country code for doubly true cryptarithms.")
     private String countryCode = "EN";
@@ -38,11 +38,11 @@ public class CryptagenConfig extends CryptaCmdConfig {
     @Option(name = "--lang", usage = "Language code for doubly true cryptarithms.")
     private String langCode = "en";
 
-    @Option(name = "--min", usage = "Minimum number of left operands.")
-    private int minLeftOperands = 2;
+    @Option(name = "--min", usage = "Minimum number of words.")
+    private int minWords = 3;
 
-    @Option(name = "--max", usage = "Maximum number of left operands.")
-    private int maxLeftOperands = -1;
+    @Option(name = "--max", usage = "Maximum number of words.")
+    private int maxWords = -1;
 
     @Option(name = "--light", hidden = true, usage = "Use a light CP model.")
     private boolean lightModel;
@@ -90,12 +90,12 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return nthreads;
     }
 
-    public final int getMinLeftOperands() {
-        return minLeftOperands;
+    public final int getMinWords() {
+        return minWords;
     }
 
-    public final int getMaxLeftOperands() {
-        return maxLeftOperands;
+    public final int getMaxWords() {
+        return maxWords;
     }
 
     public final boolean isLightModel() {

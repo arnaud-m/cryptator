@@ -36,7 +36,7 @@ echo -e "\n## Generate from a list with a fixed right member\n"
 echo "- Planets"
 solve --right fixed $DIR/planets.txt planets
 echo "- Greek alphabet"
-solve --min 6 --right fixed $DIR/alpha.txt greeks
+solve --min 7 --right fixed $DIR/alpha.txt greeks
 
 ######
 echo -e "\n## Generate doubly true cryptarithms\n\nEach number in [0, 100] appears at most once.\n"

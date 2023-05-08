@@ -46,6 +46,8 @@ import cryptator.tree.TreeUtils;
  */
 public class CryptaListGenerator implements ICryptaGenerator {
 
+    private static final int MIN_WORDS = 3;
+
     /** The words. */
     private final WordArray words;
 
@@ -114,7 +116,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     private ICryptaGenSolver buildGenSolver() {
         final AbstractCryptaListModel gen = createGenModel();
         gen.buildModel();
-        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
+        gen.postWordCountConstraints(Math.max(config.getMinWords(), MIN_WORDS), config.getMaxWords());
         gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
         if (!config.isLightModel()) {
             gen.postHeavyConstraints(config.getArithmeticBase());
