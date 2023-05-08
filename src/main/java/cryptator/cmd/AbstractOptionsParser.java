@@ -137,6 +137,10 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         appendResource(b, "help/" + getCommandName() + ".txt");
     }
 
+    private void appendExamples(final StringBuilder b) {
+        appendResource(b, "help/" + getCommandName() + "-examples.txt");
+    }
+
     private void appendResource(final StringBuilder b, final String resourceName) {
         final InputStream in = mainClass.getClassLoader().getResourceAsStream(resourceName);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -172,6 +176,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
             appendHeader(b);
             b.append("SYNOPSIS\n");
             appendExample(b, parser, OptionHandlerFilter.REQUIRED);
+            b.append("\n");
             appendExample(b, parser, OptionHandlerFilter.PUBLIC);
             appendExample(b, parser, OptionHandlerFilter.ALL);
             b.append("\nDESCRIPTION\n");
@@ -179,6 +184,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
             b.append("\nOPTIONS\n");
             b.append(printUsage(parser, OptionHandlerFilter.ALL));
             b.append("\nEXAMPLE\n");
+            appendExamples(b);
             appendFooter(b);
             getLogger().info(b.toString());
         }

@@ -44,6 +44,6 @@ echo -e "\n## Generate doubly true cryptarithms\n\nEach number in [0, 100] appea
 echo "- English"
 solve 1 100
 echo "- French"
-solve -ctry FR -lang fr 1 100
+solve --ctry FR --lang fr 1 100
 echo "- Italian"
-solve -ctry IT -lang it 1 100
+solve --ctry IT --lang it 1 100

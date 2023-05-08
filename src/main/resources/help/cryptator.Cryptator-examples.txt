@@ -1,0 +1,3 @@
+java cryptator.Cryptator "send + more = money"
+java cryptator.Cryptator -s BIGNUM "aristocratic + prescription + prosopopoeia + protectorate = transoceanic"
+java cryptator.Cryptator --check -v verbose "venus + mars + saturn + uranus = neptune"
