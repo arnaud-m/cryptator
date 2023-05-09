@@ -8,12 +8,15 @@
  */
 package cryptator;
 
+import static cryptator.TreeTest.testInorder;
+import static cryptator.TreeTest.testPostorder;
+import static cryptator.TreeTest.testPreorder;
+
+import org.junit.Test;
+
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
 import cryptator.specs.ICryptaNode;
-import org.junit.Test;
-
-import static cryptator.TreeTest.*;
 
 public class ParserTest {
 

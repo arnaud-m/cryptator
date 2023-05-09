@@ -32,7 +32,7 @@ public class CryptaCmdConfig extends CryptaLogConfig {
         return solverType;
     }
 
-    public final void setSolverType(SolverType solverType) {
+    public final void setSolverType(final SolverType solverType) {
         this.solverType = solverType;
     }
 

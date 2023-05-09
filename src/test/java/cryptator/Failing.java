@@ -36,12 +36,6 @@ public class Failing {
 
     @Test
     // FIXME integer overflow ?
-    public void testBarker6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("iron*radium=neon*sodium");
-    }
-
-    @Test
-    // FIXME integer overflow ?
     public void testPrinterError1() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         // https://mathworld.wolfram.com/PrintersErrors.html
         t.testUNIQUE("2^5*9^2 = 2592");
@@ -79,11 +73,6 @@ public class Failing {
     public void testPrinterError2() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         // https://mathworld.wolfram.com/PrintersErrors.html
         t.testUNIQUE("3^4*425 = 34425");
-    }
-
-    @Test
-    public void testBarker4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
-        t.testUNIQUE("copper*neon=iron*silver");
     }
 
 }

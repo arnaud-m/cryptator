@@ -22,6 +22,7 @@ import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
+import cryptator.solver.crypt.CryptSolver;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolver;
 
@@ -77,7 +78,7 @@ public final class Cryptator {
         case BIGNUM:
             return new CryptaSolver(true);
         case CRYPT:
-            return new CryptaSolver();
+            return new CryptSolver();
         case ADAPT:
             return new AdaptiveSolver(false);
         case ADAPTC:

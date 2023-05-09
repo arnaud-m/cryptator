@@ -67,9 +67,6 @@ public class CryptaLongMultModel implements IChocoModel {
     /** The multiplier cardinality, its number of distinct characters. */
     private final IntVar mrCard;
 
-    /** The Constant maxProductLength. */
-    private static final int MAX_PARTIAL_PRODUCTS_LENGTH = 5;
-
     /**
      * Instantiates a new model for the long multiplication.
      *

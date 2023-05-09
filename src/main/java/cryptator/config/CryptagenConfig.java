@@ -54,7 +54,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return generateType;
     }
 
-    public final void setGenerateType(GenerateType generateType) {
+    public final void setGenerateType(final GenerateType generateType) {
         this.generateType = generateType;
     }
 
@@ -62,7 +62,7 @@ public class CryptagenConfig extends CryptaCmdConfig {
         return rightMemberType;
     }
 
-    public final void setRightMemberType(RightMemberType rightMemberType) {
+    public final void setRightMemberType(final RightMemberType rightMemberType) {
         this.rightMemberType = rightMemberType;
     }
 

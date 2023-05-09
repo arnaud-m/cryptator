@@ -27,7 +27,7 @@ public class AdaptiveSolver implements ICryptaSolver {
     private final CryptaSolver solver;
     private final Optional<CryptSolver> crypt;
 
-    public AdaptiveSolver(boolean useCrypt) {
+    public AdaptiveSolver(final boolean useCrypt) {
         super();
         solver = new CryptaSolver();
         crypt = useCrypt ? Optional.of(new CryptSolver()) : Optional.empty();

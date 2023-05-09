@@ -108,11 +108,6 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
         }
     }
 
-    public void postSymbolSymmetryBreakingConstraints() {
-        IntVar[] vars = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
-        model.decreasing(vars, 0).post();
-    }
-
     @Override
     protected void postWordCountConstraint() {
         super.postWordCountConstraint();

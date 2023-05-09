@@ -57,7 +57,7 @@ public class CryptaMemberPair implements ICryptaGenSolver {
         postSymBreakLengthConstraint();
     }
 
-    private final void postSymBreakLengthConstraint() {
+    private void postSymBreakLengthConstraint() {
         if (right instanceof CryptaMemberLen) {
             getModel().lexLess(left.getWordVars(), right.getWordVars()).post();
         } else {

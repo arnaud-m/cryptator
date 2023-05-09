@@ -121,8 +121,9 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     private void appendExample(final StringBuilder b, final CmdLineParser parser, final OptionHandlerFilter filter) {
         b.append("java ").append(getCommandName()).append(' ');
         final String opts = parser.printExample(filter);
-        if (opts.length() > 0)
+        if (opts.length() > 0) {
             b.append(opts).append(" ");
+        }
         if (filter == OptionHandlerFilter.REQUIRED) {
             b.append("[options...] ");
         }
@@ -193,12 +194,12 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
     private static class CryptaOptionSorter implements Comparator<OptionHandler> {
 
-        private final boolean longOption(OptionDef x) {
+        private boolean longOption(final OptionDef x) {
             return x.toString().charAt(1) == '-';
         }
 
         @Override
-        public int compare(OptionHandler arg0, OptionHandler arg1) {
+        public int compare(final OptionHandler arg0, final OptionHandler arg1) {
             final OptionDef x = arg0.option;
             final OptionDef y = arg1.option;
             // Required option
