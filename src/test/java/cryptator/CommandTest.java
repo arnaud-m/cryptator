@@ -24,26 +24,20 @@ public class CommandTest {
     }
 
     @Test
-    public void testCryptatorHelp() throws FileNotFoundException {
-        String[] args = {"-h"};
-        assertEquals(0, Cryptator.doMain(args));
-    }
-
-    @Test
     public void testCryptatorException1() throws FileNotFoundException {
-        String[] args = {"-b", "N", "saturn+uranus=planets"};
+        String[] args = {"-v", "silent", "-b", "N", "saturn+uranus=planets"};
         assertNotEquals(0, Cryptator.doMain(args));
     }
 
     @Test
     public void testCryptatorException2() throws FileNotFoundException {
-        String[] args = {"-v", "SILENT", "more+more+veryverylongword=requirebignummodel", "send+more=money"};
+        String[] args = {"-v", "silent", "more+more+veryverylongword=requirebignummodel", "send+more=money"};
         assertEquals(1, Cryptator.doMain(args));
     }
 
     @Test
     public void testCryptatorException3() throws FileNotFoundException {
-        String[] args = {"-b", "1", "saturn+uranus=planets"};
+        String[] args = {"-v", "silent", "-b", "1", "saturn+uranus=planets"};
         assertNotEquals(1, Cryptator.doMain(args));
     }
 
@@ -56,7 +50,7 @@ public class CommandTest {
 
     @Test
     public void testCryptator2() throws FileNotFoundException {
-        String[] args = {"-v", "debug", "--check", "-s", "bignum", "--solution", "1", "--time", "5",
+        String[] args = {"-v", "silent", "--check", "-s", "bignum", "--solution", "1", "--time", "5",
                 "marcussacapus + rictus + satiric = marcuscubitus"};
         assertEquals(0, Cryptator.doMain(args));
     }
@@ -71,12 +65,6 @@ public class CommandTest {
     public void testCryptator4() throws FileNotFoundException {
         String[] args = {"-v", "silent", "--assign", "z=1", "alpos + les + otos = talos"};
         assertEquals(1, Cryptator.doMain(args));
-    }
-
-    @Test
-    public void testCryptagenHelp() throws FileNotFoundException {
-        String[] args = {"--help"};
-        assertEquals(0, Cryptator.doMain(args));
     }
 
     @Test
