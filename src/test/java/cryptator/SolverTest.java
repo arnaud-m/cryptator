@@ -14,6 +14,7 @@ import static org.junit.Assert.fail;
 
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -638,4 +639,17 @@ public class SolverTest {
         t.testResource("crosswords-sillke.db.txt");
     }
 
+    @Test
+    public void testAssignTalos1() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "alpos + les + otos = talos";
+        t.config.setAssignments(Map.of("a", "1", "e", "3"));
+        t.testUNIQUE(cryptarithm);
+    }
+
+    @Test
+    public void testAssignTalos2() throws CryptaParserException, CryptaSolverException, CryptaModelException {
+        var cryptarithm = "alpos + les + otos = talos";
+        t.config.setAssignments(Map.of("a", "2", "e", "3"));
+        t.testUNSAT(cryptarithm);
+    }
 }

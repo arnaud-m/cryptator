@@ -62,6 +62,18 @@ public class CommandTest {
     }
 
     @Test
+    public void testCryptator3() throws FileNotFoundException {
+        String[] args = {"-v", "silent", "--assign", "a=1", "--assign", "e=3", "alpos + les + otos = talos"};
+        assertEquals(0, Cryptator.doMain(args));
+    }
+
+    @Test
+    public void testCryptator4() throws FileNotFoundException {
+        String[] args = {"-v", "silent", "--assign", "z=1", "alpos + les + otos = talos"};
+        assertEquals(1, Cryptator.doMain(args));
+    }
+
+    @Test
     public void testCryptagenHelp() throws FileNotFoundException {
         String[] args = {"--help"};
         assertEquals(0, Cryptator.doMain(args));
