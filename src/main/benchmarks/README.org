@@ -222,11 +222,11 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
  #+END_SRC
 
 
-** Configure the algorithm
+** Configure algorithms
 
 *** Addition
  #+BEGIN_SRC sh
-   echo -v quiet --generate ADD -s BIGNUM > algorithms/ALL.dat
+   echo -v quiet --generate ADD --solver BIGNUM > algorithms/ALL.dat
  #+END_SRC
 
 
@@ -239,6 +239,7 @@ The word lists ~colors.txt~ and ~monsters.txt~ takes the most time by far (aroun
  #+BEGIN_SRC sh
    echo -v quiet --generate LMUL > algorithms/ALL.dat
  #+END_SRC
+
 
 * Solve
 ** Create the solver
@@ -294,7 +295,7 @@ Postprocess the output of the crypt solver.
  #+END_SRC
 Do not remove the content of the directory!
 
-** Configure the algorithm
+** Configure algorithms
 
  #+BEGIN_SRC sh
    ARGS=" -v verbose"
