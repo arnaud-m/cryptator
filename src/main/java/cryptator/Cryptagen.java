@@ -49,7 +49,7 @@ public final class Cryptagen {
             if (words != null) {
                 return generate(words, config);
             } else {
-                LOGGER.log(Level.WARNING, "Empty word list.");
+                LOGGER.log(Level.WARNING, "Invalid word list.");
             }
             return -1;
         } finally {
@@ -57,50 +57,40 @@ public final class Cryptagen {
         }
     }
 
-    private static List<String> readWords(final String filename) {
-        final List<String> words = new ArrayList<>();
-        try (Scanner s = new Scanner(new File(filename))) {
-            while (s.hasNext()) {
-                words.add(s.next());
+    private static void readWords(final List<String> words, final String argument) {
+        final File file = new File(argument);
+        if (file.canRead()) {
+            try (Scanner s = new Scanner(file)) {
+                while (s.hasNext()) {
+                    words.add(s.next());
+                }
+            } catch (FileNotFoundException e) {
+                LOGGER.log(Level.SEVERE, "cant read words in file", e);
             }
-        } catch (FileNotFoundException e) {
-            LOGGER.log(Level.SEVERE, "cant read words in file", e);
-        }
-        return words;
-    }
-
-    private static WordArray buildNumbers(final List<String> arguments, final CryptagenConfig config) {
-        final int lb = Integer.parseInt(arguments.get(0));
-        try {
-            final int ub = Integer.parseInt(arguments.get(1));
-            return new WordArray(config.getCountryCode(), config.getLangCode(), lb, ub);
-        } catch (NumberFormatException e) {
-            LOGGER.log(Level.SEVERE, "fail reading the second integer argument.", e);
-            return null;
+        } else {
+            words.add(argument);
         }
     }
 
     private static WordArray buildWords(final List<String> arguments, final CryptagenConfig config) {
-        switch (arguments.size()) {
-        case 1: {
-            final List<String> words = readWords(arguments.get(0));
-            return words.isEmpty() ? null : new WordArray(words, null);
+        // Read words from arguments and files
+        final List<String> words = new ArrayList<>();
+        for (String argument : arguments) {
+            readWords(words, argument);
         }
-        case 2: {
+        // Handle doubly true word list
+        if (words.size() == 2) {
             try {
-                return buildNumbers(arguments, config);
+                final int lb = Integer.parseInt(words.get(0));
+                final int ub = Integer.parseInt(words.get(1));
+                return new WordArray(config.getCountryCode(), config.getLangCode(), lb, ub);
             } catch (NumberFormatException e) {
                 // Cannot build a number list.
-                // So, the first argument must be the pathname of a words list
-                final List<String> words = readWords(arguments.get(0));
-                return words.isEmpty() ? null : new WordArray(words, arguments.get(1));
+                return null;
             }
         }
-        default: {
-            return new WordArray(arguments, null);
-        }
-
-        }
+        // Handle word list
+        return words.size() <= 2 ? null : new WordArray(words);
     }
 
     private static final class CryptagenOptionsParser extends OptionsParserWithLog<CryptagenConfig> {

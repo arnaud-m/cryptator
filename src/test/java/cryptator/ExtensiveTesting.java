@@ -29,4 +29,14 @@ public class ExtensiveTesting {
     public void testBarker() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         (new CryptaSolvingTester(false)).testResource("cryptarithms-barker.db.txt");
     }
+
+    @Test
+    public void testBarker4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        (new CryptaSolvingTester(true)).testUNIQUE("copper*neon=iron*silver");
+    }
+
+    @Test
+    public void testBarker6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        (new CryptaSolvingTester(true)).testUNIQUE("iron*radium=neon*sodium");
+    }
 }

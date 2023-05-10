@@ -15,7 +15,7 @@ public class CryptatorConfig extends CryptaCmdConfig {
     @Option(name = "--solution", usage = "Limit the number of solutions returned by the solver.")
     private int solutionLimit;
 
-    @Option(name = "--time", usage = "Limit the time taken by the solver (in seconds)")
+    @Option(name = "--time", usage = "Limit the time taken by the solver (in seconds).")
     private int timeLimit;
 
     public final int getSolutionLimit() {

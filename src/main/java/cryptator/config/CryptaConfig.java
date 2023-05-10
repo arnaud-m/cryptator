@@ -11,10 +11,13 @@ package cryptator.config;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.spi.MapOptionHandler;
 
 /**
  * A bean object that stores the common configuration. This is designed for
@@ -28,14 +31,18 @@ public class CryptaConfig {
     @Option(name = "-h", aliases = {"--help"}, usage = "Output a usage message and exit.")
     private boolean displayHelp;
 
-    @Option(name = "--zeros", hidden = true, usage = "Allow leading zeros in the cryptarithm solution")
-    private boolean allowLeadingZeros;
+    // Args4j raises a ClassCastException for Map<Character, Integer>
+    @Option(name = "--assign", handler = MapOptionHandler.class, metaVar = "S=D", usage = "assign digits to symbols.")
+    private Map<String, String> assignments = new HashMap<>();
 
     @Option(name = "--horner", hidden = true, usage = "Use the horner scheme to model finite precision words.")
     private boolean hornerScheme;
 
     @Option(name = "--search", hidden = true, usage = "Set the search strategy.")
     private int searchStrategy = 0;
+
+    @Option(name = "--zeros", hidden = true, usage = "Allow leading zeros in the cryptarithm solution")
+    private boolean allowLeadingZeros;
 
     /**
      * Receives other command line parameters than options.
@@ -73,6 +80,14 @@ public class CryptaConfig {
 
     public final void setSearchStrategy(final int searchStrategy) {
         this.searchStrategy = searchStrategy;
+    }
+
+    public final Map<String, String> getAssignments() {
+        return assignments;
+    }
+
+    public final void setAssignments(Map<String, String> assignments) {
+        this.assignments = assignments;
     }
 
     public final boolean isDisplayHelp() {

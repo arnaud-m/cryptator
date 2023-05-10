@@ -94,10 +94,34 @@ public abstract class AbstractModelerNodeConsumer implements ITraversalNodeConsu
 
     protected abstract void postCryptarithmEquationConstraint() throws CryptaModelException;
 
+    private void postAssignConstraint(Map.Entry<String, String> assign) throws CryptaModelException {
+        final String skey = assign.getKey();
+        if (skey.length() == 1) {
+            final Character key = skey.charAt(0);
+            if (symbolsToVariables.containsKey(key)) {
+                try {
+                    final int digit = Integer.parseInt(assign.getValue());
+                    symbolsToVariables.get(key).eq(digit).post();
+                    return;
+                } catch (NumberFormatException e) {
+                }
+            }
+        }
+        throw new CryptaModelException("The assignment is invalid: " + assign);
+
+    }
+
+    private void postAssignConstraints() throws CryptaModelException {
+        for (Map.Entry<String, String> assign : config.getAssignments().entrySet()) {
+            postAssignConstraint(assign);
+        }
+    }
+
     public void postConstraints() throws CryptaModelException {
         postFirstSymbolConstraints();
         globalCardinalityConstraint().post();
         postCryptarithmEquationConstraint();
+        postAssignConstraints();
     }
 
     public void configureSearch() {

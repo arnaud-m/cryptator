@@ -1,0 +1,4 @@
+java cryptator.Cryptagen -v quiet mercury venus earth mars jupiter saturn uranus neptune
+java cryptator.Cryptagen -v quiet --generate mul red orange yellow green blue indigo violet
+java cryptator.Cryptagen -v quiet --ctry FR --lang fr 1 100
+java cryptator.Cryptagen -v verbose --dry-run send much more money

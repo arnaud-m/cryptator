@@ -21,13 +21,13 @@ import java.util.logging.Logger;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
+import cryptator.Cryptator;
 import cryptator.choco.ChocoLogger;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptagenConfig;
-import cryptator.solver.AdaptiveSolver;
+import cryptator.config.CryptagenConfig.RightMemberType;
 import cryptator.solver.CryptaModelException;
-import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
 import cryptator.specs.IChocoModel;
 import cryptator.specs.ICryptaGenSolver;
@@ -43,6 +43,8 @@ import cryptator.tree.TreeUtils;
  * It builds and solves a generation model for cryptarithms.
  */
 public class CryptaListGenerator implements ICryptaGenerator {
+
+    private static final int MIN_WORDS = 3;
 
     /** The words. */
     private final WordArray words;
@@ -90,14 +92,15 @@ public class CryptaListGenerator implements ICryptaGenerator {
      * @return the generation model
      */
     private AbstractCryptaListModel createGenModel() {
-        if (config.getGridSize() > 0) {
-            return new CryptaGenCrossword(config.getGridSize(), words.getWords());
-        } else if (config.isMultModel()) {
-            return new CryptaGenMult(words.getWords(), config.isMultUnique());
-        } else if (config.isLongMultModel()) {
+        switch (config.getGenerateType()) {
+        case MUL:
+            return new CryptaGenMult(words.getWords(), config.getRightMemberType() != RightMemberType.FREE);
+        case LMUL:
             return new CryptaGenLongMult(words.getWords(), config.getArithmeticBase());
-        } else {
-            return new CryptaGenAdd(words.getWords());
+        case CROSS:
+            return new CryptaGenCrossword(config.getGridSize(), words.getWords());
+        default:
+            return new CryptaGenAdd(words.getWords(), config.getRightMemberType() != RightMemberType.FREE);
         }
     }
 
@@ -111,12 +114,12 @@ public class CryptaListGenerator implements ICryptaGenerator {
     private ICryptaGenSolver buildGenSolver() {
         final AbstractCryptaListModel gen = createGenModel();
         gen.buildModel();
-        gen.postWordCountConstraints(Math.max(config.getMinLeftOperands(), 2) + 1, config.getMaxLeftOperands() + 1);
+        gen.postWordCountConstraints(Math.max(config.getMinWords(), MIN_WORDS), config.getMaxWords());
         gen.postMaxSymbolCountConstraint(config.getArithmeticBase());
         if (!config.isLightModel()) {
             gen.postHeavyConstraints(config.getArithmeticBase());
         }
-        if (words.hasRightMember()) {
+        if (config.getRightMemberType() == RightMemberType.FIXED) {
             gen.postFixedRightMemberConstraints();
         }
         if (words.isDoublyTrue()) {
@@ -135,7 +138,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
     private Consumer<ICryptaNode> buildConsumer(final IChocoModel gen,
             final BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
         final Consumer<ICryptaNode> cons = new LogConsumer(gen);
-        final ICryptaSolver solver = config.useBignum() ? new CryptaSolver(true) : new AdaptiveSolver();
+        final ICryptaSolver solver = Cryptator.createSolver(config);
         return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(solver, consumer));
     }
 

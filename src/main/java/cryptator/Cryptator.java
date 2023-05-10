@@ -14,9 +14,11 @@ import java.util.logging.Logger;
 
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.OptionsParserWithLog;
+import cryptator.config.CryptaCmdConfig;
 import cryptator.config.CryptatorConfig;
 import cryptator.parser.CryptaParserException;
 import cryptator.parser.CryptaParserWrapper;
+import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
 import cryptator.solver.CryptaSolver;
 import cryptator.solver.CryptaSolverException;
@@ -69,8 +71,25 @@ public final class Cryptator {
         }
     }
 
+    public static ICryptaSolver createSolver(final CryptaCmdConfig config) {
+        switch (config.getSolverType()) {
+        case SCALAR:
+            return new CryptaSolver(false);
+        case BIGNUM:
+            return new CryptaSolver(true);
+        case CRYPT:
+            return new CryptSolver();
+        case ADAPT:
+            return new AdaptiveSolver(false);
+        case ADAPTC:
+            return new AdaptiveSolver(true);
+        default:
+            return new CryptaSolver(false);
+        }
+    }
+
     private static ICryptaSolver buildSolver(final CryptatorConfig config) {
-        final ICryptaSolver solver = config.useCrypt() ? new CryptSolver() : new CryptaSolver(config.useBignum());
+        final ICryptaSolver solver = createSolver(config);
         solver.limitSolution(config.getSolutionLimit());
         solver.limitTime(config.getTimeLimit());
         return solver;

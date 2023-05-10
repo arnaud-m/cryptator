@@ -9,9 +9,9 @@
 #
 
 JAR="../../../target/cryptator-*-with-dependencies.jar"
-CMD="java -cp $JAR cryptator.Cryptator -c TRUE -g TRUE"
+CMD="java -cp $JAR cryptator.Cryptator --check"
 
 $CMD "send + more = money"
-$CMD -l TRUE "aristocratic + prescription + prosopopoeia + protectorate = transoceanic"
-$CMD "venus + mars + saturn + uranus = neptune"
-$CMD "xiv*xciii=xxxi*xlii"
+$CMD -s bignum "aristocratic + prescription + prosopopoeia + protectorate = transoceanic"
+$CMD -v verbose --graphviz "venus + mars + saturn + uranus = neptune"
+$CMD -v quiet "xiv*xciii=xxxi*xlii"

@@ -1,1 +1,5 @@
-Help message in a file 
+The cryptagen program is constraint-based cryptarithm generator.
+The generation takes a word list as input and generate candidates cryptarithms under constraints.
+Each candidate cryptarithm is then solved and the decision is made whether to keep it.
+
+The program takes options for configuring the cryptarithm, the generation and solution solvers, the model, the output, ...

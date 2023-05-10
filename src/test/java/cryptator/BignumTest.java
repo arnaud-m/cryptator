@@ -213,6 +213,16 @@ public class BignumTest {
     }
 
     @Test
+    public void testBarker4() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("copper*neon=iron*silver");
+    }
+
+    @Test
+    public void testBarker6() throws CryptaParserException, CryptaModelException, CryptaSolverException {
+        t.testUNIQUE("iron*radium=neon*sodium");
+    }
+
+    @Test
     public void testBarker5() throws CryptaParserException, CryptaModelException, CryptaSolverException {
         t.testUNIQUE("cinq*six=trente");
     }

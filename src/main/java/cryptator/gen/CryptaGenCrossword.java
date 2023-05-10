@@ -81,7 +81,6 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
         super.buildModel();
         grid.buildModel();
         Stream.of(additions).forEach(CryptaCrossPair::buildModel);
-        // TODO change search strategy ?
     }
 
     @Override
@@ -107,11 +106,6 @@ public class CryptaGenCrossword extends AbstractCryptaListModel {
                 model.element(one, vwords, grid.getCell(i, j), 0).post();
             }
         }
-    }
-
-    public void postSymbolSymmetryBreakingConstraints() {
-        IntVar[] vars = symbolsToVariables.values().toArray(new IntVar[symbolsToVariables.size()]);
-        model.decreasing(vars, 0).post();
     }
 
     @Override

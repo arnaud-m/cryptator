@@ -34,15 +34,6 @@ class CryptaMemberMult extends CryptaMemberPair {
         return GenerateUtil.recordMultiplication(left, right);
     }
 
-    @Override
-    protected void postSymBreakLengthConstraint() {
-        if (right instanceof CryptaMemberLen) {
-            getModel().lexLess(left.getWordVars(), right.getWordVars()).post();
-        } else {
-            left.getMaxLength().le(right.getMaxLength()).post();
-        }
-    }
-
     public void postMultHeavyConstraints(final int base) {
         final IntVar sumL = getModel().sum("L_sumLength", left.lengths);
         final IntVar sumR = (right instanceof CryptaMemberLen)

@@ -34,9 +34,9 @@ solve $DIR/rainbow.txt
 echo -e "\n## Generate from a list with a fixed right member\n"
 
 echo "- Planets"
-solve $DIR/planets.txt planets
+solve --right fixed $DIR/planets.txt planets
 echo "- Greek alphabet"
-solve  --min 6 $DIR/alpha.txt greeks
+solve --min 7 --right fixed $DIR/alpha.txt greeks
 
 ######
 echo -e "\n## Generate doubly true cryptarithms\n\nEach number in [0, 100] appears at most once.\n"
@@ -44,6 +44,6 @@ echo -e "\n## Generate doubly true cryptarithms\n\nEach number in [0, 100] appea
 echo "- English"
 solve 1 100
 echo "- French"
-solve -ctry FR -lang fr 1 100
+solve --ctry FR --lang fr 1 100
 echo "- Italian"
-solve -ctry IT -lang it 1 100
+solve --ctry IT --lang it 1 100

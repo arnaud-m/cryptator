@@ -8,12 +8,12 @@
  */
 package cryptator.solver;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.CryptaOperator;
-import cryptator.config.CryptaCmdConfig;
 import cryptator.config.CryptaConfig;
 import cryptator.solver.crypt.CryptSolver;
 import cryptator.specs.ICryptaNode;
@@ -24,11 +24,13 @@ import cryptator.tree.TreeTraversals;
 
 public class AdaptiveSolver implements ICryptaSolver {
 
-    private final CryptaSolver solver = new CryptaSolver();
-    private final CryptSolver crypt = new CryptSolver();
+    private final CryptaSolver solver;
+    private final Optional<CryptSolver> crypt;
 
-    public AdaptiveSolver() {
+    public AdaptiveSolver(final boolean useCrypt) {
         super();
+        solver = new CryptaSolver();
+        crypt = useCrypt ? Optional.of(new CryptSolver()) : Optional.empty();
     }
 
     public static int computeThreshold(final int base) {
@@ -44,22 +46,13 @@ public class AdaptiveSolver implements ICryptaSolver {
     @Override
     public void limitTime(final long limit) {
         solver.limitTime(limit);
-        crypt.limitTime(limit);
+        crypt.ifPresent(x -> x.limitTime(limit));
     }
 
     @Override
     public void limitSolution(final long limit) {
         solver.limitSolution(limit);
-        crypt.limitSolution(limit);
-
-    }
-
-    public static final boolean useCrypt(final CryptaConfig config) {
-        if (config instanceof CryptaCmdConfig) {
-            return ((CryptaCmdConfig) config).useCrypt();
-        } else {
-            return false;
-        }
+        crypt.ifPresent(x -> x.limitSolution(limit));
     }
 
     @Override
@@ -68,16 +61,15 @@ public class AdaptiveSolver implements ICryptaSolver {
         final AdaptiveConsumer cons = new AdaptiveConsumer();
         TreeTraversals.preorderTraversal(cryptarithm, cons);
         final int threshold = computeThreshold(config.getArithmeticBase());
-        ICryptaSolver s = solver;
         if (cons.getMaxWordLength() > threshold) {
             solver.setBignum();
         } else {
             solver.unsetBignum();
-            if (useCrypt(config) && cons.isCryptAddition()) {
-                s = crypt;
+            if (crypt.isPresent() && cons.isCryptAddition()) {
+                return crypt.get().solve(cryptarithm, config, solutionConsumer);
             }
         }
-        return s.solve(cryptarithm, config, solutionConsumer);
+        return solver.solve(cryptarithm, config, solutionConsumer);
     }
 
     private static class AdaptiveConsumer implements ITraversalNodeConsumer {
