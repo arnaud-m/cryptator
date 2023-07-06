@@ -20,6 +20,6 @@ jobs :
       restore-keys: |
        ${{ runner.os }}-maven-
    - name: Test with Maven
-     run: mvn test --file pom.xml
+     run: mvn test --no-transfer-progress --file pom.xml
    - name: Extended test with Maven
-     run: mvn test -Dtest=ExtensiveTesting --file pom.xml
+     run: mvn test -Dtest=ExtensiveTesting --no-transfer-progress --file pom.xml
