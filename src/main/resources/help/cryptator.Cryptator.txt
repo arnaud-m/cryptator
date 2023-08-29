@@ -1,5 +1,5 @@
 The cryptator program is constraint-based cryptarithm solver.
-The program builds a constraint programming model for each cryptarithm given as parameters.
+The program builds a constraint programming model for each cryptarithm given as parameter.
 A cryptarithm is defined by a classical grammar for equations.
 The model is then solved by choco solver.
 
