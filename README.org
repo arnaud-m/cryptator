@@ -9,7 +9,8 @@
 [[https://github.com/arnaud-m/cryptator/actions/workflows/CryptatorTest.yml][file:https://github.com/arnaud-m/cryptator/actions/workflows/CryptatorTest.yml/badge.svg]]
 
 Cryptator is a cryptarithm solver using [[https://en.wikipedia.org/wiki/Constraint_programming][Constraint Programming]].\\
-It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which is an open-source Java library for Constraint Programming. \\
+It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which is an open-source Java library for Constraint Programming.
+
 It is described in the [[file:pdf/jfpc2023.pdf][white paper]] (in French) published at the conference [[https://pfia23.icube.unistra.fr/conferences/jfpc/index.html][JFPC 2023]].
 
 * About cryptarithms
