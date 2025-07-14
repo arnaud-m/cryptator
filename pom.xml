@@ -3,7 +3,7 @@
 
     This file is part of cryptator, https://github.com/arnaud-m/cryptator
 
-    Copyright (c) 2023, Université Côte d'Azur. All rights reserved.
+    Copyright (c) 2021-2025, Université Côte d'Azur. All rights reserved.
 
     Licensed under the BSD 3-clause license.
     See LICENSE file in the project root for full license information.
@@ -20,6 +20,7 @@
     <name>cryptator</name>
     <description>Constraint-based cryptarithm solver</description>
     <url>https://github.com/arnaud-m/cryptator</url>
+	<inceptionYear>2021</inceptionYear>
     <licenses>
         <license>
             <name>BSD 3-Clause License</name>
@@ -34,10 +35,9 @@
             <organizationUrl>http://www.i3s.unice.fr/~malapert/</organizationUrl>
         </developer>
         <developer>
-            <name>Marie Pelleau</name>
-            <email>marie.pelleau@univ-cotedazur.fr</email>
+            <name>Davide Fissore</name>
+            <email>davide.fissore@etu.univ-cotedazur.fr</email>
             <organization>Université Côte d'Azur</organization>
-            <organizationUrl>http://www.i3s.unice.fr/~pelleau/</organizationUrl>
         </developer>
         <developer>
             <name>Margaux Schmied</name>
@@ -136,7 +136,7 @@
 	<plugin>
 		<groupId>com.mycila</groupId>
 		<artifactId>license-maven-plugin</artifactId>
-		<version>4.3</version>
+		<version>5.0.0</version>
 		<configuration>
 			<mapping>
 				<R>SCRIPT_STYLE</R>
@@ -147,6 +147,7 @@
 				<licenseSet>
 					<properties>
 						<year>${maven.build.timestamp}</year>
+						<incyear>${project.inceptionYear}</incyear>
 						<owner>Université Côte d'Azur</owner>
 						<project>${project.name}</project>
 						<prurl>${project.url}</prurl>
