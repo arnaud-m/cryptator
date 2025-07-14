@@ -118,7 +118,8 @@ public final class Cryptagen {
 		final CryptaBiConsumer cons = buildBiConsumer(config);
 		try {
 			gen.generate(cons);
-			LOGGER.log(Level.INFO, "Found {0} cryptarithm(s).", cons.getSolutionCount());
+			LOGGER.log(Level.INFO, "Found {0,number,#} cryptarithm(s).\nd CRYPTARITHMS {0,number,#}",
+					cons.getSolutionCount());
 
 		} catch (CryptaModelException e) {
 			LOGGER.log(Level.SEVERE, "Fail to build the model.", e);
