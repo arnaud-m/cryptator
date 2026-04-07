@@ -11,7 +11,7 @@
 Cryptator is a cryptarithm solver using [[https://en.wikipedia.org/wiki/Constraint_programming][Constraint Programming]].\\
 It is based on [[https://github.com/chocoteam/choco-solver][choco-solver]] which is an open-source Java library for Constraint Programming.
 
-It is described in the [[file:pdf/jfpc2023.pdf][white paper]] (in French) published at the conference [[https://pfia23.icube.unistra.fr/conferences/jfpc/index.html][JFPC 2023]].
+It is described in the [[file:pdf/jfpc2023.pdf][white paper]] (in French) published at the conference [[https://pfia23.icube.unistra.fr/conferences/jfpc/index.html][JFPC 2023]], and in the [[file:pdf/ictai2025.pdf][paper]] (in English) published at the conference [[https://easyconferences.eu/ictai2025/][ICTAI 2025]], which received the Best Paper Award..
 
 * About cryptarithms
   [[https://en.wikipedia.org/wiki/Verbal_arithmetic][Cryptarithm]], or alphametic, is a type of mathematical game consisting of a mathematical equation among unknown numbers, whose digits are represented by letters of the alphabet.
@@ -33,6 +33,10 @@ It is described in the [[file:pdf/jfpc2023.pdf][white paper]] (in French) publis
 
   - JDK 11+
   - Maven 3+
+  - Cryptarithmetic Puzzle Solver in C (optional)
+    - Download it from [[https://tamura70.gitlab.io/web-puzzle/cryptarithm/][Naoyuki Tamura Website]].
+    - Install it locally.
+    - Note the installation path, as it will be used with the ~--crypt~ option of the solver.
 
 ** As a stand-alone application
 
