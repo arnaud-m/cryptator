@@ -51,7 +51,7 @@ public final class TransformWord {
      */
     public static String translateAndNormalize(final String ctryCd, final String lang, final int value) {
         final String translated = translate(ctryCd, lang, value);
-        return toLowerCase(removeWhitespaces(removeDashes(stripAccents(translated))));
+        return toLowerCase(removeWhitespaces(removeDashes( removeSpecialChars(stripAccents(translated)))));
     }
 
     /**
@@ -83,6 +83,16 @@ public final class TransformWord {
      */
     public static String removeDashes(final String input) {
         return input.replace("-", "");
+    }
+    
+    /**
+     * Removes the unicode special characters of the input.
+     *
+     * @param input the input
+     * @return the input without special characters
+     */
+    public static String removeSpecialChars(final String input) {
+        return input.replaceAll("\\p{Cf}", "");
     }
 
     /**
