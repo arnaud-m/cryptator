@@ -72,7 +72,7 @@ It is described in the [[file:pdf/jfpc2023.pdf][white paper]] (in French) publis
  <dependency>
     <groupId>fr.univ-cotedazur</groupId>
     <artifactId>cryptator</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
  </dependency>
  #+END_EXAMPLE
 

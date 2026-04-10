@@ -1,7 +1,7 @@
 # Contributing to Cryptator
 
 The Cryptator team encourages community feedback and contributions.
-Thank you for your interest in making Dux Machina better! There are several ways you can get involved.
+Thank you for your interest in making Cryptator better! There are several ways you can get involved.
 
 If you are looking for a good way to contribute to the project, please:
 
