@@ -50,8 +50,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
         <!-- Java source/target to use for compilation. -->
-        <javac.target>11</javac.target>
-        <javac.source>11</javac.source>
+        <javac.target>17</javac.target>
+        <javac.source>17</javac.source>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/args4j/args4j -->
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.choco-solver</groupId>
             <artifactId>choco-solver</artifactId>
-            <version>4.10.18</version>
+            <version>6.0.0</version>
         </dependency>
         <dependency>
             <groupId>guru.nidi</groupId>
@@ -126,11 +126,11 @@
                     <!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't
                         configured the maven-toolchains-plugin -->
                     <jdkToolchain>
-                        <version>11</version>
+                        <version>17</version>
                     </jdkToolchain>
-                    <release>11</release>
-                    <source>11</source>
-                    <target>11</target>
+                    <release>17</release>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
             <plugin>
