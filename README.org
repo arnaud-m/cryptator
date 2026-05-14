@@ -73,7 +73,7 @@ Each letter represents a digit, and the goal is to reconstruct the original arit
  <dependency>
     <groupId>fr.univ-cotedazur</groupId>
     <artifactId>cryptator</artifactId>
-    <version>1.0.2</version>
+    <version>2.0.0-SNAPSHOT</version>
  </dependency>
  #+END_EXAMPLE
 
