@@ -10,8 +10,6 @@ package cryptator.game;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
@@ -19,13 +17,15 @@ import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.IntVar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cryptator.solver.CryptaModel;
 import cryptator.specs.ICryptaGameEngine;
 
 public class CryptaGameEngine implements ICryptaGameEngine {
-
-    public static final Logger LOGGER = Logger.getLogger(CryptaGameEngine.class.getName());
+	
+	public static final Logger LOGGER = LoggerFactory.getLogger(CryptaGameEngine.class);
 
     private CryptaModel gameModel;
 
@@ -43,7 +43,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
     private boolean solveGame() {
         final Solver solver = gameModel.getModel().getSolver();
         if (solver.solve()) {
-            LOGGER.log(Level.CONFIG, "display the current cryptarithm solution.\n{0}", gameModel);
+            LOGGER.debug("display the current cryptarithm solution.\n{}", gameModel);
             return true;
         } else {
             return false;
@@ -76,7 +76,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
     private void propagate(final CryptaModel model, final Constraint decision) throws ContradictionException {
         final Model m = model.getModel();
         m.post(decision);
-        LOGGER.log(Level.CONFIG, "propagate decision {0} in model {1}", new Object[] {decision, m.getName()});
+        LOGGER.debug("Propagate decision {} in model {}", decision, m.getName());
         m.getSolver().propagate();
     }
 
@@ -85,8 +85,8 @@ public class CryptaGameEngine implements ICryptaGameEngine {
             propagate(gameModel, decision);
             return true;
         } catch (ContradictionException e) {
-            LOGGER.log(Level.CONFIG, "solve decision {0} in model {1}",
-                    new Object[] {decision, gameModel.getModel().getName()});
+            LOGGER.debug("Solve decision {} in model {}",
+                    decision, gameModel.getModel().getName());
             return solveGame();
         }
     }
@@ -105,7 +105,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
         m.unpost(decision);
         final Constraint opposite = decision.getOpposite();
         m.post(opposite);
-        LOGGER.log(Level.CONFIG, "solve decision {0} in model {1}", new Object[] {opposite, m.getName()});
+        LOGGER.debug("Solve decision {} in model {}", opposite, m.getName());
         m.getSolver().reset();
         if (!solveGame()) {
             throw new CryptaGameException("Cannot refute decision" + decision);
@@ -115,7 +115,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
     @Override
     public boolean takeDecision(final CryptaGameDecision decision) throws CryptaGameException {
-        LOGGER.log(Level.INFO, "take decision ({0}).", decision);
+        LOGGER.info("Take decision ({}).", decision);
         final Constraint gdec = makeDecision(gameModel, decision);
         final Constraint ddec = makeDecision(userModel, decision);
         if (probeGameDecision(gdec)) {
