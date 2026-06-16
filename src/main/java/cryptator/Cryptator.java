@@ -12,6 +12,8 @@ import java.util.OptionalInt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
+
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.OptionsParserWithLog;
 import cryptator.config.CryptaCmdConfig;
@@ -35,6 +37,13 @@ public final class Cryptator {
 
     public static void main(final String[] args) {
         JULogUtil.configureDefaultLoggers();
+        
+        org.slf4j.Logger log = LoggerFactory.getLogger(Cryptator.class);
+        
+        log.info("INFO test");
+        log.warn("WARN test");
+        log.error("ERROR test");
+        
         final int exitCode = doMain(args);
         System.exit(exitCode);
     }
