@@ -8,67 +8,67 @@
  */
 package cryptator.solver;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.variables.Variable;
 
 import cryptator.specs.ICryptaSolution;
 
 public class CryptaSolutionVars extends AbstractCryptaSolution<IntVar> {
 
-    public CryptaSolutionVars(final Map<Character, IntVar> symbolsToDigits) {
-        super(symbolsToDigits);
-    }
+	public CryptaSolutionVars(final Map<Character, IntVar> symbolsToDigits) {
+		super(symbolsToDigits);
+	}
 
-    @Override
-    public boolean hasDigit(final char symbol) {
-        final IntVar v = symbolsToDigits.get(symbol);
-        return (v != null) && v.isInstantiated();
-    }
+	@Override
+	public boolean hasDigit(final char symbol) {
+		final IntVar v = symbolsToDigits.get(symbol);
+		return (v != null) && v.isInstantiated();
+	}
 
-    @Override
-    public int getDigit(final char symbol) throws CryptaSolutionException {
-        final IntVar v = symbolsToDigits.get(symbol);
-        if ((v != null) && v.isInstantiated()) {
-            return v.getValue();
-        } else {
-            throw new CryptaSolutionException("cant find symbol: " + symbol);
-        }
-    }
+	@Override
+	public int getDigit(final char symbol) throws CryptaSolutionException {
+		final IntVar v = symbolsToDigits.get(symbol);
+		if ((v != null) && v.isInstantiated()) {
+			return v.getValue();
+		} else {
+			throw new CryptaSolutionException("cant find symbol: " + symbol);
+		}
+	}
 
-    @Override
-    public int getDigit(final char symbol, final int defaultValue) {
-        final IntVar v = symbolsToDigits.get(symbol);
-        if ((v != null) && v.isInstantiated()) {
-            return v.getValue();
-        } else {
-            return defaultValue;
-        }
-    }
+	@Override
+	public int getDigit(final char symbol, final int defaultValue) {
+		final IntVar v = symbolsToDigits.get(symbol);
+		if ((v != null) && v.isInstantiated()) {
+			return v.getValue();
+		} else {
+			return defaultValue;
+		}
+	}
 
-    @Override
-    protected final String getDomain(final IntVar v) {
-        return v.toString().replaceFirst(".*=\\s*", "");
-    }
+	@Override
+	protected final String getDomain(final IntVar v) {
+		return v.toString().replaceFirst(".*=\\s*", "");
+	}
 
-    public ICryptaSolution recordSolution() {
-        final Map<Character, Integer> symbolsToDigits = new HashMap<>();
-        this.symbolsToDigits.forEach((symbol, variable) -> {
-            if (variable.isInstantiated()) {
-                symbolsToDigits.put(symbol, variable.getValue());
-            }
-        });
-        return new CryptaSolutionMap(symbolsToDigits);
-    }
+	public ICryptaSolution recordSolution() {
+		return new CryptaSolutionMap(toMap());
+	}
 
-    public boolean isTotalSolution() {
-        for (IntVar variable : symbolsToDigits.values()) {
-            if (!variable.isInstantiated()) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public Map<Character, Integer> toMap() {
+		return symbolsToDigits.entrySet().stream()
+				.filter(entry -> entry.getValue().isInstantiated())
+				.collect(Collectors.toMap(
+						Map.Entry::getKey,
+						entry -> entry.getValue().getValue()
+						));
+	}
+
+	public boolean isTotalAssignment() {
+		return symbolsToDigits.values().stream().allMatch(Variable::isInstantiated);
+	}
 
 }

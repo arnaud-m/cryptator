@@ -15,11 +15,12 @@ import cryptator.specs.ICryptaSolution;
 
 public class CryptaSolutionMap extends AbstractCryptaSolution<Integer> {
 
-    public CryptaSolutionMap(final Map<Character, Integer> symbolsToDigits) {
-        super(symbolsToDigits);
-    }
+	
+    public CryptaSolutionMap(Map<Character, Integer> symbolsToDigits) {
+		super(symbolsToDigits);
+	}
 
-    public static final ICryptaSolution parseSolution(final String solution) throws CryptaSolutionException {
+	public static final ICryptaSolution parseSolution(final String solution) throws CryptaSolutionException {
         final HashMap<Character, Integer> symbolToDigit = new HashMap<>();
         final String[] split = solution.split("\\s*[\\s=]\\s*");
         if ((split.length % 2) != 0) {
@@ -59,10 +60,17 @@ public class CryptaSolutionMap extends AbstractCryptaSolution<Integer> {
     public int getDigit(final char symbol, final int defaultValue) {
         return symbolsToDigits.getOrDefault(symbol, defaultValue);
     }
+       
+	@Override
+	public Map<Character, Integer> toMap() {
+		return new HashMap<>(symbolsToDigits);
+	}
 
-    @Override
+	@Override
     protected String getDomain(final Integer v) {
         return v.toString();
     }
+
+	
 
 }
