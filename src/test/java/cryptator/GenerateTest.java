@@ -48,8 +48,8 @@ public class GenerateTest {
 
     private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
             final WordArray wordArray) throws CryptaModelException {
-        final CryptaListGenerator gen = new CryptaListGenerator(wordArray, config, Cryptagen.LOGGER);
-        CryptaBiConsumer cons = new CryptaBiConsumer(Cryptagen.LOGGER);
+        final CryptaListGenerator gen = new CryptaListGenerator(wordArray, config, Cryptagen.JUL_LOGGER);
+        CryptaBiConsumer cons = new CryptaBiConsumer(Cryptagen.JUL_LOGGER);
         cons.withSolutionLog();
         cons.withSolutionCheck(config.getArithmeticBase());
         assertEquals(0, cons.getErrorCount());

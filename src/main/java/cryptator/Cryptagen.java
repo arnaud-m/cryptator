@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.OptionalInt;
 import java.util.Scanner;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+
+import org.slf4j.LoggerFactory;
 
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.OptionsParserWithLog;
@@ -26,7 +28,10 @@ import cryptator.solver.CryptaModelException;
 
 public final class Cryptagen {
 
-	public static final Logger LOGGER = Logger.getLogger(Cryptagen.class.getName());
+	public static final Logger LOGGER = LoggerFactory.getLogger(Cryptagen.class);
+
+	@Deprecated
+	public final static java.util.logging.Logger JUL_LOGGER = java.util.logging.Logger.getLogger(Cryptagen.class.getName());
 
 	private Cryptagen() {
 	}
@@ -49,7 +54,7 @@ public final class Cryptagen {
 			if (words != null) {
 				return generate(words, config);
 			} else {
-				LOGGER.log(Level.WARNING, "Invalid word list.");
+				LOGGER.warn("Invalid word list.");
 			}
 			return -1;
 		} finally {
@@ -65,7 +70,7 @@ public final class Cryptagen {
 					words.add(s.next());
 				}
 			} catch (FileNotFoundException e) {
-				LOGGER.log(Level.SEVERE, "cant read words in file", e);
+				LOGGER.error("Cant read words in file", e);
 			}
 		} else {
 			words.add(argument);
@@ -104,7 +109,7 @@ public final class Cryptagen {
 	}
 
 	private static CryptaBiConsumer buildBiConsumer(final CryptagenConfig config) {
-		CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
+		CryptaBiConsumer consumer = new CryptaBiConsumer(JUL_LOGGER);
 		consumer.withCryptarithmLog();
 		if (config.isExportGraphiz()) {
 			consumer.withGraphvizExport();
@@ -113,16 +118,18 @@ public final class Cryptagen {
 	}
 
 	private static int generate(final WordArray words, final CryptagenConfig config) {
-		LOGGER.log(Level.CONFIG, () -> "Word List Features:\n" + words.toDimacs());
-		final CryptaListGenerator gen = new CryptaListGenerator(words, config, LOGGER);
+		if(LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Word List Features:\n{}", words.toDimacs());
+		}
+		final CryptaListGenerator gen = new CryptaListGenerator(words, config, JUL_LOGGER);
 		final CryptaBiConsumer cons = buildBiConsumer(config);
 		try {
 			gen.generate(cons);
-			LOGGER.log(Level.INFO, "Found {0,number,#} cryptarithm(s).\nd CRYPTARITHMS {0,number,#}",
-					cons.getSolutionCount());
+			LOGGER.info("Found {} cryptarithm(s).\nd CRYPTARITHMS {}",
+					cons.getSolutionCount(), cons.getSolutionCount());
 
 		} catch (CryptaModelException e) {
-			LOGGER.log(Level.SEVERE, "Fail to build the model.", e);
+			LOGGER.error("Fail to build the model.", e);
 			return -1;
 		}
 		return gen.getErrorCount() + cons.getErrorCount();

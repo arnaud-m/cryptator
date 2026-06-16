@@ -9,10 +9,9 @@
 package cryptator;
 
 import java.util.OptionalInt;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.OptionsParserWithLog;
@@ -30,8 +29,11 @@ import cryptator.specs.ICryptaSolver;
 
 public final class Cryptator {
 
-    public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
-
+    public static final Logger LOGGER = LoggerFactory.getLogger(Cryptator.class);
+    
+    @Deprecated
+    public final static java.util.logging.Logger JUL_LOGGER = java.util.logging.Logger.getLogger(Cryptator.class.getName());
+    
     private Cryptator() {
     }
 
@@ -40,7 +42,7 @@ public final class Cryptator {
         
         org.slf4j.Logger log = LoggerFactory.getLogger(Cryptator.class);
         
-        log.info("INFO test");
+        log.info("INFO test {}");
         log.warn("WARN test");
         log.error("ERROR test");
         
@@ -107,7 +109,7 @@ public final class Cryptator {
     public static ICryptaNode parseCryptarithm(final String cryptarithm, final CryptaParserWrapper parser,
             final Logger logger) throws CryptaParserException {
         final ICryptaNode node = parser.parse(cryptarithm);
-        logger.log(Level.INFO, "Parse cryptarithm [OK]\n{0}", cryptarithm);
+        logger.info("Parse cryptarithm [OK]\n{}", cryptarithm);
         return node;
 
     }
@@ -124,20 +126,20 @@ public final class Cryptator {
                 status = solved ? "OK" : "KO";
             }
             consumer.logOnLastSolution();
-            LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
+            LOGGER.info("Solve cryptarithm {} [{}]", cryptarithm, status);
             return consumer.getErrorCount();
         } catch (CryptaParserException e) {
-            LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
+        	LOGGER.error("Parse cryptarithm {} [FAIL]", cryptarithm, e);
         } catch (CryptaModelException e) {
-            LOGGER.log(Level.SEVERE, "Model cryptarithm [FAIL]", e);
+            LOGGER.error( "Model cryptarithm [FAIL]", e);
         } catch (CryptaSolverException e) {
-            LOGGER.log(Level.SEVERE, "Solve cryptarithm [FAIL]", e);
+            LOGGER.error("Solve cryptarithm [FAIL]", e);
         }
         return 1;
     }
 
     private static CryptaBiConsumer buildBiConsumer(final CryptatorConfig config) {
-        CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
+    	CryptaBiConsumer consumer = new CryptaBiConsumer(JUL_LOGGER);
         consumer.withSolutionLog();
         if (config.isCheckSolution()) {
             consumer.withSolutionCheck(config.getArithmeticBase());

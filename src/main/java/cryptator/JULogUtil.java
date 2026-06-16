@@ -52,7 +52,7 @@ public final class JULogUtil {
     }
 
     public static void configureLoggers(final Level level) {
-        setLevel(level, Cryptator.LOGGER, Cryptamancer.LOGGER, Cryptagen.LOGGER, AbstractCryptaSolver.LOGGER,
+        setLevel(level, Cryptator.JUL_LOGGER, Cryptagen.JUL_LOGGER, AbstractCryptaSolver.LOGGER,
                 CryptaGameEngine.LOGGER);
     }
 
@@ -92,19 +92,19 @@ public final class JULogUtil {
         @Override
         public void setQuiet() {
             ICryptaLogManager.super.setQuiet();
-            JULogUtil.setLevel(Level.INFO, Cryptagen.LOGGER, Cryptator.LOGGER);
+            JULogUtil.setLevel(Level.INFO, Cryptagen.JUL_LOGGER, Cryptator.JUL_LOGGER);
         }
 
         @Override
         public void setNormal() {
             ICryptaLogManager.super.setNormal();
-            JULogUtil.setLevel(Level.CONFIG, Cryptagen.LOGGER);
+            JULogUtil.setLevel(Level.CONFIG, Cryptagen.JUL_LOGGER);
         }
 
         @Override
         public void setVerbose() {
             ICryptaLogManager.super.setVerbose();
-            JULogUtil.setLevel(Level.FINE, Cryptagen.LOGGER);
+            JULogUtil.setLevel(Level.FINE, Cryptagen.JUL_LOGGER);
         }
 
     }
