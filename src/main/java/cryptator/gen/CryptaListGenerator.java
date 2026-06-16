@@ -35,6 +35,7 @@ import cryptator.specs.ICryptaGenerator;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
+import cryptator.specs.SearchMeasures;
 import cryptator.tree.TreeUtils;
 
 /**
@@ -185,7 +186,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	}
 
 	@Override
-	public long generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
+	public SearchMeasures generate(final BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException {
 		final ICryptaGenSolver gen = buildGenSolver();
 		clog.logOnModel(gen);
 
@@ -198,7 +199,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 			parallelSolve(gen, cons, nthreads);
 		}
 		clog.logOnSolver(gen);
-		return gen.getSolver().getSolutionCount();
+		return new SearchMeasures(gen.getSolver());
 	}
 
 	/**

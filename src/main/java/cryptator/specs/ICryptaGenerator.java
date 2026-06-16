@@ -23,9 +23,9 @@ public interface ICryptaGenerator {
      *
      * @param consumer the consumer that handles the generated cryptarithm along
      *                 with its solution.
-     * @return the number of candidate cryptarithms
+     * @return the search measures
      * @throws CryptaModelException if there was an error during the generation.
      */
-    long generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException;
+    SearchMeasures generate(BiConsumer<ICryptaNode, ICryptaSolution> consumer) throws CryptaModelException;
 
 }
