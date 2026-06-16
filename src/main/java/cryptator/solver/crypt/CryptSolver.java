@@ -22,6 +22,7 @@ import cryptator.solver.CryptaSolutionMap;
 import cryptator.solver.CryptaSolverException;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
+import cryptator.specs.SearchMeasures;
 import cryptator.tree.TreeUtils;
 
 /**
@@ -30,7 +31,7 @@ import cryptator.tree.TreeUtils;
 public class CryptSolver extends AbstractCryptaSolver {
 
     @Override
-    public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
+    public SearchMeasures solve(final ICryptaNode cryptarithm, final CryptaConfig config,
             final Consumer<ICryptaSolution> consumer) throws CryptaModelException, CryptaSolverException {
         logOnCryptarithm(cryptarithm);
         logOnConfiguration(config);
@@ -45,17 +46,20 @@ public class CryptSolver extends AbstractCryptaSolver {
         b.append(TreeUtils.writeInorder(cryptarithm)).append("\n");
         // Solve the cryptarithm with the crypt solver
         try {
+        	
+        	long timeCount = -System.nanoTime();
             final CryptExec crypt = new CryptExec(((CryptaCmdConfig) config).getCryptCommand());
+            timeCount += System.nanoTime();
             final CryptConsumer cryptConsumer = new CryptConsumer(consumer);
             crypt.exec(b.toString().getBytes(), cryptConsumer);
-            return cryptConsumer.getSolutionCount() > 0;
+            return new SearchMeasures(cryptConsumer.getSolutionCount(), timeCount, 0, 0);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Crypt solver error", e);
         } catch (InterruptedException e) {
             LOGGER.log(Level.SEVERE, "Crypt solver interruption", e);
             Thread.currentThread().interrupt();
         }
-        return false;
+        return new SearchMeasures(0, 0, 0, 1);
     }
 
     /**

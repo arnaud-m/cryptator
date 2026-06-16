@@ -20,6 +20,7 @@ import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
 import cryptator.specs.ICryptaSolver;
 import cryptator.specs.ITraversalNodeConsumer;
+import cryptator.specs.SearchMeasures;
 import cryptator.tree.TreeTraversals;
 
 public class AdaptiveSolver implements ICryptaSolver {
@@ -56,7 +57,7 @@ public class AdaptiveSolver implements ICryptaSolver {
     }
 
     @Override
-    public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
+    public SearchMeasures solve(final ICryptaNode cryptarithm, final CryptaConfig config,
             final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException, CryptaSolverException {
         final AdaptiveConsumer cons = new AdaptiveConsumer();
         TreeTraversals.preorderTraversal(cryptarithm, cons);

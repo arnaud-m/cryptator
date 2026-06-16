@@ -70,7 +70,7 @@ final class CryptaSolvingTester {
                 e.printStackTrace();
                 fail();
             }
-        }));
+        }).isFeasible());
         return solutionCount.get();
     }
 
