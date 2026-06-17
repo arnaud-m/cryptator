@@ -109,7 +109,7 @@ public final class Cryptator {
             final ICryptaNode node = parseCryptarithm(cryptarithm, parser, LOGGER);
 
             final CryptaBiConsumer consumer = buildBiConsumer(config);
-            final boolean solved = solver.solve(node, config, consumer);
+            final boolean solved = solver.solve(node, config, consumer).isFeasible();
             String status = "ERROR";
             if (consumer.getErrorCount() == 0) {
                 status = solved ? "OK" : "KO";

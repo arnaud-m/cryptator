@@ -53,7 +53,7 @@ public class GenerateTest {
         cons.withSolutionLog();
         cons.withSolutionCheck(config.getArithmeticBase());
         assertEquals(0, cons.getErrorCount());
-        long actualCandCount = gen.generate(cons);
+        final long actualCandCount = gen.generate(cons).solutionCount();
         if (expectedCandCount.isPresent()) {
             assertEquals(expectedCandCount.getAsInt(), actualCandCount);
         }

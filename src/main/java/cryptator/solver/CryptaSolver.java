@@ -17,6 +17,7 @@ import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
+import cryptator.specs.SearchMeasures;
 
 public final class CryptaSolver extends AbstractCryptaSolver {
 
@@ -42,8 +43,8 @@ public final class CryptaSolver extends AbstractCryptaSolver {
     }
 
     @Override
-    public boolean solve(final ICryptaNode cryptarithm, final CryptaConfig config,
-            final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException {
+    public SearchMeasures solve(final ICryptaNode cryptarithm, final CryptaConfig config,
+            final Consumer<ICryptaSolution> solutionConsumer) throws CryptaModelException, CryptaSolverException {
         final CryptaModel m = modeler.model(cryptarithm, config);
         logOnCryptarithm(cryptarithm);
         logOnConfiguration(config);
@@ -53,7 +54,8 @@ public final class CryptaSolver extends AbstractCryptaSolver {
         if (timeLimit > 0) {
             s.limitTime(timeLimit * MS); // in ms
         }
-        int solutionCount = 0;
+        
+        long solutionCount = 0;
         if (solutionLimit > 0) {
             while ((solutionCount < solutionLimit) && s.solve()) {
                 CLOG.logOnSolution(m.getModel());
@@ -68,7 +70,10 @@ public final class CryptaSolver extends AbstractCryptaSolver {
             }
         }
         CLOG.logOnSolver(m);
-        return solutionCount > 0;
+        if(solutionCount != s.getSolutionCount()) {
+        	throw new CryptaSolverException("Inconsistent solution count");
+        }
+        return new SearchMeasures(s);
     }
 
 }

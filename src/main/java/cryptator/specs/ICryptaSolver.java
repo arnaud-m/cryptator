@@ -40,11 +40,11 @@ public interface ICryptaSolver {
      * @param cryptarithm the cryptarithm
      * @param config      the configuration
      * @param consumer    the solution consumer
-     * @return true, if it is feasible.
+     * @return the search measures
      * @throws CryptaModelException  if there is a modeling exception
      * @throws CryptaSolverException if there is a solving exception.
      */
-    boolean solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> consumer)
+    SearchMeasures solve(ICryptaNode cryptarithm, CryptaConfig config, Consumer<ICryptaSolution> consumer)
             throws CryptaModelException, CryptaSolverException;
 
     /**
@@ -58,7 +58,7 @@ public interface ICryptaSolver {
      * @throws CryptaModelException  if there is a modeling exception
      * @throws CryptaSolverException if there is a solving exception.
      */
-    default boolean solve(ICryptaNode cryptarithm, CryptaConfig config,
+    default SearchMeasures solve(ICryptaNode cryptarithm, CryptaConfig config,
             final BiConsumer<ICryptaNode, ICryptaSolution> consumer)
             throws CryptaModelException, CryptaSolverException {
         return solve(cryptarithm, config, solution -> consumer.accept(cryptarithm, solution));

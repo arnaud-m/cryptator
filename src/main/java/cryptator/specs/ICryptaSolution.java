@@ -8,6 +8,8 @@
  */
 package cryptator.specs;
 
+import java.util.Map;
+
 import cryptator.solver.CryptaSolutionException;
 
 /**
@@ -65,5 +67,15 @@ public interface ICryptaSolution {
      * @return the domain no matter the symbol appears in the cryptarithm.
      */
     String getDomain(char symbol);
+    
+    
+    /**
+     * Returns the current assignment of symbols to digits.
+     * Unassigned symbols are absent.
+     *
+     * @return a map from symbols to their assigned digits.
+     */
+    Map<Character, Integer> toMap();
+
 
 }

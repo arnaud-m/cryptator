@@ -52,7 +52,7 @@ public class CryptaGameEngine implements ICryptaGameEngine {
 
     @Override
     public boolean isSolved() {
-        return userModel.getSolution().isTotalSolution();
+        return userModel.getSolution().isTotalAssignment();
     }
 
     private static CryptaModel makeUserDecisionModel(final CryptaModel model) {
