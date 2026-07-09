@@ -31,9 +31,6 @@ public final class Cryptagen {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Cryptagen.class);
 
-	@Deprecated
-	public static final java.util.logging.Logger JUL_LOGGER = java.util.logging.Logger.getLogger(Cryptagen.class.getName());
-
 	private Cryptagen() {
 	}
 
@@ -122,7 +119,7 @@ public final class Cryptagen {
 		if(LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Word List Features:\n{}", words.toDimacs());
 		}
-		final CryptaListGenerator gen = new CryptaListGenerator(words, config, JUL_LOGGER);
+		final CryptaListGenerator gen = new CryptaListGenerator(words, config);
 		final CryptaBiConsumer cons = buildBiConsumer(config);
 		try {
 			gen.generate(cons);

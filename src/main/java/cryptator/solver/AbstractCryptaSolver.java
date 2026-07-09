@@ -8,8 +8,6 @@
  */
 package cryptator.solver;
 
-import java.util.logging.Logger;
-
 import cryptator.JULogUtil.LoggerType;
 import cryptator.config.CryptaConfig;
 import cryptator.gen.TransformWord;
@@ -20,9 +18,6 @@ import cryptator.tree.TreeUtils;
 public abstract class AbstractCryptaSolver implements ICryptaSolver {
 
     protected static final int MS = 1000;
-
-    @Deprecated
-    public static final Logger JUL_LOGGER = Logger.getLogger(AbstractCryptaSolver.class.getName());
 
     protected final org.slf4j.Logger logger;
     

@@ -32,9 +32,6 @@ public final class Cryptator {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Cryptator.class);
     
-    @Deprecated
-    public final static java.util.logging.Logger JUL_LOGGER = java.util.logging.Logger.getLogger(Cryptator.class.getName());
-    
     private Cryptator() {
     }
 

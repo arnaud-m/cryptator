@@ -70,7 +70,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	 * @param config the configuration
 	 * @param logger the logger
 	 */
-	public CryptaListGenerator(final WordArray words, final CryptagenConfig config, final java.util.logging.Logger logger) {
+	public CryptaListGenerator(final WordArray words, final CryptagenConfig config) {
 		super();
 		this.words = words;
 		this.config = config;

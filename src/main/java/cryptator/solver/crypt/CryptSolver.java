@@ -54,9 +54,9 @@ public class CryptSolver extends AbstractCryptaSolver {
             crypt.exec(b.toString().getBytes(), cryptConsumer);
             return new SearchMeasures(cryptConsumer.getSolutionCount(), timeCount, 0, 0);
         } catch (IOException e) {
-            JUL_LOGGER.log(Level.SEVERE, "Crypt solver error", e);
+            logger.error("Crypt solver error", e);
         } catch (InterruptedException e) {
-            JUL_LOGGER.log(Level.SEVERE, "Crypt solver interruption", e);
+            logger.error("Crypt solver interruption", e);
             Thread.currentThread().interrupt();
         }
         return new SearchMeasures(0, 0, 0, 1);
@@ -65,7 +65,7 @@ public class CryptSolver extends AbstractCryptaSolver {
     /**
      * The Class CryptConsumer.
      */
-    private static class CryptConsumer implements Consumer<String> {
+    private class CryptConsumer implements Consumer<String> {
 
         /** The constant pattern PCRYPT that matches a cryptarithm. */
         private static final String PCRYPT = "[\\sa-zA-Z\\+=]*";
@@ -111,7 +111,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          */
         private void acceptCryptarithm(final String str) {
             current = str.trim();
-            JUL_LOGGER.finer(current);
+            logger.trace(current);
         }
 
         /**
@@ -121,7 +121,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          */
         private void acceptSolution(final String str) {
             final String solution = str.trim();
-            JUL_LOGGER.finer(solution);
+            logger.trace(solution);
             final Map<Character, Integer> map = new TreeMap<>();
             final int n = current.length();
             for (int i = 0; i < n; i++) {
@@ -140,15 +140,15 @@ public class CryptSolver extends AbstractCryptaSolver {
          * @param str the statistics line
          */
         private void acceptStatistics(final String str) {
-            if (JUL_LOGGER.isLoggable(Level.INFO)) {
+            if (logger.isInfoEnabled()) {
                 final String stats = str.trim();
-                JUL_LOGGER.finer(stats);
+                logger.trace(stats);
                 final String[] split = stats.split("\\s+");
                 double runtime = Double.parseDouble(split[2]) / MS;
                 solutionCount = Integer.parseInt(split[0]);
                 final String format = "Solver diagnostics:\nd TIME %.3f\nd NBSOLS %s";
                 final String diagnostics = String.format(format, runtime, split[0]);
-                JUL_LOGGER.info(diagnostics);
+                logger.info(diagnostics);
             }
         }
 
@@ -158,7 +158,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          * @param str the other line
          */
         private void acceptOther(final String str) {
-            JUL_LOGGER.finer(str::trim);
+            logger.atTrace().setMessage(str::trim);
         }
 
         /**

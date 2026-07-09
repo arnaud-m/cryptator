@@ -8,36 +8,19 @@
  */
 package cryptator;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import org.slf4j.LoggerFactory;
 
-import cryptator.solver.AbstractCryptaSolver;
+import ch.qos.logback.classic.LoggerContext;
 import cryptator.specs.ICryptaLogManager;
 
 public final class JULogUtil {
 
-    private static final String PROPERTIES = "logging.properties";
-
     private JULogUtil() {
     }
 
-    public static void readResourceConfigurationLoggers(final String resourcePath) {
-        final InputStream stream = Cryptator.class.getClassLoader().getResourceAsStream(resourcePath);
-        try {
-            LogManager.getLogManager().readConfiguration(stream);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
+  
     public enum LoggerType {
         PRIMARY,
         SECONDARY;
@@ -49,46 +32,24 @@ public final class JULogUtil {
         
 
     public static void configureDefaultLoggers() {
-        readResourceConfigurationLoggers(PROPERTIES);
+       
     }
 
     public static void configureTestLoggers() {
-        readResourceConfigurationLoggers(PROPERTIES);
-        configureLoggers(Level.WARNING);
+    	configureLoggers(Level.WARNING);
     }
 
     public static void configureSilentLoggers() {
-        readResourceConfigurationLoggers(PROPERTIES);
-        configureLoggers(Level.OFF);
+    	configureLoggers(Level.OFF);
     }
 
     public static void configureLoggers(final Level level) {
-        setLevel(level, Cryptator.JUL_LOGGER, Cryptagen.JUL_LOGGER, AbstractCryptaSolver.JUL_LOGGER);
-    }
-
-    public static void setLevel(final Level level, final Logger... loggers) {
-        for (Logger logger : loggers) {
-            logger.setLevel(level);
-        }
-    }
-
-    public static void flushLogs(final Logger logger) {
-        logger.log(Level.FINEST, "Flush logger {0}", logger.getName());
-        for (Handler handler : logger.getHandlers()) {
-            handler.flush();
-        }
+        //setLevel(level, Cryptagen.JUL_LOGGER, AbstractCryptaSolver.JUL_LOGGER);
     }
 
     public static void flushLogs() {
-        final LogManager manager = LogManager.getLogManager();
-        final Enumeration<String> names = manager.getLoggerNames();
-        final String pkg = JULogUtil.class.getPackage().getName();
-        while (names.hasMoreElements()) {
-            final String name = names.nextElement();
-            if (name.startsWith(pkg)) {
-                flushLogs(manager.getLogger(name));
-            }
-        }
+    	LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+    	context.stop();
     }
 
     public static final ICryptaLogManager DEFAULT_LOG_MANAGER = new DefaultLogManager();
@@ -102,19 +63,17 @@ public final class JULogUtil {
         @Override
         public void setQuiet() {
             ICryptaLogManager.super.setQuiet();
-            JULogUtil.setLevel(Level.INFO, Cryptagen.JUL_LOGGER, Cryptator.JUL_LOGGER);
+            
         }
 
         @Override
         public void setNormal() {
             ICryptaLogManager.super.setNormal();
-            JULogUtil.setLevel(Level.CONFIG, Cryptagen.JUL_LOGGER);
         }
 
         @Override
         public void setVerbose() {
             ICryptaLogManager.super.setVerbose();
-            JULogUtil.setLevel(Level.FINE, Cryptagen.JUL_LOGGER);
         }
 
     }
