@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import org.chocosolver.solver.Solver;
 
+import cryptator.JULogUtil.LoggerType;
 import cryptator.choco.ChocoLogger;
 import cryptator.config.CryptaConfig;
 import cryptator.specs.ICryptaModeler;
@@ -21,7 +22,7 @@ import cryptator.specs.SearchMeasures;
 
 public final class CryptaSolver extends AbstractCryptaSolver {
 
-    private static final ChocoLogger CLOG = new ChocoLogger(JUL_LOGGER);
+    private final ChocoLogger CLOG;
 
     private ICryptaModeler modeler;
 
@@ -32,6 +33,7 @@ public final class CryptaSolver extends AbstractCryptaSolver {
     public CryptaSolver(final boolean useBignum) {
         super();
         modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
+        this.CLOG = new ChocoLogger(LoggerType.PRIMARY);
     }
 
     public void setBignum() {

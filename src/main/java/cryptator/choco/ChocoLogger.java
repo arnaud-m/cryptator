@@ -10,22 +10,22 @@ package cryptator.choco;
 
 import java.util.Formatter;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
+import org.slf4j.Logger;
 
+import cryptator.JULogUtil.LoggerType;
 import cryptator.specs.IChocoModel;
 
 public final class ChocoLogger {
 
     private final Logger logger;
 
-    public ChocoLogger(final Logger logger) {
+    public ChocoLogger(final LoggerType loggerType) {
         super();
-        this.logger = logger;
+        this.logger = loggerType.getLogger(ChocoLogger.class);
     }
 
     public void logOnModel(final IChocoModel m) {
@@ -33,17 +33,13 @@ public final class ChocoLogger {
     }
 
     public void logOnModel(final Model model) {
-        if (logger.isLoggable(Level.CONFIG)) {
-            logger.log(Level.CONFIG, "Model diagnostics:\n{0}", toDimacs(model));
-            logger.log(Level.FINE, "Pretty model:{0}", model);
-        }
+    	logger.atDebug().setMessage("Model diagnostics:\n{}").addArgument( () -> toDimacs(model));
+        logger.trace("Pretty model:{}", model);      
     }
 
     public void logOnSolution(final Solution solution) {
-        if (logger.isLoggable(Level.FINER)) {
-            solution.record();
-            logger.log(Level.FINER, "Solver solution:\n{0}", solution);
-        }
+       logger.atTrace().setMessage("Solver solution:\n{}").addArgument(() -> {solution.record();return solution;});
+  
     }
 
     public void logOnSolution(final IChocoModel m) {
@@ -59,9 +55,7 @@ public final class ChocoLogger {
     }
 
     public void logOnSolver(final Model model) {
-        if (logger.isLoggable(Level.INFO)) {
-            logger.log(Level.INFO, "Solver diagnostics:\n{0}", toDimacs(model.getSolver()));
-        }
+    	logger.atInfo().setMessage("Solver diagnostics:\n{}").addArgument( () -> toDimacs(model.getSolver()));
     }
 
     public static String toDimacs(final Model model) {

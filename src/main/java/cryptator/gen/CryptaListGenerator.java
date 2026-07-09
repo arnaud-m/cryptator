@@ -22,6 +22,7 @@ import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 
 import cryptator.Cryptator;
+import cryptator.JULogUtil.LoggerType;
 import cryptator.choco.ChocoLogger;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
@@ -74,7 +75,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		this.words = words;
 		this.config = config;
 		this.logger = logger;
-		this.clog = new ChocoLogger(logger);
+		this.clog = new ChocoLogger(LoggerType.PRIMARY);
 		this.errorCount = new AtomicInteger();
 	}
 

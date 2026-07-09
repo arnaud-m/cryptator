@@ -38,8 +38,13 @@ public final class JULogUtil {
         }
     }
     
-    public static  org.slf4j.Logger getLogger(Class<?> type, boolean usePrimaryLogger) {
-    	return LoggerFactory.getLogger(type.getName() + (usePrimaryLogger ? ".primary" : ".secondary"));
+    public enum LoggerType {
+        PRIMARY,
+        SECONDARY;
+        
+    	public org.slf4j.Logger getLogger(Class<?> type) {
+        	return LoggerFactory.getLogger(type.getName() +"." +  name().toLowerCase());
+        }
     }
         
 

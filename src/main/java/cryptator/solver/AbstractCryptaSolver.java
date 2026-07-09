@@ -10,9 +10,7 @@ package cryptator.solver;
 
 import java.util.logging.Logger;
 
-import org.slf4j.LoggerFactory;
-
-import cryptator.JULogUtil;
+import cryptator.JULogUtil.LoggerType;
 import cryptator.config.CryptaConfig;
 import cryptator.gen.TransformWord;
 import cryptator.specs.ICryptaNode;
@@ -33,12 +31,12 @@ public abstract class AbstractCryptaSolver implements ICryptaSolver {
     protected long solutionLimit = 0;
 
     protected AbstractCryptaSolver() {
-        this(true);
+        this(LoggerType.PRIMARY);
     }
     
-    protected AbstractCryptaSolver(boolean withPrimaryLogger) {
+    protected AbstractCryptaSolver(final LoggerType loggerType) {
         super();
-        this.logger = JULogUtil.getLogger(AbstractCryptaSolver.class, withPrimaryLogger);
+        this.logger = loggerType.getLogger(AbstractCryptaSolver.class);
     }
 
     protected final void logOnCryptarithm(final ICryptaNode cryptarithm) {
