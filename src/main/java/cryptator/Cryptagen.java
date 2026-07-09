@@ -28,10 +28,10 @@ import cryptator.solver.CryptaModelException;
 
 public final class Cryptagen {
 
-	public static final Logger LOGGER = LoggerFactory.getLogger(Cryptagen.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Cryptagen.class);
 
 	@Deprecated
-	public final static java.util.logging.Logger JUL_LOGGER = java.util.logging.Logger.getLogger(Cryptagen.class.getName());
+	public static final java.util.logging.Logger JUL_LOGGER = java.util.logging.Logger.getLogger(Cryptagen.class.getName());
 
 	private Cryptagen() {
 	}

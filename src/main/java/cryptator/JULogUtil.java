@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
+
 import cryptator.solver.AbstractCryptaSolver;
 import cryptator.specs.ICryptaLogManager;
 
@@ -35,6 +37,11 @@ public final class JULogUtil {
             e.printStackTrace();
         }
     }
+    
+    public static  org.slf4j.Logger getLogger(Class<?> type, boolean usePrimaryLogger) {
+    	return LoggerFactory.getLogger(type.getName() + (usePrimaryLogger ? ".primary" : ".secondary"));
+    }
+        
 
     public static void configureDefaultLoggers() {
         readResourceConfigurationLoggers(PROPERTIES);
@@ -51,7 +58,7 @@ public final class JULogUtil {
     }
 
     public static void configureLoggers(final Level level) {
-        setLevel(level, Cryptator.JUL_LOGGER, Cryptagen.JUL_LOGGER, AbstractCryptaSolver.LOGGER);
+        setLevel(level, Cryptator.JUL_LOGGER, Cryptagen.JUL_LOGGER, AbstractCryptaSolver.JUL_LOGGER);
     }
 
     public static void setLevel(final Level level, final Logger... loggers) {

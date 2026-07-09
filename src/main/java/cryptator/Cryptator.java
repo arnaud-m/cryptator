@@ -42,7 +42,10 @@ public final class Cryptator {
         
         org.slf4j.Logger log = LoggerFactory.getLogger(Cryptator.class);
         
-        log.info("INFO test {}");
+
+        log.trace("TRACE test");
+        log.debug("DEBUG test");
+        log.info("INFO test {}", 1);
         log.warn("WARN test");
         log.error("ERROR test");
         

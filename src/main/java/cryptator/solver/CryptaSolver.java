@@ -21,7 +21,7 @@ import cryptator.specs.SearchMeasures;
 
 public final class CryptaSolver extends AbstractCryptaSolver {
 
-    private static final ChocoLogger CLOG = new ChocoLogger(LOGGER);
+    private static final ChocoLogger CLOG = new ChocoLogger(JUL_LOGGER);
 
     private ICryptaModeler modeler;
 
