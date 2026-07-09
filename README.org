@@ -36,7 +36,7 @@ Each letter represents a digit, and the goal is to reconstruct the original arit
   - Maven 3+
   - Cryptarithmetic Puzzle Solver in C (optional)
     - Download it from [[https://tamura70.gitlab.io/web-puzzle/cryptarithm/][Naoyuki Tamura Website]].
-    - Install it locally.
+    - If compilation fails with recent GCC versions, compile with ~-std=gnu89~ to preserve compatibility with the old C syntax : ~make CFLAGS="-std=gnu89 -g -O~.
     - Note the installation path, as it will be used with the ~--crypt~ option of the solver.
 
 ** As a stand-alone application
