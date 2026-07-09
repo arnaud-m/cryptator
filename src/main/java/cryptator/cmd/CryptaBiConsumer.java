@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+
+import cryptator.JULogUtil.LoggerType;
 import cryptator.specs.ICryptaEvaluation;
 import cryptator.specs.ICryptaNode;
 import cryptator.specs.ICryptaSolution;
@@ -40,9 +41,9 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 	private BiConsumer<ICryptaNode, ICryptaSolution> internal;
 
-	public CryptaBiConsumer(final Logger logger) {
+	public CryptaBiConsumer(final LoggerType loggerType) {
 		super();
-		this.logger = logger;
+		this.logger = loggerType.getLogger(CryptaBiConsumer.class);
 		lastSolution = Optional.empty();
 		internal = new SolutionCounter();
 	}
@@ -83,8 +84,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 	public void logOnLastSolution() {
 		if (lastSolution.isPresent()) {
-			logger.log(Level.INFO, "Last cryptarithm solution #{0,number,#}:\n{1}",
-					new Object[] { solutionCount, lastSolution.get() });
+			logger.info("Last cryptarithm solution #{}:\n{}", solutionCount, lastSolution.get());
 		}
 	}
 
@@ -101,8 +101,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 		@Override
 		public void accept(final ICryptaNode t, final ICryptaSolution u) {
-			logger.log(Level.INFO, "Find cryptarithm solution #{0,number,#} [OK]\n{1}",
-					new Object[] { solutionCount, u });
+			logger.info("Find cryptarithm solution #{} [OK]\n{}", solutionCount, u);
 		}
 	}
 
@@ -110,10 +109,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 		@Override
 		public void accept(final ICryptaNode t, final ICryptaSolution u) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.log(Level.INFO, "Find cryptarithm #{0,number,#} [OK]\n{1}\n{2}",
-						new Object[] { solutionCount, TreeUtils.writeInorder(t), u });
-			}
+			logger.atInfo().setMessage("Find cryptarithm #{0,number,#} [OK]\n{1}\n{2}").addArgument(solutionCount).addArgument(() -> TreeUtils.writeInorder(t)).addArgument(u);
 		}
 	}
 
@@ -132,14 +128,14 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 		public void accept(final ICryptaNode n, final ICryptaSolution s) {
 			try {
 				if (eval.evaluate(n, s, base).compareTo(BigInteger.ZERO) != 0) {
-					logger.log(Level.FINE, "Eval cryptarithm solution #{0,number,#} [OK]", solutionCount);
+					logger.trace("Eval cryptarithm solution #{} [OK]", solutionCount);
 				} else {
 					errorCount++;
-					logger.log(Level.SEVERE, "Eval cryptarithm solution #{0,number,#} [KO]", solutionCount);
+					logger.error("Eval cryptarithm solution #{} [KO]", solutionCount);
 				}
 			} catch (CryptaEvaluationException e) {
 				errorCount++;
-				logger.log(Level.SEVERE, e, () -> "Eval cryptarithm solution #" + solutionCount + " [FAIL]");
+				logger.error("Eval cryptarithm solution #{} [FAIL]", solutionCount, e);
 			}
 		}
 	}
@@ -153,10 +149,9 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 				final Graph graph = GraphvizExport.exportToGraphviz(n, s);
 				final File file = File.createTempFile("cryptarithm-", ".svg");
 				Graphviz.fromGraph(graph).width(WIDTH).render(Format.SVG).toFile(file);
-				logger.log(Level.INFO, "Export cryptarithm solution #{0,number,#} [OK]\n{1}",
-						new Object[] { solutionCount, file });
+				logger.info("Export cryptarithm solution #{} [OK]\n{}", solutionCount, file );
 			} catch (IOException e) {
-				logger.log(Level.SEVERE, e, () -> "Export cryptarithm solution #" + solutionCount + " [FAIL]\n");
+				logger.error("Export cryptarithm solution #{} [FAIL]\n", solutionCount, e);
 			}
 		}
 

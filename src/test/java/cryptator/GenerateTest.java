@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import cryptator.JULogUtil.LoggerType;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
 import cryptator.config.CryptaCmdConfig.SolverType;
@@ -37,7 +38,6 @@ public class GenerateTest {
 
     @Before
     public void configureDefault() {
-//        JULogUtil.configureTestLoggers();
         config.setArithmeticBase(10);
         config.setGridSize(3);
         config.setLightModel(false);
@@ -49,7 +49,7 @@ public class GenerateTest {
     private void testGenerate(final int expectedSolCount, final OptionalInt expectedCandCount,
             final WordArray wordArray) throws CryptaModelException {
         final CryptaListGenerator gen = new CryptaListGenerator(wordArray, config, Cryptagen.JUL_LOGGER);
-        CryptaBiConsumer cons = new CryptaBiConsumer(Cryptagen.JUL_LOGGER);
+        CryptaBiConsumer cons = new CryptaBiConsumer(LoggerType.PRIMARY);
         cons.withSolutionLog();
         cons.withSolutionCheck(config.getArithmeticBase());
         assertEquals(0, cons.getErrorCount());
@@ -60,7 +60,7 @@ public class GenerateTest {
         assertEquals(expectedSolCount, cons.getSolutionCount());
     }
 
-    private void testGenerate(final int expectedSolCount, final WordArray wordArray, final int gridSize)
+    private void testGenerate(final int expectedSolCount, final WordArray wordArray)
             throws CryptaModelException {
         testGenerate(expectedSolCount, OptionalInt.empty(), wordArray);
     }
@@ -113,14 +113,14 @@ public class GenerateTest {
     @Test
     public void testPlanets1() throws CryptaModelException {
         WordArray words = new WordArray("venus", "earth", "uranus", "saturn");
-        testGenerate(2, words, 0);
+        testGenerate(2, words);
     }
 
     @Test
     public void testPlanets2() throws CryptaModelException {
         WordArray words = new WordArray("venus", "earth", "uranus", "saturn", "planets");
         config.setRightMemberType(RightMemberType.FIXED);
-        testGenerate(1, words, 0);
+        testGenerate(1, words);
     }
 
     @Test
@@ -138,17 +138,17 @@ public class GenerateTest {
 
     @Test
     public void testDoublyTrue1() throws CryptaModelException {
-        testGenerate(0, new WordArray("FR", "fr", 0, 10), 0);
+        testGenerate(0, new WordArray("FR", "fr", 0, 10));
     }
 
     @Test
     public void testDoublyTrue2() throws CryptaModelException {
-        testGenerate(1, new WordArray("FR", "fr", 30, 30), 0);
+        testGenerate(1, new WordArray("FR", "fr", 30, 30));
     }
 
     @Test
     public void testDoublyTrue3() throws CryptaModelException {
-        testGenerate(3, new WordArray("IT", "it", 20, 30), 0);
+        testGenerate(3, new WordArray("IT", "it", 20, 30));
     }
 
     @Test

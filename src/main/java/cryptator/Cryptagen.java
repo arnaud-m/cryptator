@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 
 import org.slf4j.LoggerFactory;
 
+import cryptator.JULogUtil.LoggerType;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.OptionsParserWithLog;
 import cryptator.cmd.WordArray;
@@ -109,7 +110,7 @@ public final class Cryptagen {
 	}
 
 	private static CryptaBiConsumer buildBiConsumer(final CryptagenConfig config) {
-		CryptaBiConsumer consumer = new CryptaBiConsumer(JUL_LOGGER);
+		CryptaBiConsumer consumer = new CryptaBiConsumer(LoggerType.PRIMARY);
 		consumer.withCryptarithmLog();
 		if (config.isExportGraphiz()) {
 			consumer.withGraphvizExport();

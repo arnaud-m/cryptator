@@ -13,6 +13,7 @@ import java.util.OptionalInt;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import cryptator.JULogUtil.LoggerType;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.OptionsParserWithLog;
 import cryptator.config.CryptaCmdConfig;
@@ -142,7 +143,7 @@ public final class Cryptator {
     }
 
     private static CryptaBiConsumer buildBiConsumer(final CryptatorConfig config) {
-    	CryptaBiConsumer consumer = new CryptaBiConsumer(JUL_LOGGER);
+    	CryptaBiConsumer consumer = new CryptaBiConsumer(LoggerType.PRIMARY);
         consumer.withSolutionLog();
         if (config.isCheckSolution()) {
             consumer.withSolutionCheck(config.getArithmeticBase());
