@@ -33,6 +33,7 @@ public final class CryptaSolver extends AbstractCryptaSolver {
     public CryptaSolver(final boolean useBignum) {
         super();
         modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
+        // TODO Depends on solution (primary) or generation (secondary)
         this.CLOG = new ChocoLogger(LoggerType.PRIMARY);
     }
 

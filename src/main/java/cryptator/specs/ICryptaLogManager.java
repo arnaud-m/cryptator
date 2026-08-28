@@ -8,8 +8,8 @@
  */
 package cryptator.specs;
 
-import java.util.logging.Level;
 
+import ch.qos.logback.classic.Level;
 import cryptator.JULogUtil;
 
 /**
@@ -28,7 +28,7 @@ public interface ICryptaLogManager {
      * Sets the quiet level.
      */
     default void setQuiet() {
-        JULogUtil.configureLoggers(Level.WARNING);
+        JULogUtil.configureLoggers(Level.WARN);
     }
 
     /**
@@ -42,20 +42,20 @@ public interface ICryptaLogManager {
      * Sets the verbose level.
      */
     default void setVerbose() {
-        JULogUtil.configureLoggers(Level.CONFIG);
+        JULogUtil.configureLoggers(Level.DEBUG);
     }
 
     /**
      * Sets the very verbose level.
      */
     default void setVeryVerbose() {
-        JULogUtil.configureLoggers(Level.FINE);
+        JULogUtil.configureLoggers(Level.TRACE);
     }
 
     /**
      * Sets the debug level.
      */
     default void setDebug() {
-        JULogUtil.configureLoggers(Level.ALL);
+        JULogUtil.configureLoggers(Level.TRACE);
     }
 }

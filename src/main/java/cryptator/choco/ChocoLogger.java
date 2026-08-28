@@ -51,7 +51,7 @@ public final class ChocoLogger {
     }
 
     public void logOnSolver(final IChocoModel m) {
-        logOnSolver(m.getModel());
+    	logOnSolver(m.getModel());
     }
 
     public void logOnSolver(final Model model) {

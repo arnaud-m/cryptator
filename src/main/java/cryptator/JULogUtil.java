@@ -8,10 +8,10 @@
  */
 package cryptator;
 
-import java.util.logging.Level;
 
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import cryptator.specs.ICryptaLogManager;
 
@@ -35,7 +35,7 @@ public final class JULogUtil {
     }
 
     public static void configureTestLoggers() {
-    	configureLoggers(Level.WARNING);
+    	configureLoggers(Level.WARN);
     }
 
     public static void configureSilentLoggers() {
@@ -44,7 +44,20 @@ public final class JULogUtil {
 
     @Deprecated
     public static void configureLoggers(final Level level) {
-        //setLevel(level, Cryptagen.JUL_LOGGER, AbstractCryptaSolver.JUL_LOGGER);
+    	LoggerContext context =
+    	        (LoggerContext) LoggerFactory.getILoggerFactory();
+    	
+    	ch.qos.logback.classic.Logger cryptatorLogger = context.getLogger("cryptator");
+    	cryptatorLogger.setLevel(level);
+    	
+    	for (ch.qos.logback.classic.Logger logger : context.getLoggerList()) {
+    	    System.out.printf(
+    	        "%s: level=%s, effective=%s%n",
+    	        logger.getName(),
+    	        logger.getLevel(),
+    	        logger.getEffectiveLevel()
+    	    );
+    	}
     }
 
     public static void flushLogs() {
