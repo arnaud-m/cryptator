@@ -19,7 +19,6 @@ public final class JULogUtil {
 
     private JULogUtil() {
     }
-
   
     public enum LoggerType {
         PRIMARY,
@@ -32,7 +31,7 @@ public final class JULogUtil {
         
 
     public static void configureDefaultLoggers() {
-       
+    	
     }
 
     public static void configureTestLoggers() {
@@ -43,6 +42,7 @@ public final class JULogUtil {
     	configureLoggers(Level.OFF);
     }
 
+    @Deprecated
     public static void configureLoggers(final Level level) {
         //setLevel(level, Cryptagen.JUL_LOGGER, AbstractCryptaSolver.JUL_LOGGER);
     }
@@ -52,30 +52,10 @@ public final class JULogUtil {
     	context.stop();
     }
 
-    public static final ICryptaLogManager DEFAULT_LOG_MANAGER = new DefaultLogManager();
+    public static final ICryptaLogManager DEFAULT_LOG_MANAGER = new ICryptaLogManager() {};
 
     public static ICryptaLogManager getDefaultLogManager() {
         return DEFAULT_LOG_MANAGER;
-    }
-
-    private static class DefaultLogManager implements ICryptaLogManager {
-
-        @Override
-        public void setQuiet() {
-            ICryptaLogManager.super.setQuiet();
-            
-        }
-
-        @Override
-        public void setNormal() {
-            ICryptaLogManager.super.setNormal();
-        }
-
-        @Override
-        public void setVerbose() {
-            ICryptaLogManager.super.setVerbose();
-        }
-
     }
 
 }

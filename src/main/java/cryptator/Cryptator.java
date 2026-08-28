@@ -30,7 +30,7 @@ import cryptator.specs.ICryptaSolver;
 
 public final class Cryptator {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(Cryptator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Cryptator.class);
     
     private Cryptator() {
     }
@@ -38,14 +38,11 @@ public final class Cryptator {
     public static void main(final String[] args) {
         JULogUtil.configureDefaultLoggers();
         
-        org.slf4j.Logger log = LoggerFactory.getLogger(Cryptator.class);
-        
-
-        log.trace("TRACE test");
-        log.debug("DEBUG test");
-        log.info("INFO test {}", 1);
-        log.warn("WARN test");
-        log.error("ERROR test");
+        LOGGER.trace("TRACE test");
+        LOGGER.debug("DEBUG test");
+        LOGGER.info("INFO test {}", 1);
+        LOGGER.warn("WARN test");
+        LOGGER.error("ERROR test");
         
         final int exitCode = doMain(args);
         System.exit(exitCode);

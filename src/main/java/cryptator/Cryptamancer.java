@@ -29,7 +29,7 @@ import cryptator.specs.ICryptaNode;
 
 public final class Cryptamancer {
 
-	 public static final Logger LOGGER = LoggerFactory.getLogger(Cryptamancer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Cryptamancer.class);
 	       
     private static class CryptamancerOptionsParser extends OptionsParserWithLog<CryptaLogConfig> {
 

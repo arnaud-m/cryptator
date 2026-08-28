@@ -18,6 +18,8 @@ import java.util.function.Consumer;
 
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cryptator.Cryptator;
 import cryptator.JULogUtil.LoggerType;
@@ -53,7 +55,8 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	private final CryptagenConfig config;
 
 	/** The logger. */
-	private final org.slf4j.Logger logger;
+	// TODO Should be a static field.
+	private final Logger logger;
 
 	/** The clog. */
 	private final ChocoLogger clog;
@@ -72,7 +75,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		super();
 		this.words = words;
 		this.config = config;
-		this.logger = org.slf4j.LoggerFactory.getLogger(CryptaListGenerator.class);
+		this.logger = LoggerFactory.getLogger(CryptaListGenerator.class);
 		this.clog = new ChocoLogger(LoggerType.PRIMARY);
 		this.errorCount = new AtomicInteger();
 	}

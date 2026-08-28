@@ -25,7 +25,7 @@ import cryptator.specs.ICryptaGameEngine;
 
 public class CryptaGameEngine implements ICryptaGameEngine {
 	
-	public static final Logger LOGGER = LoggerFactory.getLogger(CryptaGameEngine.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CryptaGameEngine.class);
 
     private CryptaModel gameModel;
 
