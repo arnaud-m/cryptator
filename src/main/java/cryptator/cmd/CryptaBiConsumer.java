@@ -109,7 +109,7 @@ public class CryptaBiConsumer implements BiConsumer<ICryptaNode, ICryptaSolution
 
 		@Override
 		public void accept(final ICryptaNode t, final ICryptaSolution u) {
-			logger.atInfo().setMessage("Find cryptarithm #{0,number,#} [OK]\n{1}\n{2}").addArgument(solutionCount).addArgument(() -> TreeUtils.writeInorder(t)).addArgument(u);
+			logger.atInfo().setMessage("Find cryptarithm #{} [OK]\n{}\n{}").addArgument(solutionCount).addArgument(() -> TreeUtils.writeInorder(t)).addArgument(u).log();
 		}
 	}
 

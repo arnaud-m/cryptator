@@ -35,8 +35,8 @@ public abstract class AbstractCryptaSolver implements ICryptaSolver {
     }
 
     protected final void logOnCryptarithm(final ICryptaNode cryptarithm) {
-        	logger.atInfo().setMessage("Declare instance:\ni {}").addArgument(() -> TransformWord.removeWhitespaces(TreeUtils.writeInorder(cryptarithm)));
-            logger.atDebug().setMessage("Cryptarithm features:\n{}").addArgument(() -> TreeUtils.computeFeatures(cryptarithm));
+        	logger.atInfo().setMessage("Declare instance:\ni {}").addArgument(() -> TransformWord.removeWhitespaces(TreeUtils.writeInorder(cryptarithm))).log();
+            logger.atDebug().setMessage("Cryptarithm features:\n{}").addArgument(() -> TreeUtils.computeFeatures(cryptarithm)).log();
     }
 
     public long getTimeLimit() {

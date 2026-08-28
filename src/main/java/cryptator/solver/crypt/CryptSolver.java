@@ -158,7 +158,7 @@ public class CryptSolver extends AbstractCryptaSolver {
          * @param str the other line
          */
         private void acceptOther(final String str) {
-            logger.atTrace().setMessage(str::trim);
+            logger.atTrace().setMessage(str::trim).log();
         }
 
         /**

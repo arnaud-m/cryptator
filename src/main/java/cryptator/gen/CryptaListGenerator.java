@@ -231,7 +231,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		@Override
 		public void accept(final ICryptaNode t) {
 			clog.logOnSolution(solution);
-			logger.atTrace().setMessage("Candidate cryptarithm:\n{}").addArgument(() -> TreeUtils.writeInorder(t));
+			logger.atTrace().setMessage("Candidate cryptarithm:\n{}").addArgument(() -> TreeUtils.writeInorder(t)).log();
 		}
 	}
 

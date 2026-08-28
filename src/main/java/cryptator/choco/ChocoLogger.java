@@ -33,12 +33,12 @@ public final class ChocoLogger {
     }
 
     public void logOnModel(final Model model) {
-    	logger.atDebug().setMessage("Model diagnostics:\n{}").addArgument( () -> toDimacs(model));
+    	logger.atDebug().setMessage("Model diagnostics:\n{}").addArgument( () -> toDimacs(model)).log();
         logger.trace("Pretty model:{}", model);      
     }
 
     public void logOnSolution(final Solution solution) {
-       logger.atTrace().setMessage("Solver solution:\n{}").addArgument(() -> {solution.record();return solution;});
+       logger.atTrace().setMessage("Solver solution:\n{}").addArgument(() -> {solution.record();return solution;}).log();
   
     }
 
@@ -55,7 +55,7 @@ public final class ChocoLogger {
     }
 
     public void logOnSolver(final Model model) {
-    	logger.atInfo().setMessage("Solver diagnostics:\n{}").addArgument( () -> toDimacs(model.getSolver()));
+    	logger.atInfo().setMessage("Solver diagnostics:\n{}").addArgument( () -> toDimacs(model.getSolver())).log();
     }
 
     public static String toDimacs(final Model model) {
