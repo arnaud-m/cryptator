@@ -15,8 +15,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Comparator;
 import java.util.OptionalInt;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -24,6 +22,8 @@ import org.kohsuke.args4j.OptionDef;
 import org.kohsuke.args4j.OptionHandlerFilter;
 import org.kohsuke.args4j.ParserProperties;
 import org.kohsuke.args4j.spi.OptionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cryptator.config.CryptaConfig;
 
@@ -47,7 +47,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     }
 
     public final Logger getLogger() {
-        return Logger.getLogger(mainClass.getName());
+        return LoggerFactory.getLogger(mainClass.getName());
     }
 
     private String getCommandName() {
@@ -62,7 +62,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
 
     protected boolean checkConfiguration() {
         if (config.getArithmeticBase() < 2) {
-            getLogger().severe("The Arithmetic base must be greater than 1.");
+            getLogger().error("The Arithmetic base must be greater than 1.");
             return false;
         }
         return true;
@@ -95,18 +95,18 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
                 return EXIT_CODE;
             } else if (checkConfiguration()) {
                 if (checkArguments()) {
-                    getLogger().log(Level.CONFIG, "Parse options [OK]");
-                    getLogger().log(Level.FINE, "Parse configuration [OK]\n{0}", config);
+                    getLogger().debug("Parse options [OK]");
+                    getLogger().trace("Parse configuration [OK]\n{}", config);
                     return EMPTY_CODE;
                 } else {
-                    getLogger().log(Level.SEVERE, "Parse arguments [FAIL]\n{0}", config.getArguments());
+                    getLogger().error("Parse arguments [FAIL]\n{}", config.getArguments());
                 }
             } else {
-                getLogger().log(Level.SEVERE, "Check options [FAIL]");
+                getLogger().error("Check options [FAIL]");
             }
 
         } catch (CmdLineException e) {
-            getLogger().log(Level.SEVERE, "Parse options [FAIL]", e);
+            getLogger().error("Parse options [FAIL]", e);
         }
         logHelp(parser);
         return ERROR_CODE;
@@ -121,7 +121,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     private void appendExample(final StringBuilder b, final CmdLineParser parser, final OptionHandlerFilter filter) {
         b.append("java ").append(getCommandName()).append(' ');
         final String opts = parser.printExample(filter);
-        if (opts.length() > 0) {
+        if (!opts.isEmpty()) {
             b.append(opts).append(" ");
         }
         if (filter == OptionHandlerFilter.REQUIRED) {
@@ -158,7 +158,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     }
 
     private void logHelp(final CmdLineParser parser) {
-        if (getLogger().isLoggable(Level.INFO)) {
+        if (getLogger().isInfoEnabled()) {
             final StringBuilder b = new StringBuilder();
             appendHeader(b);
             appendExample(b, parser, OptionHandlerFilter.REQUIRED);
@@ -172,7 +172,7 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
     }
 
     private void logManual(final CmdLineParser parser) {
-        if (getLogger().isLoggable(Level.INFO)) {
+        if (getLogger().isInfoEnabled()) {
             final StringBuilder b = new StringBuilder();
             appendHeader(b);
             b.append("SYNOPSIS\n");
