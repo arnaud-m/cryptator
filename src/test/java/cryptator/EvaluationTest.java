@@ -351,7 +351,7 @@ public class EvaluationTest {
 
     @Test
     public void testSolverSolution() throws CryptaModelException, CryptaSolverException {
-        final ICryptaSolver solver = new CryptaSolver();
+        final ICryptaSolver solver = new CryptaSolver(false);
         final ICryptaNode node = parser.parse("send+more=money");
         solver.solve(node, new CryptaConfig(), s -> {
             try {

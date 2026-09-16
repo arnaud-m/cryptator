@@ -13,6 +13,8 @@ src/main/benchmarks/crypt/
 src/main/benchmarks/crypt.awk 
 src/main/benchmarks/classify-additions.awk 
 
+src/main/third-party/crypt*/
+
 #### joe made this: http://goel.io/joe
 
 #####=== Java ===#####

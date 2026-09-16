@@ -15,13 +15,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cryptator.Cryptator;
+import cryptator.JULogUtil.LoggerType;
 import cryptator.choco.ChocoLogger;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.WordArray;
@@ -54,6 +55,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	private final CryptagenConfig config;
 
 	/** The logger. */
+	// TODO Should be a static field.
 	private final Logger logger;
 
 	/** The clog. */
@@ -69,12 +71,12 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	 * @param config the configuration
 	 * @param logger the logger
 	 */
-	public CryptaListGenerator(final WordArray words, final CryptagenConfig config, final Logger logger) {
+	public CryptaListGenerator(final WordArray words, final CryptagenConfig config) {
 		super();
 		this.words = words;
 		this.config = config;
-		this.logger = logger;
-		this.clog = new ChocoLogger(logger);
+		this.logger = LoggerFactory.getLogger(CryptaListGenerator.class);
+		this.clog = new ChocoLogger(LoggerType.PRIMARY);
 		this.errorCount = new AtomicInteger();
 	}
 
@@ -139,7 +141,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	private Consumer<ICryptaNode> buildConsumer(final IChocoModel gen,
 			final BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
 		final Consumer<ICryptaNode> cons = new LogConsumer(gen);
-		final ICryptaSolver solver = Cryptator.createSolver(config);
+		final ICryptaSolver solver = Cryptator.createSolver(config, LoggerType.SECONDARY);
 		return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(solver, consumer));
 	}
 
@@ -229,9 +231,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		@Override
 		public void accept(final ICryptaNode t) {
 			clog.logOnSolution(solution);
-			if (logger.isLoggable(Level.FINE)) {
-				logger.log(Level.FINE, "Candidate cryptarithm:\n{0}", TreeUtils.writeInorder(t));
-			}
+			logger.atTrace().setMessage("Candidate cryptarithm:\n{}").addArgument(() -> TreeUtils.writeInorder(t)).log();
 		}
 	}
 
@@ -265,7 +265,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		 * @return the cryptarithm consumer
 		 */
 		private CryptaBiConsumer buildBiConsumer() {
-			CryptaBiConsumer consumer = new CryptaBiConsumer(logger);
+			CryptaBiConsumer consumer = new CryptaBiConsumer(LoggerType.PRIMARY);
 			if (config.isCheckSolution()) {
 				consumer.withSolutionCheck(config.getArithmeticBase());
 			}
@@ -288,11 +288,11 @@ public class CryptaListGenerator implements ICryptaGenerator {
 						internal.accept(t, solution.get());
 					}
 				} else {
-					logger.log(Level.WARNING, "Solve the candidate cryptarithm [ERROR]");
+					logger.warn("Solve the candidate cryptarithm [ERROR]");
 				}
 			} catch (CryptaModelException | CryptaSolverException e) {
 				errorCount.incrementAndGet();
-				logger.log(Level.WARNING, "Solve the candidate cryptarithm [FAIL]", e);
+				logger.warn("Solve the candidate cryptarithm [FAIL]", e);
 			}
 		}
 	}

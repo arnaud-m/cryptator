@@ -10,8 +10,9 @@ package cryptator;
 
 import java.util.OptionalInt;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cryptator.cmd.OptionsParserWithLog;
 import cryptator.config.CryptaConfig;
@@ -28,14 +29,14 @@ import cryptator.specs.ICryptaNode;
 
 public final class Cryptamancer {
 
-    public static final Logger LOGGER = Logger.getLogger(Cryptamancer.class.getName());
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(Cryptamancer.class);
+	       
     private static class CryptamancerOptionsParser extends OptionsParserWithLog<CryptaLogConfig> {
 
         private static final String ARG_NAME = "CRYPTARITHM";
 
         protected CryptamancerOptionsParser() {
-            super(Cryptamancer.class, new CryptaLogConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
+            super(new CryptaLogConfig(), Cryptamancer.class.getName(), ARG_NAME, JULogUtil.getDefaultLogManager());
         }
 
         @Override
@@ -53,7 +54,7 @@ public final class Cryptamancer {
         try {
             return Cryptator.parseCryptarithm(cryptarithm, new CryptaParserWrapper(), LOGGER);
         } catch (CryptaParserException e) {
-            LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
+            LOGGER.error("Parse cryptarithm {} [FAIL]", cryptarithm, e);
             return null;
         }
     }
@@ -65,7 +66,7 @@ public final class Cryptamancer {
             engine.setUp(modeler.model(node, config));
             return engine;
         } catch (CryptaGameException | CryptaModelException e) {
-            LOGGER.log(Level.SEVERE, "failed to build the game engine", e);
+            LOGGER.error("Failed to build the game engine", e);
             return null;
         }
     }
@@ -74,22 +75,22 @@ public final class Cryptamancer {
         final Scanner scanner = new Scanner(System.in);
         int n = 1;
         while ((!engine.isSolved())) {
-            LOGGER.log(Level.INFO, "Turn {0}\nEnter a decision (symbol operator value):", n);
+            LOGGER.info("Turn {}\nEnter a decision (symbol operator value):", n);
             try {
                 final CryptaGameDecision decision = CryptaGameDecision.parseDecision(scanner);
                 if (decision == null) {
-                    LOGGER.warning("Cannot parse the decision.");
+                    LOGGER.warn("Cannot parse the decision.");
                 } else {
                     final boolean answer = engine.takeDecision(decision);
                     if (answer) {
-                        LOGGER.info("decision accepted.");
+                        LOGGER.info("Decision accepted.");
                     } else {
-                        LOGGER.info("decision rejected.");
+                        LOGGER.info("Decision rejected.");
                     }
-                    LOGGER.log(Level.INFO, "display the current partial solution.\n{0}", engine);
+                    LOGGER.info("Display the current partial solution.\n{}", engine);
                 }
             } catch (CryptaGameException e) {
-                LOGGER.log(Level.WARNING, "failure while taking the decision.", e);
+                LOGGER.warn("Failure while taking the decision.", e);
             }
             n++;
         }

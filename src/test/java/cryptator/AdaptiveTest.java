@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import cryptator.JULogUtil.LoggerType;
 import cryptator.parser.CryptaParserException;
 import cryptator.solver.AdaptiveSolver;
 import cryptator.solver.CryptaModelException;
@@ -21,7 +22,7 @@ import cryptator.solver.CryptaSolverException;
 
 public class AdaptiveTest {
 
-    private final CryptaSolvingTester t = new CryptaSolvingTester(new AdaptiveSolver(false));
+    private final CryptaSolvingTester t = new CryptaSolvingTester(new AdaptiveSolver(false, LoggerType.PRIMARY));
 
     public AdaptiveTest() {
     }

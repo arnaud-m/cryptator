@@ -8,6 +8,7 @@
  */
 package cryptator;
 
+import cryptator.JULogUtil.LoggerType;
 import cryptator.config.CryptatorConfig;
 import cryptator.json.SolveInput;
 import cryptator.json.SolveOutput;
@@ -33,7 +34,7 @@ public final class CryptaJson {
         final SolveOutput output = new SolveOutput(input);
         output.setSymbols(TreeUtils.computeSymbols(node));
 
-        final ICryptaSolver solver = new AdaptiveSolver(false);
+        final ICryptaSolver solver = new AdaptiveSolver(false, LoggerType.PRIMARY);
         solver.limitSolution(config.getSolutionLimit());
         solver.limitTime(config.getTimeLimit());
         solver.solve(node, input.getConfig(), s -> output.accept(node, s));

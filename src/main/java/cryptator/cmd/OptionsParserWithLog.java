@@ -13,15 +13,16 @@ import cryptator.specs.ICryptaLogManager;
 
 public class OptionsParserWithLog<E extends CryptaLogConfig> extends AbstractOptionsParser<E> {
 
-    private final ICryptaLogManager logManager;
+    private final ICryptaLogManager logManager;   
 
-    public OptionsParserWithLog(final Class<?> mainClass, final E config, final String argumentName,
-            final ICryptaLogManager logManager) {
-        super(mainClass, config, argumentName);
-        this.logManager = logManager;
-    }
+    public OptionsParserWithLog(E config, String commandName, String argumentName, ICryptaLogManager logManager) {
+		super(config, commandName, argumentName);
+		this.logManager = logManager;
+	}
 
-    @Override
+
+
+	@Override
     protected void configureLoggers() {
         config.getVerbosity().applyTo(logManager);
     }

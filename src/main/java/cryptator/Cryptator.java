@@ -9,9 +9,11 @@
 package cryptator;
 
 import java.util.OptionalInt;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
+import cryptator.JULogUtil.LoggerType;
 import cryptator.cmd.CryptaBiConsumer;
 import cryptator.cmd.OptionsParserWithLog;
 import cryptator.config.CryptaCmdConfig;
@@ -28,13 +30,20 @@ import cryptator.specs.ICryptaSolver;
 
 public final class Cryptator {
 
-    public static final Logger LOGGER = Logger.getLogger(Cryptator.class.getName());
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(Cryptator.class);
+    
     private Cryptator() {
     }
 
     public static void main(final String[] args) {
         JULogUtil.configureDefaultLoggers();
+        
+//        LOGGER.trace("TRACE test");
+//        LOGGER.debug("DEBUG test");
+//        LOGGER.info("INFO test {}", 1);
+//        LOGGER.warn("WARN test");
+//        LOGGER.error("ERROR test");
+        
         final int exitCode = doMain(args);
         System.exit(exitCode);
     }
@@ -67,29 +76,30 @@ public final class Cryptator {
         private static final String ARG_NAME = "CRYPTARITHMS...";
 
         CryptatorOptionsParser() {
-            super(Cryptator.class, new CryptatorConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
+            super(new CryptatorConfig(), Cryptator.class.getName(), ARG_NAME, JULogUtil.getCryptatorLogManager());
         }
     }
 
-    public static ICryptaSolver createSolver(final CryptaCmdConfig config) {
+    public static ICryptaSolver createSolver(final CryptaCmdConfig config, final LoggerType loggerType) {
         switch (config.getSolverType()) {
         case SCALAR:
-            return new CryptaSolver(false);
+            return new CryptaSolver(false, loggerType);
         case BIGNUM:
-            return new CryptaSolver(true);
+            return new CryptaSolver(true, loggerType);
         case CRYPT:
+        	// TODO Adapt to logger type ? 
             return new CryptSolver();
         case ADAPT:
-            return new AdaptiveSolver(false);
+            return new AdaptiveSolver(false, loggerType);
         case ADAPTC:
-            return new AdaptiveSolver(true);
+            return new AdaptiveSolver(true, loggerType);
         default:
-            return new CryptaSolver(false);
+            return new CryptaSolver(false, loggerType);
         }
     }
 
     private static ICryptaSolver buildSolver(final CryptatorConfig config) {
-        final ICryptaSolver solver = createSolver(config);
+        final ICryptaSolver solver = createSolver(config, LoggerType.PRIMARY);
         solver.limitSolution(config.getSolutionLimit());
         solver.limitTime(config.getTimeLimit());
         return solver;
@@ -98,7 +108,7 @@ public final class Cryptator {
     public static ICryptaNode parseCryptarithm(final String cryptarithm, final CryptaParserWrapper parser,
             final Logger logger) throws CryptaParserException {
         final ICryptaNode node = parser.parse(cryptarithm);
-        logger.log(Level.INFO, "Parse cryptarithm [OK]\n{0}", cryptarithm);
+        logger.info("Parse cryptarithm [OK]\n{}", cryptarithm);
         return node;
 
     }
@@ -115,20 +125,20 @@ public final class Cryptator {
                 status = solved ? "OK" : "KO";
             }
             consumer.logOnLastSolution();
-            LOGGER.log(Level.INFO, "Solve cryptarithm {0} [{1}]", new Object[] {cryptarithm, status});
+            LOGGER.info("Solve cryptarithm {} [{}]", cryptarithm, status);
             return consumer.getErrorCount();
         } catch (CryptaParserException e) {
-            LOGGER.log(Level.SEVERE, e, () -> "Parse cryptarithm " + cryptarithm + " [FAIL]");
+        	LOGGER.error("Parse cryptarithm {} [FAIL]", cryptarithm, e);
         } catch (CryptaModelException e) {
-            LOGGER.log(Level.SEVERE, "Model cryptarithm [FAIL]", e);
+            LOGGER.error( "Model cryptarithm [FAIL]", e);
         } catch (CryptaSolverException e) {
-            LOGGER.log(Level.SEVERE, "Solve cryptarithm [FAIL]", e);
+            LOGGER.error("Solve cryptarithm [FAIL]", e);
         }
         return 1;
     }
 
     private static CryptaBiConsumer buildBiConsumer(final CryptatorConfig config) {
-        CryptaBiConsumer consumer = new CryptaBiConsumer(LOGGER);
+    	CryptaBiConsumer consumer = new CryptaBiConsumer(LoggerType.PRIMARY);
         consumer.withSolutionLog();
         if (config.isCheckSolution()) {
             consumer.withSolutionCheck(config.getArithmeticBase());

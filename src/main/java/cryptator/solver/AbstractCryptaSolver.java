@@ -8,8 +8,7 @@
  */
 package cryptator.solver;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
 
 import cryptator.config.CryptaConfig;
 import cryptator.gen.TransformWord;
@@ -21,24 +20,18 @@ public abstract class AbstractCryptaSolver implements ICryptaSolver {
 
     protected static final int MS = 1000;
 
-    public static final Logger LOGGER = Logger.getLogger(AbstractCryptaSolver.class.getName());
-
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(AbstractCryptaSolver.class);
+    
     protected long timeLimit = 0;
 
     protected long solutionLimit = 0;
 
-    protected AbstractCryptaSolver() {
-        super();
+    protected AbstractCryptaSolver() {     
     }
-
-    protected static void logOnCryptarithm(final ICryptaNode cryptarithm) {
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.log(Level.INFO, "Declare instance:\ni {0}",
-                    TransformWord.removeWhitespaces(TreeUtils.writeInorder(cryptarithm)));
-            if (LOGGER.isLoggable(Level.CONFIG)) {
-                LOGGER.log(Level.CONFIG, "Cryptarithm features:\n{0}", TreeUtils.computeFeatures(cryptarithm));
-            }
-        }
+   
+    protected final void logOnCryptarithm(final ICryptaNode cryptarithm) {
+        	logger.atInfo().setMessage("Declare instance:\ni {}").addArgument(() -> TransformWord.removeWhitespaces(TreeUtils.writeInorder(cryptarithm))).log();
+            logger.atDebug().setMessage("Cryptarithm features:\n{}").addArgument(() -> TreeUtils.computeFeatures(cryptarithm)).log();
     }
 
     public long getTimeLimit() {
@@ -59,8 +52,8 @@ public abstract class AbstractCryptaSolver implements ICryptaSolver {
         this.solutionLimit = limit;
     }
 
-    protected static void logOnConfiguration(final CryptaConfig config) {
-        LOGGER.log(Level.CONFIG, "Configuration:\n{0}", config);
+    protected final void logOnConfiguration(final CryptaConfig config) {
+        logger.debug("Configuration:\n{}", config);
     }
 
 }
