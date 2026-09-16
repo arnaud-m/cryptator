@@ -15,6 +15,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import cryptator.specs.ICryptaLogManager;
 
+
 public final class JULogUtil {
 
 	private JULogUtil() {
@@ -43,94 +44,114 @@ public final class JULogUtil {
 	}
 
 	public static void configureLoggers(final Level level) {
-		final LoggerContext context =
-				(LoggerContext) LoggerFactory.getILoggerFactory();
+		getLoggerContext().getLogger("cryptator").setLevel(level);
+	}
 
-		ch.qos.logback.classic.Logger cryptatorLogger = context.getLogger("cryptator");
-		cryptatorLogger.setLevel(level);
 
-		//    	for (ch.qos.logback.classic.Logger logger : context.getLoggerList()) {
-		//    	    System.out.printf(
-		//    	        "%s: level=%s, effective=%s%n",
-		//    	        logger.getName(),
-		//    	        logger.getLevel(),
-		//    	        logger.getEffectiveLevel()
-		//    	    );
-		//    	}
+	public static void printLoggers() {
+		for (ch.qos.logback.classic.Logger logger : getLoggerContext().getLoggerList()) {
+			System.out.printf(
+					"%s: level=%s, effective=%s%n",
+					logger.getName(),
+					logger.getLevel(),
+					logger.getEffectiveLevel()
+					);
+		}
+	}
+	
+	private static LoggerContext getLoggerContext() {
+		return (LoggerContext) LoggerFactory.getILoggerFactory();
 	}
 
 	public static void flushLogs() {
-		LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-		context.stop();
+		getLoggerContext().stop();
 	}
 
-	public static final ICryptaLogManager DEFAULT_LOG_MANAGER = new ICryptaLogManager() {};
+	private static class DefaultLogManager implements ICryptaLogManager {
+		
+		@Override
+		public void setSilent() {
+			configureLoggers(Level.OFF);
+		}
 
+		@Override
+		public void setQuiet() {
+			configureLoggers(Level.WARN);
+		}
+
+		@Override
+		public void setNormal() {
+			configureLoggers(Level.INFO);
+		}
+
+		@Override
+		public void setVerbose() {
+			configureLoggers(Level.DEBUG);
+		}
+
+		@Override
+		public void setDebug() {
+			configureLoggers(Level.TRACE);
+		}
+	}
+	
+
+	private static final ICryptaLogManager DEFAULT_LOG_MANAGER = new DefaultLogManager();
+	
 	public static ICryptaLogManager getDefaultLogManager() {
 		return DEFAULT_LOG_MANAGER;
 	}
 
-	public static final ICryptaLogManager CRYPTATOR_LOG_MANAGER = new ICryptaLogManager() {
-
+	private static class CryptatorLogManager extends DefaultLogManager {
+		
 		@Override
 		public void setQuiet() {
-			ICryptaLogManager.super.setQuiet();
-			final LoggerContext context =
-					(LoggerContext) LoggerFactory.getILoggerFactory();
-
+			super.setQuiet();
+			final LoggerContext context = getLoggerContext();
 			context.getLogger("cryptator.Cryptator").setLevel(Level.INFO);
 			context.getLogger("cryptator.cmd.CryptaBiConsumer.primary").setLevel(Level.INFO);
 			context.getLogger("cryptator.cmd.AbstractOptionsParser").setLevel(Level.INFO);
 		}
-		
-		@Override
-		public void setVeryVerbose() {
-			ICryptaLogManager.super.setVeryVerbose();
-			final LoggerContext context =
-					(LoggerContext) LoggerFactory.getILoggerFactory();
-			 context.getLogger("cryptator.choco.ChocoLogger.primary").setLevel(Level.DEBUG);
-		}
-	};
+	}
+	
+	private static final ICryptaLogManager CRYPTATOR_LOG_MANAGER = new CryptatorLogManager();
 	
 	public static ICryptaLogManager getCryptatorLogManager() {
 		return CRYPTATOR_LOG_MANAGER;
 	}
 
-	public static final ICryptaLogManager CRYPTAGEN_LOG_MANAGER = new ICryptaLogManager() {
-
+	private static class CryptagenLogManager extends DefaultLogManager {
+		
 		@Override
 		public void setQuiet() {
-			ICryptaLogManager.super.setQuiet();
-			final LoggerContext context =
-					(LoggerContext) LoggerFactory.getILoggerFactory();
-
+			super.setQuiet();
+			final LoggerContext context = getLoggerContext();
 			context.getLogger("cryptator.Cryptagen").setLevel(Level.INFO);
-	    	context.getLogger("cryptator.cmd.CryptaBiConsumer.primary").setLevel(Level.INFO);
-	    	context.getLogger("cryptator.cmd.AbstractOptionsParser").setLevel(Level.INFO);
-	    	context.getLogger("cryptator.choco.ChocoLogger.primary").setLevel(Level.INFO);
+			context.getLogger("cryptator.cmd.CryptaBiConsumer.primary").setLevel(Level.INFO);
+			context.getLogger("cryptator.cmd.AbstractOptionsParser").setLevel(Level.INFO);
+			context.getLogger("cryptator.choco.ChocoLogger.primary").setLevel(Level.INFO);
 		}
-		
+
 		@Override
 		public void setNormal() {
-			ICryptaLogManager.super.setNormal();
-			final LoggerContext context =
-					(LoggerContext) LoggerFactory.getILoggerFactory();
+			super.setNormal();
+			final LoggerContext context = getLoggerContext();
 			context.getLogger("cryptator.Cryptagen").setLevel(Level.DEBUG);
-	    	context.getLogger("cryptator.cmd.AbstractOptionsParser").setLevel(Level.DEBUG);
-	    	context.getLogger("cryptator.choco.ChocoLogger.primary").setLevel(Level.DEBUG);
+			context.getLogger("cryptator.cmd.AbstractOptionsParser").setLevel(Level.DEBUG);
+			context.getLogger("cryptator.choco.ChocoLogger.primary").setLevel(Level.DEBUG);
 		}
-		
+
 		@Override
 		public void setVerbose() {
-			ICryptaLogManager.super.setVerbose();
-			final LoggerContext context =
-					(LoggerContext) LoggerFactory.getILoggerFactory();
-			  context.getLogger("cryptator.gen.CryptaListGenerator").setLevel(Level.TRACE);
-		      context.getLogger("cryptator.choco.ChocoLogger.primary").setLevel(Level.TRACE);
+			super.setVerbose();
+			final LoggerContext context = getLoggerContext();
+			context.getLogger("cryptator.gen.CryptaListGenerator").setLevel(Level.TRACE);
+			context.getLogger("cryptator.choco.ChocoLogger.primary").setLevel(Level.TRACE);
 		}
-		
-	};
-	
+	}
+
+	private static final ICryptaLogManager CRYPTAGEN_LOG_MANAGER = new CryptagenLogManager();
+
 	public static ICryptaLogManager getCryptagenLogManager() {
 		return CRYPTAGEN_LOG_MANAGER;
 	}

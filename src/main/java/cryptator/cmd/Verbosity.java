@@ -23,8 +23,6 @@ public enum Verbosity {
     NORMAL,
     /** The verbose level. */
     VERBOSE,
-    /** The very verbose level. */
-    VERY_VERBOSE,
     /** The debug level. */
     DEBUG;
 
@@ -53,8 +51,6 @@ public enum Verbosity {
                 manager.setNormal();
             } else if (verbosity.equals(VERBOSE)) {
                 manager.setVerbose();
-            } else if (verbosity.equals(VERY_VERBOSE)) {
-                manager.setVeryVerbose();
             } else if (verbosity.equals(DEBUG)) {
                 manager.setDebug();
             }
