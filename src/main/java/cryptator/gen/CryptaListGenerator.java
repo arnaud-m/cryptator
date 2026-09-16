@@ -47,6 +47,9 @@ import cryptator.tree.TreeUtils;
 public class CryptaListGenerator implements ICryptaGenerator {
 
 	private static final int MIN_WORDS = 3;
+	
+	/** The logger. */
+	private static final Logger LOGGER = LoggerFactory.getLogger(CryptaListGenerator.class);
 
 	/** The words. */
 	private final WordArray words;
@@ -54,9 +57,6 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	/** The config. */
 	private final CryptagenConfig config;
 
-	/** The logger. */
-	// TODO Should be a static field.
-	private final Logger logger;
 
 	/** The clog. */
 	private final ChocoLogger clog;
@@ -69,13 +69,12 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	 *
 	 * @param words  the word array
 	 * @param config the configuration
-	 * @param logger the logger
+	 * @param LOGGER the logger
 	 */
 	public CryptaListGenerator(final WordArray words, final CryptagenConfig config) {
 		super();
 		this.words = words;
 		this.config = config;
-		this.logger = LoggerFactory.getLogger(CryptaListGenerator.class);
 		this.clog = new ChocoLogger(LoggerType.PRIMARY);
 		this.errorCount = new AtomicInteger();
 	}
@@ -231,7 +230,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 		@Override
 		public void accept(final ICryptaNode t) {
 			clog.logOnSolution(solution);
-			logger.atTrace().setMessage("Candidate cryptarithm:\n{}").addArgument(() -> TreeUtils.writeInorder(t)).log();
+			LOGGER.atTrace().setMessage("Candidate cryptarithm:\n{}").addArgument(() -> TreeUtils.writeInorder(t)).log();
 		}
 	}
 
@@ -288,11 +287,11 @@ public class CryptaListGenerator implements ICryptaGenerator {
 						internal.accept(t, solution.get());
 					}
 				} else {
-					logger.warn("Solve the candidate cryptarithm [ERROR]");
+					LOGGER.warn("Solve the candidate cryptarithm [ERROR]");
 				}
 			} catch (CryptaModelException | CryptaSolverException e) {
 				errorCount.incrementAndGet();
-				logger.warn("Solve the candidate cryptarithm [FAIL]", e);
+				LOGGER.warn("Solve the candidate cryptarithm [FAIL]", e);
 			}
 		}
 	}

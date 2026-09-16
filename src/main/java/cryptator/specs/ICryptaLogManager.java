@@ -8,10 +8,6 @@
  */
 package cryptator.specs;
 
-
-import ch.qos.logback.classic.Level;
-import cryptator.JULogUtil;
-
 /**
  * The Interface ILogManager manages the logging verbosity.
  */
@@ -20,42 +16,25 @@ public interface ICryptaLogManager {
     /**
      * Sets the silent level.
      */
-    default void setSilent() {
-        JULogUtil.configureLoggers(Level.OFF);
-    }
+    void setSilent();
 
     /**
      * Sets the quiet level.
      */
-    default void setQuiet() {
-        JULogUtil.configureLoggers(Level.WARN);
-    }
+    void setQuiet();
 
     /**
      * Sets the normal level.
      */
-    default void setNormal() {
-        JULogUtil.configureLoggers(Level.INFO);
-    }
+    void setNormal();
 
     /**
      * Sets the verbose level.
      */
-    default void setVerbose() {
-        JULogUtil.configureLoggers(Level.DEBUG);
-    }
-
-    /**
-     * Sets the very verbose level.
-     */
-    default void setVeryVerbose() {
-        JULogUtil.configureLoggers(Level.TRACE);
-    }
+    void setVerbose();
 
     /**
      * Sets the debug level.
      */
-    default void setDebug() {
-        JULogUtil.configureLoggers(Level.TRACE);
-    }
+    void setDebug();
 }
