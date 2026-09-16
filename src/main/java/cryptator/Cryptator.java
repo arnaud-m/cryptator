@@ -76,7 +76,7 @@ public final class Cryptator {
         private static final String ARG_NAME = "CRYPTARITHMS...";
 
         CryptatorOptionsParser() {
-            super(Cryptator.class, new CryptatorConfig(), ARG_NAME, JULogUtil.getCryptatorLogManager());
+            super(new CryptatorConfig(), Cryptator.class.getName(), ARG_NAME, JULogUtil.getCryptatorLogManager());
         }
     }
 

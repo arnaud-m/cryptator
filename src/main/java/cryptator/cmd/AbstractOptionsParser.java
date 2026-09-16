@@ -49,14 +49,6 @@ public abstract class AbstractOptionsParser<E extends CryptaConfig> {
         this.argumentName = argumentName;
     }
     
-    @Deprecated
-    protected AbstractOptionsParser(final Class<?> mainClass, final E config, final String argumentName) {
-        super();
-        this.config = config;
-        this.commandName = mainClass.getName();
-        this.argumentName = argumentName;
-    }
-
     private String getCommandName() {
         return commandName;
     }

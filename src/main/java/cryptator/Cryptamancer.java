@@ -36,7 +36,7 @@ public final class Cryptamancer {
         private static final String ARG_NAME = "CRYPTARITHM";
 
         protected CryptamancerOptionsParser() {
-            super(Cryptamancer.class, new CryptaLogConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
+            super(new CryptaLogConfig(), Cryptamancer.class.getName(), ARG_NAME, JULogUtil.getDefaultLogManager());
         }
 
         @Override
