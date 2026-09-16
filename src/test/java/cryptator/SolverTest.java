@@ -629,7 +629,6 @@ public class SolverTest {
 
     @Test
     public void testEvaluation4Issue25() throws CryptaParserException, CryptaSolverException, CryptaModelException {
-        // TODO : modify this line for issue 39 to accept W = 0
         var cryptarithm = "W='4'";
         t.testUNIQUE(cryptarithm);
     }
