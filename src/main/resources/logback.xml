@@ -1,10 +1,12 @@
-<configuration debug="true">
+<configuration debug="false">
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <target>System.out</target>
         <immediateFlush>true</immediateFlush>
 
         <encoder>
             <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger] %msg%n</pattern>
+<!--   	        <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger] %msg%n</pattern>-->
+   
         </encoder>
     </appender>
 
@@ -32,12 +34,10 @@
         </rollingPolicy>
     </appender>
 
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>
-    
-    <logger name="cryptator" level="TRACE"/>
 
-    
+    <logger name="cryptator" level="TRACE"/>
 </configuration>

@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import org.chocosolver.solver.variables.IntVar;
 
 import cryptator.CryptaOperator;
+import cryptator.JULogUtil.LoggerType;
 import cryptator.config.CryptaConfig;
 import cryptator.solver.crypt.CryptSolver;
 import cryptator.specs.ICryptaNode;
@@ -28,9 +29,9 @@ public class AdaptiveSolver implements ICryptaSolver {
     private final CryptaSolver solver;
     private final Optional<CryptSolver> crypt;
 
-    public AdaptiveSolver(final boolean useCrypt) {
+    public AdaptiveSolver(final boolean useCrypt, final LoggerType loggerType) {
         super();
-        solver = new CryptaSolver();
+        solver = new CryptaSolver(true, loggerType);
         crypt = useCrypt ? Optional.of(new CryptSolver()) : Optional.empty();
     }
 

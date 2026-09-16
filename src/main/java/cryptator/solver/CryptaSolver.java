@@ -22,19 +22,18 @@ import cryptator.specs.SearchMeasures;
 
 public final class CryptaSolver extends AbstractCryptaSolver {
 
-    private final ChocoLogger CLOG;
+    private final ChocoLogger chocoLogger;
 
     private ICryptaModeler modeler;
 
-    public CryptaSolver() {
-        this(false);
-    }
-
     public CryptaSolver(final boolean useBignum) {
+        this(useBignum, LoggerType.PRIMARY);
+    }
+    
+    public CryptaSolver(final boolean useBignum, final LoggerType loggerType) {
         super();
         modeler = useBignum ? new CryptaBignumModeler() : new CryptaModeler();
-        // TODO Depends on solution (primary) or generation (secondary)
-        this.CLOG = new ChocoLogger(LoggerType.PRIMARY);
+        this.chocoLogger = new ChocoLogger(loggerType);
     }
 
     public void setBignum() {
@@ -51,7 +50,7 @@ public final class CryptaSolver extends AbstractCryptaSolver {
         final CryptaModel m = modeler.model(cryptarithm, config);
         logOnCryptarithm(cryptarithm);
         logOnConfiguration(config);
-        CLOG.logOnModel(m);
+        chocoLogger.logOnModel(m);
 
         final Solver s = m.getSolver();
         if (timeLimit > 0) {
@@ -61,18 +60,18 @@ public final class CryptaSolver extends AbstractCryptaSolver {
         long solutionCount = 0;
         if (solutionLimit > 0) {
             while ((solutionCount < solutionLimit) && s.solve()) {
-                CLOG.logOnSolution(m.getModel());
+                chocoLogger.logOnSolution(m.getModel());
                 solutionConsumer.accept(m.recordSolution());
                 solutionCount++;
             }
         } else {
             while (s.solve()) {
-                CLOG.logOnSolution(m.getModel());
+                chocoLogger.logOnSolution(m.getModel());
                 solutionConsumer.accept(m.recordSolution());
                 solutionCount++;
             }
         }
-        CLOG.logOnSolver(m);
+        chocoLogger.logOnSolver(m);
         if(solutionCount != s.getSolutionCount()) {
         	throw new CryptaSolverException("Inconsistent solution count");
         }

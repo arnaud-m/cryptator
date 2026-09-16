@@ -141,7 +141,7 @@ public class CryptaListGenerator implements ICryptaGenerator {
 	private Consumer<ICryptaNode> buildConsumer(final IChocoModel gen,
 			final BiConsumer<ICryptaNode, ICryptaSolution> consumer) {
 		final Consumer<ICryptaNode> cons = new LogConsumer(gen);
-		final ICryptaSolver solver = Cryptator.createSolver(config);
+		final ICryptaSolver solver = Cryptator.createSolver(config, LoggerType.SECONDARY);
 		return config.isDryRun() ? cons : cons.andThen(new GenerateConsumer(solver, consumer));
 	}
 

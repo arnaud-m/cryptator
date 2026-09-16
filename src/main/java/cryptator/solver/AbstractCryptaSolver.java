@@ -8,7 +8,8 @@
  */
 package cryptator.solver;
 
-import cryptator.JULogUtil.LoggerType;
+import org.slf4j.LoggerFactory;
+
 import cryptator.config.CryptaConfig;
 import cryptator.gen.TransformWord;
 import cryptator.specs.ICryptaNode;
@@ -19,21 +20,15 @@ public abstract class AbstractCryptaSolver implements ICryptaSolver {
 
     protected static final int MS = 1000;
 
-    protected final org.slf4j.Logger logger;
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(AbstractCryptaSolver.class);
     
     protected long timeLimit = 0;
 
     protected long solutionLimit = 0;
 
-    protected AbstractCryptaSolver() {
-        this(LoggerType.PRIMARY);
+    protected AbstractCryptaSolver() {     
     }
-    
-    protected AbstractCryptaSolver(final LoggerType loggerType) {
-        super();
-        this.logger = loggerType.getLogger(AbstractCryptaSolver.class);
-    }
-
+   
     protected final void logOnCryptarithm(final ICryptaNode cryptarithm) {
         	logger.atInfo().setMessage("Declare instance:\ni {}").addArgument(() -> TransformWord.removeWhitespaces(TreeUtils.writeInorder(cryptarithm))).log();
             logger.atDebug().setMessage("Cryptarithm features:\n{}").addArgument(() -> TreeUtils.computeFeatures(cryptarithm)).log();

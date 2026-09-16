@@ -100,7 +100,7 @@ public final class Cryptagen {
 		private static final String ARG_NAME = "WORDS...";
 
 		protected CryptagenOptionsParser() {
-			super(Cryptagen.class, new CryptagenConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
+			super(Cryptagen.class, new CryptagenConfig(), ARG_NAME, JULogUtil.getCryptagenLogManager());
 		}
 
 	}

@@ -39,7 +39,6 @@ public final class ChocoLogger {
 
     public void logOnSolution(final Solution solution) {
        logger.atTrace().setMessage("Solver solution:\n{}").addArgument(() -> {solution.record();return solution;}).log();
-  
     }
 
     public void logOnSolution(final IChocoModel m) {

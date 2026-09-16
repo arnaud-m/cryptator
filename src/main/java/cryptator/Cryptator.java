@@ -38,11 +38,11 @@ public final class Cryptator {
     public static void main(final String[] args) {
         JULogUtil.configureDefaultLoggers();
         
-        LOGGER.trace("TRACE test");
-        LOGGER.debug("DEBUG test");
-        LOGGER.info("INFO test {}", 1);
-        LOGGER.warn("WARN test");
-        LOGGER.error("ERROR test");
+//        LOGGER.trace("TRACE test");
+//        LOGGER.debug("DEBUG test");
+//        LOGGER.info("INFO test {}", 1);
+//        LOGGER.warn("WARN test");
+//        LOGGER.error("ERROR test");
         
         final int exitCode = doMain(args);
         System.exit(exitCode);
@@ -76,29 +76,30 @@ public final class Cryptator {
         private static final String ARG_NAME = "CRYPTARITHMS...";
 
         CryptatorOptionsParser() {
-            super(Cryptator.class, new CryptatorConfig(), ARG_NAME, JULogUtil.getDefaultLogManager());
+            super(Cryptator.class, new CryptatorConfig(), ARG_NAME, JULogUtil.getCryptatorLogManager());
         }
     }
 
-    public static ICryptaSolver createSolver(final CryptaCmdConfig config) {
+    public static ICryptaSolver createSolver(final CryptaCmdConfig config, final LoggerType loggerType) {
         switch (config.getSolverType()) {
         case SCALAR:
-            return new CryptaSolver(false);
+            return new CryptaSolver(false, loggerType);
         case BIGNUM:
-            return new CryptaSolver(true);
+            return new CryptaSolver(true, loggerType);
         case CRYPT:
+        	// TODO Adapt to logger type ? 
             return new CryptSolver();
         case ADAPT:
-            return new AdaptiveSolver(false);
+            return new AdaptiveSolver(false, loggerType);
         case ADAPTC:
-            return new AdaptiveSolver(true);
+            return new AdaptiveSolver(true, loggerType);
         default:
-            return new CryptaSolver(false);
+            return new CryptaSolver(false, loggerType);
         }
     }
 
     private static ICryptaSolver buildSolver(final CryptatorConfig config) {
-        final ICryptaSolver solver = createSolver(config);
+        final ICryptaSolver solver = createSolver(config, LoggerType.PRIMARY);
         solver.limitSolution(config.getSolutionLimit());
         solver.limitTime(config.getTimeLimit());
         return solver;
