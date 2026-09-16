@@ -42,7 +42,6 @@ public final class JULogUtil {
 		configureLoggers(Level.OFF);
 	}
 
-	@Deprecated
 	public static void configureLoggers(final Level level) {
 		final LoggerContext context =
 				(LoggerContext) LoggerFactory.getILoggerFactory();
